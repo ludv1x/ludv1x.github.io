@@ -1,0 +1,289 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>HTTP-интерфейс &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
+    <link rel="up" title="Интерфейсы" href="index.html" />
+    <link rel="next" title="JDBC-драйвер" href="jdbc.html" />
+    <link rel="prev" title="Клиент командной строки" href="cli.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="jdbc.html" title="JDBC-драйвер"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cli.html" title="Клиент командной строки"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Интерфейсы</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="http">
+<h1>HTTP-интерфейс<a class="headerlink" href="#http" title="Permalink to this headline">¶</a></h1>
+<p>HTTP интерфейс позволяет использовать ClickHouse на любой платформе, из любого языка программирования. У нас он используется для работы из Java и Perl, а также из shell-скриптов. В других отделах, HTTP интерфейс используется из Perl, Python и Go. HTTP интерфейс более ограничен по сравнению с родным интерфейсом, но является более совместимым.</p>
+<p>По умолчанию, clickhouse-server слушает HTTP на порту 8123 (это можно изменить в конфиге).
+Если запросить GET / без параметров, то вернётся строка &#8220;Ok.&#8221; (с переводом строки на конце). Это может быть использовано в скриптах проверки живости.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ curl <span class="s1">&#39;http://localhost:8123/&#39;</span>
+Ok.
+</pre></div>
+</div>
+<p>Запрос отправляется в виде параметра URL query. Или POST-ом. Или начало запроса в параметре query, а продолжение POST-ом (зачем это нужно, будет объяснено ниже). Размер URL ограничен 16KB, это следует учитывать при отправке больших запросов.</p>
+<p>В случае успеха, вам вернётся код ответа 200 и результат обработки запроса в теле ответа.
+В случае ошибки, вам вернётся код ответа 500 и текст с описанием ошибки в теле ответа.</p>
+<p>При использовании метода GET, выставляется настройка readonly. То есть, для запросов, модифицирующие данные, можно использовать только метод POST. Сам запрос при этом можно отправлять как в теле POST-а, так и в параметре URL.</p>
+<p>Примеры:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ curl <span class="s1">&#39;http://localhost:8123/?query=SELECT%201&#39;</span>
+<span class="m">1</span>
+
+$ wget -O- -q <span class="s1">&#39;http://localhost:8123/?query=SELECT 1&#39;</span>
+<span class="m">1</span>
+
+$ GET <span class="s1">&#39;http://localhost:8123/?query=SELECT 1&#39;</span>
+<span class="m">1</span>
+
+$ <span class="nb">echo</span> -ne <span class="s1">&#39;GET /?query=SELECT%201 HTTP/1.0\r\n\r\n&#39;</span> <span class="p">|</span> nc localhost <span class="m">8123</span>
+HTTP/1.0 <span class="m">200</span> OK
+Connection: Close
+Date: Fri, <span class="m">16</span> Nov <span class="m">2012</span> <span class="m">19</span>:21:50 GMT
+
+<span class="m">1</span>
+</pre></div>
+</div>
+<p>Как видно, curl немного неудобен тем, что надо URL-эскейпить пробелы.
+wget сам всё эскейпит, но его не рекомендуется использовать, так как он плохо работает по HTTP 1.1 при использовании keep-alive и Transfer-Encoding: chunked.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ <span class="nb">echo</span> <span class="s1">&#39;SELECT 1&#39;</span> <span class="p">|</span> curl <span class="s1">&#39;http://localhost:8123/&#39;</span> --data-binary @-
+<span class="m">1</span>
+
+$ <span class="nb">echo</span> <span class="s1">&#39;SELECT 1&#39;</span> <span class="p">|</span> curl <span class="s1">&#39;http://localhost:8123/?query=&#39;</span> --data-binary @-
+<span class="m">1</span>
+
+$ <span class="nb">echo</span> <span class="s1">&#39;1&#39;</span> <span class="p">|</span> curl <span class="s1">&#39;http://localhost:8123/?query=SELECT&#39;</span> --data-binary @-
+<span class="m">1</span>
+</pre></div>
+</div>
+<p>Если часть запроса отправляется в параметре, а часть POST-ом, то между этими двумя кусками данных ставится перевод строки.
+Пример (так работать не будет):</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ <span class="nb">echo</span> <span class="s1">&#39;ECT 1&#39;</span> <span class="p">|</span> curl <span class="s1">&#39;http://localhost:8123/?query=SEL&#39;</span> --data-binary @-
+Code: <span class="m">59</span>, e.displayText<span class="o">()</span> <span class="o">=</span> DB::Exception: Syntax error: failed at position <span class="m">0</span>: SEL
+ECT <span class="m">1</span>
+, expected One of: SHOW TABLES, SHOW DATABASES, SELECT, INSERT, CREATE, ATTACH, RENAME, DROP, DETACH, USE, SET, OPTIMIZE., e.what<span class="o">()</span> <span class="o">=</span> DB::Exception
+</pre></div>
+</div>
+<p>По умолчанию, данные возвращаются в формате TabSeparated (подробнее смотри раздел &#8220;Форматы&#8221;).
+Можно попросить любой другой формат - с помощью секции FORMAT запроса.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ <span class="nb">echo</span> <span class="s1">&#39;SELECT 1 FORMAT Pretty&#39;</span> <span class="p">|</span> curl <span class="s1">&#39;http://localhost:8123/?&#39;</span> --data-binary @-
+┏━━━┓
+┃ <span class="m">1</span> ┃
+┡━━━┩
+│ <span class="m">1</span> │
+└───┘
+</pre></div>
+</div>
+<p>Возможность передавать данные POST-ом нужна для INSERT-запросов. В этом случае вы можете написать начало запроса в параметре URL, а вставляемые данные передать POST-ом. Вставляемыми данными может быть, например, tab-separated дамп, полученный из MySQL. Таким образом, запрос INSERT заменяет LOAD DATA LOCAL INFILE из MySQL.</p>
+<p>Примеры:
+Создаём таблицу:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="s1">&#39;CREATE TABLE t (a UInt8) ENGINE = Memory&#39;</span> <span class="p">|</span> POST <span class="s1">&#39;http://localhost:8123/&#39;</span>
+</pre></div>
+</div>
+<p>Используем привычный запрос INSERT для вставки данных:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="s1">&#39;INSERT INTO t VALUES (1),(2),(3)&#39;</span> <span class="p">|</span> POST <span class="s1">&#39;http://localhost:8123/&#39;</span>
+</pre></div>
+</div>
+<p>Данные можно отправить отдельно от запроса:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="s1">&#39;(4),(5),(6)&#39;</span> <span class="p">|</span> POST <span class="s1">&#39;http://localhost:8123/?query=INSERT INTO t VALUES&#39;</span>
+</pre></div>
+</div>
+<p>Можно указать любой формат для данных. Формат Values - то же, что используется при записи INSERT INTO t VALUES:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="s1">&#39;(7),(8),(9)&#39;</span> <span class="p">|</span> POST <span class="s1">&#39;http://localhost:8123/?query=INSERT INTO t FORMAT Values&#39;</span>
+</pre></div>
+</div>
+<p>Можно вставить данные из tab-separated дампа, указав соответствующий формат:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="nb">echo</span> -ne <span class="s1">&#39;10\n11\n12\n&#39;</span> <span class="p">|</span> POST <span class="s1">&#39;http://localhost:8123/?query=INSERT INTO t FORMAT TabSeparated&#39;</span>
+</pre></div>
+</div>
+<p>Прочитаем содержимое таблицы. Данные выводятся в произвольном порядке из-за параллельной обработки запроса:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ GET <span class="s1">&#39;http://localhost:8123/?query=SELECT a FROM t&#39;</span>
+<span class="m">7</span>
+<span class="m">8</span>
+<span class="m">9</span>
+<span class="m">10</span>
+<span class="m">11</span>
+<span class="m">12</span>
+<span class="m">1</span>
+<span class="m">2</span>
+<span class="m">3</span>
+<span class="m">4</span>
+<span class="m">5</span>
+<span class="m">6</span>
+</pre></div>
+</div>
+<p>Удаляем таблицу.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>POST <span class="s1">&#39;http://localhost:8123/?query=DROP TABLE t&#39;</span>
+</pre></div>
+</div>
+<p>Для запросов, которые не возвращают таблицу с данными, в случае успеха, выдаётся пустое тело ответа.</p>
+<p>Вы можете использовать сжатие при передаче данных. Формат сжатых данных нестандартный, и вам придётся использовать для работы с ним специальную программу compressor (<cite>sudo apt-get install compressor-metrika-yandex</cite>).</p>
+<p>Если вы указали в URL compress=1, то сервер будет сжимать отправляемые вам данные.
+Если вы указали в URL decompress=1, то сервер будет разжимать те данные, которые вы передаёте ему POST-ом.</p>
+<p>Это может быть использовано для уменьшения трафика по сети при передаче большого количества данных, а также для создания сразу сжатых дампов.</p>
+<p>В параметре URL database может быть указана БД по умолчанию.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ <span class="nb">echo</span> <span class="s1">&#39;SELECT number FROM numbers LIMIT 10&#39;</span> <span class="p">|</span> curl <span class="s1">&#39;http://localhost:8123/?database=system&#39;</span> --data-binary @-
+<span class="m">0</span>
+<span class="m">1</span>
+<span class="m">2</span>
+<span class="m">3</span>
+<span class="m">4</span>
+<span class="m">5</span>
+<span class="m">6</span>
+<span class="m">7</span>
+<span class="m">8</span>
+<span class="m">9</span>
+</pre></div>
+</div>
+<p>По умолчанию используется БД, которая прописана в настройках сервера, как БД по умолчанию. По умолчанию, это - БД default. Также вы всегда можете указать БД через точку перед именем таблицы.</p>
+<p>Имя пользователя и пароль могут быть указаны в одном из двух вариантов:</p>
+<ol class="arabic">
+<li><p class="first">С использованием HTTP Basic Authentification. Пример:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>echo &#39;SELECT 1&#39; | curl &#39;http://user:password@localhost:8123/&#39; -d @-
+</pre></div>
+</div>
+</li>
+<li><p class="first">В параметрах URL user и password. Пример:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>echo &#39;SELECT 1&#39; | curl &#39;http://localhost:8123/?user=user&amp;password=password&#39; -d @-
+</pre></div>
+</div>
+</li>
+</ol>
+<p>Если имя пользователя не указано, то используется имя пользователя default. Если пароль не указан, то используется пустой пароль.
+Также в параметрах URL вы можете указать любые настроки, которые будут использованы для обработки одного запроса, или целые профили настроек. Пример:
+<cite>http://localhost:8123/?profile=web&amp;max_rows_to_read=1000000000&amp;query=SELECT+1</cite></p>
+<p>Подробнее см. раздел &#8220;Настройки&#8221;.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$ <span class="nb">echo</span> <span class="s1">&#39;SELECT number FROM system.numbers LIMIT 10&#39;</span> <span class="p">|</span> curl <span class="s1">&#39;http://localhost:8123/?&#39;</span> --data-binary @-
+<span class="m">0</span>
+<span class="m">1</span>
+<span class="m">2</span>
+<span class="m">3</span>
+<span class="m">4</span>
+<span class="m">5</span>
+<span class="m">6</span>
+<span class="m">7</span>
+<span class="m">8</span>
+<span class="m">9</span>
+</pre></div>
+</div>
+<p>Об остальных параметрах смотри раздел &#8220;SET&#8221;.</p>
+<p>В отличие от родного интерфейса, HTTP интерфейс не поддерживает понятие сессии и настройки в пределах сессии, не позволяет (вернее, позволяет лишь в некоторых случаях) прервать выполнение запроса, не показывает прогресс выполнения запроса. Парсинг и форматирование данных производится на стороне сервера и использование сети может быть неэффективным.
+Может быть передан необязательный параметр query_id - идентификатор запроса, произвольная строка. Подробнее смотрите раздел &#8220;Настройки, replace_running_query&#8221;.</p>
+<p>Может быть передан необязательный параметр quota_key - ключ квоты, произвольная строка. Подробнее смотрите раздел &#8220;Квоты&#8221;.</p>
+<p>HTTP интерфейс позволяет передать внешние данные (внешние временные таблицы) для использования запроса. Подробнее смотрите раздел &#8220;Внешние данные для обработки запроса&#8221;</p>
+<div class="section" id="id1">
+<h2>Буферизация ответа<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>Существует возможность включить буферизацию ответа на стороне сервера. Для этого предусмотрены параметры URL <tt class="docutils literal"><span class="pre">buffer_size</span></tt> и <tt class="docutils literal"><span class="pre">wait_end_of_query</span></tt>.</p>
+<p><tt class="docutils literal"><span class="pre">buffer_size</span></tt> определяет количество байт результата которые будут буферизованы в памяти сервера. Если тело результата больше этого порога, то буфер будет переписан в HTTP канал, а оставшиеся данные будут отправляться в HTTP-канал напрямую.</p>
+<p>Чтобы гарантировать буферизацию всего ответа необходимо выставить <tt class="docutils literal"><span class="pre">wait_end_of_query=1</span></tt>. В этом случае данные, не поместившиеся в памяти, будут буферизованы во временном файле сервера.</p>
+<p>Пример:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>curl -sS <span class="s1">&#39;http://localhost:8123/?max_result_bytes=4000000&amp;buffer_size=3000000&amp;wait_end_of_query=1&#39;</span> -d <span class="s1">&#39;SELECT toUInt8(number) FROM system.numbers LIMIT 9000000 FORMAT RowBinary&#39;</span>
+</pre></div>
+</div>
+<p>Буферизация позволяет избежать ситуации когда код ответа и HTTP-заголовки были отправлены клиенту, после чего возникла ошибка выполнения запроса. В такой ситуации сообщение об ошибке записывается в конце тела ответа, и на стороне клиента ошибка может быть обнаружена только на этапе парсинга.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">HTTP-интерфейс</a><ul>
+<li><a class="reference internal" href="#id1">Буферизация ответа</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="cli.html"
+                        title="previous chapter">Клиент командной строки</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="jdbc.html"
+                        title="next chapter">JDBC-драйвер</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/interfaces/http_interface.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="jdbc.html" title="JDBC-драйвер"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="cli.html" title="Клиент командной строки"
+             >previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Интерфейсы</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

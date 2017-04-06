@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Функции кодирования &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
+    <link rel="up" title="Функции" href="index.html" />
+    <link rel="next" title="Функции для работы с внешними словарями" href="ext_dict_functions.html" />
+    <link rel="prev" title="Функции для работы с датами и временем" href="date_time_functions.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="ext_dict_functions.html" title="Функции для работы с внешними словарями"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="date_time_functions.html" title="Функции для работы с датами и временем"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Функции</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Функции кодирования<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="hex">
+<h2>hex<a class="headerlink" href="#hex" title="Permalink to this headline">¶</a></h2>
+<p>Принимает строку, число, дату или дату-с-временем. Возвращает строку, содержащую шестнадцатеричное представление аргумента. Используются заглавные буквы A-F. Не используются префиксы 0x и суффиксы h. Для строк просто все байты кодируются в виде двух шестнадцатеричных цифр. Числа выводятся в big endian (&#8220;человеческом&#8221;) формате. Для чисел вырезаются старшие нули, но только по целым байтам. Например, hex(1) = &#8216;01&#8217;. Даты кодируются как число дней с начала unix-эпохи. Даты-с-временем кодируются как число секунд с начала unix-эпохи.</p>
+</div>
+<div class="section" id="unhex-str">
+<h2>unhex(str)<a class="headerlink" href="#unhex-str" title="Permalink to this headline">¶</a></h2>
+<p>Принимает строку, содержащую произвольное количество шестнадцатеричных цифр, и возвращает строку, содержащую соответствующие байты. Поддерживаются как строчные, так и заглавные буквы A-F. Число шестнадцатеричных цифр не обязано быть чётным. Если оно нечётное - последняя цифра интерпретируется как младшая половинка байта 00-0F. Если строка-аргумент содержит что-либо кроме шестнадцатеричных цифр, то будет возвращён какой-либо implementation-defined результат (не кидается исключение).
+Если вы хотите преобразовать результат в число, то вы можете использовать функции reverse и reinterpretAsType.</p>
+</div>
+<div class="section" id="uuidstringtonum-str">
+<h2>UUIDStringToNum(str)<a class="headerlink" href="#uuidstringtonum-str" title="Permalink to this headline">¶</a></h2>
+<p>Принимает строку, содержащую 36 символов в формате 123e4567-e89b-12d3-a456-426655440000, и возвращает в виде набора байт в FixedString(16).</p>
+</div>
+<div class="section" id="uuidnumtostring-str">
+<h2>UUIDNumToString(str)<a class="headerlink" href="#uuidnumtostring-str" title="Permalink to this headline">¶</a></h2>
+<p>Принимает значение типа FixedString(16). Возвращает строку из 36 символов в текстовом виде.</p>
+</div>
+<div class="section" id="bitmasktolist-num">
+<h2>bitmaskToList(num)<a class="headerlink" href="#bitmasktolist-num" title="Permalink to this headline">¶</a></h2>
+<p>Принимает целое число. Возвращает строку, содержащую список степеней двойки, в сумме дающих исходное число; по возрастанию, в текстовом виде, через запятую, без пробелов.</p>
+</div>
+<div class="section" id="bitmasktoarray-num">
+<h2>bitmaskToArray(num)<a class="headerlink" href="#bitmasktoarray-num" title="Permalink to this headline">¶</a></h2>
+<p>Принимает целое число. Возвращает массив чисел типа UInt64, содержащий степени двойки, в сумме дающих исходное число; числа в массиве идут по возрастанию.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Функции кодирования</a><ul>
+<li><a class="reference internal" href="#hex">hex</a></li>
+<li><a class="reference internal" href="#unhex-str">unhex(str)</a></li>
+<li><a class="reference internal" href="#uuidstringtonum-str">UUIDStringToNum(str)</a></li>
+<li><a class="reference internal" href="#uuidnumtostring-str">UUIDNumToString(str)</a></li>
+<li><a class="reference internal" href="#bitmasktolist-num">bitmaskToList(num)</a></li>
+<li><a class="reference internal" href="#bitmasktoarray-num">bitmaskToArray(num)</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="date_time_functions.html"
+                        title="previous chapter">Функции для работы с датами и временем</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ext_dict_functions.html"
+                        title="next chapter">Функции для работы с внешними словарями</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/functions/encoding_functions.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="ext_dict_functions.html" title="Функции для работы с внешними словарями"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="date_time_functions.html" title="Функции для работы с датами и временем"
+             >previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Функции</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

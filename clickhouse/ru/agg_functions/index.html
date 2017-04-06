@@ -1,0 +1,407 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Агрегатные функции &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Агрегатные функции<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="count">
+<h2>count()<a class="headerlink" href="#count" title="Permalink to this headline">¶</a></h2>
+<p>Считает количество строк. Принимает ноль аргументов, возвращает UInt64.
+Не поддерживается синтаксис COUNT(DISTINCT x) - для этого есть отдельная агрегатная функция uniq.</p>
+<p>Запрос вида SELECT count() FROM table не оптимизируется, так как количество записей в таблице нигде не хранится отдельно - из таблицы будет выбран какой-нибудь достаточно маленький столбец, и будет посчитано количество значений в нём.</p>
+</div>
+<div class="section" id="any-x">
+<h2>any(x)<a class="headerlink" href="#any-x" title="Permalink to this headline">¶</a></h2>
+<p>Выбирает первое попавшееся значение.
+Порядок выполнения запроса может быть произвольным и даже каждый раз разным, поэтому результат данной функции недетерминирован.
+Для получения детерминированного результата, можно использовать функции min или max вместо any.</p>
+<p>В некоторых случаях, вы всё-таки можете рассчитывать на порядок выполнения запроса. Это - случаи, когда SELECT идёт из подзапроса, в котором используется ORDER BY.</p>
+<p>При наличии в запросе SELECT секции GROUP BY или хотя бы одной агрегатной функции, ClickHouse (в отличие от MySQL) требует, чтобы все выражения в секциях SELECT, HAVING, ORDER BY вычислялись из ключей или из агрегатных функций. То есть, каждый выбираемый из таблицы столбец, должен использоваться либо в ключах, либо внутри агрегатных функций. Чтобы получить поведение, как в MySQL, вы можете поместить остальные столбцы в агрегатную функцию any.</p>
+</div>
+<div class="section" id="anylast-x">
+<h2>anyLast(x)<a class="headerlink" href="#anylast-x" title="Permalink to this headline">¶</a></h2>
+<p>Выбирает последнее попавшееся значение.
+Результат так же недетерминирован, как и для функции any.</p>
+</div>
+<div class="section" id="min-x">
+<h2>min(x)<a class="headerlink" href="#min-x" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет минимум.</p>
+</div>
+<div class="section" id="max-x">
+<h2>max(x)<a class="headerlink" href="#max-x" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет максимум.</p>
+</div>
+<div class="section" id="argmin-arg-val">
+<h2>argMin(arg, val)<a class="headerlink" href="#argmin-arg-val" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет значение arg при минимальном значении val. Если есть несколько разных значений arg для минимальных значений val, то выдаётся первое попавшееся из таких значений.</p>
+</div>
+<div class="section" id="argmax-arg-val">
+<h2>argMax(arg, val)<a class="headerlink" href="#argmax-arg-val" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет значение arg при максимальном значении val. Если есть несколько разных значений arg для максимальных значений val, то выдаётся первое попавшееся из таких значений.</p>
+</div>
+<div class="section" id="sum-x">
+<h2>sum(x)<a class="headerlink" href="#sum-x" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет сумму.
+Работает только для чисел.</p>
+</div>
+<div class="section" id="avg-x">
+<h2>avg(x)<a class="headerlink" href="#avg-x" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет среднее.
+Работает только для чисел.
+Результат всегда - Float64.</p>
+</div>
+<div class="section" id="uniq-x">
+<h2>uniq(x)<a class="headerlink" href="#uniq-x" title="Permalink to this headline">¶</a></h2>
+<p>Приближённо вычисляет количество различных значений аргумента. Работает для чисел, строк, дат, дат-с-временем, для нескольких аргументов и аргументов-кортежей.</p>
+<p>Используется алгоритм типа adaptive sampling: в качестве состояния вычислений используется выборка значений хэшей элементов, размером до 65 536.
+Алгоритм является очень точным для множеств небольшой кардинальности (до 65 536) и очень эффективным по CPU (при расчёте не слишком большого количества таких функций, использование uniq почти так же быстро, как использование других агрегатных функций).</p>
+<p>Результат детерминирован (не зависит от порядка выполнения запроса).</p>
+</div>
+<div class="section" id="uniqcombined-x">
+<h2>uniqCombined(x)<a class="headerlink" href="#uniqcombined-x" title="Permalink to this headline">¶</a></h2>
+<p>Приближённо вычисляет количество различных значений аргумента. Работает для чисел, строк, дат, дат-с-временем, для нескольких аргументов и аргументов-кортежей.</p>
+<p>Используется комбинация трёх алгоритмов: массив, хэш-таблица и HyperLogLog с таблицей коррекции погрешности. Расход памяти в несколько раз меньше, чем у функции uniq, а точность в несколько раз выше. Скорость работы чуть ниже, чем у функции uniq, но иногда может быть даже выше - в случае распределённых запросов, в которых по сети передаётся большое количество состояний агрегации. Максимальный размер состояния составляет 96 KiB (HyperLogLog из 217 6-битовых ячеек).</p>
+<p>Результат детерминирован (не зависит от порядка выполнения запроса).</p>
+<p>Функция uniqCombined является хорошим выбором по умолчанию для подсчёта количества различных значений.</p>
+</div>
+<div class="section" id="uniqhll12-x">
+<h2>uniqHLL12(x)<a class="headerlink" href="#uniqhll12-x" title="Permalink to this headline">¶</a></h2>
+<p>Приближённо вычисляет количество различных значений аргумента, используя алгоритм HyperLogLog.
+Используется 212 5-битовых ячеек. Размер состояния чуть больше 2.5 КБ.</p>
+<p>Результат детерминирован (не зависит от порядка выполнения запроса).</p>
+<p>В большинстве случаев, используйте функцию uniq или uniqCombined.</p>
+</div>
+<div class="section" id="uniqexact-x">
+<h2>uniqExact(x)<a class="headerlink" href="#uniqexact-x" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет количество различных значений аргумента, точно.
+Не стоит бояться приближённых расчётов. Поэтому, используйте лучше функцию uniq.
+Функцию uniqExact следует использовать, если вам точно нужен точный результат.</p>
+<p>Функция uniqExact расходует больше оперативки, чем функция uniq, так как размер состояния неограниченно растёт по мере роста количества различных значений.</p>
+</div>
+<div class="section" id="grouparray-x">
+<h2>groupArray(x)<a class="headerlink" href="#grouparray-x" title="Permalink to this headline">¶</a></h2>
+<p>Составляет массив из значений аргумента.
+Значения в массив могут быть добавлены в любом (недетерминированном) порядке.</p>
+<p>В некоторых случаях, вы всё-таки можете рассчитывать на порядок выполнения запроса. Это - случаи, когда SELECT идёт из подзапроса, в котором используется ORDER BY.</p>
+</div>
+<div class="section" id="groupuniqarray-x">
+<h2>groupUniqArray(x)<a class="headerlink" href="#groupuniqarray-x" title="Permalink to this headline">¶</a></h2>
+<p>Составляет массив из различных значений аргумента. Расход оперативки такой же, как у функции uniqExact.</p>
+</div>
+<div class="section" id="quantile-level-x">
+<h2>quantile(level)(x)<a class="headerlink" href="#quantile-level-x" title="Permalink to this headline">¶</a></h2>
+<p>Приближённо вычисляет квантиль уровня level. level - константа, число с плавающей запятой от 0 до 1.
+Рекомендуется использовать значения level в диапазоне 0.01 .. 0.99.
+Не используйте значения level, равные 0 или 1 - для таких случаев есть функции min и max.</p>
+<p>В этой функции, равно как и во всех функциях для расчёта квантилей, параметр level может быть не указан. В таком случае, он принимается равным 0.5 - то есть, функция будет вычислять медиану.</p>
+<p>Работает для чисел, дат, дат-с-временем.
+Для чисел возвращает Float64, для дат - дату, для дат-с-временем - дату-с-временем.</p>
+<p>Используется reservoir sampling с размером резервуара до 8192.
+При необходимости, результат выдаётся с линейной аппроксимацией из двух соседних значений.
+Этот алгоритм обеспечивает весьма низкую точность расчёта. Смотрите также функции quantileTiming, quantileTDigest, quantileExact.</p>
+<p>Результат зависит от порядка выполнения запроса, и является недетерминированным.</p>
+<p>При использовании нескольких функций quantile (и аналогичных) с разными уровнями в запросе, внутренние состояния не объединяются (то есть, запрос работает менее эффективно, чем мог бы). В этом случае, используйте функцию quantiles (и аналогичные).</p>
+</div>
+<div class="section" id="quantiledeterministic-level-x-determinator">
+<h2>quantileDeterministic(level)(x, determinator)<a class="headerlink" href="#quantiledeterministic-level-x-determinator" title="Permalink to this headline">¶</a></h2>
+<p>Работает аналогично функции quantile, но, в отличие от неё, результат является детерминированным и не зависит от порядка выполнения запроса.</p>
+<p>Для этого, функция принимает второй аргумент - &#8220;детерминатор&#8221;. Это некоторое число, хэш от которого используется вместо генератора случайных чисел в алгоритме reservoir sampling. Для правильной работы функции, одно и то же значение детерминатора не должно встречаться слишком часто. В качестве детерминатора вы можете использовать идентификатор события, идентификатор посетителя и т. п.</p>
+<p>Не используйте эту функцию для рассчёта таймингов. Для этого есть более подходящая функции - quantileTiming.</p>
+</div>
+<div class="section" id="quantiletiming-level-x">
+<h2>quantileTiming(level)(x)<a class="headerlink" href="#quantiletiming-level-x" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет квантиль уровня level с фиксированной точностью.
+Работает для чисел. Предназначена для расчёта квантилей от времени загрузки страницы в миллисекундах.</p>
+<p>Если значение больше 30 000 (соответствует времени загрузки страницы большем 30 секундам.) - результат приравнивается к 30 000.</p>
+<p>Если всего значений не больше примерно 5670, то вычисление точное.</p>
+<dl class="docutils">
+<dt>Иначе:</dt>
+<dd><ul class="first last simple">
+<li>если время меньше 1024 мс., то вычисление точное.</li>
+<li>иначе вычисление идёт с округлением до числа, кратного 16 мс.</li>
+</ul>
+</dd>
+</dl>
+<p>При передаче в функцию отрицательных значений, поведение не определено.</p>
+<p>Возвращаемое значение имеет тип Float32. Когда в функцию не было передано ни одного значения (при использовании quantileTimingIf), возвращается nan. Это сделано, чтобы отличать такие случаи от нулей. Смотрите замечание о сортировке NaN-ов в разделе &#8220;Секция ORDER BY&#8221;.</p>
+<p>Результат детерминирован (не зависит от порядка выполнения запроса).</p>
+<p>Для своей задачи (расчёт квантилей времени загрузки страниц), использование этой функции эффективнее и результат точнее, чем для функции quantile.</p>
+</div>
+<div class="section" id="quantiletimingweighted-level-x-weight">
+<h2>quantileTimingWeighted(level)(x, weight)<a class="headerlink" href="#quantiletimingweighted-level-x-weight" title="Permalink to this headline">¶</a></h2>
+<p>Отличается от функции medianTiming наличием второго аргумента - &#8220;веса&#8221;. Вес - неотрицательное целое число.
+Результат считается так же, как если бы в функцию medianTiming значение x было передано weight количество раз.</p>
+</div>
+<div class="section" id="quantileexact-level-x">
+<h2>quantileExact(level)(x)<a class="headerlink" href="#quantileexact-level-x" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет квантиль уровня level точно. Для этого, все переданные значения складываются в массив, который затем частично сортируется. Поэтому, функция потребляет O(n) памяти, где n - количество переданных значений. Впрочем, для случая маленького количества значений, функция весьма эффективна.</p>
+</div>
+<div class="section" id="quantileexactweighted-level-x-weight">
+<h2>quantileExactWeighted(level)(x, weight)<a class="headerlink" href="#quantileexactweighted-level-x-weight" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет квантиль уровня level точно. При этом, каждое значение учитывается с весом weight - как будто оно присутствует weight раз. Аргументы функции можно рассматривать как гистограммы, где значению x соответствует &#8220;столбик&#8221; гистограммы высоты weight, а саму функцию можно рассматривать как суммирование гистограмм.</p>
+<p>В качестве алгоритма используется хэш-таблица. Из-за этого, в случае, если передаваемые значения часто повторяются, функция потребляет меньше оперативки, чем quantileExact. Вы можете использовать эту функцию вместо quantileExact, указав в качестве веса число 1.</p>
+</div>
+<div class="section" id="quantiletdigest-level-x">
+<h2>quantileTDigest(level)(x)<a class="headerlink" href="#quantiletdigest-level-x" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет квантиль уровня level приближённо, с использованием алгоритма t-digest. Максимальная погрешность составляет 1%. Расход памяти на состояние пропорционален логарифму от количества переданных значений.</p>
+<p>Производительность функции ниже quantile, quantileTiming. По соотношению размера состояния и точности, функция существенно лучше, чем quantile.</p>
+<p>Результат зависит от порядка выполнения запроса, и является недетерминированным.</p>
+</div>
+<div class="section" id="median">
+<h2>median<a class="headerlink" href="#median" title="Permalink to this headline">¶</a></h2>
+<p>Для всех quantile-функций, также присутствуют соответствующие median-функции: median, medianDeterministic, medianTiming, medianTimingWeighted, medianExact, medianExactWeighted, medianTDigest. Они являются синонимами и их поведение ничем не отличается.</p>
+</div>
+<div class="section" id="quantiles-level1-level2-x">
+<h2>quantiles(level1, level2, ...)(x)<a class="headerlink" href="#quantiles-level1-level2-x" title="Permalink to this headline">¶</a></h2>
+<p>Для всех quantile-функций, также присутствуют соответствующие quantiles-функции: quantiles, quantilesDeterministic, quantilesTiming, quantilesTimingWeighted, quantilesExact, quantilesExactWeighted, quantilesTDigest. Эти функции за один проход вычисляют все квантили перечисленных уровней и возвращают массив вычисленных значений.</p>
+</div>
+<div class="section" id="varsamp-x">
+<h2>varSamp(x)<a class="headerlink" href="#varsamp-x" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет величину Σ((x - x̅)2) / (n - 1), где n - размер выборки, x̅ - среднее значение x.</p>
+<p>Она представляет собой несмещённую оценку дисперсии случайной величины, если переданные в функцию значения являются выборкой этой случайной величины.</p>
+<p>Возвращает Float64. В случае, когда n &lt;= 1, возвращается +∞.</p>
+</div>
+<div class="section" id="varpop-x">
+<h2>varPop(x)<a class="headerlink" href="#varpop-x" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет величину Σ((x - x̅)2) / n, где n - размер выборки, x̅ - среднее значение x.</p>
+<p>То есть, дисперсию для множества значений. Возвращает Float64.</p>
+</div>
+<div class="section" id="stddevsamp-x">
+<h2>stddevSamp(x)<a class="headerlink" href="#stddevsamp-x" title="Permalink to this headline">¶</a></h2>
+<p>Результат равен квадратному корню от varSamp(x).</p>
+</div>
+<div class="section" id="stddevpop-x">
+<h2>stddevPop(x)<a class="headerlink" href="#stddevpop-x" title="Permalink to this headline">¶</a></h2>
+<p>Результат равен квадратному корню от varPop(x).</p>
+</div>
+<div class="section" id="covarsamp-x-y">
+<h2>covarSamp(x, y)<a class="headerlink" href="#covarsamp-x-y" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет величину Σ((x - x̅)(y - y̅)) / (n - 1).</p>
+<p>Возвращает Float64. В случае, когда n &lt;= 1, возвращается +∞.</p>
+</div>
+<div class="section" id="covarpop-x-y">
+<h2>covarPop(x, y)<a class="headerlink" href="#covarpop-x-y" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет величину Σ((x - x̅)(y - y̅)) / n.</p>
+</div>
+<div class="section" id="corr-x-y">
+<h2>corr(x, y)<a class="headerlink" href="#corr-x-y" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет коэффициент корреляции Пирсона: Σ((x - x̅)(y - y̅)) / sqrt(Σ((x - x̅)2) * Σ((y - y̅)2)).</p>
+</div>
+</div>
+<div class="section" id="id2">
+<h1>Параметрические агрегатные функции<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h1>
+<p>Некоторые агрегатные функции могут принимать не только столбцы-аргументы (по которым производится свёртка), но и набор параметров - констант для инициализации. Синтаксис - две пары круглых скобок вместо одной. Первая - для параметров, вторая - для аргументов.</p>
+<div class="section" id="sequencematch-pattern-time-cond1-cond2">
+<h2>sequenceMatch(pattern)(time, cond1, cond2, ...)<a class="headerlink" href="#sequencematch-pattern-time-cond1-cond2" title="Permalink to this headline">¶</a></h2>
+<p>Сопоставление с образцом для цепочки событий.</p>
+<p><tt class="docutils literal"><span class="pre">pattern</span></tt> - строка, содержащая шаблон для сопоставления. Шаблон похож на регулярное выражение.</p>
+<p><tt class="docutils literal"><span class="pre">time</span></tt> - время события, тип DateTime</p>
+<p><tt class="docutils literal"><span class="pre">cond1</span></tt>, <tt class="docutils literal"><span class="pre">cond2</span></tt> ... - от одного до 32 аргументов типа UInt8 - признаков, было ли выполнено некоторое условие для события.</p>
+<p>Функция собирает в оперативке последовательность событий. Затем производит проверку на соответствие этой последовательности шаблону.
+Возвращает UInt8 - 0, если шаблон не подходит и 1, если шаблон подходит.</p>
+<p>Пример: <tt class="docutils literal"><span class="pre">sequenceMatch('(?1).*(?2)')(EventTime,</span> <span class="pre">URL</span> <span class="pre">LIKE</span> <span class="pre">'%company%',</span> <span class="pre">URL</span> <span class="pre">LIKE</span> <span class="pre">'%cart%')</span></tt></p>
+<ul class="simple">
+<li>была ли цепочка событий, в которой посещение страницы с адресом, содержащим company было раньше по времени посещения страницы с адресом, содержащим cart.</li>
+</ul>
+<p>Это вырожденный пример. Его можно записать с помощью других агрегатных функций:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>minIf(EventTime, URL LIKE &#39;%company%&#39;) &lt; maxIf(EventTime, URL LIKE &#39;%cart%&#39;).
+</pre></div>
+</div>
+<p>Но в более сложных случаях, такого решения нет.</p>
+<p>Синтаксис шаблонов:</p>
+<p><tt class="docutils literal"><span class="pre">(?1)</span></tt> - ссылка на условие (вместо 1 - любой номер);</p>
+<p><tt class="docutils literal"><span class="pre">.*</span></tt> - произвольное количество любых событий;</p>
+<p><tt class="docutils literal"><span class="pre">(?t&gt;=1800)</span></tt> - условие на время;</p>
+<p>за указанное время допускается любое количество любых событий;</p>
+<p>вместо &gt;= могут использоваться операторы &lt;, &gt;, &lt;=;</p>
+<p>вместо 1800 может быть любое число;</p>
+<p>События, произошедшие в одну секунду, могут оказаться в цепочке в произвольном порядке. От этого может зависеть результат работы функции.</p>
+</div>
+<div class="section" id="sequencecount-pattern-time-cond1-cond2">
+<h2>sequenceCount(pattern)(time, cond1, cond2, ...)<a class="headerlink" href="#sequencecount-pattern-time-cond1-cond2" title="Permalink to this headline">¶</a></h2>
+<p>Аналогично функции sequenceMatch, но возвращает не факт наличия цепочки событий, а UInt64 - количество найденных цепочек.
+Цепочки ищутся без перекрытия. То есть, следующая цепочка может начаться только после окончания предыдущей.</p>
+</div>
+<div class="section" id="uniqupto-n-x">
+<h2>uniqUpTo(N)(x)<a class="headerlink" href="#uniqupto-n-x" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет количество различных значений аргумента, если оно меньше или равно N.
+В случае, если количество различных значений аргумента больше N, возвращает N + 1.</p>
+<p>Рекомендуется использовать для маленьких N - до 10. Максимальное значение N - 100.</p>
+<p>Для состояния агрегатной функции используется количество оперативки равное 1 + N * размер одного значения байт.
+Для строк запоминается некриптографический хэш, имеющий размер 8 байт. То есть, для строк вычисление приближённое.</p>
+<p>Функция также работает для нескольких аргументов.</p>
+<p>Работает максимально быстро за исключением патологических случаев, когда используется большое значение N и количество уникальных значений чуть меньше N.</p>
+<p>Пример применения:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>Задача: показывать в отчёте только поисковые фразы, по которым было хотя бы 5 уникальных посетителей.
+Решение: пишем в запросе GROUP BY SearchPhrase HAVING uniqUpTo(4)(UserID) &gt;= 5
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id3">
+<h1>Комбинаторы агрегатных функций<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h1>
+<p>К имени агрегатной функции может быть приписан некоторый суффикс. При этом, работа агрегатной функции некоторым образом модифицируется.
+Существуют комбинаторы If и Array. Смотрите разделы ниже.</p>
+<div class="section" id="if">
+<h2>Комбинатор -If. Условные агрегатные функции<a class="headerlink" href="#if" title="Permalink to this headline">¶</a></h2>
+<p>К имени любой агрегатной функции может быть приписан суффикс -If. В этом случае, агрегатная функция принимает ещё один дополнительный аргумент - условие (типа UInt8). Агрегатная функция будет обрабатывать только те строки, для которых условие сработало. Если условие ни разу не сработало - возвращается некоторое значение по умолчанию (обычно - нули, пустые строки).</p>
+<p>Примеры: <tt class="docutils literal"><span class="pre">sumIf(column,</span> <span class="pre">cond)</span></tt>, <tt class="docutils literal"><span class="pre">countIf(cond)</span></tt>, <tt class="docutils literal"><span class="pre">avgIf(x,</span> <span class="pre">cond)</span></tt>, <tt class="docutils literal"><span class="pre">quantilesTimingIf(level1,</span> <span class="pre">level2)(x,</span> <span class="pre">cond)</span></tt>, <tt class="docutils literal"><span class="pre">argMinIf(arg,</span> <span class="pre">val,</span> <span class="pre">cond)</span></tt> и т. п.</p>
+<p>С помощью условных агрегатных функций, вы можете вычислить агрегаты сразу для нескольких условий, не используя подзапросы и JOIN-ы.
+Например, в Яндекс.Метрике, условные агрегатные функции используются для реализации функциональности сравнения сегментов.</p>
+</div>
+<div class="section" id="array">
+<h2>Комбинатор -Array. Агрегатные функции для аргументов-массивов<a class="headerlink" href="#array" title="Permalink to this headline">¶</a></h2>
+<p>К имени любой агрегатной функции может быть приписан суффикс -Array. В этом случае, агрегатная функция вместо аргументов типов T принимает аргументы типов Array(T) (массивы). Если агрегатная функция принимает несколько аргументов, то это должны быть массивы одинаковых длин. При обработке массивов, агрегатная функция работает, как исходная агрегатная функция по всем элементам массивов.</p>
+<p>Пример 1: <tt class="docutils literal"><span class="pre">sumArray(arr)</span></tt> - просуммировать все элементы всех массивов arr. В данном примере можно было бы написать проще: <tt class="docutils literal"><span class="pre">sum(arraySum(arr))</span></tt>.</p>
+<p>Пример 2: <tt class="docutils literal"><span class="pre">uniqArray(arr)</span></tt> - посчитать количество уникальных элементов всех массивов arr. Это можно было бы сделать проще: <tt class="docutils literal"><span class="pre">uniq(arrayJoin(arr))</span></tt>, но не всегда есть возможность добавить arrayJoin в запрос.</p>
+<p>Комбинаторы -If и -Array можно сочетать. При этом, должен сначала идти Array, а потом If. Примеры: uniqArrayIf(arr, cond),  quantilesTimingArrayIf(level1, level2)(arr, cond). Из-за такого порядка получается, что аргумент cond не должен быть массивом.</p>
+</div>
+<div class="section" id="state">
+<h2>Комбинатор -State.<a class="headerlink" href="#state" title="Permalink to this headline">¶</a></h2>
+<p>В случае применения этого комбинатора, агрегатная функция возвращает не готовое значение (например, в случае функции uniq - количество уникальных значений), а промежуточное состояние агрегации (например, в случае функции uniq - хэш-таблицу для рассчёта количества уникальных значений), которое имеет тип AggregateFunction(...) и может использоваться для дальнейшей обработки или может быть сохранено в таблицу для последующей доагрегации - смотрите разделы &#8220;AggregatingMergeTree&#8221; и &#8220;функции для работы с промежуточными состояниями агрегации&#8221;.</p>
+</div>
+<div class="section" id="merge">
+<h2>Комбинатор -Merge.<a class="headerlink" href="#merge" title="Permalink to this headline">¶</a></h2>
+<p>В случае применения этого комбинатора, агрегатная функция будет принимать в качестве аргумента промежуточное состояние агрегации, доагрегировать (объединять вместе) эти состояния, и возвращать готовое значение.</p>
+</div>
+<div class="section" id="mergestate">
+<h2>Комбинатор -MergeState.<a class="headerlink" href="#mergestate" title="Permalink to this headline">¶</a></h2>
+<p>Выполняет слияние промежуточных состояний агрегации, аналогично комбинатору -Merge, но возвращает не готовое значение, а промежуточное состояние агрегации, аналогично комбинатору -State.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Агрегатные функции</a><ul>
+<li><a class="reference internal" href="#count">count()</a></li>
+<li><a class="reference internal" href="#any-x">any(x)</a></li>
+<li><a class="reference internal" href="#anylast-x">anyLast(x)</a></li>
+<li><a class="reference internal" href="#min-x">min(x)</a></li>
+<li><a class="reference internal" href="#max-x">max(x)</a></li>
+<li><a class="reference internal" href="#argmin-arg-val">argMin(arg, val)</a></li>
+<li><a class="reference internal" href="#argmax-arg-val">argMax(arg, val)</a></li>
+<li><a class="reference internal" href="#sum-x">sum(x)</a></li>
+<li><a class="reference internal" href="#avg-x">avg(x)</a></li>
+<li><a class="reference internal" href="#uniq-x">uniq(x)</a></li>
+<li><a class="reference internal" href="#uniqcombined-x">uniqCombined(x)</a></li>
+<li><a class="reference internal" href="#uniqhll12-x">uniqHLL12(x)</a></li>
+<li><a class="reference internal" href="#uniqexact-x">uniqExact(x)</a></li>
+<li><a class="reference internal" href="#grouparray-x">groupArray(x)</a></li>
+<li><a class="reference internal" href="#groupuniqarray-x">groupUniqArray(x)</a></li>
+<li><a class="reference internal" href="#quantile-level-x">quantile(level)(x)</a></li>
+<li><a class="reference internal" href="#quantiledeterministic-level-x-determinator">quantileDeterministic(level)(x, determinator)</a></li>
+<li><a class="reference internal" href="#quantiletiming-level-x">quantileTiming(level)(x)</a></li>
+<li><a class="reference internal" href="#quantiletimingweighted-level-x-weight">quantileTimingWeighted(level)(x, weight)</a></li>
+<li><a class="reference internal" href="#quantileexact-level-x">quantileExact(level)(x)</a></li>
+<li><a class="reference internal" href="#quantileexactweighted-level-x-weight">quantileExactWeighted(level)(x, weight)</a></li>
+<li><a class="reference internal" href="#quantiletdigest-level-x">quantileTDigest(level)(x)</a></li>
+<li><a class="reference internal" href="#median">median</a></li>
+<li><a class="reference internal" href="#quantiles-level1-level2-x">quantiles(level1, level2, ...)(x)</a></li>
+<li><a class="reference internal" href="#varsamp-x">varSamp(x)</a></li>
+<li><a class="reference internal" href="#varpop-x">varPop(x)</a></li>
+<li><a class="reference internal" href="#stddevsamp-x">stddevSamp(x)</a></li>
+<li><a class="reference internal" href="#stddevpop-x">stddevPop(x)</a></li>
+<li><a class="reference internal" href="#covarsamp-x-y">covarSamp(x, y)</a></li>
+<li><a class="reference internal" href="#covarpop-x-y">covarPop(x, y)</a></li>
+<li><a class="reference internal" href="#corr-x-y">corr(x, y)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id2">Параметрические агрегатные функции</a><ul>
+<li><a class="reference internal" href="#sequencematch-pattern-time-cond1-cond2">sequenceMatch(pattern)(time, cond1, cond2, ...)</a></li>
+<li><a class="reference internal" href="#sequencecount-pattern-time-cond1-cond2">sequenceCount(pattern)(time, cond1, cond2, ...)</a></li>
+<li><a class="reference internal" href="#uniqupto-n-x">uniqUpTo(N)(x)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id3">Комбинаторы агрегатных функций</a><ul>
+<li><a class="reference internal" href="#if">Комбинатор -If. Условные агрегатные функции</a></li>
+<li><a class="reference internal" href="#array">Комбинатор -Array. Агрегатные функции для аргументов-массивов</a></li>
+<li><a class="reference internal" href="#state">Комбинатор -State.</a></li>
+<li><a class="reference internal" href="#merge">Комбинатор -Merge.</a></li>
+<li><a class="reference internal" href="#mergestate">Комбинатор -MergeState.</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/ru/agg_functions/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Синтаксис &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Синтаксис<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>В системе есть два вида парсеров: полноценный парсер SQL (recursive descent parser) и парсер форматов данных (быстрый потоковый парсер).
+Во всех случаях кроме запроса INSERT, используется только полноценный парсер SQL.
+В запросе INSERT используется оба парсера:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>INSERT INTO t VALUES (1, &#39;Hello, world&#39;), (2, &#39;abc&#39;), (3, &#39;def&#39;)
+</pre></div>
+</div>
+<p>Фрагмент <tt class="docutils literal"><span class="pre">INSERT</span> <span class="pre">INTO</span> <span class="pre">t</span> <span class="pre">VALUES</span></tt> парсится полноценным парсером, а данные <tt class="docutils literal"><span class="pre">(1,</span> <span class="pre">'Hello,</span> <span class="pre">world'),</span> <span class="pre">(2,</span> <span class="pre">'abc'),</span> <span class="pre">(3,</span> <span class="pre">'def')</span></tt> - быстрым потоковым парсером.
+Данные могут иметь любой формат. При получении запроса, сервер заранее считывает в оперативку не более <tt class="docutils literal"><span class="pre">max_query_size</span></tt> байт запроса (по умолчанию, 1МБ), а всё остальное обрабатывается потоково.
+Таким образом, в системе нет проблем с большими INSERT запросами, как в MySQL.</p>
+<p>При использовании формата Values в INSERT запросе может сложиться иллюзия, что данные парсятся также, как выражения в запросе SELECT, но это не так - формат Values гораздо более ограничен.</p>
+<p>Далее пойдёт речь о полноценном парсере. О парсерах форматов, смотри раздел &#8220;Форматы&#8221;.</p>
+<div class="section" id="id2">
+<h2>Пробелы<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>Между синтаксическими конструкциями (в том числе, в начале и конце запроса) может быть расположено произвольное количество пробельных символов. К пробельным символам относятся пробел, таб, перевод строки, CR, form feed.</p>
+</div>
+<div class="section" id="id3">
+<h2>Комментарии<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<p>Поддерживаются комментарии в SQL-стиле и C-стиле.
+Комментарии в SQL-стиле: от <tt class="docutils literal"><span class="pre">--</span></tt> до конца строки. Пробел после <tt class="docutils literal"><span class="pre">--</span></tt> может не ставиться.
+Комментарии в C-стиле: от <tt class="docutils literal"><span class="pre">/*</span></tt> до <tt class="docutils literal"><span class="pre">*/</span></tt>. Такие комментарии могут быть многострочными. Пробелы тоже не обязательны.</p>
+</div>
+<div class="section" id="id4">
+<h2>Ключевые слова<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<p>Ключевые слова (например, <tt class="docutils literal"><span class="pre">SELECT</span></tt>) регистронезависимы. Всё остальное (имена столбцов, функций и т. п.), в отличие от стандарта SQL, регистрозависимо. Ключевые слова не зарезервированы (а всего лишь парсятся как ключевые слова в соответствующем контексте).</p>
+</div>
+<div class="section" id="id5">
+<h2>Идентификаторы<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<p>Идентификаторы (имена столбцов, функций, типов данных) могут быть квотированными или не квотированными.
+Не квотированные идентификаторы начинаются на букву латинского алфавита или подчёркивание; продолжаются на букву латинского алфавита или подчёркивание или цифру. Короче говоря, должны соответствовать регулярному выражению <tt class="docutils literal"><span class="pre">^[a-zA-Z_][0-9a-zA-Z_]*$</span></tt>. Примеры: <tt class="docutils literal"><span class="pre">x,</span> <span class="pre">_1,</span> <span class="pre">X_y__Z123_.</span></tt>
+Квотированные идентификаторы расположены в обратных кавычках <tt class="docutils literal"><span class="pre">`id`</span></tt> (также, как в MySQL), и могут обозначать произвольный (непустой) набор байт. При этом, внутри записи такого идентификатора, символы (например, символ обратной кавычки) могут экранироваться с помощью обратного слеша. Правила экранирования такие же, как в строковых литералах (см. ниже).
+Рекомендуется использовать идентификаторы, которые не нужно квотировать.</p>
+</div>
+<div class="section" id="id6">
+<h2>Литералы<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
+<p>Бывают числовые, строковые и составные литералы.</p>
+<div class="section" id="id7">
+<h3>Числовые литералы<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<p>Числовой литерал пытается распарситься:
+- сначала как 64-битное число без знака, с помощью функции strtoull;
+- если не получилось - то как 64-битное число со знаком, с помощью функции strtoll;
+- если не получилось - то как число с плавающей запятой, с помощью функции strtod;
+- иначе - ошибка.</p>
+<p>Соответствующее значение будет иметь тип минимального размера, который вмещает значение.
+Например, 1 парсится как UInt8, а 256 - как UInt16. Подробнее смотрите &#8220;Типы данных&#8221;.</p>
+<p>Примеры: <tt class="docutils literal"><span class="pre">1</span></tt>, <tt class="docutils literal"><span class="pre">18446744073709551615</span></tt>, <tt class="docutils literal"><span class="pre">0xDEADBEEF</span></tt>, <tt class="docutils literal"><span class="pre">01</span></tt>, <tt class="docutils literal"><span class="pre">0.1</span></tt>, <tt class="docutils literal"><span class="pre">1e100</span></tt>, <tt class="docutils literal"><span class="pre">-1e-100</span></tt>, <tt class="docutils literal"><span class="pre">inf</span></tt>, <tt class="docutils literal"><span class="pre">nan</span></tt>.</p>
+</div>
+<div class="section" id="id8">
+<h3>Строковые литералы<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<p>Поддерживаются только строковые литералы в одинарных кавычках. Символы внутри могут быть экранированы с помощью обратного слеша. Следующие escape-последовательности имеют соответствующее специальное значение: <tt class="docutils literal"><span class="pre">\b</span></tt>, <tt class="docutils literal"><span class="pre">\f</span></tt>, <tt class="docutils literal"><span class="pre">\r</span></tt>, <tt class="docutils literal"><span class="pre">\n</span></tt>, <tt class="docutils literal"><span class="pre">\t</span></tt>, <tt class="docutils literal"><span class="pre">\0</span></tt>, <tt class="docutils literal"><span class="pre">\a</span></tt>, <tt class="docutils literal"><span class="pre">\v</span></tt>, <tt class="docutils literal"><span class="pre">\xHH</span></tt>. Во всех остальных случаях, последовательности вида <tt class="docutils literal"><span class="pre">\c</span></tt>, где c - любой символ, преобразуется в c. Таким образом, могут быть использованы последовательности <tt class="docutils literal"><span class="pre">\'</span></tt> и <tt class="docutils literal"><span class="pre">\\</span></tt>. Значение будет иметь тип String.</p>
+<p>Минимальный набор символов, которых вам необходимо экранировать в строковых литералах: <tt class="docutils literal"><span class="pre">'</span></tt> and <tt class="docutils literal"><span class="pre">\</span></tt>.</p>
+</div>
+<div class="section" id="id9">
+<h3>Составные литералы<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<p>Поддерживаются конструкции для массивов: <tt class="docutils literal"><span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">3]</span></tt> и кортежей: <tt class="docutils literal"><span class="pre">(1,</span> <span class="pre">'Hello,</span> <span class="pre">world!',</span> <span class="pre">2)</span></tt>.
+На самом деле, это вовсе не литералы, а выражение с оператором создания массива и оператором создания кортежа, соответственно.
+Подробнее смотри в разделе &#8220;Операторы&#8221;.
+Массив должен состоять хотя бы из одного элемента, а кортеж - хотя бы из двух.
+Кортежи носят служебное значение для использования в секции IN запроса SELECT. Кортежи могут быть получены в качестве результата запроса, но не могут быть сохранены в базу (за исключением таблиц типа Memory).</p>
+</div>
+</div>
+<div class="section" id="id10">
+<h2>Функции<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h2>
+<p>Функции записываются как идентификатор со списком аргументов (возможно, пустым) в скобках. В отличие от стандартного SQL, даже в случае пустого списка аргументов, скобки обязательны. Пример: <tt class="docutils literal"><span class="pre">now()</span></tt>.
+Бывают обычные и агрегатные функции (смотрите раздел &#8220;Агрегатные функции&#8221;). Некоторые агрегатные функции могут содержать два списка аргументов в круглых скобках. Пример: <tt class="docutils literal"><span class="pre">quantile(0.9)(x)</span></tt>. Такие агрегатные функции называются &#8220;параметрическими&#8221;, а первый список аргументов называется &#8220;параметрами&#8221;. Синтаксис агрегатных функций без параметров ничем не отличается от обычных функций.</p>
+</div>
+<div class="section" id="id11">
+<h2>Операторы<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h2>
+<p>Операторы преобразуются в соответствующие им функции во время парсинга запроса, с учётом их приоритета и ассоциативности.
+Например, выражение <tt class="docutils literal"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">2</span> <span class="pre">*</span> <span class="pre">3</span> <span class="pre">+</span> <span class="pre">4</span></tt> преобразуется в <tt class="docutils literal"><span class="pre">plus(plus(1,</span> <span class="pre">multiply(2,</span> <span class="pre">3)),</span> <span class="pre">4)</span></tt>.
+Подробнее смотрите раздел &#8220;Операторы&#8221; ниже.</p>
+</div>
+<div class="section" id="id12">
+<h2>Типы данных и движки таблиц<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h2>
+<p>Типы данных и движки таблиц в запросе <tt class="docutils literal"><span class="pre">CREATE</span></tt> записываются также, как идентификаторы или также как функции. То есть, могут содержать или не содержать список аргументов в круглых скобках. Подробнее смотрите разделы &#8220;Типы данных&#8221;, &#8220;Движки таблиц&#8221;, &#8220;CREATE&#8221;.</p>
+</div>
+<div class="section" id="id13">
+<h2>Синонимы<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h2>
+<p>В запросе SELECT, в выражениях могут быть указаны синонимы с помощью ключевого слова AS. Слева от AS стоит любое выражение. Справа от AS стоит идентификатор - имя для синонима. В отличие от стандартного SQL, синонимы могут объявляться не только на верхнем уровне выражений:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>SELECT (1 AS n) + 2, n
+</pre></div>
+</div>
+<p>В отличие от стандартного SQL, синонимы могут использоваться во всех секциях запроса, а не только <tt class="docutils literal"><span class="pre">SELECT</span></tt>.</p>
+</div>
+<div class="section" id="id14">
+<h2>Звёздочка<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h2>
+<p>В запросе <tt class="docutils literal"><span class="pre">SELECT</span></tt>, вместо выражения может стоять звёздочка. Подробнее смотрите раздел &#8220;SELECT&#8221;.</p>
+</div>
+<div class="section" id="id15">
+<h2>Выражения<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h2>
+<p>Выражение представляет собой функцию, идентификатор, литерал, применение оператора, выражение в скобках, подзапрос, звёздочку; и может содержать синоним.
+Список выражений - одно выражение или несколько выражений через запятую.
+Функции и операторы, в свою очередь, в качестве аргументов, могут иметь произвольные выражения.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Синтаксис</a><ul>
+<li><a class="reference internal" href="#id2">Пробелы</a></li>
+<li><a class="reference internal" href="#id3">Комментарии</a></li>
+<li><a class="reference internal" href="#id4">Ключевые слова</a></li>
+<li><a class="reference internal" href="#id5">Идентификаторы</a></li>
+<li><a class="reference internal" href="#id6">Литералы</a><ul>
+<li><a class="reference internal" href="#id7">Числовые литералы</a></li>
+<li><a class="reference internal" href="#id8">Строковые литералы</a></li>
+<li><a class="reference internal" href="#id9">Составные литералы</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id10">Функции</a></li>
+<li><a class="reference internal" href="#id11">Операторы</a></li>
+<li><a class="reference internal" href="#id12">Типы данных и движки таблиц</a></li>
+<li><a class="reference internal" href="#id13">Синонимы</a></li>
+<li><a class="reference internal" href="#id14">Звёздочка</a></li>
+<li><a class="reference internal" href="#id15">Выражения</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/ru/query_language/syntax.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

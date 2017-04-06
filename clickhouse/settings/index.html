@@ -1,0 +1,185 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Настройки &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
+    <link rel="next" title="Ограничения на сложность запроса" href="query_complexity.html" />
+    <link rel="prev" title="Встроенные словари" href="../dicts/internal_dicts.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="query_complexity.html" title="Ограничения на сложность запроса"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../dicts/internal_dicts.html" title="Встроенные словари"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Настройки<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>Здесь будут рассмотрены настройки, которые можно задать с помощью запроса SET или в конфигурационном файле. Напомню, что эти настройки могут быть выставлены в пределах сессии или глобально. Настройки, которые можно задать только в конфигурационном файле сервера, здесь рассмотрены не будут.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="query_complexity.html">Ограничения на сложность запроса</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#readonly">readonly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#max-memory-usage">max_memory_usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#max-rows-to-read">max_rows_to_read</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#max-bytes-to-read">max_bytes_to_read</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#read-overflow-mode">read_overflow_mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#max-rows-to-group-by">max_rows_to_group_by</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#group-by-overflow-mode">group_by_overflow_mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#max-rows-to-sort">max_rows_to_sort</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#max-bytes-to-sort">max_bytes_to_sort</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#sort-overflow-mode">sort_overflow_mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#max-result-rows">max_result_rows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#max-result-bytes">max_result_bytes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#result-overflow-mode">result_overflow_mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#max-execution-time">max_execution_time</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#timeout-overflow-mode">timeout_overflow_mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#min-execution-speed">min_execution_speed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#timeout-before-checking-execution-speed">timeout_before_checking_execution_speed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#max-columns-to-read">max_columns_to_read</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#max-temporary-columns">max_temporary_columns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#max-temporary-non-const-columns">max_temporary_non_const_columns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#max-subquery-depth">max_subquery_depth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#max-pipeline-depth">max_pipeline_depth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#max-ast-depth">max_ast_depth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#max-ast-elements">max_ast_elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#max-rows-in-set">max_rows_in_set</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#max-bytes-in-set">max_bytes_in_set</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#set-overflow-mode">set_overflow_mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#max-rows-in-distinct">max_rows_in_distinct</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#max-bytes-in-distinct">max_bytes_in_distinct</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#distinct-overflow-mode">distinct_overflow_mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#max-rows-to-transfer">max_rows_to_transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#max-bytes-to-transfer">max_bytes_to_transfer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html#transfer-overflow-mode">transfer_overflow_mode</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html">max_block_size</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html#max-insert-block-size">max_insert_block_size</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html#max-threads">max_threads</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html#max-compress-block-size">max_compress_block_size</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html#min-compress-block-size">min_compress_block_size</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html#max-query-size">max_query_size</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html#interactive-delay">interactive_delay</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html#connect-timeout">connect_timeout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html#receive-timeout">receive_timeout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html#send-timeout">send_timeout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html#poll-interval">poll_interval</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html#max-distributed-connections">max_distributed_connections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html#distributed-connections-pool-size">distributed_connections_pool_size</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html#connect-timeout-with-failover-ms">connect_timeout_with_failover_ms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html#connections-with-failover-max-tries">connections_with_failover_max_tries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html#extremes">extremes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html#use-uncompressed-cache">use_uncompressed_cache</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html#replace-running-query">replace_running_query</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html#load-balancing">load_balancing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#random">random (по умолчанию)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#nearest-hostname">nearest_hostname</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#in-order">in_order</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html#totals-mode">totals_mode</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html#totals-auto-threshold">totals_auto_threshold</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html#default-sample">default_sample</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html#max-parallel-replicas">max_parallel_replicas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html#compile">compile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html#min-count-to-compile">min_count_to_compile</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html#input-format-skip-unknown-fields">input_format_skip_unknown_fields</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html#output-format-json-quote-64bit-integers">output_format_json_quote_64bit_integers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings_profiles.html">Профили настроек</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../dicts/internal_dicts.html"
+                        title="previous chapter">Встроенные словари</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="query_complexity.html"
+                        title="next chapter">Ограничения на сложность запроса</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/settings/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="query_complexity.html" title="Ограничения на сложность запроса"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../dicts/internal_dicts.html" title="Встроенные словари"
+             >previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

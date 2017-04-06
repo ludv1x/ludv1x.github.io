@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Битовые функции &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Битовые функции<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>Битовые функции работают для любой пары типов из UInt8, UInt16, UInt32, UInt64, Int8, Int16, Int32, Int64, Float32, Float64.</p>
+<p><tt class="docutils literal"><span class="pre">Тип</span> <span class="pre">результата</span></tt> - целое число, битность которого равна максимальной битности аргументов. Если хотя бы один аргумент знаковый, то результат - знаковое число. Если аргумент - число с плавающей запятой - оно приводится к Int64.</p>
+<div class="section" id="bitand-a-b">
+<h2>bitAnd(a, b)<a class="headerlink" href="#bitand-a-b" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="bitor-a-b">
+<h2>bitOr(a, b)<a class="headerlink" href="#bitor-a-b" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="bitxor-a-b">
+<h2>bitXor(a, b)<a class="headerlink" href="#bitxor-a-b" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="bitnot-a">
+<h2>bitNot(a)<a class="headerlink" href="#bitnot-a" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="bitshiftleft-a-b">
+<h2>bitShiftLeft(a, b)<a class="headerlink" href="#bitshiftleft-a-b" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="bitshiftright-a-b">
+<h2>bitShiftRight(a, b)<a class="headerlink" href="#bitshiftright-a-b" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Битовые функции</a><ul>
+<li><a class="reference internal" href="#bitand-a-b">bitAnd(a, b)</a></li>
+<li><a class="reference internal" href="#bitor-a-b">bitOr(a, b)</a></li>
+<li><a class="reference internal" href="#bitxor-a-b">bitXor(a, b)</a></li>
+<li><a class="reference internal" href="#bitnot-a">bitNot(a)</a></li>
+<li><a class="reference internal" href="#bitshiftleft-a-b">bitShiftLeft(a, b)</a></li>
+<li><a class="reference internal" href="#bitshiftright-a-b">bitShiftRight(a, b)</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/ru/functions/bit_functions.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

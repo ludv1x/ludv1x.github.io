@@ -1,0 +1,235 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Математические функции &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
+    <link rel="up" title="Функции" href="index.html" />
+    <link rel="next" title="Прочие функции" href="other_functions.html" />
+    <link rel="prev" title="Логические функции" href="logical_functions.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="other_functions.html" title="Прочие функции"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="logical_functions.html" title="Логические функции"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Функции</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Математические функции<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>Все функции возвращают число типа Float64. Точность результата близка к максимально возможной, но результат может не совпадать с наиболее близким к соответствующему вещественному числу машинно представимым числом.</p>
+<div class="section" id="e">
+<h2>e()<a class="headerlink" href="#e" title="Permalink to this headline">¶</a></h2>
+<p>Принимает ноль аргументов, возвращает число типа Float64, близкое к числу e.</p>
+</div>
+<div class="section" id="pi">
+<h2>pi()<a class="headerlink" href="#pi" title="Permalink to this headline">¶</a></h2>
+<p>Принимает ноль аргументов, возвращает число типа Float64, близкое к числу π.</p>
+</div>
+<div class="section" id="exp-x">
+<h2>exp(x)<a class="headerlink" href="#exp-x" title="Permalink to this headline">¶</a></h2>
+<p>Принимает числовой аргумент, возвращает число типа Float64, близкое к экспоненте от аргумента.</p>
+</div>
+<div class="section" id="log-x">
+<h2>log(x)<a class="headerlink" href="#log-x" title="Permalink to this headline">¶</a></h2>
+<p>Принимает числовой аргумент, возвращает число типа Float64, близкое к натуральному логарифму от аргумента.</p>
+</div>
+<div class="section" id="exp2-x">
+<h2>exp2(x)<a class="headerlink" href="#exp2-x" title="Permalink to this headline">¶</a></h2>
+<p>Принимает числовой аргумент, возвращает число типа Float64, близкое к 2x.</p>
+</div>
+<div class="section" id="log2-x">
+<h2>log2(x)<a class="headerlink" href="#log2-x" title="Permalink to this headline">¶</a></h2>
+<p>Принимает числовой аргумент, возвращает число типа Float64, близкое к двоичному логарифму от аргумента.</p>
+</div>
+<div class="section" id="exp10-x">
+<h2>exp10(x)<a class="headerlink" href="#exp10-x" title="Permalink to this headline">¶</a></h2>
+<p>Принимает числовой аргумент, возвращает число типа Float64, близкое к 10x.</p>
+</div>
+<div class="section" id="log10-x">
+<h2>log10(x)<a class="headerlink" href="#log10-x" title="Permalink to this headline">¶</a></h2>
+<p>Принимает числовой аргумент, возвращает число типа Float64, близкое к десятичному логарифму от аргумента.</p>
+</div>
+<div class="section" id="sqrt-x">
+<h2>sqrt(x)<a class="headerlink" href="#sqrt-x" title="Permalink to this headline">¶</a></h2>
+<p>Принимает числовой аргумент, возвращает число типа Float64, близкое к квадратному корню от аргумента.</p>
+</div>
+<div class="section" id="cbrt-x">
+<h2>cbrt(x)<a class="headerlink" href="#cbrt-x" title="Permalink to this headline">¶</a></h2>
+<p>Принимает числовой аргумент, возвращает число типа Float64, близкое к кубическому корню от аргумента.</p>
+</div>
+<div class="section" id="erf-x">
+<h2>erf(x)<a class="headerlink" href="#erf-x" title="Permalink to this headline">¶</a></h2>
+<p>Если x неотрицательно, то erf(x / σ√2) - вероятность того, что случайная величина, имеющая нормальное распределение со среднеквадратичным отклонением σ, принимает значение, отстоящее от мат. ожидания больше чем на x.</p>
+<p>Пример (правило трёх сигм):</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span>SELECT erf(3 / sqrt(2))
+
+┌─erf(divide(3, sqrt(2)))─┐
+│      0.9973002039367398 │
+└─────────────────────────┘
+</pre></div>
+</div>
+</div>
+<div class="section" id="erfc-x">
+<h2>erfc(x)<a class="headerlink" href="#erfc-x" title="Permalink to this headline">¶</a></h2>
+<p>Принимает числовой аргумент, возвращает число типа Float64, близкое к 1 - erf(x), но без потери точности для больших x.</p>
+</div>
+<div class="section" id="lgamma-x">
+<h2>lgamma(x)<a class="headerlink" href="#lgamma-x" title="Permalink to this headline">¶</a></h2>
+<p>Логарифм от гамма функции.</p>
+</div>
+<div class="section" id="tgamma-x">
+<h2>tgamma(x)<a class="headerlink" href="#tgamma-x" title="Permalink to this headline">¶</a></h2>
+<p>Гамма функция.</p>
+</div>
+<div class="section" id="sin-x">
+<h2>sin(x)<a class="headerlink" href="#sin-x" title="Permalink to this headline">¶</a></h2>
+<p>Синус.</p>
+</div>
+<div class="section" id="cos-x">
+<h2>cos(x)<a class="headerlink" href="#cos-x" title="Permalink to this headline">¶</a></h2>
+<p>Косинус.</p>
+</div>
+<div class="section" id="tan-x">
+<h2>tan(x)<a class="headerlink" href="#tan-x" title="Permalink to this headline">¶</a></h2>
+<p>Тангенс.</p>
+</div>
+<div class="section" id="asin-x">
+<h2>asin(x)<a class="headerlink" href="#asin-x" title="Permalink to this headline">¶</a></h2>
+<p>Арксинус.</p>
+</div>
+<div class="section" id="acos-x">
+<h2>acos(x)<a class="headerlink" href="#acos-x" title="Permalink to this headline">¶</a></h2>
+<p>Арккосинус.</p>
+</div>
+<div class="section" id="atan-x">
+<h2>atan(x)<a class="headerlink" href="#atan-x" title="Permalink to this headline">¶</a></h2>
+<p>Арктангенс.</p>
+</div>
+<div class="section" id="pow-x-y">
+<h2>pow(x, y)<a class="headerlink" href="#pow-x-y" title="Permalink to this headline">¶</a></h2>
+<p>xy.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Математические функции</a><ul>
+<li><a class="reference internal" href="#e">e()</a></li>
+<li><a class="reference internal" href="#pi">pi()</a></li>
+<li><a class="reference internal" href="#exp-x">exp(x)</a></li>
+<li><a class="reference internal" href="#log-x">log(x)</a></li>
+<li><a class="reference internal" href="#exp2-x">exp2(x)</a></li>
+<li><a class="reference internal" href="#log2-x">log2(x)</a></li>
+<li><a class="reference internal" href="#exp10-x">exp10(x)</a></li>
+<li><a class="reference internal" href="#log10-x">log10(x)</a></li>
+<li><a class="reference internal" href="#sqrt-x">sqrt(x)</a></li>
+<li><a class="reference internal" href="#cbrt-x">cbrt(x)</a></li>
+<li><a class="reference internal" href="#erf-x">erf(x)</a></li>
+<li><a class="reference internal" href="#erfc-x">erfc(x)</a></li>
+<li><a class="reference internal" href="#lgamma-x">lgamma(x)</a></li>
+<li><a class="reference internal" href="#tgamma-x">tgamma(x)</a></li>
+<li><a class="reference internal" href="#sin-x">sin(x)</a></li>
+<li><a class="reference internal" href="#cos-x">cos(x)</a></li>
+<li><a class="reference internal" href="#tan-x">tan(x)</a></li>
+<li><a class="reference internal" href="#asin-x">asin(x)</a></li>
+<li><a class="reference internal" href="#acos-x">acos(x)</a></li>
+<li><a class="reference internal" href="#atan-x">atan(x)</a></li>
+<li><a class="reference internal" href="#pow-x-y">pow(x, y)</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="logical_functions.html"
+                        title="previous chapter">Логические функции</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="other_functions.html"
+                        title="next chapter">Прочие функции</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/functions/math_functions.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="other_functions.html" title="Прочие функции"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="logical_functions.html" title="Логические функции"
+             >previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Функции</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

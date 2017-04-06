@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Функции для работы с IP-адресами &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="ip">
+<h1>Функции для работы с IP-адресами<a class="headerlink" href="#ip" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="ipv4numtostring-num">
+<h2>IPv4NumToString(num)<a class="headerlink" href="#ipv4numtostring-num" title="Permalink to this headline">¶</a></h2>
+<p>Принимает число типа UInt32. Интерпретирует его, как IPv4-адрес в big endian. Возвращает строку, содержащую соответствующий IPv4-адрес в формате A.B.C.D (числа в десятичной форме через точки).</p>
+</div>
+<div class="section" id="ipv4stringtonum-s">
+<h2>IPv4StringToNum(s)<a class="headerlink" href="#ipv4stringtonum-s" title="Permalink to this headline">¶</a></h2>
+<p>Функция, обратная к IPv4NumToString. Если IPv4 адрес в неправильном формате, то возвращает 0.</p>
+</div>
+<div class="section" id="ipv4numtostringclassc-num">
+<h2>IPv4NumToStringClassC(num)<a class="headerlink" href="#ipv4numtostringclassc-num" title="Permalink to this headline">¶</a></h2>
+<p>Похоже на IPv4NumToString, но вместо последнего октета используется xxx.</p>
+<p>Пример:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span>SELECT
+    IPv4NumToStringClassC(ClientIP) AS k,
+    count() AS c
+FROM test.hits
+GROUP BY k
+ORDER BY c DESC
+LIMIT 10
+
+┌─k──────────────┬─────c─┐
+│ 83.149.9.xxx   │ 26238 │
+│ 217.118.81.xxx │ 26074 │
+│ 213.87.129.xxx │ 25481 │
+│ 83.149.8.xxx   │ 24984 │
+│ 217.118.83.xxx │ 22797 │
+│ 78.25.120.xxx  │ 22354 │
+│ 213.87.131.xxx │ 21285 │
+│ 78.25.121.xxx  │ 20887 │
+│ 188.162.65.xxx │ 19694 │
+│ 83.149.48.xxx  │ 17406 │
+└────────────────┴───────┘
+</pre></div>
+</div>
+<p>В связи с тем, что использование xxx весьма необычно, это может быть изменено в дальнейшем, и вам не следует полагаться на конкретный вид этого фрагмента.</p>
+</div>
+<div class="section" id="ipv6numtostring-x">
+<h2>IPv6NumToString(x)<a class="headerlink" href="#ipv6numtostring-x" title="Permalink to this headline">¶</a></h2>
+<p>Принимает значение типа FixedString(16), содержащее IPv6-адрес в бинарном виде. Возвращает строку, содержащую этот адрес в текстовом виде.
+IPv6-mapped IPv4 адреса выводится в формате ::ffff:111.222.33.44. Примеры:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span>SELECT IPv6NumToString(toFixedString(unhex(&#39;2A0206B8000000000000000000000011&#39;), 16)) AS addr
+
+┌─addr─────────┐
+│ 2a02:6b8::11 │
+└──────────────┘
+SELECT
+    IPv6NumToString(ClientIP6 AS k),
+    count() AS c
+FROM hits_all
+WHERE EventDate = today() AND substring(ClientIP6, 1, 12) != unhex(&#39;00000000000000000000FFFF&#39;)
+GROUP BY k
+ORDER BY c DESC
+LIMIT 10
+
+┌─IPv6NumToString(ClientIP6)──────────────┬─────c─┐
+│ 2a02:2168:aaa:bbbb::2                   │ 24695 │
+│ 2a02:2698:abcd:abcd:abcd:abcd:8888:5555 │ 22408 │
+│ 2a02:6b8:0:fff::ff                      │ 16389 │
+│ 2a01:4f8:111:6666::2                    │ 16016 │
+│ 2a02:2168:888:222::1                    │ 15896 │
+│ 2a01:7e00::ffff:ffff:ffff:222           │ 14774 │
+│ 2a02:8109:eee:ee:eeee:eeee:eeee:eeee    │ 14443 │
+│ 2a02:810b:8888:888:8888:8888:8888:8888  │ 14345 │
+│ 2a02:6b8:0:444:4444:4444:4444:4444      │ 14279 │
+│ 2a01:7e00::ffff:ffff:ffff:ffff          │ 13880 │
+└─────────────────────────────────────────┴───────┘
+SELECT
+    IPv6NumToString(ClientIP6 AS k),
+    count() AS c
+FROM hits_all
+WHERE EventDate = today()
+GROUP BY k
+ORDER BY c DESC
+LIMIT 10
+
+┌─IPv6NumToString(ClientIP6)─┬──────c─┐
+│ ::ffff:94.26.111.111       │ 747440 │
+│ ::ffff:37.143.222.4        │ 529483 │
+│ ::ffff:5.166.111.99        │ 317707 │
+│ ::ffff:46.38.11.77         │ 263086 │
+│ ::ffff:79.105.111.111      │ 186611 │
+│ ::ffff:93.92.111.88        │ 176773 │
+│ ::ffff:84.53.111.33        │ 158709 │
+│ ::ffff:217.118.11.22       │ 154004 │
+│ ::ffff:217.118.11.33       │ 148449 │
+│ ::ffff:217.118.11.44       │ 148243 │
+└────────────────────────────┴────────┘
+</pre></div>
+</div>
+</div>
+<div class="section" id="ipv6stringtonum-s">
+<h2>IPv6StringToNum(s)<a class="headerlink" href="#ipv6stringtonum-s" title="Permalink to this headline">¶</a></h2>
+<p>Функция, обратная к IPv6NumToString. Если IPv6 адрес в неправильном формате, то возвращает строку из нулевых байт.
+HEX может быть в любом регистре.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Функции для работы с IP-адресами</a><ul>
+<li><a class="reference internal" href="#ipv4numtostring-num">IPv4NumToString(num)</a></li>
+<li><a class="reference internal" href="#ipv4stringtonum-s">IPv4StringToNum(s)</a></li>
+<li><a class="reference internal" href="#ipv4numtostringclassc-num">IPv4NumToStringClassC(num)</a></li>
+<li><a class="reference internal" href="#ipv6numtostring-x">IPv6NumToString(x)</a></li>
+<li><a class="reference internal" href="#ipv6stringtonum-s">IPv6StringToNum(s)</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/ru/functions/ip_address_functions.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

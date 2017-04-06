@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>system.merges &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
+    <link rel="up" title="Системные таблицы" href="index.html" />
+    <link rel="next" title="system.metrics" href="system.metrics.html" />
+    <link rel="prev" title="system.functions" href="system.functions.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="system.metrics.html" title="system.metrics"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="system.functions.html" title="system.functions"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Системные таблицы</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="system-merges">
+<h1>system.merges<a class="headerlink" href="#system-merges" title="Permalink to this headline">¶</a></h1>
+<p>Содержит информацию о производящихся прямо сейчас слияниях для таблиц семейства MergeTree.</p>
+<p>Столбцы:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>database String                    - имя базы данных, в которой находится таблица
+table String                       - имя таблицы
+elapsed Float64                    - время в секундах, прошедшее от начала выполнения слияния
+progress Float64                   - доля выполненной работы от 0 до 1
+num_parts UInt64                   - количество сливаемых кусков
+result_part_name String            - имя куска, который будет образован в результате слияния
+total_size_bytes_compressed UInt64 - суммарный размер сжатых данных сливаемых кусков
+total_size_marks UInt64            - суммарное количество засечек в сливаемых кусках
+bytes_read_uncompressed UInt64     - количество прочитанных байт, разжатых
+rows_read UInt64                   - количество прочитанных строк
+bytes_written_uncompressed UInt64  - количество записанных байт, несжатых
+rows_written UInt64                - количество записанных строк
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="system.functions.html"
+                        title="previous chapter">system.functions</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="system.metrics.html"
+                        title="next chapter">system.metrics</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/system_tables/system.merges.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="system.metrics.html" title="system.metrics"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="system.functions.html" title="system.functions"
+             >previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Системные таблицы</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

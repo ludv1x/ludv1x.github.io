@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Функции поиска в строках &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Функции поиска в строках<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>Во всех функциях, поиск регистрозависимый.
+Во всех функциях, подстрока для поиска или регулярное выражение, должно быть константой.</p>
+<div class="section" id="position-haystack-needle">
+<h2>position(haystack, needle)<a class="headerlink" href="#position-haystack-needle" title="Permalink to this headline">¶</a></h2>
+<p>Поиск подстроки needle в строке haystack.
+Возвращает позицию (в байтах) найденной подстроки, начиная с 1, или 0, если подстрока не найдена.
+Есть также функция positionCaseInsensitive.</p>
+</div>
+<div class="section" id="positionutf8-haystack-needle">
+<h2>positionUTF8(haystack, needle)<a class="headerlink" href="#positionutf8-haystack-needle" title="Permalink to this headline">¶</a></h2>
+<p>Так же, как position, но позиция возвращается в кодовых точках Unicode. Работает при допущении, что строка содержит набор байт, представляющий текст в кодировке UTF-8. Если допущение не выполнено - то возвращает какой-нибудь результат (не кидает исключение).
+Есть также функция positionCaseInsensitiveUTF8.</p>
+</div>
+<div class="section" id="match-haystack-pattern">
+<h2>match(haystack, pattern)<a class="headerlink" href="#match-haystack-pattern" title="Permalink to this headline">¶</a></h2>
+<p>Проверка строки на соответствие регулярному выражению pattern. Регулярное выражение re2.
+Возвращает 0 (если не соответствует) или 1 (если соответствует).</p>
+<p>Обратите внимание, что для экранирования в регулярном выражении, используется символ <tt class="docutils literal"><span class="pre">\</span></tt> (обратный слеш). Этот же символ используется для экранирования в строковых литералах. Поэтому, чтобы экранировать символ в регулярном выражении, необходимо написать в строковом литерале \ (два обратных слеша).</p>
+<p>Регулярное выражение работает со строкой как с набором байт. Регулярное выражение не может содержать нулевые байты.
+Для шаблонов на поиск подстроки в строке, лучше используйте LIKE или position, так как они работают существенно быстрее.</p>
+</div>
+<div class="section" id="extract-haystack-pattern">
+<h2>extract(haystack, pattern)<a class="headerlink" href="#extract-haystack-pattern" title="Permalink to this headline">¶</a></h2>
+<p>Извлечение фрагмента строки по регулярному выражению. Если haystack не соответствует регулярному выражению pattern, то возвращается пустая строка. Если регулярное выражение не содержит subpattern-ов, то вынимается фрагмент, который подпадает под всё регулярное выражение. Иначе вынимается фрагмент, который подпадает под первый subpattern.</p>
+</div>
+<div class="section" id="extractall-haystack-pattern">
+<h2>extractAll(haystack, pattern)<a class="headerlink" href="#extractall-haystack-pattern" title="Permalink to this headline">¶</a></h2>
+<p>Извлечение всех фрагментов строки по регулярному выражению. Если haystack не соответствует регулярному выражению pattern, то возвращается пустая строка. Возвращается массив строк, состоящий из всех соответствий регулярному выражению. В остальном, поведение аналогично функции extract (по прежнему, вынимается первый subpattern, или всё выражение, если subpattern-а нет).</p>
+</div>
+<div class="section" id="like-haystack-pattern-haystack-like-pattern">
+<h2>like(haystack, pattern), оператор haystack LIKE pattern<a class="headerlink" href="#like-haystack-pattern-haystack-like-pattern" title="Permalink to this headline">¶</a></h2>
+<p>Проверка строки на соответствие простому регулярному выражению.
+Регулярное выражение может содержать метасимволы <tt class="docutils literal"><span class="pre">%</span></tt> и <tt class="docutils literal"><span class="pre">_</span></tt>.</p>
+<p><tt class="docutils literal"><span class="pre">%</span></tt> обозначает любое количество любых байт (в том числе, нулевое количество символов).</p>
+<p><tt class="docutils literal"><span class="pre">_</span></tt> обозначает один любой байт.</p>
+<p>Для экранирования метасимволов, используется символ <tt class="docutils literal"><span class="pre">\</span></tt> (обратный слеш). Смотрите замечание об экранировании в описании функции match.</p>
+<p>Для регулярных выражений вида <tt class="docutils literal"><span class="pre">%needle%</span></tt> действует более оптимальный код, который работает также быстро, как функция <tt class="docutils literal"><span class="pre">position</span></tt>.
+Для остальных регулярных выражений, код аналогичен функции match.</p>
+</div>
+<div class="section" id="notlike-haystack-pattern-haystack-not-like-pattern">
+<h2>notLike(haystack, pattern), оператор haystack NOT LIKE pattern<a class="headerlink" href="#notlike-haystack-pattern-haystack-not-like-pattern" title="Permalink to this headline">¶</a></h2>
+<p>То же, что like, но с отрицанием.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Функции поиска в строках</a><ul>
+<li><a class="reference internal" href="#position-haystack-needle">position(haystack, needle)</a></li>
+<li><a class="reference internal" href="#positionutf8-haystack-needle">positionUTF8(haystack, needle)</a></li>
+<li><a class="reference internal" href="#match-haystack-pattern">match(haystack, pattern)</a></li>
+<li><a class="reference internal" href="#extract-haystack-pattern">extract(haystack, pattern)</a></li>
+<li><a class="reference internal" href="#extractall-haystack-pattern">extractAll(haystack, pattern)</a></li>
+<li><a class="reference internal" href="#like-haystack-pattern-haystack-like-pattern">like(haystack, pattern), оператор haystack LIKE pattern</a></li>
+<li><a class="reference internal" href="#notlike-haystack-pattern-haystack-not-like-pattern">notLike(haystack, pattern), оператор haystack NOT LIKE pattern</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/ru/functions/string_search_functions.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

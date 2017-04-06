@@ -1,0 +1,1282 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Запросы &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Запросы<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="create-database">
+<h2>CREATE DATABASE<a class="headerlink" href="#create-database" title="Permalink to this headline">¶</a></h2>
+<p>Создание базы данных db_name</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>CREATE DATABASE [IF NOT EXISTS] db_name
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">База</span> <span class="pre">данных</span></tt> - это просто директория для таблиц.
+Если написано <tt class="docutils literal"><span class="pre">IF</span> <span class="pre">NOT</span> <span class="pre">EXISTS</span></tt>, то запрос не будет возвращать ошибку, если база данных уже существует.</p>
+</div>
+<div class="section" id="create-table">
+<h2>CREATE TABLE<a class="headerlink" href="#create-table" title="Permalink to this headline">¶</a></h2>
+<p>Запрос <tt class="docutils literal"><span class="pre">CREATE</span> <span class="pre">TABLE</span></tt> может иметь несколько форм.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>CREATE [TEMPORARY] TABLE [IF NOT EXISTS] [db.]name
+(
+    name1 [type1] [DEFAULT|MATERIALIZED|ALIAS expr1],
+    name2 [type2] [DEFAULT|MATERIALIZED|ALIAS expr2],
+    ...
+) ENGINE = engine
+</pre></div>
+</div>
+<p>Создаёт таблицу с именем name в БД db или текущей БД, если db не указана, со структурой, указанной в скобках, и движком engine.
+Структура таблицы представляет список описаний столбцов. Индексы, если поддерживаются движком, указываются в качестве параметров для движка таблицы.</p>
+<p>Описание столбца, это <tt class="docutils literal"><span class="pre">name</span> <span class="pre">type</span></tt>, в простейшем случае. Пример: <tt class="docutils literal"><span class="pre">RegionID</span> <span class="pre">UInt32</span></tt>.
+Также могут быть указаны выражения для значений по умолчанию - смотрите ниже.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>CREATE [TEMPORARY] TABLE [IF NOT EXISTS] [db.]name AS [db2.]name2 [ENGINE = engine]
+</pre></div>
+</div>
+<p>Создаёт таблицу с такой же структурой, как другая таблица. Можно указать другой движок для таблицы. Если движок не указан, то будет выбран такой же движок, как у таблицы <tt class="docutils literal"><span class="pre">db2.name2</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>CREATE [TEMPORARY] TABLE [IF NOT EXISTS] [db.]name ENGINE = engine AS SELECT ...
+</pre></div>
+</div>
+<p>Создаёт таблицу со структурой, как результат запроса <tt class="docutils literal"><span class="pre">SELECT</span></tt>, с движком engine, и заполняет её данными из SELECT-а.</p>
+<p>Во всех случаях, если указано <tt class="docutils literal"><span class="pre">IF</span> <span class="pre">NOT</span> <span class="pre">EXISTS</span></tt>, то запрос не будет возвращать ошибку, если таблица уже существует. В этом случае, запрос будет ничего не делать.</p>
+<div class="section" id="id2">
+<h3>Значения по умолчанию<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>В описании столбца, может быть указано выражение для значения по умолчанию, одного из следующих видов:
+<tt class="docutils literal"><span class="pre">DEFAULT</span> <span class="pre">expr</span></tt>, <tt class="docutils literal"><span class="pre">MATERIALIZED</span> <span class="pre">expr</span></tt>, <tt class="docutils literal"><span class="pre">ALIAS</span> <span class="pre">expr</span></tt>.
+Пример: <tt class="docutils literal"><span class="pre">URLDomain</span> <span class="pre">String</span> <span class="pre">DEFAULT</span> <span class="pre">domain(URL)</span></tt>.</p>
+<p>Если выражение для значения по умолчанию не указано, то в качестве значений по умолчанию будут использоваться нули для чисел, пустые строки для строк, пустые массивы для массивов, а также <tt class="docutils literal"><span class="pre">0000-00-00</span></tt> для дат и <tt class="docutils literal"><span class="pre">0000-00-00</span> <span class="pre">00:00:00</span></tt> для дат с временем. NULL-ы не поддерживаются.</p>
+<p>В случае, если указано выражение по умолчанию, то указание типа столбца не обязательно. При отсутствии явно указанного типа, будет использован тип выражения по умолчанию. Пример: <tt class="docutils literal"><span class="pre">EventDate</span> <span class="pre">DEFAULT</span> <span class="pre">toDate(EventTime)</span></tt> - для столбца EventDate будет использован тип Date.</p>
+<p>При наличии явно указанного типа данных и выражения по умолчанию, это выражение будет приводиться к указанному типу с использованием функций приведения типа. Пример: <tt class="docutils literal"><span class="pre">Hits</span> <span class="pre">UInt32</span> <span class="pre">DEFAULT</span> <span class="pre">0</span></tt> - имеет такой же смысл, как <tt class="docutils literal"><span class="pre">Hits</span> <span class="pre">UInt32</span> <span class="pre">DEFAULT</span> <span class="pre">toUInt32(0)</span></tt>.</p>
+<p>В качестве выражения для умолчания, может быть указано произвольное выражение от констант и столбцов таблицы. При создании и изменении структуры таблицы, проверяется, что выражения не содержат циклов. При INSERT-е проверяется разрешимость выражений - что все столбцы, из которых их можно вычислить, переданы.</p>
+<p><tt class="docutils literal"><span class="pre">DEFAULT</span> <span class="pre">expr</span></tt></p>
+<p>Обычное значение по умолчанию. Если в запросе INSERT не указан соответствующий столбец, то он будет заполнен путём вычисления соответствующего выражения.</p>
+<p><tt class="docutils literal"><span class="pre">MATERIALIZED</span> <span class="pre">expr</span></tt></p>
+<p>Материализованное выражение. Такой столбец не может быть указан при INSERT-е, то есть, он всегда вычисляется.
+При INSERT-е без указания списка столбцов, такие столбцы не рассматриваются.
+Также этот столбец не подставляется при использовании звёздочки в запросе SELECT - чтобы сохранить инвариант, что дамп, полученный путём SELECT <a href="#id3"><span class="problematic" id="id4">*</span></a>, можно вставить обратно в таблицу INSERT-ом без указания списка столбцов.</p>
+<p><tt class="docutils literal"><span class="pre">ALIAS</span> <span class="pre">expr</span></tt></p>
+<p>Синоним. Такой столбец вообще не хранится в таблице.
+Его значения не могут быть вставлены в таблицу, он не подставляется при использовании звёздочки в запросе SELECT.
+Он может быть использован в SELECT-ах - в таком случае, во время разбора запроса, алиас раскрывается.</p>
+<p>При добавлении новых столбцов с помощью запроса ALTER, старые данные для этих столбцов не записываются. Вместо этого, при чтении старых данных, для которых отсутствуют значения новых столбцов, выполняется вычисление выражений по умолчанию налету. При этом, если выполнение выражения требует использования других столбцов, не указанных в запросе, то эти столбцы будут дополнительно прочитаны, но только для тех блоков данных, для которых это необходимо.</p>
+<p>Если добавить в таблицу новый столбец, а через некоторое время изменить его выражение по умолчанию, то используемые значения для старых данных (для данных, где значения не хранились на диске) поменяются. Также заметим, что при выполнении фоновых слияний, данные для столбцов, отсутствующих в одном из сливаемых кусков, записываются в объединённый кусок.</p>
+<p>Отсутствует возможность задать значения по умолчанию для элементов вложенных структур данных.</p>
+</div>
+<div class="section" id="id5">
+<h3>Временные таблицы<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<p>Во всех случаях, если указано <tt class="docutils literal"><span class="pre">TEMPORARY</span></tt>, то будет создана временная таблица. Временные таблицы обладают следующими особенностями:
+- временные таблицы исчезают после завершения сессии; в том числе, при обрыве соединения;
+- временная таблица создаётся с движком Memory; все остальные движки таблиц не поддерживаются;
+- для временной таблицы нет возможности указать БД: она создаётся вне баз данных;
+- если временная таблица имеет то же имя, что и некоторая другая, то, при упоминании в запросе без указания БД, будет использована временная таблица;
+- при распределённой обработке запроса, используемые в запросе временные таблицы, передаются на удалённые серверы.</p>
+<p>В большинстве случаев, временные таблицы создаются не вручную, а при использовании внешних данных для запроса, или при распределённом <tt class="docutils literal"><span class="pre">(GLOBAL)</span> <span class="pre">IN</span></tt>. Подробнее см. соответствующие разделы</p>
+</div>
+</div>
+<div class="section" id="create-view">
+<h2>CREATE VIEW<a class="headerlink" href="#create-view" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">CREATE</span> <span class="pre">[MATERIALIZED]</span> <span class="pre">VIEW</span> <span class="pre">[IF</span> <span class="pre">NOT</span> <span class="pre">EXISTS]</span> <span class="pre">[db.]name</span> <span class="pre">[ENGINE</span> <span class="pre">=</span> <span class="pre">engine]</span> <span class="pre">[POPULATE]</span> <span class="pre">AS</span> <span class="pre">SELECT</span> <span class="pre">...</span></tt></p>
+<p>Создаёт представление. Представления бывают двух видов - обычные и материализованные (MATERIALIZED).</p>
+<p>Обычные представления не хранят никаких данных, а всего лишь производят чтение из другой таблицы. То есть, обычное представление - не более чем сохранённый запрос. При чтении из представления, этот сохранённый запрос, используется в качестве подзапроса в секции FROM.</p>
+<p>Для примера, пусть вы создали представление:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>CREATE VIEW view AS SELECT ...
+</pre></div>
+</div>
+<p>и написали запрос:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>SELECT a, b, c FROM view
+</pre></div>
+</div>
+<p>Этот запрос полностью эквивалентен использованию подзапроса:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>SELECT a, b, c FROM (SELECT ...)
+</pre></div>
+</div>
+<p>Материализованные (MATERIALIZED) представления хранят данные, преобразованные соответствующим запросом SELECT.</p>
+<p>При создании материализованного представления, можно указать ENGINE - движок таблицы для хранения данных. По умолчанию, будет использован тот же движок, что и у таблицы, из которой делается запрос SELECT.</p>
+<p>Материализованное представление устроено следующим образом: при вставке данных в таблицу, указанную в SELECT-е, кусок вставляемых данных преобразуется этим запросом SELECT, и полученный результат вставляется в представление.</p>
+<p>Если указано POPULATE, то при создании представления, в него будут вставлены имеющиеся данные таблицы, как если бы был сделан запрос <tt class="docutils literal"><span class="pre">CREATE</span> <span class="pre">TABLE</span> <span class="pre">...</span> <span class="pre">AS</span> <span class="pre">SELECT</span> <span class="pre">...</span></tt> . Иначе, представление будет содержать только данные, вставляемые в таблицу после создания представления. Не рекомендуется использовать POPULATE, так как вставляемые в таблицу данные во время создания представления, не попадут в него.</p>
+<p>Запрос <tt class="docutils literal"><span class="pre">SELECT</span></tt> может содержать <tt class="docutils literal"><span class="pre">DISTINCT</span></tt>, <tt class="docutils literal"><span class="pre">GROUP</span> <span class="pre">BY</span></tt>, <tt class="docutils literal"><span class="pre">ORDER</span> <span class="pre">BY</span></tt>, <tt class="docutils literal"><span class="pre">LIMIT</span></tt>... Следует иметь ввиду, что соответствующие преобразования будут выполняться независимо, на каждый блок вставляемых данных. Например, при наличии <tt class="docutils literal"><span class="pre">GROUP</span> <span class="pre">BY</span></tt>, данные будут агрегироваться при вставке, но только в рамках одной пачки вставляемых данных. Далее, данные не будут доагрегированы. Исключение - использование ENGINE, производящего агрегацию данных самостоятельно, например, <tt class="docutils literal"><span class="pre">SummingMergeTree</span></tt>.</p>
+<p>Недоработано выполнение запросов <tt class="docutils literal"><span class="pre">ALTER</span></tt> над материализованными представлениями, поэтому они могут быть неудобными для использования.</p>
+<p>Представления выглядят так же, как обычные таблицы. Например, они перечисляются в результате запроса <tt class="docutils literal"><span class="pre">SHOW</span> <span class="pre">TABLES</span></tt>.</p>
+<p>Отсутствует отдельный запрос для удаления представлений. Чтобы удалить представление, следует использовать <tt class="docutils literal"><span class="pre">DROP</span> <span class="pre">TABLE</span></tt>.</p>
+</div>
+<div class="section" id="attach">
+<h2>ATTACH<a class="headerlink" href="#attach" title="Permalink to this headline">¶</a></h2>
+<p>Запрос полностью аналогичен запросу <tt class="docutils literal"><span class="pre">CREATE</span></tt>, но
+- вместо слова <tt class="docutils literal"><span class="pre">CREATE</span></tt> используется слово <tt class="docutils literal"><span class="pre">ATTACH</span></tt>;
+- запрос не создаёт данные на диске, а предполагает, что данные уже лежат в соответствующих местах, и всего лишь добавляет информацию о таблице в сервер.
+После выполнения запроса ATTACH, сервер будет знать о существовании таблицы.</p>
+<p>Этот запрос используется при старте сервера. Сервер хранит метаданные таблиц в виде файлов с запросами <tt class="docutils literal"><span class="pre">ATTACH</span></tt>, которые он просто исполняет при запуске (за исключением системных таблиц, создание которых явно вписано в сервер).</p>
+</div>
+<div class="section" id="drop">
+<h2>DROP<a class="headerlink" href="#drop" title="Permalink to this headline">¶</a></h2>
+<p>Запрос имеет два вида: <tt class="docutils literal"><span class="pre">DROP</span> <span class="pre">DATABASE</span></tt> и <tt class="docutils literal"><span class="pre">DROP</span> <span class="pre">TABLE</span></tt>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>DROP DATABASE [IF EXISTS] db
+</pre></div>
+</div>
+<p>Удаляет все таблицы внутри базы данных db, а затем саму базу данных db.
+Если указано <tt class="docutils literal"><span class="pre">IF</span> <span class="pre">EXISTS</span></tt> - не выдавать ошибку, если база данных не существует.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>DROP TABLE [IF EXISTS] [db.]name
+</pre></div>
+</div>
+<p>Удаляет таблицу.
+Если указано <tt class="docutils literal"><span class="pre">IF</span> <span class="pre">EXISTS</span></tt> - не выдавать ошибку, если таблица не существует или база данных не существует.</p>
+</div>
+<div class="section" id="detach">
+<h2>DETACH<a class="headerlink" href="#detach" title="Permalink to this headline">¶</a></h2>
+<p>Удаляет из сервера информацию о таблице <cite>name</cite>. Сервер перестаёт знать о существовании таблицы.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>DETACH TABLE [IF EXISTS] [db.]name
+</pre></div>
+</div>
+<p>Но ни данные, ни метаданные таблицы не удаляются. При следующем запуске сервера, сервер прочитает метаданные и снова узнает о таблице.
+Также, &#8220;отцепленную&#8221; таблицу можно прицепить заново запросом <tt class="docutils literal"><span class="pre">ATTACH</span></tt> (за исключением системных таблиц, для которых метаданные не хранятся).</p>
+<p>Запроса <tt class="docutils literal"><span class="pre">DETACH</span> <span class="pre">DATABASE</span></tt> нет.</p>
+</div>
+<div class="section" id="rename">
+<h2>RENAME<a class="headerlink" href="#rename" title="Permalink to this headline">¶</a></h2>
+<p>Переименовывает одну или несколько таблиц.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>RENAME TABLE [db11.]name11 TO [db12.]name12, [db21.]name21 TO [db22.]name22, ...
+</pre></div>
+</div>
+<p>Все таблицы переименовываются под глобальной блокировкой. Переименовывание таблицы является лёгкой операцией. Если вы указали после TO другую базу данных, то таблица будет перенесена в эту базу данных. При этом, директории с базами данных должны быть расположены в одной файловой системе (иначе возвращается ошибка).</p>
+</div>
+<div class="section" id="alter">
+<h2>ALTER<a class="headerlink" href="#alter" title="Permalink to this headline">¶</a></h2>
+<p>Запрос <tt class="docutils literal"><span class="pre">ALTER</span></tt> поддерживается только для таблиц типа <tt class="docutils literal"><span class="pre">*MergeTree</span></tt>, а также <tt class="docutils literal"><span class="pre">Merge</span></tt> и <tt class="docutils literal"><span class="pre">Distributed</span></tt>. Запрос имеет несколько вариантов.</p>
+<div class="section" id="id6">
+<h3>Манипуляции со столбцами<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<p>Изменение структуры таблицы.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>ALTER TABLE [db].name ADD|DROP|MODIFY COLUMN ...
+</pre></div>
+</div>
+<p>В запросе указывается список из одного или более действий через запятую.
+Каждое действие - операция над столбцом.</p>
+<p>Существуют следующие действия:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>ADD COLUMN name [type] [default_expr] [AFTER name_after]
+</pre></div>
+</div>
+<p>Добавляет в таблицу новый столбец с именем name, типом type и выражением для умолчания <tt class="docutils literal"><span class="pre">default_expr</span></tt> (смотрите раздел &#8220;Значения по умолчанию&#8221;). Если указано <tt class="docutils literal"><span class="pre">AFTER</span> <span class="pre">name_after</span></tt> (имя другого столбца), то столбец добавляется (в список столбцов таблицы) после указанного. Иначе, столбец добавляется в конец таблицы. Внимательный читатель может заметить, что отсутствует возможность добавить столбец в начало таблицы. Для цепочки действий, name_after может быть именем столбца, который добавляется в одном из предыдущих действий.</p>
+<p>Добавление столбца всего лишь меняет структуру таблицы, и не производит никаких действий с данными - соответствующие данные не появляются на диске после ALTER-а. При чтении из таблицы, если для какого-либо столбца отсутствуют данные, то он заполняется значениями по умолчанию (выполняя выражение по умолчанию, если такое есть, или нулями, пустыми строками). Также, столбец появляется на диске при слиянии кусков данных (см. MergeTree).</p>
+<p>Такая схема позволяет добиться мгновенной работы запроса ALTER и отсутствия необходимости увеличивать объём старых данных.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">DROP</span> <span class="k">COLUMN</span> <span class="n">name</span>
+</pre></div>
+</div>
+<p>Удаляет столбец с именем name.
+Удаляет данные из файловой системы. Так как это представляет собой удаление целых файлов, запрос выполняется почти мгновенно.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">MODIFY</span> <span class="k">COLUMN</span> <span class="n">name</span> <span class="p">[</span><span class="k">type</span><span class="p">]</span> <span class="p">[</span><span class="n">default_expr</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Изменяет тип столбца name на type и/или выражение для умолчания на default_expr. При изменении типа, значения преобразуются так, как если бы к ним была применена функция toType.</p>
+<p>Если изменяется только выражение для умолчания, то запрос не делает никакой сложной работы и выполняется мгновенно.</p>
+<p>Изменение типа столбца - это единственное действие, которое выполняет сложную работу - меняет содержимое файлов с данными. Для больших таблиц, выполнение может занять длительное время.</p>
+<p>Выполнение производится в несколько стадий:
+- подготовка временных (новых) файлов с изменёнными данными;
+- переименование старых файлов;
+- переименование временных (новых) файлов в старые;
+- удаление старых файлов.</p>
+<p>Из них, длительной является только первая стадия. Если на этой стадии возникнет сбой, то данные не поменяются.
+Если на одной из следующих стадий возникнет сбой, то данные будет можно восстановить вручную. За исключением случаев, когда старые файлы удалены из файловой системы, а данные для новых файлов не доехали на диск и потеряны.</p>
+<p>Не поддерживается изменение типа столбца у массивов и вложенных структур данных.</p>
+<p>Запрос <tt class="docutils literal"><span class="pre">ALTER</span></tt> позволяет создавать и удалять отдельные элементы (столбцы) вложенных структур данных, но не вложенные структуры данных целиком. Для добавления вложенной структуры данных, вы можете добавить столбцы с именем вида <tt class="docutils literal"><span class="pre">name.nested_name</span></tt> и типом <tt class="docutils literal"><span class="pre">Array(T)</span></tt> - вложенная структура данных полностью эквивалентна нескольким столбцам-массивам с именем, имеющим одинаковый префикс до точки.</p>
+<p>Отсутствует возможность удалять столбцы, входящие в первичный ключ или ключ для сэмплирования (в общем, входящие в выражение <tt class="docutils literal"><span class="pre">ENGINE</span></tt>). Изменение типа у столбцов, входящих в первичный ключ возможно только в том случае, если это изменение не приводит к изменению данных (например, разрешено добавление значения в Enum или изменение типа с <tt class="docutils literal"><span class="pre">DateTime</span></tt> на <tt class="docutils literal"><span class="pre">UInt32</span></tt>).</p>
+<p>Если возможностей запроса <tt class="docutils literal"><span class="pre">ALTER</span></tt> не хватает для нужного изменения таблицы, вы можете создать новую таблицу, скопировать туда данные с помощью запроса <tt class="docutils literal"><span class="pre">INSERT</span> <span class="pre">SELECT</span></tt>, затем поменять таблицы местами с помощью запроса <tt class="docutils literal"><span class="pre">RENAME</span></tt>, и удалить старую таблицу.</p>
+<p>Запрос <tt class="docutils literal"><span class="pre">ALTER</span></tt> блокирует все чтения и записи для таблицы. То есть, если на момент запроса <tt class="docutils literal"><span class="pre">ALTER</span></tt>, выполнялся долгий <tt class="docutils literal"><span class="pre">SELECT</span></tt>, то запрос <tt class="docutils literal"><span class="pre">ALTER</span></tt> сначала дождётся его выполнения. И в это время, все новые запросы к той же таблице, будут ждать, пока завершится этот <tt class="docutils literal"><span class="pre">ALTER</span></tt>.</p>
+<p>Для таблиц, которые не хранят данные самостоятельно (типа <tt class="docutils literal"><span class="pre">Merge</span></tt> и <tt class="docutils literal"><span class="pre">Distributed</span></tt>), <tt class="docutils literal"><span class="pre">ALTER</span></tt> всего лишь меняет структуру таблицы, но не меняет структуру подчинённых таблиц. Для примера, при ALTER-е таблицы типа <tt class="docutils literal"><span class="pre">Distributed</span></tt>, вам также потребуется выполнить запрос <tt class="docutils literal"><span class="pre">ALTER</span></tt> для таблиц на всех удалённых серверах.</p>
+<p>Запрос <tt class="docutils literal"><span class="pre">ALTER</span></tt> на изменение столбцов реплицируется. Соответствующие инструкции сохраняются в ZooKeeper, и затем каждая реплика их применяет. Все запросы <tt class="docutils literal"><span class="pre">ALTER</span></tt> выполняются в одном и том же порядке. Запрос ждёт выполнения соответствующих действий на всех репликах. Но при этом, запрос на изменение столбцов в реплицируемой таблице можно прервать, и все действия будут осуществлены асинхронно.</p>
+</div>
+<div class="section" id="id7">
+<h3>Манипуляции с партициями и кусками<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<p>Работает только для таблиц семейства <tt class="docutils literal"><span class="pre">MergeTree</span></tt>. Существуют следующие виды операций:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">DETACH</span> <span class="pre">PARTITION</span></tt> - перенести партицию в директорию detached и забыть про неё.</li>
+<li><tt class="docutils literal"><span class="pre">DROP</span> <span class="pre">PARTITION</span></tt> - удалить партицию.</li>
+<li><tt class="docutils literal"><span class="pre">ATTACH</span> <span class="pre">PART|PARTITION</span></tt> - добавить в таблицу новый кусок или партицию из директории <tt class="docutils literal"><span class="pre">detached</span></tt>.</li>
+<li><tt class="docutils literal"><span class="pre">FREEZE</span> <span class="pre">PARTITION</span></tt> - создать бэкап партиции.</li>
+<li><tt class="docutils literal"><span class="pre">FETCH</span> <span class="pre">PARTITION</span></tt> - скачать партицию с другого сервера.</li>
+</ul>
+<p>Ниже будет рассмотрен каждый вид запроса по-отдельности.</p>
+<p>Партицией (partition) в таблице называются данные за один календарный месяц. Это определяется значениями ключа-даты, указанной в параметрах движка таблицы. Данные за каждый месяц хранятся отдельно, чтобы упростить всевозможные манипуляции с этими данными.</p>
+<p>Куском (part) в таблице называется часть данных одной партиции, отсортированная по первичному ключу.</p>
+<p>Чтобы посмотреть набор кусков и партиций таблицы, можно воспользоваться системной таблицей <tt class="docutils literal"><span class="pre">system.parts</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>SELECT * FROM system.parts WHERE active
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">active</span></tt> - учитывать только активные куски. Неактивными являются, например, исходные куски оставшиеся после слияния в более крупный кусок - такие куски удаляются приблизительно через 10 минут после слияния.</p>
+<p>Другой способ посмотреть набор кусков и партиций - зайти в директорию с данными таблицы.
+Директория с данными - <tt class="docutils literal"><span class="pre">/var/lib/clickhouse/data/database/table/</span></tt>,
+где <tt class="docutils literal"><span class="pre">/var/lib/clickhouse/</span></tt> - путь к данным ClickHouse, database - имя базы данных, table - имя таблицы. Пример:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>$ ls -l /var/lib/clickhouse/data/test/visits/
+total 48
+drwxrwxrwx 2 clickhouse clickhouse 20480 мая   13 02:58 20140317_20140323_2_2_0
+drwxrwxrwx 2 clickhouse clickhouse 20480 мая   13 02:58 20140317_20140323_4_4_0
+drwxrwxrwx 2 clickhouse clickhouse  4096 мая   13 02:55 detached
+-rw-rw-rw- 1 clickhouse clickhouse     2 мая   13 02:58 increment.txt
+</pre></div>
+</div>
+<p>Здесь <tt class="docutils literal"><span class="pre">20140317_20140323_2_2_0</span></tt>, <tt class="docutils literal"><span class="pre">20140317_20140323_4_4_0</span></tt> - директории кусков.</p>
+<dl class="docutils">
+<dt>Рассмотрим по порядку имя первого куска: <tt class="docutils literal"><span class="pre">20140317_20140323_2_2_0</span></tt>.</dt>
+<dd><ul class="first last simple">
+<li><tt class="docutils literal"><span class="pre">20140317</span></tt> - минимальная дата данных куска</li>
+<li><tt class="docutils literal"><span class="pre">20140323</span></tt> - максимальная дата данных куска .. <a href="#id17"><span class="problematic" id="id18">|br|</span></a> raw:: html</li>
+<li><tt class="docutils literal"><span class="pre">2</span></tt> - минимальный номер блока данных .. <a href="#id19"><span class="problematic" id="id20">|br|</span></a> raw:: html</li>
+<li><tt class="docutils literal"><span class="pre">2</span></tt> - максимальный номер блока данных .. <a href="#id21"><span class="problematic" id="id22">|br|</span></a> raw:: html</li>
+<li><tt class="docutils literal"><span class="pre">0</span></tt> - уровень куска - глубина дерева слияний, которыми он образован</li>
+</ul>
+</dd>
+</dl>
+<p>Каждый кусок относится к одной партиции и содержит данные только за один месяц.
+<tt class="docutils literal"><span class="pre">201403</span></tt> - имя партиции. Партиция представляет собой набор кусков за один месяц.</p>
+<p>При работающем сервере, нельзя вручную изменять набор кусков или их данные на файловой системе, так как сервер не будет об этом знать.
+Для нереплицируемых таблиц, вы можете это делать при остановленном сервере, хотя это не рекомендуется.
+Для реплицируемых таблиц, набор кусков нельзя менять в любом случае.</p>
+<p>Директория <tt class="docutils literal"><span class="pre">detached</span></tt> содержит куски, не используемые сервером - отцепленные от таблицы с помощью запроса <tt class="docutils literal"><span class="pre">ALTER</span> <span class="pre">...</span> <span class="pre">DETACH</span></tt>. Также в эту директорию переносятся куски, признанные повреждёнными, вместо их удаления. Вы можете в любое время добавлять, удалять, модифицировать данные в директории detached - сервер не будет об этом знать, пока вы не сделаете запрос <tt class="docutils literal"><span class="pre">ALTER</span> <span class="pre">TABLE</span> <span class="pre">...</span> <span class="pre">ATTACH</span></tt>.
+::
+ALTER TABLE [db.]table DETACH PARTITION &#8216;name&#8217;</p>
+<p>Перенести все данные для партиции с именем name в директорию detached и забыть про них.
+Имя партиции указывается в формате YYYYMM. Оно может быть указано в одинарных кавычках или без них.</p>
+<p>После того, как запрос будет выполнен, вы можете самостоятельно сделать что угодно с данными в директории detached, например, удалить их из файловой системы, или ничего не делать.</p>
+<p>Запрос реплицируется - данные будут перенесены в директорию detached и забыты на всех репликах. Запрос может быть отправлен только на реплику-лидер. Вы можете узнать, является ли реплика лидером, сделав SELECT в системную таблицу system.replicas. Или, проще, вы можете выполнить запрос на всех репликах, и на всех кроме одной, он кинет исключение.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>ALTER TABLE [db.]table DROP PARTITION &#39;name&#39;
+</pre></div>
+</div>
+<p>Аналогично операции <tt class="docutils literal"><span class="pre">DETACH</span></tt>. Удалить данные из таблицы. Куски с данными будут помечены как неактивные и будут полностью удалены примерно через 10 минут. Запрос реплицируется - данные будут удалены на всех репликах.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>ALTER TABLE [db.]table ATTACH PARTITION|PART &#39;name&#39;
+</pre></div>
+</div>
+<p>Добавить данные в таблицу из директории detached.</p>
+<p>Существует возможность добавить данные для целой партиции (PARTITION) или отдельный кусок (PART). В случае PART, укажите полное имя куска в одинарных кавычках.</p>
+<p>Запрос реплицируется. Каждая реплика проверяет, если ли данные в директории detached. Если данные есть - проверяет их целостность, проверяет их соответствие данным на сервере-инициаторе запроса, и если всё хорошо, то добавляет их. Если нет, то скачивает данные с реплики-инициатора запроса, или с другой реплики, на которой уже добавлены эти данные.</p>
+<p>То есть, вы можете разместить данные в директории detached на одной реплике и, с помощью запроса ALTER ... ATTACH добавить их в таблицу на всех репликах.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>ALTER TABLE [db.]table FREEZE PARTITION &#39;name&#39;
+</pre></div>
+</div>
+<p>Создаёт локальный бэкап одной или нескольких партиций. В качестве имени может быть указано полное имя партиции (например, 201403) или его префикс (например, 2014) - тогда бэкап будет создан для всех соответствующих партиций.</p>
+<p>Запрос делает следующее: для снэпшота данных на момент его выполнения, создаёт hardlink-и на данные таблиц в директории <tt class="docutils literal"><span class="pre">/var/lib/clickhouse/shadow/N/...</span></tt></p>
+<p><tt class="docutils literal"><span class="pre">/var/lib/clickhouse/</span></tt> - рабочая директория ClickHouse из конфига.
+<tt class="docutils literal"><span class="pre">N</span></tt> - инкрементальный номер бэкапа.</p>
+<p>Структура директорий внутри бэкапа создаётся такой же, как внутри <tt class="docutils literal"><span class="pre">/var/lib/clickhouse/</span></tt>.
+Также делает chmod всех файлов, запрещая запись в них.</p>
+<p>Создание бэкапа происходит почти мгновенно (но сначала дожидается окончания выполняющихся в данный момент запросов к соответствующей таблице). Бэкап изначально не занимает места на диске. При дальнейшей работе системы, бэкап может отнимать место на диске, по мере модификации данных. Если бэкап делается для достаточно старых данных, то он не будет отнимать место на диске.</p>
+<p>После создания бэкапа, данные из <tt class="docutils literal"><span class="pre">/var/lib/clickhouse/shadow/</span></tt> можно скопировать на удалённый сервер и затем удалить на локальном сервере.
+Весь процесс бэкапа не требует остановки сервера.</p>
+<p>Запрос <tt class="docutils literal"><span class="pre">ALTER</span> <span class="pre">...</span> <span class="pre">FREEZE</span> <span class="pre">PARTITION</span></tt> не реплицируется. То есть, локальный бэкап создаётся только на локальном сервере.</p>
+<p>В качестве альтернативного варианта, вы можете скопировать данные из директории <tt class="docutils literal"><span class="pre">/var/lib/clickhouse/data/database/table</span></tt> вручную.
+Но если это делать при запущенном сервере, то возможны race conditions при копировании директории с добавляющимися/изменяющимися файлами, и бэкап может быть неконсистентным. Этот вариант может использоваться, если сервер не запущен - тогда полученные данные будут такими же, как после запроса <tt class="docutils literal"><span class="pre">ALTER</span> <span class="pre">TABLE</span> <span class="pre">t</span> <span class="pre">FREEZE</span> <span class="pre">PARTITION</span></tt>.</p>
+<p><tt class="docutils literal"><span class="pre">ALTER</span> <span class="pre">TABLE</span> <span class="pre">...</span> <span class="pre">FREEZE</span> <span class="pre">PARTITION</span></tt> копирует только данные, но не метаданные таблицы. Чтобы сделать бэкап метаданных таблицы, скопируйте файл  <tt class="docutils literal"><span class="pre">/var/lib/clickhouse/metadata/database/table.sql</span></tt></p>
+<dl class="docutils">
+<dt>Для восстановления из бэкапа:</dt>
+<dd><ul class="first last simple">
+<li>создайте таблицу, если её нет, с помощью запроса CREATE. Запрос можно взять из .sql файла (замените в нём <tt class="docutils literal"><span class="pre">ATTACH</span></tt> на <tt class="docutils literal"><span class="pre">CREATE</span></tt>);</li>
+<li>скопируйте данные из директории data/database/table/ внутри бэкапа в директорию <tt class="docutils literal"><span class="pre">/var/lib/clickhouse/data/database/table/detached/</span></tt></li>
+<li>выполните запросы <tt class="docutils literal"><span class="pre">ALTER</span> <span class="pre">TABLE</span> <span class="pre">...</span> <span class="pre">ATTACH</span> <span class="pre">PARTITION</span> <span class="pre">YYYYMM</span></tt>, где <tt class="docutils literal"><span class="pre">YYYYMM</span></tt> - месяц, для каждого месяца.</li>
+</ul>
+</dd>
+</dl>
+<p>Таким образом, данные из бэкапа будут добавлены в таблицу.
+Восстановление из бэкапа, так же, не требует остановки сервера.</p>
+</div>
+<div class="section" id="id8">
+<h3>Бэкапы и репликация<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<p>Репликация защищает от аппаратных сбоев. В случае, если на одной из реплик у вас исчезли все данные, то восстановление делается по инструкции в разделе &#8220;Восстановление после сбоя&#8221;.</p>
+<p>Для защиты от аппаратных сбоев, обязательно используйте репликацию. Подробнее про репликацию написано в разделе &#8220;Репликация данных&#8221;.</p>
+<p>Бэкапы защищают от человеческих ошибок (случайно удалили данные, удалили не те данные или не на том кластере, испортили данные).
+Для баз данных большого объёма, бывает затруднительно копировать бэкапы на удалённые серверы. В этих случаях, для защиты от человеческой ошибки, можно держать бэкап на том же сервере (он будет лежать в <tt class="docutils literal"><span class="pre">/var/lib/clickhouse/shadow/</span></tt>).</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>ALTER TABLE [db.]table FETCH PARTITION &#39;name&#39; FROM &#39;path-in-zookeeper&#39;
+</pre></div>
+</div>
+<p>Запрос работает только для реплицируемых таблиц.</p>
+<p>Скачивает указанную партицию с шарда, путь в <tt class="docutils literal"><span class="pre">ZooKeeper</span></tt> к которому указан в секции <tt class="docutils literal"><span class="pre">FROM</span></tt> и помещает в директорию <tt class="docutils literal"><span class="pre">detached</span></tt> указанной таблицы.</p>
+<p>Не смотря на то, что запрос называется <tt class="docutils literal"><span class="pre">ALTER</span> <span class="pre">TABLE</span></tt>, он не изменяет структуру таблицы, и не изменяет сразу доступные данные в таблице.</p>
+<p>Данные помещаются в директорию <tt class="docutils literal"><span class="pre">detached</span></tt>, и их можно прикрепить с помощью запроса <tt class="docutils literal"><span class="pre">ALTER</span> <span class="pre">TABLE</span> <span class="pre">...</span> <span class="pre">ATTACH</span></tt>.</p>
+<p>В секции <tt class="docutils literal"><span class="pre">FROM</span></tt> указывается путь в <tt class="docutils literal"><span class="pre">ZooKeeper</span></tt>. Например, <tt class="docutils literal"><span class="pre">/clickhouse/tables/01-01/visits</span></tt>.
+Перед скачиванием проверяется существование партиции и совпадение структуры таблицы. Автоматически выбирается наиболее актуальная реплика среди живых реплик.</p>
+<p>Запрос <tt class="docutils literal"><span class="pre">ALTER</span> <span class="pre">...</span> <span class="pre">FETCH</span> <span class="pre">PARTITION</span></tt> не реплицируется. То есть, партиция будет скачана в директорию detached только на локальном сервере. Заметим, что если вы после этого добавите данные в таблицу с помощью запроса <tt class="docutils literal"><span class="pre">ALTER</span> <span class="pre">TABLE</span> <span class="pre">...</span> <span class="pre">ATTACH</span></tt>, то данные будут добавлены на всех репликах (на одной из реплик будут добавлены из директории detached, а на других - загружены с соседних реплик).</p>
+</div>
+<div class="section" id="id9">
+<h3>Синхронность запросов ALTER<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<p>Для нереплицируемых таблиц, все запросы <tt class="docutils literal"><span class="pre">ALTER</span></tt> выполняются синхронно. Для реплицируемых таблиц, запрос всего лишь добавляет инструкцию по соответствующим действиям в <tt class="docutils literal"><span class="pre">ZooKeeper</span></tt>, а сами действия осуществляются при первой возможности. Но при этом, запрос может ждать завершения выполнения этих действий на всех репликах.</p>
+<p>Для запросов <tt class="docutils literal"><span class="pre">ALTER</span> <span class="pre">...</span> <span class="pre">ATTACH|DETACH|DROP</span></tt> можно настроить ожидание, с помощью настройки <tt class="docutils literal"><span class="pre">replication_alter_partitions_sync</span></tt>.
+Возможные значения: <tt class="docutils literal"><span class="pre">0</span></tt> - не ждать, <tt class="docutils literal"><span class="pre">1</span></tt> - ждать выполнения только у себя (по умолчанию), <tt class="docutils literal"><span class="pre">2</span></tt> - ждать всех.</p>
+</div>
+</div>
+<div class="section" id="show-databases">
+<h2>SHOW DATABASES<a class="headerlink" href="#show-databases" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SHOW</span> <span class="n">DATABASES</span> <span class="p">[</span><span class="k">INTO</span> <span class="n">OUTFILE</span> <span class="n">filename</span><span class="p">]</span> <span class="p">[</span><span class="n">FORMAT</span> <span class="n">format</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Выводит список всех баз данных.
+Запрос полностью аналогичен запросу <tt class="docutils literal"><span class="pre">SELECT</span> <span class="pre">name</span> <span class="pre">FROM</span> <span class="pre">system.databases</span> <span class="pre">[INTO</span> <span class="pre">OUTFILE</span> <span class="pre">filename]</span> <span class="pre">[FORMAT</span> <span class="pre">format]</span></tt>.</p>
+<p>Смотрите также раздел &#8220;Форматы&#8221;.</p>
+</div>
+<div class="section" id="show-tables">
+<h2>SHOW TABLES<a class="headerlink" href="#show-tables" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SHOW</span> <span class="n">TABLES</span> <span class="p">[</span><span class="k">FROM</span> <span class="n">db</span><span class="p">]</span> <span class="p">[</span><span class="k">LIKE</span> <span class="s1">&#39;pattern&#39;</span><span class="p">]</span> <span class="p">[</span><span class="k">INTO</span> <span class="n">OUTFILE</span> <span class="n">filename</span><span class="p">]</span> <span class="p">[</span><span class="n">FORMAT</span> <span class="n">format</span><span class="p">]</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>Выводит список таблиц</dt>
+<dd><ul class="first last simple">
+<li>из текущей БД или из БД db, если указано FROM db;</li>
+<li>всех, или имя которых соответствует шаблону pattern, если указано LIKE &#8216;pattern&#8217;;</li>
+</ul>
+</dd>
+</dl>
+<p>Запрос полностью аналогичен запросу: <tt class="docutils literal"><span class="pre">SELECT</span> <span class="pre">name</span> <span class="pre">FROM</span> <span class="pre">system.tables</span> <span class="pre">WHERE</span> <span class="pre">database</span> <span class="pre">=</span> <span class="pre">'db'</span> <span class="pre">[AND</span> <span class="pre">name</span> <span class="pre">LIKE</span> <span class="pre">'pattern']</span> <span class="pre">[INTO</span> <span class="pre">OUTFILE</span> <span class="pre">filename]</span> <span class="pre">[FORMAT</span> <span class="pre">format]</span></tt>
+Смотрите также раздел &#8220;Оператор LIKE&#8221;.</p>
+</div>
+<div class="section" id="show-processlist">
+<h2>SHOW PROCESSLIST<a class="headerlink" href="#show-processlist" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SHOW</span> <span class="n">PROCESSLIST</span> <span class="p">[</span><span class="k">INTO</span> <span class="n">OUTFILE</span> <span class="n">filename</span><span class="p">]</span> <span class="p">[</span><span class="n">FORMAT</span> <span class="n">format</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Выводит список запросов, выполняющихся в данный момент времени, кроме запросов <tt class="docutils literal"><span class="pre">SHOW</span> <span class="pre">PROCESSLIST</span></tt>.</p>
+<p>Выдаёт таблицу, содержащую столбцы:</p>
+<p><strong>user</strong> - пользователь, под которым был задан запрос. Следует иметь ввиду, что при распределённой обработке запроса на удалённые серверы запросы отправляются под пользователем default. И SHOW PROCESSLIST показывает имя пользователя для конкретного запроса, а не для запроса, который данный запрос инициировал.</p>
+<p><strong>address</strong> - имя хоста, с которого был отправлен запрос. При распределённой обработке запроса на удалённых серверах — это имя хоста-инициатора запроса. Чтобы проследить, откуда был задан распределённый запрос изначально, следует смотреть SHOW PROCESSLIST на сервере-инициаторе запроса.</p>
+<p><strong>elapsed</strong> - время выполнения запроса, в секундах. Запросы выводятся упорядоченными по убыванию времени выполнения.</p>
+<p><strong>rows_read</strong>, <strong>bytes_read</strong> - сколько было прочитано строк, байт несжатых данных при обработке запроса. При распределённой обработке запроса суммируются данные со всех удалённых серверов. Именно эти данные используются для ограничений и квот.</p>
+<p><strong>memory_usage</strong> - текущее потребление оперативки в байтах. Смотрите настройку max_memory_usage.</p>
+<p><strong>query</strong> - сам запрос. В запросах INSERT данные для вставки не выводятся.</p>
+<p><strong>query_id</strong> - идентификатор запроса. Непустой, только если был явно задан пользователем. При распределённой обработке запроса идентификатор запроса не передаётся на удалённые серверы.</p>
+<p>Запрос полностью аналогичен запросу: <tt class="docutils literal"><span class="pre">SELECT</span> <span class="pre">*</span> <span class="pre">FROM</span> <span class="pre">system.processes</span> <span class="pre">[INTO</span> <span class="pre">OUTFILE</span> <span class="pre">filename]</span> <span class="pre">[FORMAT</span> <span class="pre">format]</span></tt>.</p>
+<p>Полезный совет (выполните в консоли):
+<tt class="docutils literal"><span class="pre">watch</span> <span class="pre">-n1</span> <span class="pre">&quot;clickhouse-client</span> <span class="pre">--query='SHOW</span> <span class="pre">PROCESSLIST'&quot;</span></tt></p>
+</div>
+<div class="section" id="show-create-table">
+<h2>SHOW CREATE TABLE<a class="headerlink" href="#show-create-table" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SHOW</span> <span class="k">CREATE</span> <span class="k">TABLE</span> <span class="p">[</span><span class="n">db</span><span class="p">.]</span><span class="k">table</span> <span class="p">[</span><span class="k">INTO</span> <span class="n">OUTFILE</span> <span class="n">filename</span><span class="p">]</span> <span class="p">[</span><span class="n">FORMAT</span> <span class="n">format</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Возвращает один столбец statement типа <tt class="docutils literal"><span class="pre">String</span></tt>, содержащий одно значение - запрос <tt class="docutils literal"><span class="pre">CREATE</span></tt>, с помощью которого создана указанная таблица.</p>
+</div>
+<div class="section" id="describe-table">
+<h2>DESCRIBE TABLE<a class="headerlink" href="#describe-table" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">DESC</span><span class="o">|</span><span class="k">DESCRIBE</span> <span class="k">TABLE</span> <span class="p">[</span><span class="n">db</span><span class="p">.]</span><span class="k">table</span> <span class="p">[</span><span class="k">INTO</span> <span class="n">OUTFILE</span> <span class="n">filename</span><span class="p">]</span> <span class="p">[</span><span class="n">FORMAT</span> <span class="n">format</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Возвращает два столбца: <tt class="docutils literal"><span class="pre">name</span></tt>, <tt class="docutils literal"><span class="pre">type</span></tt> типа <tt class="docutils literal"><span class="pre">String</span></tt>, в которых описаны имена и типы столбцов указанной таблицы.</p>
+<p>Вложенные структуры данных выводятся в &#8220;развёрнутом&#8221; виде. То есть, каждый столбец - по отдельности, с именем через точку.</p>
+</div>
+<div class="section" id="exists">
+<h2>EXISTS<a class="headerlink" href="#exists" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">EXISTS</span> <span class="k">TABLE</span> <span class="p">[</span><span class="n">db</span><span class="p">.]</span><span class="n">name</span> <span class="p">[</span><span class="k">INTO</span> <span class="n">OUTFILE</span> <span class="n">filename</span><span class="p">]</span> <span class="p">[</span><span class="n">FORMAT</span> <span class="n">format</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Возвращает один столбец типа <tt class="docutils literal"><span class="pre">UInt8</span></tt>, содержащий одно значение - <tt class="docutils literal"><span class="pre">0</span></tt>, если таблицы или БД не существует и <tt class="docutils literal"><span class="pre">1</span></tt>, если таблица в указанной БД существует.</p>
+</div>
+<div class="section" id="use">
+<h2>USE<a class="headerlink" href="#use" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="n">USE</span> <span class="n">db</span>
+</pre></div>
+</div>
+<p>Позволяет установить текущую базу данных для сессии.
+Текущая база данных используется для поиска таблиц, если база данных не указана в запросе явно через точку перед именем таблицы.
+При использовании HTTP протокола, запрос не может быть выполнен, так как понятия сессии не существует.</p>
+</div>
+<div class="section" id="set">
+<h2>SET<a class="headerlink" href="#set" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SET</span> <span class="p">[</span><span class="k">GLOBAL</span><span class="p">]</span> <span class="n">param</span> <span class="o">=</span> <span class="n">value</span>
+</pre></div>
+</div>
+<p>Позволяет установить настройку <tt class="docutils literal"><span class="pre">param</span></tt> в значение <tt class="docutils literal"><span class="pre">value</span></tt>. Также можно одним запросом установить все настройки из заданного профиля настроек - для этого, укажите в качестве имени настройки profile. Подробнее смотри раздел &#8220;Настройки&#8221;.
+Настройка устанавливается на сессию, или на сервер (глобально), если указано <tt class="docutils literal"><span class="pre">GLOBAL</span></tt>.
+При установке глобальной настройки, настройка на все уже запущенные сессии, включая текущую сессию, не устанавливается, а будет использована только для новых сессий.</p>
+<p>Настройки, заданные с помощью <tt class="docutils literal"><span class="pre">SET</span> <span class="pre">GLOBAL</span></tt> имеют меньший приоритет по сравнению с настройками, указанными в профиле пользователя, в конфигурационном файле. То есть, переопределить такие настройки с помощью <tt class="docutils literal"><span class="pre">SET</span> <span class="pre">GLOBAL</span></tt> невозможно.</p>
+<p>При перезапуске сервера, теряются глобальные настройки, установленные с помощью <tt class="docutils literal"><span class="pre">SET</span> <span class="pre">GLOBAL</span></tt>.
+Установить настройки, которые переживут перезапуск сервера, можно только с помощью конфигурационного файла сервера. (Это не может быть сделано с помощью запроса <tt class="docutils literal"><span class="pre">SET</span></tt>.)</p>
+</div>
+<div class="section" id="optimize">
+<h2>OPTIMIZE<a class="headerlink" href="#optimize" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="n">OPTIMIZE</span> <span class="k">TABLE</span> <span class="p">[</span><span class="n">db</span><span class="p">.]</span><span class="n">name</span> <span class="p">[</span><span class="n">PARTITION</span> <span class="n">partition</span><span class="p">]</span> <span class="p">[</span><span class="k">FINAL</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Просит движок таблицы сделать что-нибудь, что может привести к более оптимальной работе.
+Поддерживается только движками <tt class="docutils literal"><span class="pre">*MergeTree</span></tt>, в котором выполнение этого запроса инициирует внеочередное слияние кусков данных.
+Если указан <tt class="docutils literal"><span class="pre">PARTITION</span></tt>, то оптимизация будет производиться только для указаной партиции.
+Если указан <tt class="docutils literal"><span class="pre">FINAL</span></tt>, то оптимизация будет производиться даже когда все данные уже лежат в одном куске.</p>
+</div>
+<div class="section" id="insert">
+<h2>INSERT<a class="headerlink" href="#insert" title="Permalink to this headline">¶</a></h2>
+<p>Запрос имеет несколько вариантов.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">INSERT</span> <span class="k">INTO</span> <span class="p">[</span><span class="n">db</span><span class="p">.]</span><span class="k">table</span> <span class="p">[(</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">)]</span> <span class="k">VALUES</span> <span class="p">(</span><span class="n">v11</span><span class="p">,</span> <span class="n">v12</span><span class="p">,</span> <span class="n">v13</span><span class="p">),</span> <span class="p">(</span><span class="n">v21</span><span class="p">,</span> <span class="n">v22</span><span class="p">,</span> <span class="n">v23</span><span class="p">),</span> <span class="p">...</span>
+</pre></div>
+</div>
+<p>Вставляет в таблицу table строчки с перечисленными значениями.
+Запрос полностью аналогичен запросу вида:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">INSERT</span> <span class="k">INTO</span> <span class="p">[</span><span class="n">db</span><span class="p">.]</span><span class="k">table</span> <span class="p">[(</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">)]</span> <span class="n">FORMAT</span> <span class="k">Values</span> <span class="p">(</span><span class="n">v11</span><span class="p">,</span> <span class="n">v12</span><span class="p">,</span> <span class="n">v13</span><span class="p">),</span> <span class="p">(</span><span class="n">v21</span><span class="p">,</span> <span class="n">v22</span><span class="p">,</span> <span class="n">v23</span><span class="p">),</span> <span class="p">...</span>
+</pre></div>
+</div>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">INSERT</span> <span class="k">INTO</span> <span class="p">[</span><span class="n">db</span><span class="p">.]</span><span class="k">table</span> <span class="p">[(</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">)]</span> <span class="n">FORMAT</span> <span class="n">format</span> <span class="p">...</span>
+</pre></div>
+</div>
+<p>Вставка данных в произвольном указанном формате.
+Сами данные идут после format, после всех пробельных символов до первого перевода строки, если он есть, включая его, или после всех пробельных символов, если переводов строки нет. Рекомендуется писать данные начиная со следующей строки (это важно, если данные начинаются с пробельных символов).</p>
+<p>Пример:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">t</span> <span class="n">FORMAT</span> <span class="n">TabSeparated</span>
+<span class="mi">11</span>  <span class="n">Hello</span><span class="p">,</span> <span class="n">world</span><span class="o">!</span>
+<span class="mi">22</span>  <span class="n">Qwerty</span>
+</pre></div>
+</div>
+<p>Подробнее про форматы данных смотрите в разделе &#8220;Форматы&#8221;.
+В разделе &#8220;Интерфейсы&#8221; описано, как можно вставлять данные отдельно от запроса, при использовании клиента командной строки или HTTP интерфейса.</p>
+<p>В запросе может быть опционально указан список столбцов для вставки. В этом случае, в остальные столбцы записываются значения по умолчанию.
+Значения по умолчанию вычисляются из DEFAULT выражений, указанных в определении таблицы, или, если <tt class="docutils literal"><span class="pre">DEFAULT</span></tt> не прописан явно - используются нули, пустые строки. Если настройка <tt class="docutils literal"><span class="pre">strict_insert_defaults</span></tt> выставлена в 1, то все столбцы, для которых нет явных DEFAULT-ов, должны быть указаны в запросе.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">INSERT</span> <span class="k">INTO</span> <span class="p">[</span><span class="n">db</span><span class="p">.]</span><span class="k">table</span> <span class="p">[(</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">)]</span> <span class="k">SELECT</span> <span class="p">...</span>
+</pre></div>
+</div>
+<p>Вставка в таблицу результата запроса <tt class="docutils literal"><span class="pre">SELECT</span></tt>.
+Имена и типы данных результата выполнения SELECT-а должны точно совпадать со структурой таблицы, в которую вставляются данные, или с указанным списком столбцов.
+Для изменения имён столбцов следует использовать синонимы (AS) в запросе <tt class="docutils literal"><span class="pre">SELECT</span></tt>.
+Для изменения типов данных следует использовать функции преобразования типов (смотрите раздел &#8220;Функции&#8221;).</p>
+<p>Ни один из форматов данных не позволяет использовать в качестве значений выражения.
+То есть, вы не можете написать <tt class="docutils literal"><span class="pre">INSERT</span> <span class="pre">INTO</span> <span class="pre">t</span> <span class="pre">VALUES</span> <span class="pre">(now(),</span> <span class="pre">1</span> <span class="pre">+</span> <span class="pre">1,</span> <span class="pre">DEFAULT)</span></tt>.</p>
+<p>Не поддерживаются другие запросы на модификацию части данных: <tt class="docutils literal"><span class="pre">UPDATE</span></tt>, <tt class="docutils literal"><span class="pre">DELETE</span></tt>, <tt class="docutils literal"><span class="pre">REPLACE</span></tt>, <tt class="docutils literal"><span class="pre">MERGE</span></tt>, <tt class="docutils literal"><span class="pre">UPSERT</span></tt>, <tt class="docutils literal"><span class="pre">INSERT</span> <span class="pre">UPDATE</span></tt>.
+Впрочем, вы можете удалять старые данные с помощью запроса <tt class="docutils literal"><span class="pre">ALTER</span> <span class="pre">TABLE</span> <span class="pre">...</span> <span class="pre">DROP</span> <span class="pre">PARTITION</span></tt>.</p>
+</div>
+<div class="section" id="select">
+<h2>SELECT<a class="headerlink" href="#select" title="Permalink to this headline">¶</a></h2>
+<p>Его величество, запрос SELECT.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="p">[</span><span class="k">DISTINCT</span><span class="p">]</span> <span class="n">expr_list</span>
+    <span class="p">[</span><span class="k">FROM</span> <span class="p">[</span><span class="n">db</span><span class="p">.]</span><span class="k">table</span> <span class="o">|</span> <span class="p">(</span><span class="n">subquery</span><span class="p">)</span> <span class="o">|</span> <span class="n">table_function</span><span class="p">]</span> <span class="p">[</span><span class="k">FINAL</span><span class="p">]</span>
+    <span class="p">[</span><span class="n">SAMPLE</span> <span class="n">sample_coeff</span><span class="p">]</span>
+    <span class="p">[</span><span class="nb">ARRAY</span> <span class="k">JOIN</span> <span class="p">...]</span>
+    <span class="p">[</span><span class="k">GLOBAL</span><span class="p">]</span> <span class="k">ANY</span><span class="o">|</span><span class="k">ALL</span> <span class="k">INNER</span><span class="o">|</span><span class="k">LEFT</span> <span class="k">JOIN</span> <span class="p">(</span><span class="n">subquery</span><span class="p">)</span><span class="o">|</span><span class="k">table</span> <span class="k">USING</span> <span class="n">columns_list</span>
+    <span class="p">[</span><span class="n">PREWHERE</span> <span class="n">expr</span><span class="p">]</span>
+    <span class="p">[</span><span class="k">WHERE</span> <span class="n">expr</span><span class="p">]</span>
+    <span class="p">[</span><span class="k">GROUP</span> <span class="k">BY</span> <span class="n">expr_list</span><span class="p">]</span> <span class="p">[</span><span class="k">WITH</span> <span class="n">TOTALS</span><span class="p">]</span>
+    <span class="p">[</span><span class="k">HAVING</span> <span class="n">expr</span><span class="p">]</span>
+    <span class="p">[</span><span class="k">ORDER</span> <span class="k">BY</span> <span class="n">expr_list</span><span class="p">]</span>
+    <span class="p">[</span><span class="k">LIMIT</span> <span class="p">[</span><span class="n">n</span><span class="p">,</span> <span class="p">]</span><span class="n">m</span><span class="p">]</span>
+    <span class="p">[</span><span class="k">UNION</span> <span class="k">ALL</span> <span class="p">...]</span>
+    <span class="p">[</span><span class="k">INTO</span> <span class="n">OUTFILE</span> <span class="n">filename</span><span class="p">]</span>
+    <span class="p">[</span><span class="n">FORMAT</span> <span class="n">format</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Все секции, кроме списка выражений сразу после SELECT, являются необязательными.
+Ниже секции будут описаны в порядке, почти соответствующем конвейеру выполнения запроса.</p>
+<p>Если в запросе отсутствуют секции <tt class="docutils literal"><span class="pre">DISTINCT</span></tt>, <tt class="docutils literal"><span class="pre">GROUP</span> <span class="pre">BY</span></tt>, <tt class="docutils literal"><span class="pre">ORDER</span> <span class="pre">BY</span></tt>, подзапросы в <tt class="docutils literal"><span class="pre">IN</span></tt> и <tt class="docutils literal"><span class="pre">JOIN</span></tt>, то запрос будет обработан полностью потоково, с использованием O(1) количества оперативки.
+Иначе запрос может съесть много оперативки, если не указаны подходящие ограничения <tt class="docutils literal"><span class="pre">max_memory_usage</span></tt>, <tt class="docutils literal"><span class="pre">max_rows_to_group_by</span></tt>, <tt class="docutils literal"><span class="pre">max_rows_to_sort</span></tt>, <tt class="docutils literal"><span class="pre">max_rows_in_distinct</span></tt>, <tt class="docutils literal"><span class="pre">max_bytes_in_distinct</span></tt>, <tt class="docutils literal"><span class="pre">max_rows_in_set</span></tt>, <tt class="docutils literal"><span class="pre">max_bytes_in_set</span></tt>, <tt class="docutils literal"><span class="pre">max_rows_in_join</span></tt>, <tt class="docutils literal"><span class="pre">max_bytes_in_join</span></tt>, <tt class="docutils literal"><span class="pre">max_bytes_before_external_sort</span></tt>, <tt class="docutils literal"><span class="pre">max_bytes_before_external_group_by</span></tt>. Подробнее смотрите в разделе &#8220;Настройки&#8221;. Присутствует возможность использовать внешнюю сортировку (с сохранением временных данных на диск) и внешнюю агрегацию. <tt class="docutils literal"><span class="pre">Merge</span> <span class="pre">join</span></tt> в системе нет.</p>
+<div class="section" id="from">
+<h3>Секция FROM<a class="headerlink" href="#from" title="Permalink to this headline">¶</a></h3>
+<p>Если секция FROM отсутствует, то данные будут читаться из таблицы <tt class="docutils literal"><span class="pre">system.one</span></tt>.
+Таблица system.one содержит ровно одну строку (то есть, эта таблица выполняет такую же роль, как таблица DUAL, которую можно найти в других СУБД).</p>
+<p>В секции FROM указывается таблица, из которой будут читаться данные, либо подзапрос, либо табличная функция; дополнительно могут присутствовать ARRAY JOIN и обычный JOIN (смотрите ниже).</p>
+<p>Вместо таблицы, может быть указан подзапрос SELECT в скобках.
+В этом случае, конвейер обработки подзапроса будет встроен в конвейер обработки внешнего запроса.
+В отличие от стандартного SQL, после подзапроса не нужно указывать его синоним. Для совместимости, присутствует возможность написать AS name после подзапроса, но указанное имя нигде не используется.</p>
+<p>Вместо таблицы, может быть указана табличная функция. Подробнее смотрите раздел &#8220;Табличные функции&#8221;.</p>
+<p>Для выполнения запроса, из соответствующей таблицы, вынимаются все столбцы, перечисленные в запросе. Из подзапросов выкидываются столбцы, не нужные для внешнего запроса.
+Если в запросе не перечислено ни одного столбца (например, SELECT count() FROM t), то из таблицы всё равно вынимается один какой-нибудь столбец (предпочитается самый маленький), для того, чтобы можно было хотя бы посчитать количество строк.</p>
+<p>Модификатор FINAL может быть использован только при SELECT-е из таблицы типа CollapsingMergeTree. При указании FINAL, данные будут выбираться полностью &#8220;сколлапсированными&#8221;. Стоит учитывать, что использование FINAL приводит к выбору кроме указанных в SELECT-е столбцов также столбцов, относящихся к первичному ключу. Также, запрос будет выполняться в один поток, и при выполнении запроса будет выполняться слияние данных. Это приводит к тому, что при использовании FINAL, запрос выполняется медленнее. В большинстве случаев, следует избегать использования FINAL. Подробнее смотрите раздел &#8220;Движок CollapsingMergeTree&#8221;.</p>
+</div>
+<div class="section" id="sample">
+<h3>Секция SAMPLE<a class="headerlink" href="#sample" title="Permalink to this headline">¶</a></h3>
+<p>Секция SAMPLE позволяет выполнить запрос приближённо. Приближённое выполнение запроса поддерживается только таблицами типа MergeTree*  и только если при создании таблицы было указано выражение, по которому производится выборка (смотрите раздел &#8220;Движок MergeTree&#8221;).</p>
+<p><tt class="docutils literal"><span class="pre">SAMPLE</span></tt> имеет вид <tt class="docutils literal"><span class="pre">SAMPLE</span> <span class="pre">k</span></tt>, где <tt class="docutils literal"><span class="pre">k</span></tt> - дробное число в интервале от 0 до 1, или <tt class="docutils literal"><span class="pre">SAMPLE</span> <span class="pre">n</span></tt>, где n - достаточно большое целое число.</p>
+<p>В первом случае, запрос будет выполнен по k-доле данных. Например, если указано <tt class="docutils literal"><span class="pre">SAMPLE</span> <span class="pre">0.1</span></tt>, то запрос будет выполнен по 10% данных.
+Во втором случае, запрос будет выполнен по выборке из не более n строк. Например, если указано <tt class="docutils literal"><span class="pre">SAMPLE</span> <span class="pre">10000000</span></tt>, то запрос будет выполнен по не более чем 10 000 000 строкам.</p>
+<p>Пример:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span>
+    <span class="n">Title</span><span class="p">,</span>
+    <span class="k">count</span><span class="p">()</span> <span class="o">*</span> <span class="mi">10</span> <span class="k">AS</span> <span class="n">PageViews</span>
+<span class="k">FROM</span> <span class="n">hits_distributed</span>
+<span class="n">SAMPLE</span> <span class="mi">0</span><span class="p">.</span><span class="mi">1</span>
+<span class="k">WHERE</span>
+    <span class="n">CounterID</span> <span class="o">=</span> <span class="mi">34</span>
+    <span class="k">AND</span> <span class="n">toDate</span><span class="p">(</span><span class="n">EventDate</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">toDate</span><span class="p">(</span><span class="s1">&#39;2013-01-29&#39;</span><span class="p">)</span>
+    <span class="k">AND</span> <span class="n">toDate</span><span class="p">(</span><span class="n">EventDate</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">toDate</span><span class="p">(</span><span class="s1">&#39;2013-02-04&#39;</span><span class="p">)</span>
+    <span class="k">AND</span> <span class="k">NOT</span> <span class="n">DontCountHits</span>
+    <span class="k">AND</span> <span class="k">NOT</span> <span class="n">Refresh</span>
+    <span class="k">AND</span> <span class="n">Title</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="n">Title</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="n">PageViews</span> <span class="k">DESC</span> <span class="k">LIMIT</span> <span class="mi">1000</span>
+</pre></div>
+</div>
+<p>В этом примере, запрос выполняется по выборке из 0.1 (10%) данных. Значения агрегатных функций не корректируются автоматически, поэтому для получения приближённого результата, значение count() вручную домножается на 10.</p>
+<p>При использовании варианта вида <tt class="docutils literal"><span class="pre">SAMPLE</span> <span class="pre">10000000</span></tt>, нет информации, какая относительная доля данных была обработана, и на что следует домножить агрегатные функции, поэтому такой способ записи подходит не для всех случаев.</p>
+<p>Выборка с указанием относительного коэффициента является &#8220;согласованной&#8221;: если рассмотреть все возможные данные, которые могли бы быть в таблице, то выборка (при использовании одного выражения сэмплирования, указанного при создании таблицы), с одинаковым коэффициентом, выбирает всегда одно и то же подмножество этих всевозможных данных. То есть, выборка из разных таблиц, на разных серверах, в разное время, делается одинаковым образом.</p>
+<p>Например, выборка по идентификаторам посетителей, выберет из разных таблиц строки с одинаковым подмножеством всех возможных идентификаторов посетителей. Это позволяет использовать выборку в подзапросах в секции IN, а также при ручном сопоставлении результатов разных запросов с выборками.</p>
+</div>
+<div class="section" id="array-join">
+<h3>Секция ARRAY JOIN<a class="headerlink" href="#array-join" title="Permalink to this headline">¶</a></h3>
+<p>Позволяет выполнить JOIN с массивом или вложенной структурой данных. Смысл похож на функцию arrayJoin, но функциональность более широкая.</p>
+<p><tt class="docutils literal"><span class="pre">ARRAY</span> <span class="pre">JOIN</span></tt> - это, по сути, <tt class="docutils literal"><span class="pre">INNER</span> <span class="pre">JOIN</span></tt> с массивом. Пример:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span>:) CREATE TABLE arrays_test (s String, arr Array(UInt8)) ENGINE = Memory
+
+CREATE TABLE arrays_test
+(
+    s String,
+    arr Array(UInt8)
+) ENGINE = Memory
+
+Ok.
+
+0 rows in set. Elapsed: 0.001 sec.
+
+:) INSERT INTO arrays_test VALUES (&#39;Hello&#39;, [1,2]), (&#39;World&#39;, [3,4,5]), (&#39;Goodbye&#39;, [])
+
+INSERT INTO arrays_test VALUES
+
+Ok.
+
+3 rows in set. Elapsed: 0.001 sec.
+
+:) SELECT * FROM arrays_test
+
+SELECT *
+FROM arrays_test
+
+┌─s───────┬─arr─────┐
+│ Hello   │ [1,2]   │
+│ World   │ [3,4,5] │
+│ Goodbye │ []      │
+└─────────┴─────────┘
+
+3 rows in set. Elapsed: 0.001 sec.
+
+:) SELECT s, arr FROM arrays_test ARRAY JOIN arr
+
+SELECT s, arr
+FROM arrays_test
+ARRAY JOIN arr
+
+┌─s─────┬─arr─┐
+│ Hello │   1 │
+│ Hello │   2 │
+│ World │   3 │
+│ World │   4 │
+│ World │   5 │
+└───────┴─────┘
+
+5 rows in set. Elapsed: 0.001 sec.
+</pre></div>
+</div>
+<p>Для массива в секции ARRAY JOIN может быть указан алиас. В этом случае, элемент массива будет доступен под этим алиасом, а сам массив - под исходным именем. Пример:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span>:) SELECT s, arr, a FROM arrays_test ARRAY JOIN arr AS a
+
+SELECT s, arr, a
+FROM arrays_test
+ARRAY JOIN arr AS a
+
+┌─s─────┬─arr─────┬─a─┐
+│ Hello │ [1,2]   │ 1 │
+│ Hello │ [1,2]   │ 2 │
+│ World │ [3,4,5] │ 3 │
+│ World │ [3,4,5] │ 4 │
+│ World │ [3,4,5] │ 5 │
+└───────┴─────────┴───┘
+
+5 rows in set. Elapsed: 0.001 sec.
+</pre></div>
+</div>
+<p>В секции ARRAY JOIN может быть указано несколько массивов одинаковых размеров через запятую. В этом случае, JOIN делается с ними одновременно (прямая сумма, а не прямое произведение). Пример:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span>:) SELECT s, arr, a, num, mapped FROM arrays_test ARRAY JOIN arr AS a, arrayEnumerate(arr) AS num, arrayMap(x -&gt; x + 1, arr) AS mapped
+
+SELECT s, arr, a, num, mapped
+FROM arrays_test
+ARRAY JOIN arr AS a, arrayEnumerate(arr) AS num, arrayMap(lambda(tuple(x), plus(x, 1)), arr) AS mapped
+
+┌─s─────┬─arr─────┬─a─┬─num─┬─mapped─┐
+│ Hello │ [1,2]   │ 1 │   1 │      2 │
+│ Hello │ [1,2]   │ 2 │   2 │      3 │
+│ World │ [3,4,5] │ 3 │   1 │      4 │
+│ World │ [3,4,5] │ 4 │   2 │      5 │
+│ World │ [3,4,5] │ 5 │   3 │      6 │
+└───────┴─────────┴───┴─────┴────────┘
+
+5 rows in set. Elapsed: 0.002 sec.
+
+:) SELECT s, arr, a, num, arrayEnumerate(arr) FROM arrays_test ARRAY JOIN arr AS a, arrayEnumerate(arr) AS num
+
+SELECT s, arr, a, num, arrayEnumerate(arr)
+FROM arrays_test
+ARRAY JOIN arr AS a, arrayEnumerate(arr) AS num
+
+┌─s─────┬─arr─────┬─a─┬─num─┬─arrayEnumerate(arr)─┐
+│ Hello │ [1,2]   │ 1 │   1 │ [1,2]               │
+│ Hello │ [1,2]   │ 2 │   2 │ [1,2]               │
+│ World │ [3,4,5] │ 3 │   1 │ [1,2,3]             │
+│ World │ [3,4,5] │ 4 │   2 │ [1,2,3]             │
+│ World │ [3,4,5] │ 5 │   3 │ [1,2,3]             │
+└───────┴─────────┴───┴─────┴─────────────────────┘
+
+5 rows in set. Elapsed: 0.002 sec.
+</pre></div>
+</div>
+<p>ARRAY JOIN также работает с вложенными структурами данных. Пример:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span>:) CREATE TABLE nested_test (s String, nest Nested(x UInt8, y UInt32)) ENGINE = Memory
+
+CREATE TABLE nested_test
+(
+    s String,
+    nest Nested(
+    x UInt8,
+    y UInt32)
+) ENGINE = Memory
+
+Ok.
+
+0 rows in set. Elapsed: 0.006 sec.
+
+:) INSERT INTO nested_test VALUES (&#39;Hello&#39;, [1,2], [10,20]), (&#39;World&#39;, [3,4,5], [30,40,50]), (&#39;Goodbye&#39;, [], [])
+
+INSERT INTO nested_test VALUES
+
+Ok.
+
+3 rows in set. Elapsed: 0.001 sec.
+
+:) SELECT * FROM nested_test
+
+SELECT *
+FROM nested_test
+
+┌─s───────┬─nest.x──┬─nest.y─────┐
+│ Hello   │ [1,2]   │ [10,20]    │
+│ World   │ [3,4,5] │ [30,40,50] │
+│ Goodbye │ []      │ []         │
+└─────────┴─────────┴────────────┘
+
+3 rows in set. Elapsed: 0.001 sec.
+
+:) SELECT s, nest.x, nest.y FROM nested_test ARRAY JOIN nest
+
+SELECT s, `nest.x`, `nest.y`
+FROM nested_test
+ARRAY JOIN nest
+
+┌─s─────┬─nest.x─┬─nest.y─┐
+│ Hello │      1 │     10 │
+│ Hello │      2 │     20 │
+│ World │      3 │     30 │
+│ World │      4 │     40 │
+│ World │      5 │     50 │
+└───────┴────────┴────────┘
+
+5 rows in set. Elapsed: 0.001 sec.
+</pre></div>
+</div>
+<p>При указании имени вложенной структуры данных в ARRAY JOIN, смысл такой же, как ARRAY JOIN со всеми элементами-массивами, из которых она состоит. Пример:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span>:) SELECT s, nest.x, nest.y FROM nested_test ARRAY JOIN nest.x, nest.y
+
+SELECT s, `nest.x`, `nest.y`
+FROM nested_test
+ARRAY JOIN `nest.x`, `nest.y`
+
+┌─s─────┬─nest.x─┬─nest.y─┐
+│ Hello │      1 │     10 │
+│ Hello │      2 │     20 │
+│ World │      3 │     30 │
+│ World │      4 │     40 │
+│ World │      5 │     50 │
+└───────┴────────┴────────┘
+
+5 rows in set. Elapsed: 0.001 sec.
+</pre></div>
+</div>
+<p>Такой вариант тоже имеет смысл:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span>:) SELECT s, nest.x, nest.y FROM nested_test ARRAY JOIN nest.x
+
+SELECT s, `nest.x`, `nest.y`
+FROM nested_test
+ARRAY JOIN `nest.x`
+
+┌─s─────┬─nest.x─┬─nest.y─────┐
+│ Hello │      1 │ [10,20]    │
+│ Hello │      2 │ [10,20]    │
+│ World │      3 │ [30,40,50] │
+│ World │      4 │ [30,40,50] │
+│ World │      5 │ [30,40,50] │
+└───────┴────────┴────────────┘
+
+5 rows in set. Elapsed: 0.001 sec.
+</pre></div>
+</div>
+<p>Алиас для вложенной структуры данных можно использовать, чтобы выбрать как результат JOIN-а, так и исходный массив. Пример:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span>:) SELECT s, n.x, n.y, nest.x, nest.y FROM nested_test ARRAY JOIN nest AS n
+
+SELECT s, `n.x`, `n.y`, `nest.x`, `nest.y`
+FROM nested_test
+ARRAY JOIN nest AS n
+
+┌─s─────┬─n.x─┬─n.y─┬─nest.x──┬─nest.y─────┐
+│ Hello │   1 │  10 │ [1,2]   │ [10,20]    │
+│ Hello │   2 │  20 │ [1,2]   │ [10,20]    │
+│ World │   3 │  30 │ [3,4,5] │ [30,40,50] │
+│ World │   4 │  40 │ [3,4,5] │ [30,40,50] │
+│ World │   5 │  50 │ [3,4,5] │ [30,40,50] │
+└───────┴─────┴─────┴─────────┴────────────┘
+
+5 rows in set. Elapsed: 0.001 sec.
+</pre></div>
+</div>
+<p>Пример использования функции arrayEnumerate:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span>:) SELECT s, n.x, n.y, nest.x, nest.y, num FROM nested_test ARRAY JOIN nest AS n, arrayEnumerate(nest.x) AS num
+
+SELECT s, `n.x`, `n.y`, `nest.x`, `nest.y`, num
+FROM nested_test
+ARRAY JOIN nest AS n, arrayEnumerate(`nest.x`) AS num
+
+┌─s─────┬─n.x─┬─n.y─┬─nest.x──┬─nest.y─────┬─num─┐
+│ Hello │   1 │  10 │ [1,2]   │ [10,20]    │   1 │
+│ Hello │   2 │  20 │ [1,2]   │ [10,20]    │   2 │
+│ World │   3 │  30 │ [3,4,5] │ [30,40,50] │   1 │
+│ World │   4 │  40 │ [3,4,5] │ [30,40,50] │   2 │
+│ World │   5 │  50 │ [3,4,5] │ [30,40,50] │   3 │
+└───────┴─────┴─────┴─────────┴────────────┴─────┘
+
+5 rows in set. Elapsed: 0.002 sec.
+</pre></div>
+</div>
+<p>В запросе может быть указано не более одной секции ARRAY JOIN.</p>
+<p>Соответствующее преобразование может выполняться как до секции WHERE/PREWHERE (если его результат нужен в этой секции), так и после выполнения WHERE/PREWHERE (чтобы уменьшить объём вычислений).</p>
+</div>
+<div class="section" id="join">
+<h3>Секция JOIN<a class="headerlink" href="#join" title="Permalink to this headline">¶</a></h3>
+<p>Обычный JOIN, не имеет отношения к ARRAY JOIN, который описан выше.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="p">[</span><span class="k">GLOBAL</span><span class="p">]</span> <span class="k">ANY</span><span class="o">|</span><span class="k">ALL</span> <span class="k">INNER</span><span class="o">|</span><span class="k">LEFT</span> <span class="p">[</span><span class="k">OUTER</span><span class="p">]</span> <span class="k">JOIN</span> <span class="p">(</span><span class="n">subquery</span><span class="p">)</span><span class="o">|</span><span class="k">table</span> <span class="k">USING</span> <span class="n">columns_list</span>
+</pre></div>
+</div>
+<p>Выполняет соединение с данными из подзапроса. В начале выполнения запроса, выполняется подзапрос, указанный после JOIN, и его результат сохраняется в память. Затем производится чтение из &#8220;левой&#8221; таблицы, указанной в секции FROM, и во время этого чтения, для каждой прочитанной строчки из &#8220;левой&#8221; таблицы, из таблицы-результата подзапроса (&#8220;правой&#8221; таблицы) выбираются строчки, соответствующие условию на совпадение значений столбцов, указанных в USING.</p>
+<p>Вместо подзапроса может быть указано имя таблицы. Это эквивалентно подзапросу <tt class="docutils literal"><span class="pre">SELECT</span> <span class="pre">*</span> <span class="pre">FROM</span> <span class="pre">table</span></tt>, кроме особого случая, когда таблица имеет движок Join - подготовленное множество для соединения.</p>
+<p>Из подзапроса удаляются все ненужные для JOIN-а столбцы.</p>
+<p>JOIN-ы бывают нескольких видов:</p>
+<p><tt class="docutils literal"><span class="pre">INNER</span></tt> или <tt class="docutils literal"><span class="pre">LEFT</span></tt> - тип:
+Если указано INNER, то в результат попадают только строки, для которых найдена соответствующая строка в &#8220;правой&#8221; таблице.
+Если указано LEFT, то для строчек &#8220;левой&#8221; таблицы, для которых нет соответствующих в &#8220;правой&#8221; таблице, будут присоединены значения &#8220;по умолчанию&#8221; - нули, пустые строки. Вместо LEFT может быть написано LEFT OUTER - слово OUTER ни на что не влияет.</p>
+<p><tt class="docutils literal"><span class="pre">ANY</span></tt> или <tt class="docutils literal"><span class="pre">ALL</span></tt> - строгость:
+Если указано <tt class="docutils literal"><span class="pre">ANY</span></tt>, то при наличии в &#8220;правой&#8221; таблице нескольких соответствующих строк, будет присоединена только первая попавшаяся.
+Если указано <tt class="docutils literal"><span class="pre">ALL</span></tt>, то при наличии в &#8220;правой&#8221; таблице нескольких соответствующих строк, данные будут размножены по количеству этих строк.</p>
+<p>Использование ALL соответствует обычной семантике JOIN-а из стандартного SQL.
+Использование ANY является более оптимальным. Если известно, что в &#8220;правой&#8221; таблице есть не более одной подходящей строки, то результаты ANY и ALL совпадают. Обязательно необходимо указать ANY или ALL (ни один из этих вариантов не выбран по умолчанию).</p>
+<p><tt class="docutils literal"><span class="pre">GLOBAL</span></tt> - распределённость:</p>
+<p>При использовании обычного JOIN-а, запрос отправляется на удалённые серверы, и на каждом из них выполняются подзапросы для формирования &#8220;правой&#8221; таблицы, и с этой таблицей выполняется соединение. То есть, &#8220;правая&#8221; таблица формируется на каждом сервере отдельно.</p>
+<p>При использовании <tt class="docutils literal"><span class="pre">GLOBAL</span> <span class="pre">...</span> <span class="pre">JOIN-а</span></tt>, сначала, на сервере-инициаторе запроса, выполняется подзапрос для вычисления &#8220;правой&#8221; таблицы, и затем эта временная таблица передаётся на каждый удалённый сервер, и на них выполняются запросы, с использованием этих переданных временных данных.</p>
+<p>Следует быть аккуратным при использовании GLOBAL JOIN-ов. Подробнее читайте в разделе &#8220;Распределённые подзапросы&#8221; ниже.</p>
+<p>Возможны все комбинации JOIN-ов. Например, <tt class="docutils literal"><span class="pre">GLOBAL</span> <span class="pre">ANY</span> <span class="pre">LEFT</span> <span class="pre">OUTER</span> <span class="pre">JOIN</span></tt>.</p>
+<p>При выполнении JOIN-а отсутствует оптимизация порядка выполнения по отношению к другим стадиям запроса: соединение (поиск в &#8220;правой&#8221; таблице) выполняется до фильтрации в WHERE, до агрегации. Поэтому, чтобы явно задать порядок вычислений, рекомендуется выполнять JOIN подзапроса с подзапросом.</p>
+<p>Пример:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span>SELECT
+    CounterID,
+    hits,
+    visits
+FROM
+(
+    SELECT
+        CounterID,
+        count() AS hits
+    FROM test.hits
+    GROUP BY CounterID
+) ANY LEFT JOIN
+(
+    SELECT
+        CounterID,
+        sum(Sign) AS visits
+    FROM test.visits
+    GROUP BY CounterID
+) USING CounterID
+ORDER BY hits DESC
+LIMIT 10
+
+┌─CounterID─┬───hits─┬─visits─┐
+│   1143050 │ 523264 │  13665 │
+│    731962 │ 475698 │ 102716 │
+│    722545 │ 337212 │ 108187 │
+│    722889 │ 252197 │  10547 │
+│   2237260 │ 196036 │   9522 │
+│  23057320 │ 147211 │   7689 │
+│    722818 │  90109 │  17847 │
+│     48221 │  85379 │   4652 │
+│  19762435 │  77807 │   7026 │
+│    722884 │  77492 │  11056 │
+└───────────┴────────┴────────┘
+</pre></div>
+</div>
+<p>У подзапросов нет возможности задать имена и нет возможности их использовать для того, чтобы сослаться на столбец из конкретного подзапроса.
+Требуется, чтобы столбцы, указанные в USING, назывались одинаково в обоих подзапросах, а остальные столбцы - по-разному. Изменить имена столбцов в подзапросах можно с помощью алиасов (в примере используются алиасы hits и visits).</p>
+<p>В секции USING указывается один или несколько столбцов для соединения, что обозначает условие на равенство этих столбцов. Список столбцов задаётся без скобок. Более сложные условия соединения не поддерживаются.</p>
+<p>&#8220;Правая&#8221; таблица (результат подзапроса) располагается в оперативке. Если оперативки не хватает, вы не сможете выполнить JOIN.</p>
+<p>В запросе (на одном уровне) можно указать только один JOIN. Чтобы выполнить несколько JOIN-ов, вы можете разместить их в подзапросах.</p>
+<p>Каждый раз для выполнения запроса с одинаковым JOIN-ом, подзапрос выполняется заново - результат не кэшируется. Это можно избежать, используя специальный движок таблиц Join, представляющий собой подготовленное множество для соединения, которое всегда находится в оперативке. Подробнее смотрите в разделе &#8220;Движки таблиц, Join&#8221;.</p>
+<p>В некоторых случаях, вместо использования JOIN достаточно использовать IN - это более эффективно.
+Среди разных типов JOIN-ов, наиболее эффективен ANY LEFT JOIN, затем ANY INNER JOIN; наименее эффективны ALL LEFT JOIN и ALL INNER JOIN.</p>
+<p>Если JOIN необходим для соединения с таблицами измерений (dimension tables - сравнительно небольшие таблицы, которые содержат свойства измерений - например, имена для рекламных кампаний), то использование JOIN может быть не очень удобным из-за громоздкости синтаксиса, а также из-за того, что правая таблица читается заново при каждом запросе. Специально для таких случаев существует функциональность &#8220;Внешние словари&#8221;, которую следует использовать вместо JOIN. Подробнее смотрите раздел &#8220;Внешние словари&#8221;.</p>
+</div>
+<div class="section" id="where">
+<h3>Секция WHERE<a class="headerlink" href="#where" title="Permalink to this headline">¶</a></h3>
+<p>Секция WHERE, если есть, должна содержать выражение, имеющее тип UInt8. Обычно это какое-либо выражение с операторами сравнения и логическими операторами.
+Это выражение будет использовано для фильтрации данных перед всеми остальными преобразованиями.</p>
+<p>Выражение анализируется на возможность использования индексов, если индексы поддерживаются движком таблицы.</p>
+</div>
+<div class="section" id="prewhere">
+<h3>Секция PREWHERE<a class="headerlink" href="#prewhere" title="Permalink to this headline">¶</a></h3>
+<p>Имеет такой же смысл, как и секция WHERE. Отличие состоит в том, какие данные читаются из таблицы.
+При использовании PREWHERE, из таблицы сначала читаются только столбцы, необходимые для выполнения PREWHERE. Затем читаются остальные столбцы, нужные для выполнения запроса, но из них только те блоки, в которых выражение в PREWHERE истинное.</p>
+<p>PREWHERE имеет смысл использовать, если есть условия фильтрации, не подходящие под индексы, которые использует меньшинство столбцов из тех, что есть в запросе, но достаточно сильно фильтрует данные. Таким образом, сокращается количество читаемых данных.</p>
+<p>Например, полезно писать PREWHERE для запросов, которые вынимают много столбцов, но в которых фильтрация производится лишь по нескольким столбцам.</p>
+<p>PREWHERE поддерживается только таблицами семейства <a href="#id10"><span class="problematic" id="id11">*</span></a>MergeTree.</p>
+<p>В запросе могут быть одновременно указаны секции PREWHERE и WHERE. В этом случае, PREWHERE идёт перед WHERE.</p>
+<p>Следует иметь ввиду, что указывать в PREWHERE только столбцы, по которым существует индекс, имеет мало смысла, так как при использовании индекса и так читаются лишь блоки данных, соответствующие индексу.</p>
+<p>Если настройка optimize_move_to_prewhere выставлена в 1, то при отсутствии PREWHERE, система будет автоматически переносить части выражений из WHERE в PREWHERE согласно некоторой эвристике.</p>
+</div>
+<div class="section" id="group-by">
+<h3>Секция GROUP BY<a class="headerlink" href="#group-by" title="Permalink to this headline">¶</a></h3>
+<p>Это одна из наиболее важных частей СУБД.</p>
+<p>Секция GROUP BY, если есть, должна содержать список выражений. Каждое выражение далее будем называть &#8220;ключом&#8221;.
+При этом, все выражения в секциях SELECT, HAVING, ORDER BY, должны вычисляться из ключей или из агрегатных функций. То есть, каждый выбираемый из таблицы столбец, должен использоваться либо в ключах, либо внутри агрегатных функций.</p>
+<p>Если запрос содержит столбцы таблицы только внутри агрегатных функций, то секция GROUP BY может не указываться, и подразумевается агрегация по пустому набору ключей.</p>
+<p>Пример:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span>
+    <span class="k">count</span><span class="p">(),</span>
+    <span class="n">median</span><span class="p">(</span><span class="n">FetchTiming</span> <span class="o">&gt;</span> <span class="mi">60</span> <span class="o">?</span> <span class="mi">60</span> <span class="p">:</span> <span class="n">FetchTiming</span><span class="p">),</span>
+    <span class="k">count</span><span class="p">()</span> <span class="o">-</span> <span class="k">sum</span><span class="p">(</span><span class="n">Refresh</span><span class="p">)</span>
+<span class="k">FROM</span> <span class="n">hits</span>
+</pre></div>
+</div>
+<p>Но, в отличие от стандартного SQL, если в таблице нет строк (вообще нет или после фильтрации с помощью WHERE), в качестве результата возвращается пустой результат, а не результат из одной строки, содержащий &#8220;начальные&#8221; значения агрегатных функций.</p>
+<p>В отличие от MySQL (и в соответствии со стандартом SQL), вы не можете получить какое-нибудь значение некоторого столбца, не входящего в ключ или агрегатную функцию (за исключением константных выражений). Для обхода этого вы можете воспользоваться агрегатной функцией any (получить первое попавшееся значение) или min/max.</p>
+<p>Пример:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span>
+    <span class="n">domainWithoutWWW</span><span class="p">(</span><span class="n">URL</span><span class="p">)</span> <span class="k">AS</span> <span class="k">domain</span><span class="p">,</span>
+    <span class="k">count</span><span class="p">(),</span>
+    <span class="k">any</span><span class="p">(</span><span class="n">Title</span><span class="p">)</span> <span class="k">AS</span> <span class="n">title</span> <span class="c1">-- для каждого домена достаём первый попавшийся заголовок страницы</span>
+<span class="k">FROM</span> <span class="n">hits</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="k">domain</span>
+</pre></div>
+</div>
+<p>GROUP BY вычисляет для каждого встретившегося различного значения ключей, набор значений агрегатных функций.</p>
+<p>Не поддерживается GROUP BY по столбцам-массивам.</p>
+<p>Не поддерживается указание констант в качестве аргументов агрегатных функций. Пример: sum(1). Вместо этого, вы можете избавиться от констант. Пример: <tt class="docutils literal"><span class="pre">count()</span></tt>.</p>
+<div class="section" id="with-totals">
+<h4>Модификатор WITH TOTALS<a class="headerlink" href="#with-totals" title="Permalink to this headline">¶</a></h4>
+<p>Если указан модификатор WITH TOTALS, то будет посчитана ещё одна строчка, в которой в столбцах-ключах будут содержаться значения по умолчанию (нули, пустые строки), а в столбцах агрегатных функций - значения, посчитанные по всем строкам (&#8220;тотальные&#8221; значения).</p>
+<p>Эта дополнительная строчка выводится в форматах JSON*, TabSeparated*, Pretty* отдельно от остальных строчек. В остальных форматах эта строчка не выводится.</p>
+<p>В форматах JSON* строчка выводится отдельным полем totals. В форматах TabSeparated* строчка выводится после основного результата, и перед ней (после остальных данных) вставляется пустая строка. В форматах Pretty* строчка выводится отдельной табличкой после основного результата.</p>
+<p><tt class="docutils literal"><span class="pre">WITH</span> <span class="pre">TOTALS</span></tt> может выполняться по-разному при наличии HAVING. Поведение зависит от настройки totals_mode.
+По умолчанию <tt class="docutils literal"><span class="pre">totals_mode</span> <span class="pre">=</span> <span class="pre">'before_having'</span></tt>. В этом случае totals считается по всем строчкам, включая непрошедших через HAVING и max_rows_to_group_by.</p>
+<p>Остальные варианты учитывают в totals только строчки, прошедшие через HAVING, и имеют разное поведение при наличии настройки <tt class="docutils literal"><span class="pre">max_rows_to_group_by</span></tt> и <tt class="docutils literal"><span class="pre">group_by_overflow_mode</span> <span class="pre">=</span> <span class="pre">'any'</span></tt>.</p>
+<p><tt class="docutils literal"><span class="pre">after_having_exclusive</span></tt> - не учитывать строчки, не прошедшие <tt class="docutils literal"><span class="pre">max_rows_to_group_by</span></tt>. То есть в totals попадёт меньше или столько же строчек, чем если бы <tt class="docutils literal"><span class="pre">max_rows_to_group_by</span></tt> не было.</p>
+<p><tt class="docutils literal"><span class="pre">after_having_inclusive</span></tt> - учитывать в totals все строчки, не прошедшие max_rows_to_group_by. То есть в totals попадёт больше или столько же строчек, чем если бы <tt class="docutils literal"><span class="pre">max_rows_to_group_by</span></tt> не было.</p>
+<p><tt class="docutils literal"><span class="pre">after_having_auto</span></tt> - считать долю строчек, прошедших через HAVING. Если она больше некоторого значения (по умолчанию - 50%), то включить все строчки, не прошедшие max_rows_to_group_by в totals, иначе - не включить.</p>
+<p><tt class="docutils literal"><span class="pre">totals_auto_threshold</span></tt> - по умолчанию 0.5. Коэффициент для работы <tt class="docutils literal"><span class="pre">after_having_auto</span></tt>.</p>
+<p>Если <tt class="docutils literal"><span class="pre">max_rows_to_group_by</span></tt> и <tt class="docutils literal"><span class="pre">group_by_overflow_mode</span> <span class="pre">=</span> <span class="pre">'any'</span></tt> не используются, то все варианты вида <tt class="docutils literal"><span class="pre">after_having</span></tt> не отличаются, и вы можете использовать любой из них, например, <tt class="docutils literal"><span class="pre">after_having_auto</span></tt>.</p>
+<p>Вы можете использовать WITH TOTALS в подзапросах, включая подзапросы в секции JOIN (в этом случае соответствующие тотальные значения будут соединены).</p>
+</div>
+<div class="section" id="id12">
+<h4>GROUP BY во внешней памяти<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h4>
+<p>Существует возможность включить сброс временных данных на диск для ограничения потребления оперативной памяти при GROUP BY.
+Настройка <tt class="docutils literal"><span class="pre">max_bytes_before_external_group_by</span></tt> - потребление оперативки, при котором временные данные GROUP BY сбрасываются в файловую систему. Если равно 0 (по умолчанию) - значит выключено.</p>
+<p>При использовании <tt class="docutils literal"><span class="pre">max_bytes_before_external_group_by</span></tt> рекомендуется выставить max_memory_usage примерно в два раза больше. Это следует сделать, потому что агрегация выполняется в две стадии: чтение и формирование промежуточных данных (1) и слияние промежуточных данных (2). Сброс данных на файловую систему может производиться только на стадии 1. Если сброса временных данных не было, то на стадии 2 может потребляться до такого же объёма памяти, как на стадии 1.</p>
+<p>Например, если у вас <tt class="docutils literal"><span class="pre">max_memory_usage</span></tt> было выставлено в 10000000000, и вы хотите использовать внешнюю агрегацию, то имеет смысл выставить <tt class="docutils literal"><span class="pre">max_bytes_before_external_group_by</span></tt> в 10000000000, а max_memory_usage в 20000000000. При срабатывании внешней агрегации (если был хотя бы один сброс временных данных в файловую систему) максимальное потребление оперативки будет лишь чуть-чуть больше <tt class="docutils literal"><span class="pre">max_bytes_before_external_group_by</span></tt>.</p>
+<p>При распределённой обработке запроса внешняя агрегация производится на удалённых серверах. Для того чтобы на сервере-инициаторе запроса использовалось немного оперативки, нужно выставить настройку <tt class="docutils literal"><span class="pre">distributed_aggregation_memory_efficient</span></tt> в 1.</p>
+<p>При слиянии данных, сброшенных на диск, а также при слиянии результатов с удалённых серверов, при включенной настройке <tt class="docutils literal"><span class="pre">distributed_aggregation_memory_efficient</span></tt>, потребляется до 1/256 * количество потоков от общего объёма оперативки.</p>
+<p>При включенной внешней агрегации, если данных было меньше <tt class="docutils literal"><span class="pre">max_bytes_before_external_group_by</span></tt> (то есть сброса данных не было), то запрос работает так же быстро, как без внешней агрегации. Если же какие-то временные данные были сброшены, то время выполнения будет в несколько раз больше (примерно в три раза).</p>
+<p>Если после GROUP BY у вас есть ORDER BY с небольшим LIMIT, то на ORDER BY не будет тратиться существенного количества оперативки.
+Но если есть ORDER BY без LIMIT, то не забудьте включить внешнюю сортировку (<tt class="docutils literal"><span class="pre">max_bytes_before_external_sort</span></tt>).</p>
+</div>
+<div class="section" id="limit-n-by">
+<h4>Модификатор LIMIT N BY<a class="headerlink" href="#limit-n-by" title="Permalink to this headline">¶</a></h4>
+<p>LIMIT N BY COLUMNS позволяет выбрать топ N строк для каждой группы COLUMNS. LIMIT N BY не связан с LIMIT и они могут использоваться в одном запросе. Ключ для LIMIT N BY может содержать произвольное число колонок или выражений.</p>
+<p>Пример:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span>
+    <span class="n">domainWithoutWWW</span><span class="p">(</span><span class="n">URL</span><span class="p">)</span> <span class="k">AS</span> <span class="k">domain</span><span class="p">,</span>
+    <span class="n">domainWithoutWWW</span><span class="p">(</span><span class="n">REFERRER_URL</span><span class="p">)</span> <span class="k">AS</span> <span class="n">referrer</span><span class="p">,</span>
+    <span class="n">device_type</span><span class="p">,</span>
+    <span class="k">count</span><span class="p">()</span> <span class="n">cnt</span>
+<span class="k">FROM</span> <span class="n">hits</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="k">domain</span><span class="p">,</span> <span class="n">referrer</span><span class="p">,</span> <span class="n">device_type</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="n">cnt</span> <span class="k">DESC</span>
+<span class="k">LIMIT</span> <span class="mi">5</span> <span class="k">BY</span> <span class="k">domain</span><span class="p">,</span> <span class="n">device_type</span>
+<span class="k">LIMIT</span> <span class="mi">100</span>
+</pre></div>
+</div>
+<p>выберет топ 5 рефереров для каждой пары domain - device type. Ограничить общее число строк результата 100.</p>
+</div>
+</div>
+<div class="section" id="having">
+<h3>Секция HAVING<a class="headerlink" href="#having" title="Permalink to this headline">¶</a></h3>
+<p>Позволяет отфильтровать результат, полученный после GROUP BY, аналогично секции WHERE.
+WHERE и HAVING отличаются тем, что WHERE выполняется до агрегации (GROUP BY), а HAVING - после.
+Если агрегации не производится, то HAVING использовать нельзя.</p>
+</div>
+<div class="section" id="order-by">
+<h3>Секция ORDER BY<a class="headerlink" href="#order-by" title="Permalink to this headline">¶</a></h3>
+<p>Секция ORDER BY содержит список выражений, к каждому из которых также может быть приписано DESC или ASC (направление сортировки). Если ничего не приписано - это аналогично приписыванию ASC. ASC - сортировка по возрастанию, DESC - сортировка по убыванию. Обозначение направления сортировки действует на одно выражение, а не на весь список. Пример: <tt class="docutils literal"><span class="pre">ORDER</span> <span class="pre">BY</span> <span class="pre">Visits</span> <span class="pre">DESC,</span> <span class="pre">SearchPhrase</span></tt></p>
+<p>Для сортировки по значениям типа String есть возможность указать collation (сравнение). Пример: <tt class="docutils literal"><span class="pre">ORDER</span> <span class="pre">BY</span> <span class="pre">SearchPhrase</span> <span class="pre">COLLATE</span> <span class="pre">'tr'</span></tt> - для сортировки по поисковой фразе, по возрастанию, с учётом турецкого алфавита, регистронезависимо, при допущении, что строки в кодировке UTF-8. COLLATE может быть указан или не указан для каждого выражения в ORDER BY независимо. Если есть ASC или DESC, то COLLATE указывается после них. При использовании COLLATE сортировка всегда регистронезависима.</p>
+<p>Рекомендуется использовать COLLATE только для окончательной сортировки небольшого количества строк, так как производительность сортировки с указанием COLLATE меньше, чем обычной сортировки по байтам.</p>
+<p>Строки, для которых список выражений, по которым производится сортировка, принимает одинаковые значения, выводятся в произвольном порядке, который может быть также недетерминированным (каждый раз разным).
+Если секция ORDER BY отсутствует, то, аналогично, порядок, в котором идут строки, не определён, и может быть недетерминированным.</p>
+<p>При сортировке чисел с плавающей запятой, NaN-ы идут отдельно от остальных значений. Вне зависимости от порядка сортировки, NaN-ы помещаются в конец. То есть, при сортировке по возрастанию, они как будто больше всех чисел, а при сортировке по убыванию - как будто меньше всех.</p>
+<p>Если кроме ORDER BY указан также не слишком большой LIMIT, то расходуется меньше оперативки. Иначе расходуется количество памяти, пропорциональное количеству данных для сортировки. При распределённой обработке запроса, если отсутствует GROUP BY, сортировка частично делается на удалённых серверах, а на сервере-инициаторе запроса производится слияние результатов. Таким образом, при распределённой сортировке, может сортироваться объём данных, превышающий размер памяти на одном сервере.</p>
+<p>Существует возможность выполнять сортировку во внешней памяти (с созданием временных файлов на диске), если оперативной памяти не хватает. Для этого предназначена настройка <tt class="docutils literal"><span class="pre">max_bytes_before_external_sort</span></tt>. Если она выставлена в 0 (по умолчанию), то внешняя сортировка выключена. Если она включена, то при достижении объёмом данных для сортировки указанного количества байт, накопленные данные будут отсортированы и сброшены во временный файл. После того, как все данные будут прочитаны, будет произведено слияние всех сортированных файлов и выдача результата. Файлы записываются в директорию /var/lib/clickhouse/tmp/ (по умолчанию, может быть изменено с помощью параметра tmp_path) в конфиге.</p>
+<p>На выполнение запроса может расходоваться больше памяти, чем max_bytes_before_external_sort. Поэтому, значение этой настройки должно быть существенно меньше, чем max_memory_usage. Для примера, если на вашем сервере 128 GB оперативки, и вам нужно выполнить один запрос, то выставите max_memory_usage в 100 GB, а max_bytes_before_external_sort в 80 GB.</p>
+<p>Внешняя сортировка работает существенно менее эффективно, чем сортировка в оперативке.</p>
+</div>
+<div class="section" id="id13">
+<h3>Секция SELECT<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
+<p>После вычислений, соответствующих всем перечисленным выше секциям, производится вычисление выражений, указанных в секции SELECT.
+Вернее, вычисляются выражения, стоящие над агрегатными функциями, если есть агрегатные функции.
+Сами агрегатные функции и то, что под ними, вычисляются при агрегации (GROUP BY).
+Эти выражения работают так, как будто применяются к отдельным строкам результата.</p>
+</div>
+<div class="section" id="distinct">
+<h3>Секция DISTINCT<a class="headerlink" href="#distinct" title="Permalink to this headline">¶</a></h3>
+<p>Если указано DISTINCT, то из всех множеств полностью совпадающих строк результата, будет оставляться только одна строка.
+Результат выполнения будет таким же, как если указано GROUP BY по всем указанным полям в SELECT-е и не указаны агрегатные функции. Но имеется несколько отличий от GROUP BY:</p>
+<ul class="simple">
+<li>DISTINCT может применяться совместно с GROUP BY;</li>
+<li>при отсутствии ORDER BY и наличии LIMIT, запрос прекратит выполнение сразу после того, как будет прочитано необходимое количество различных строк - в этом случае использование DISTINCT существенно более оптимально;</li>
+<li>блоки данных будут выдаваться по мере их обработки, не дожидаясь выполнения всего запроса.</li>
+</ul>
+<p>DISTINCT не поддерживается, если в SELECT-е присутствует хотя бы один столбец типа массив.</p>
+</div>
+<div class="section" id="limit">
+<h3>Секция LIMIT<a class="headerlink" href="#limit" title="Permalink to this headline">¶</a></h3>
+<p>LIMIT m позволяет выбрать из результата первые m строк.
+LIMIT n, m позволяет выбрать из результата первые m строк после пропуска первых n строк.</p>
+<p>n и m должны быть неотрицательными целыми числами.</p>
+<p>При отсутствии секции ORDER BY, однозначно сортирующей результат, результат может быть произвольным и может являться недетерминированным.</p>
+</div>
+<div class="section" id="union-all">
+<h3>Секция UNION ALL<a class="headerlink" href="#union-all" title="Permalink to this headline">¶</a></h3>
+<p>Произвольное количество запросов может быть объединено с помощью UNION ALL. Пример:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">CounterID</span><span class="p">,</span> <span class="mi">1</span> <span class="k">AS</span> <span class="k">table</span><span class="p">,</span> <span class="n">toInt64</span><span class="p">(</span><span class="k">count</span><span class="p">())</span> <span class="k">AS</span> <span class="k">c</span>
+    <span class="k">FROM</span> <span class="n">test</span><span class="p">.</span><span class="n">hits</span>
+    <span class="k">GROUP</span> <span class="k">BY</span> <span class="n">CounterID</span>
+
+<span class="k">UNION</span> <span class="k">ALL</span>
+
+<span class="k">SELECT</span> <span class="n">CounterID</span><span class="p">,</span> <span class="mi">2</span> <span class="k">AS</span> <span class="k">table</span><span class="p">,</span> <span class="k">sum</span><span class="p">(</span><span class="n">Sign</span><span class="p">)</span> <span class="k">AS</span> <span class="k">c</span>
+    <span class="k">FROM</span> <span class="n">test</span><span class="p">.</span><span class="n">visits</span>
+    <span class="k">GROUP</span> <span class="k">BY</span> <span class="n">CounterID</span>
+    <span class="k">HAVING</span> <span class="k">c</span> <span class="o">&gt;</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>Поддерживается только UNION ALL. Обычный UNION (UNION DISTINCT) не поддерживается. Если вам нужен UNION DISTINCT, то вы можете написать SELECT DISTINCT из подзапроса, содержащего UNION ALL.</p>
+<p>Запросы - части UNION ALL могут выполняться параллельно, и их результаты могут возвращаться вперемешку.</p>
+<p>Структура результатов (количество и типы столбцов) у запросов должна совпадать. Но имена столбцов могут отличаться. В этом случае, имена столбцов для общего результата будут взяты из первого запроса.</p>
+<p>Запросы - части UNION ALL нельзя заключить в скобки. ORDER BY и LIMIT применяются к отдельным запросам, а не к общему результату. Если вам нужно применить какое-либо преобразование к общему результату, то вы можете разместить все запросы с UNION ALL в подзапросе в секции FROM.</p>
+</div>
+<div class="section" id="into-outfile">
+<h3>Секция INTO OUTFILE<a class="headerlink" href="#into-outfile" title="Permalink to this headline">¶</a></h3>
+<p>При указании <tt class="docutils literal"><span class="pre">INTO</span> <span class="pre">OUTFILE</span> <span class="pre">filename</span></tt> (где filename - строковый литерал), результат запроса будет сохранён в файл filename.
+В отличие от MySQL, файл создаётся на стороне клиента. Если файл с таким именем уже существует, это приведёт к ошибке.
+Функциональность доступна в клиенте командной строки и clickhouse-local (попытка выполнить запрос с INTO OUTFILE через HTTP интерфейс приведёт к ошибке).</p>
+<p>Формат вывода по умолчанию - TabSeparated, как и в неинтерактивном режиме клиента командной строки.</p>
+</div>
+<div class="section" id="format">
+<h3>Секция FORMAT<a class="headerlink" href="#format" title="Permalink to this headline">¶</a></h3>
+<p>При указании FORMAT format вы можете получить данные в любом указанном формате.
+Это может использоваться для удобства или для создания дампов.
+Подробнее смотрите раздел &#8220;Форматы&#8221;.
+Если секция FORMAT отсутствует, то используется формат по умолчанию, который зависит от используемого интерфейса для доступа к БД и от настроек. Для HTTP интерфейса, а также для клиента командной строки, используемого в batch-режиме, по умолчанию используется формат TabSeparated. Для клиента командной строки, используемого в интерактивном режиме, по умолчанию используется формат PrettyCompact (прикольные таблички, компактные).</p>
+<p>При использовании клиента командной строки данные на клиент передаются во внутреннем эффективном формате. При этом клиент самостоятельно интерпретирует секцию FORMAT запроса и форматирует данные на своей стороне (снимая нагрузку на сеть и сервер).</p>
+</div>
+<div class="section" id="in">
+<h3>Операторы IN<a class="headerlink" href="#in" title="Permalink to this headline">¶</a></h3>
+<p>Операторы <tt class="docutils literal"><span class="pre">IN</span></tt>, <tt class="docutils literal"><span class="pre">NOT</span> <span class="pre">IN</span></tt>, <tt class="docutils literal"><span class="pre">GLOBAL</span> <span class="pre">IN</span></tt>, <tt class="docutils literal"><span class="pre">GLOBAL</span> <span class="pre">NOT</span> <span class="pre">IN</span></tt> рассматриваются отдельно, так как их функциональность достаточно богатая.</p>
+<p>В качестве левой части оператора, может присутствовать как один столбец, так и кортеж.</p>
+<p>Примеры:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">UserID</span> <span class="k">IN</span> <span class="p">(</span><span class="mi">123</span><span class="p">,</span> <span class="mi">456</span><span class="p">)</span> <span class="k">FROM</span> <span class="p">...</span>
+<span class="k">SELECT</span> <span class="p">(</span><span class="n">CounterID</span><span class="p">,</span> <span class="n">UserID</span><span class="p">)</span> <span class="k">IN</span> <span class="p">((</span><span class="mi">34</span><span class="p">,</span> <span class="mi">123</span><span class="p">),</span> <span class="p">(</span><span class="mi">101500</span><span class="p">,</span> <span class="mi">456</span><span class="p">))</span> <span class="k">FROM</span> <span class="p">...</span>
+</pre></div>
+</div>
+<p>Если слева стоит один столбец, входящий в индекс, а справа - множество констант, то при выполнении запроса, система воспользуется индексом.</p>
+<p>Не перечисляйте слишком большое количество значений (миллионы) явно. Если множество большое - лучше загрузить его во временную таблицу (например, смотрите раздел &#8220;Внешние данные для обработки запроса&#8221;), и затем воспользоваться подзапросом.</p>
+<p>В качестве правой части оператора может быть множество константных выражений, множество кортежей с константными выражениями (показано в примерах выше), а также имя таблицы или подзапрос SELECT в скобках.</p>
+<p>Если в качестве правой части оператора указано имя таблицы (например, <tt class="docutils literal"><span class="pre">UserID</span> <span class="pre">IN</span> <span class="pre">users</span></tt>), то это эквивалентно подзапросу <tt class="docutils literal"><span class="pre">UserID</span> <span class="pre">IN</span> <span class="pre">(SELECT</span> <span class="pre">*</span> <span class="pre">FROM</span> <span class="pre">users)</span></tt>. Это используется при работе с внешними данными, отправляемым вместе с запросом. Например, вместе с запросом может быть отправлено множество идентификаторов посетителей, загруженное во временную таблицу users, по которому следует выполнить фильтрацию.</p>
+<p>Если качестве правой части оператора, указано имя таблицы, имеющий движок Set (подготовленное множество, постоянно находящееся в оперативке), то множество не будет создаваться заново при каждом запросе.</p>
+<p>В подзапросе может быть указано более одного столбца для фильтрации кортежей.
+Пример:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="p">(</span><span class="n">CounterID</span><span class="p">,</span> <span class="n">UserID</span><span class="p">)</span> <span class="k">IN</span> <span class="p">(</span><span class="k">SELECT</span> <span class="n">CounterID</span><span class="p">,</span> <span class="n">UserID</span> <span class="k">FROM</span> <span class="p">...)</span> <span class="k">FROM</span> <span class="p">...</span>
+</pre></div>
+</div>
+<p>Типы столбцов слева и справа оператора IN, должны совпадать.</p>
+<p>Исключение: если слева от IN стоит массив, то проверяется принадлежность хотя бы одного элемента массива множеству.
+Например, <tt class="docutils literal"><span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">3]</span> <span class="pre">IN</span> <span class="pre">(3,</span> <span class="pre">4,</span> <span class="pre">5)</span></tt> вернёт 1. Это немного нелогично, но удобно для реализации некоторой функциональности в Яндекс.Метрике.</p>
+<p>Если слева от NOT IN стоит массив, то проверяется, что хотя бы один элемент массива не принадлежит множеству.
+Например, <tt class="docutils literal"><span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">3]</span> <span class="pre">NOT</span> <span class="pre">IN</span> <span class="pre">(3,</span> <span class="pre">4,</span> <span class="pre">5)</span></tt> вернёт 1. Это совсем нелогично, и лучше не полагаться на такое поведение. Лучше воспользуйтесь функциями высшего порядка. Пример: <tt class="docutils literal"><span class="pre">arrayAll(x</span> <span class="pre">-&gt;</span> <span class="pre">x</span> <span class="pre">IN</span> <span class="pre">(3,</span> <span class="pre">4,</span> <span class="pre">5),</span> <span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">3])</span></tt> вернёт 0 - проверяет принадлежность всех элементов массива множеству.</p>
+<p>Оператор IN и подзапрос могут встречаться в любой части запроса, в том числе в агрегатных и лямбда функциях.
+Пример:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span>SELECT
+    EventDate,
+    avg(UserID IN
+    (
+        SELECT UserID
+        FROM test.hits
+        WHERE EventDate = toDate(&#39;2014-03-17&#39;)
+    )) AS ratio
+FROM test.hits
+GROUP BY EventDate
+ORDER BY EventDate ASC
+
+┌──EventDate─┬────ratio─┐
+│ 2014-03-17 │        1 │
+│ 2014-03-18 │ 0.807696 │
+│ 2014-03-19 │ 0.755406 │
+│ 2014-03-20 │ 0.723218 │
+│ 2014-03-21 │ 0.697021 │
+│ 2014-03-22 │ 0.647851 │
+│ 2014-03-23 │ 0.648416 │
+└────────────┴──────────┘
+</pre></div>
+</div>
+<ul class="simple">
+<li>за каждый день после 17 марта считаем долю хитов, сделанных посетителями, которые заходили на сайт 17 марта.</li>
+</ul>
+<p>Подзапрос в секции IN на одном сервере всегда выполняется только один раз. Зависимых подзапросов не существует.</p>
+</div>
+<div class="section" id="id14">
+<h3>Распределённые подзапросы<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h3>
+<p>Существует два варианта IN-ов с подзапросами (аналогично для JOIN-ов): обычный <tt class="docutils literal"><span class="pre">IN</span></tt> / <tt class="docutils literal"><span class="pre">JOIN</span></tt> и <tt class="docutils literal"><span class="pre">GLOBAL</span> <span class="pre">IN</span></tt> / <tt class="docutils literal"><span class="pre">GLOBAL</span> <span class="pre">JOIN</span></tt>. Они отличаются способом выполнения при распределённой обработке запроса.</p>
+<p>При использовании обычного IN-а, запрос отправляется на удалённые серверы, и на каждом из них выполняются подзапросы в секциях <tt class="docutils literal"><span class="pre">IN</span></tt> / <tt class="docutils literal"><span class="pre">JOIN</span></tt>.</p>
+<p>При использовании <tt class="docutils literal"><span class="pre">GLOBAL</span> <span class="pre">IN</span></tt> / <tt class="docutils literal"><span class="pre">GLOBAL</span> <span class="pre">JOIN-а</span></tt>, сначала выполняются все подзапросы для <tt class="docutils literal"><span class="pre">GLOBAL</span> <span class="pre">IN</span></tt> / <tt class="docutils literal"><span class="pre">GLOBAL</span> <span class="pre">JOIN-ов</span></tt>, и результаты складываются во временные таблицы. Затем эти временные таблицы передаются на каждый удалённый сервер, и на них выполняются запросы, с использованием этих переданных временных данных.</p>
+<p>Если запрос не распределённый, используйте обычный <tt class="docutils literal"><span class="pre">IN</span></tt> / <tt class="docutils literal"><span class="pre">JOIN</span></tt>.</p>
+<p>Следует быть внимательным при использовании подзапросов в секции <tt class="docutils literal"><span class="pre">IN</span></tt> / <tt class="docutils literal"><span class="pre">JOIN</span></tt> в случае распределённой обработки запроса.</p>
+<p>Рассмотрим это на примерах. Пусть на каждом сервере кластера есть обычная таблица <strong>local_table</strong>. Пусть также есть таблица <strong>distributed_table</strong> типа <strong>Distributed</strong>, которая смотрит на все серверы кластера.</p>
+<p>При запросе к распределённой таблице <strong>distributed_table</strong>, запрос будет отправлен на все удалённые серверы, и на них будет выполнен с использованием таблицы <strong>local_table</strong>.</p>
+<p>Например, запрос</p>
+<p><tt class="docutils literal"><span class="pre">SELECT</span> <span class="pre">uniq(UserID)</span> <span class="pre">FROM</span> <span class="pre">distributed_table</span></tt></p>
+<p>будет отправлен на все удалённые серверы в виде</p>
+<p><tt class="docutils literal"><span class="pre">SELECT</span> <span class="pre">uniq(UserID)</span> <span class="pre">FROM</span> <span class="pre">local_table</span></tt></p>
+<p>, выполнен параллельно на каждом из них до стадии, позволяющей объединить промежуточные результаты; затем промежуточные результаты вернутся на сервер-инициатор запроса, будут на нём объединены, и финальный результат будет отправлен клиенту.</p>
+<p>Теперь рассмотрим запрос с IN-ом:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">uniq</span><span class="p">(</span><span class="n">UserID</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">distributed_table</span> <span class="k">WHERE</span> <span class="n">CounterID</span> <span class="o">=</span> <span class="mi">101500</span> <span class="k">AND</span> <span class="n">UserID</span> <span class="k">IN</span> <span class="p">(</span><span class="k">SELECT</span> <span class="n">UserID</span> <span class="k">FROM</span> <span class="n">local_table</span> <span class="k">WHERE</span> <span class="n">CounterID</span> <span class="o">=</span> <span class="mi">34</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>расчёт пересечения аудиторий двух сайтов.</li>
+</ul>
+<p>Этот запрос будет отправлен на все удалённые серверы в виде</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">uniq</span><span class="p">(</span><span class="n">UserID</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">local_table</span> <span class="k">WHERE</span> <span class="n">CounterID</span> <span class="o">=</span> <span class="mi">101500</span> <span class="k">AND</span> <span class="n">UserID</span> <span class="k">IN</span> <span class="p">(</span><span class="k">SELECT</span> <span class="n">UserID</span> <span class="k">FROM</span> <span class="n">local_table</span> <span class="k">WHERE</span> <span class="n">CounterID</span> <span class="o">=</span> <span class="mi">34</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>То есть, множество в секции IN будет собрано на каждом сервере независимо, только по тем данным, которые есть локально на каждом из серверов.</p>
+<p>Это будет работать правильно и оптимально, если вы предусмотрели такой случай, и раскладываете данные по серверам кластера таким образом, чтобы данные одного UserID-а лежали только на одном сервере. В таком случае все необходимые данные будут присутствовать на каждом сервере локально. В противном случае результат будет посчитан неточно. Назовём этот вариант запроса &#8220;локальный IN&#8221;.</p>
+<p>Чтобы исправить работу запроса, когда данные размазаны по серверам кластера произвольным образом, можно было бы указать <strong>distributed_table</strong> внутри подзапроса. Запрос будет выглядеть так:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">uniq</span><span class="p">(</span><span class="n">UserID</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">distributed_table</span> <span class="k">WHERE</span> <span class="n">CounterID</span> <span class="o">=</span> <span class="mi">101500</span> <span class="k">AND</span> <span class="n">UserID</span> <span class="k">IN</span> <span class="p">(</span><span class="k">SELECT</span> <span class="n">UserID</span> <span class="k">FROM</span> <span class="n">distributed_table</span> <span class="k">WHERE</span> <span class="n">CounterID</span> <span class="o">=</span> <span class="mi">34</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Этот запрос будет отправлен на все удалённые серверы в виде</p>
+<p>На каждом удалённом сервере начнёт выполняться подзапрос. Так как в подзапросе используется распределённая таблица, то подзапрос будет, на каждом удалённом сервере, снова отправлен на каждый удалённый сервер, в виде</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">UserID</span> <span class="k">FROM</span> <span class="n">local_table</span> <span class="k">WHERE</span> <span class="n">CounterID</span> <span class="o">=</span> <span class="mi">34</span>
+</pre></div>
+</div>
+<p>Например, если у вас кластер из 100 серверов, то выполнение всего запроса потребует 10 000 элементарных запросов, что, как правило, является неприемлемым.</p>
+<p>В таких случаях всегда следует использовать GLOBAL IN вместо IN. Рассмотрим его работу для запроса</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">uniq</span><span class="p">(</span><span class="n">UserID</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">distributed_table</span> <span class="k">WHERE</span> <span class="n">CounterID</span> <span class="o">=</span> <span class="mi">101500</span> <span class="k">AND</span> <span class="n">UserID</span> <span class="k">GLOBAL</span> <span class="k">IN</span> <span class="p">(</span><span class="k">SELECT</span> <span class="n">UserID</span> <span class="k">FROM</span> <span class="n">distributed_table</span> <span class="k">WHERE</span> <span class="n">CounterID</span> <span class="o">=</span> <span class="mi">34</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>На сервере-инициаторе запроса будет выполнен подзапрос</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">UserID</span> <span class="k">FROM</span> <span class="n">distributed_table</span> <span class="k">WHERE</span> <span class="n">CounterID</span> <span class="o">=</span> <span class="mi">34</span>
+</pre></div>
+</div>
+<p>, и результат будет сложен во временную таблицу в оперативке. Затем запрос будет отправлен на каждый удалённый сервер в виде</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">uniq</span><span class="p">(</span><span class="n">UserID</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">local_table</span> <span class="k">WHERE</span> <span class="n">CounterID</span> <span class="o">=</span> <span class="mi">101500</span> <span class="k">AND</span> <span class="n">UserID</span> <span class="k">GLOBAL</span> <span class="k">IN</span> <span class="n">_data1</span>
+</pre></div>
+</div>
+<p>, и вместе с запросом, на каждый удалённый сервер будет отправлена временная таблица _data1 (имя временной таблицы - implementation defined).</p>
+<p>Это гораздо более оптимально, чем при использовании обычного IN. Но при этом, следует помнить о нескольких вещах:</p>
+<ol class="arabic simple">
+<li>При создании временной таблицы данные не уникализируются. Чтобы уменьшить объём передаваемых по сети данных, укажите в подзапросе DISTINCT (для обычного IN-а этого делать не нужно).</li>
+<li>Временная таблица будет передана на все удалённые серверы. Передача не учитывает топологию сети. Например, если 10 удалённых серверов расположены в удалённом относительно сервера-инициатора запроса датацентре, то по каналу в удалённый датацентр данные будет переданы 10 раз. Старайтесь не использовать большие множества при использовании GLOBAL IN.</li>
+<li>При передаче данных на удалённые серверы не настраивается ограничение использования сетевой полосы. Вы можете перегрузить сеть.</li>
+<li>Старайтесь распределять данные по серверам так, чтобы в GLOBAL IN-ах не было частой необходимости.</li>
+<li>Если в GLOBAL IN есть частая необходимость, то спланируйте размещение кластера ClickHouse таким образом, чтобы в каждом датацентре была хотя бы одна реплика каждого шарда, и среди них была быстрая сеть - чтобы запрос целиком можно было бы выполнить, передавая данные в пределах одного датацентра.</li>
+</ol>
+<p>В секции <tt class="docutils literal"><span class="pre">GLOBAL</span> <span class="pre">IN</span></tt> также имеет смысл указывать локальную таблицу - в случае, если эта локальная таблица есть только на сервере-инициаторе запроса, и вы хотите воспользоваться данными из неё на удалённых серверах.</p>
+</div>
+<div class="section" id="id15">
+<h3>Экстремальные значения<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h3>
+<p>Вы можете получить в дополнение к результату также минимальные и максимальные значения по столбцам результата. Для этого выставите настройку <strong>extremes</strong> в 1. Минимумы и максимумы считаются для числовых типов, дат, дат-с-временем. Для остальных столбцов будут выведены значения по умолчанию.</p>
+<p>Вычисляются дополнительные две строчки - минимумы и максимумы, соответственно. Эти дополнительные две строчки выводятся в форматах JSON*, TabSeparated*, Pretty* отдельно от остальных строчек. В остальных форматах они не выводится.</p>
+<p>В форматах JSON* экстремальные значения выводятся отдельным полем extremes. В форматах TabSeparated* строчка выводится после основного результата и после totals, если есть. Перед ней (после остальных данных) вставляется пустая строка. В форматах Pretty* строчка выводится отдельной табличкой после основного результата и после totals, если есть.</p>
+<p>Экстремальные значения считаются по строчкам, прошедшим через LIMIT. Но при этом, при использовании LIMIT offset, size, строчки до offset учитываются в extremes. В потоковых запросах, в результате может учитываться также небольшое количество строчек, прошедших LIMIT.</p>
+</div>
+<div class="section" id="id16">
+<h3>Замечания<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
+<p>В секциях <tt class="docutils literal"><span class="pre">GROUP</span> <span class="pre">BY</span></tt>, <tt class="docutils literal"><span class="pre">ORDER</span> <span class="pre">BY</span></tt>, в отличие от диалекта MySQL, и в соответствии со стандартным SQL, не поддерживаются позиционные аргументы.
+Например, если вы напишите <tt class="docutils literal"><span class="pre">GROUP</span> <span class="pre">BY</span> <span class="pre">1,</span> <span class="pre">2</span></tt> - то это будет воспринято, как группировка по константам (то есть, агрегация всех строк в одну).</p>
+<p>Вы можете использовать синонимы (алиасы AS) в любом месте запроса.</p>
+<p>В любом месте запроса, вместо выражения, может стоять звёздочка. При анализе запроса звёздочка раскрывается в список всех столбцов таблицы (за исключением MATERIALIZED и ALIAS столбцов). Есть лишь немного случаев, когда оправдано использовать звёздочку:</p>
+<ul class="simple">
+<li>при создании дампа таблицы;</li>
+<li>для таблиц, содержащих всего несколько столбцов - например, системных таблиц;</li>
+<li>для получения информации о том, какие столбцы есть в таблице; в этом случае, укажите LIMIT 1. Но лучше используйте запрос DESC TABLE;</li>
+<li>при наличии сильной фильтрации по небольшому количеству столбцов с помощью PREWHERE;</li>
+<li>в подзапросах (так как из подзапросов выкидываются столбцы, не нужные для внешнего запроса).</li>
+</ul>
+<p>В других случаях использование звёздочки является издевательством над системой, так как вместо преимуществ столбцовой СУБД вы получаете недостатки. То есть использовать звёздочку не рекомендуется.</p>
+</div>
+</div>
+<div class="section" id="kill-query">
+<h2>KILL QUERY<a class="headerlink" href="#kill-query" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="n">KILL</span> <span class="n">QUERY</span> <span class="k">WHERE</span> <span class="o">&lt;</span><span class="k">where</span> <span class="n">expression</span> <span class="k">to</span> <span class="k">SELECT</span> <span class="k">FROM</span> <span class="k">system</span><span class="p">.</span><span class="n">processes</span> <span class="n">query</span><span class="o">&gt;</span> <span class="p">[</span><span class="n">SYNC</span><span class="o">|</span><span class="n">ASYNC</span><span class="o">|</span><span class="n">TEST</span><span class="p">]</span> <span class="p">[</span><span class="n">FORMAT</span> <span class="n">format</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Пытается завершить исполняющиеся в данный момент запросы.
+Запросы для завершения выбираются из таблицы system.processes для которых выражение expression_for_system.processes истинно.</p>
+<p>Примеры:
+.. code-block:: sql</p>
+<blockquote>
+<div>KILL QUERY WHERE query_id=&#8216;2-857d-4a57-9ee0-327da5d60a90&#8217;</div></blockquote>
+<p>Завершает все запросы с указанным query_id.
+.. code-block:: sql</p>
+<blockquote>
+<div>KILL QUERY WHERE user=&#8217;username&#8217; SYNC</div></blockquote>
+<p>Синхронно завершает все запросы пользователя <tt class="docutils literal"><span class="pre">username</span></tt>.</p>
+<p>Readonly-пользователи могут совершать только свои запросы.
+По-умолчанию используется асинхронный вариант запроса (ASYNC), который завершается не ожидая завершения запросов.
+Синхронный вариант (SYNC) ожидает завершения всех запросов и построчно выводит информацию о процессах по ходу их завершения.
+Ответ содержит колонку <tt class="docutils literal"><span class="pre">kill_status</span></tt>, которая может принимать следующие значения:
+#. &#8216;finished&#8217; - запрос успешно завершился;
+#. &#8216;waiting&#8217; - запросу отправлен сигнал завершения, ожидается его завершение;
+#. остальные значения описывают причину невозможности завершения запроса.</p>
+<p>Тестовый вариант запроса (TEST) только проверяет права пользователя и выводит список запросов для завершения.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Запросы</a><ul>
+<li><a class="reference internal" href="#create-database">CREATE DATABASE</a></li>
+<li><a class="reference internal" href="#create-table">CREATE TABLE</a><ul>
+<li><a class="reference internal" href="#id2">Значения по умолчанию</a></li>
+<li><a class="reference internal" href="#id5">Временные таблицы</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#create-view">CREATE VIEW</a></li>
+<li><a class="reference internal" href="#attach">ATTACH</a></li>
+<li><a class="reference internal" href="#drop">DROP</a></li>
+<li><a class="reference internal" href="#detach">DETACH</a></li>
+<li><a class="reference internal" href="#rename">RENAME</a></li>
+<li><a class="reference internal" href="#alter">ALTER</a><ul>
+<li><a class="reference internal" href="#id6">Манипуляции со столбцами</a></li>
+<li><a class="reference internal" href="#id7">Манипуляции с партициями и кусками</a></li>
+<li><a class="reference internal" href="#id8">Бэкапы и репликация</a></li>
+<li><a class="reference internal" href="#id9">Синхронность запросов ALTER</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#show-databases">SHOW DATABASES</a></li>
+<li><a class="reference internal" href="#show-tables">SHOW TABLES</a></li>
+<li><a class="reference internal" href="#show-processlist">SHOW PROCESSLIST</a></li>
+<li><a class="reference internal" href="#show-create-table">SHOW CREATE TABLE</a></li>
+<li><a class="reference internal" href="#describe-table">DESCRIBE TABLE</a></li>
+<li><a class="reference internal" href="#exists">EXISTS</a></li>
+<li><a class="reference internal" href="#use">USE</a></li>
+<li><a class="reference internal" href="#set">SET</a></li>
+<li><a class="reference internal" href="#optimize">OPTIMIZE</a></li>
+<li><a class="reference internal" href="#insert">INSERT</a></li>
+<li><a class="reference internal" href="#select">SELECT</a><ul>
+<li><a class="reference internal" href="#from">Секция FROM</a></li>
+<li><a class="reference internal" href="#sample">Секция SAMPLE</a></li>
+<li><a class="reference internal" href="#array-join">Секция ARRAY JOIN</a></li>
+<li><a class="reference internal" href="#join">Секция JOIN</a></li>
+<li><a class="reference internal" href="#where">Секция WHERE</a></li>
+<li><a class="reference internal" href="#prewhere">Секция PREWHERE</a></li>
+<li><a class="reference internal" href="#group-by">Секция GROUP BY</a><ul>
+<li><a class="reference internal" href="#with-totals">Модификатор WITH TOTALS</a></li>
+<li><a class="reference internal" href="#id12">GROUP BY во внешней памяти</a></li>
+<li><a class="reference internal" href="#limit-n-by">Модификатор LIMIT N BY</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#having">Секция HAVING</a></li>
+<li><a class="reference internal" href="#order-by">Секция ORDER BY</a></li>
+<li><a class="reference internal" href="#id13">Секция SELECT</a></li>
+<li><a class="reference internal" href="#distinct">Секция DISTINCT</a></li>
+<li><a class="reference internal" href="#limit">Секция LIMIT</a></li>
+<li><a class="reference internal" href="#union-all">Секция UNION ALL</a></li>
+<li><a class="reference internal" href="#into-outfile">Секция INTO OUTFILE</a></li>
+<li><a class="reference internal" href="#format">Секция FORMAT</a></li>
+<li><a class="reference internal" href="#in">Операторы IN</a></li>
+<li><a class="reference internal" href="#id14">Распределённые подзапросы</a></li>
+<li><a class="reference internal" href="#id15">Экстремальные значения</a></li>
+<li><a class="reference internal" href="#id16">Замечания</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#kill-query">KILL QUERY</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/ru/query_language/queries.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

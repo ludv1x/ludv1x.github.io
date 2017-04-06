@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Профили настроек &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
+    <link rel="up" title="Настройки" href="index.html" />
+    <link rel="next" title="Конфигурационные файлы" href="../configuration_files.html" />
+    <link rel="prev" title="max_block_size" href="settings.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../configuration_files.html" title="Конфигурационные файлы"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="settings.html" title="max_block_size"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Настройки</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Профили настроек<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>Профили настроек - это множество настроек, сгруппированных под одним именем. Для каждого пользователя ClickHouse указывается некоторый профиль.
+Все настройки профиля можно применить, установив настройку с именем profile. Пример:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>SET profile = &#39;web&#39;
+</pre></div>
+</div>
+<ul class="simple">
+<li>установить профиль web - то есть, установить все настройки, относящиеся к профилю web.</li>
+</ul>
+<p>Профили настроек объявляются в конфигурационном файле пользователей. Обычно это - <tt class="docutils literal"><span class="pre">users.xml</span></tt>.
+Пример:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="c">&lt;!-- Профили настроек. --&gt;</span>
+<span class="nt">&lt;profiles&gt;</span>
+    <span class="c">&lt;!-- Настройки по умолчанию --&gt;</span>
+    <span class="nt">&lt;default&gt;</span>
+        <span class="c">&lt;!-- Максимальное количество потоков при выполнении одного запроса. --&gt;</span>
+        <span class="nt">&lt;max_threads&gt;</span>8<span class="nt">&lt;/max_threads&gt;</span>
+    <span class="nt">&lt;/default&gt;</span>
+
+    <span class="c">&lt;!-- Настройки для запросов из пользовательского интерфейса --&gt;</span>
+    <span class="nt">&lt;web&gt;</span>
+        <span class="nt">&lt;max_rows_to_read&gt;</span>1000000000<span class="nt">&lt;/max_rows_to_read&gt;</span>
+        <span class="nt">&lt;max_bytes_to_read&gt;</span>100000000000<span class="nt">&lt;/max_bytes_to_read&gt;</span>
+
+        <span class="nt">&lt;max_rows_to_group_by&gt;</span>1000000<span class="nt">&lt;/max_rows_to_group_by&gt;</span>
+        <span class="nt">&lt;group_by_overflow_mode&gt;</span>any<span class="nt">&lt;/group_by_overflow_mode&gt;</span>
+
+        <span class="nt">&lt;max_rows_to_sort&gt;</span>1000000<span class="nt">&lt;/max_rows_to_sort&gt;</span>
+        <span class="nt">&lt;max_bytes_to_sort&gt;</span>1000000000<span class="nt">&lt;/max_bytes_to_sort&gt;</span>
+
+        <span class="nt">&lt;max_result_rows&gt;</span>100000<span class="nt">&lt;/max_result_rows&gt;</span>
+        <span class="nt">&lt;max_result_bytes&gt;</span>100000000<span class="nt">&lt;/max_result_bytes&gt;</span>
+        <span class="nt">&lt;result_overflow_mode&gt;</span>break<span class="nt">&lt;/result_overflow_mode&gt;</span>
+
+        <span class="nt">&lt;max_execution_time&gt;</span>600<span class="nt">&lt;/max_execution_time&gt;</span>
+        <span class="nt">&lt;min_execution_speed&gt;</span>1000000<span class="nt">&lt;/min_execution_speed&gt;</span>
+        <span class="nt">&lt;timeout_before_checking_execution_speed&gt;</span>15<span class="nt">&lt;/timeout_before_checking_execution_speed&gt;</span>
+
+        <span class="nt">&lt;max_columns_to_read&gt;</span>25<span class="nt">&lt;/max_columns_to_read&gt;</span>
+        <span class="nt">&lt;max_temporary_columns&gt;</span>100<span class="nt">&lt;/max_temporary_columns&gt;</span>
+        <span class="nt">&lt;max_temporary_non_const_columns&gt;</span>50<span class="nt">&lt;/max_temporary_non_const_columns&gt;</span>
+
+        <span class="nt">&lt;max_subquery_depth&gt;</span>2<span class="nt">&lt;/max_subquery_depth&gt;</span>
+        <span class="nt">&lt;max_pipeline_depth&gt;</span>25<span class="nt">&lt;/max_pipeline_depth&gt;</span>
+        <span class="nt">&lt;max_ast_depth&gt;</span>50<span class="nt">&lt;/max_ast_depth&gt;</span>
+        <span class="nt">&lt;max_ast_elements&gt;</span>100<span class="nt">&lt;/max_ast_elements&gt;</span>
+
+        <span class="nt">&lt;readonly&gt;</span>1<span class="nt">&lt;/readonly&gt;</span>
+    <span class="nt">&lt;/web&gt;</span>
+<span class="nt">&lt;/profiles&gt;</span>
+</pre></div>
+</div>
+<p>В примере задано два профиля: <tt class="docutils literal"><span class="pre">default</span></tt> и <tt class="docutils literal"><span class="pre">web</span></tt>. Профиль <tt class="docutils literal"><span class="pre">default</span></tt> имеет специальное значение - он всегда обязан присутствовать и применяется при запуске сервера. То есть, профиль default содержит настройки по умолчанию. Профиль web - обычный профиль, который может быть установлен с помощью запроса SET или с помощью параметра URL при запросе по HTTP.</p>
+<p>Профили настроек могут наследоваться от друг-друга - это реализуется указанием настройки profile перед остальными настройками, перечисленными в профиле.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="settings.html"
+                        title="previous chapter">max_block_size</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../configuration_files.html"
+                        title="next chapter">Конфигурационные файлы</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/settings/settings_profiles.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../configuration_files.html" title="Конфигурационные файлы"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="settings.html" title="max_block_size"
+             >previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Настройки</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

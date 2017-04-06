@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Функции округления &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
+    <link rel="up" title="Функции" href="index.html" />
+    <link rel="next" title="Функции разбиения и слияния строк и массивов" href="splitting_merging_functions.html" />
+    <link rel="prev" title="Функции генерации псевдослучайных чисел" href="random_functions.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="splitting_merging_functions.html" title="Функции разбиения и слияния строк и массивов"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="random_functions.html" title="Функции генерации псевдослучайных чисел"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Функции</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Функции округления<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="floor-x-n">
+<h2>floor(x[, N])<a class="headerlink" href="#floor-x-n" title="Permalink to this headline">¶</a></h2>
+<p>Возвращает наибольшее круглое число, которое меньше или равно, чем x.
+Круглым называется число, кратное 1 / 10N или ближайшее к нему число соответствующего типа данных, если 1 / 10N не представимо точно.
+N - целочисленная константа, не обязательный параметр. По умолчанию - ноль, что означает - округлять до целого числа.
+N может быть отрицательным.</p>
+<p>Примеры: <tt class="docutils literal"><span class="pre">floor(123.45,</span> <span class="pre">1)</span> <span class="pre">=</span> <span class="pre">123.4,</span> <span class="pre">floor(123.45,</span> <span class="pre">-1)</span> <span class="pre">=</span> <span class="pre">120.</span></tt></p>
+<p><tt class="docutils literal"><span class="pre">x</span></tt> - любой числовой тип. Результат - число того же типа.
+Для целочисленных аргументов имеет смысл округление с отрицательным значением N (для неотрицательных N, функция ничего не делает).
+В случае переполнения при округлении (например, floor(-128, -1)), возвращается implementation specific результат.</p>
+</div>
+<div class="section" id="ceil-x-n">
+<h2>ceil(x[, N])<a class="headerlink" href="#ceil-x-n" title="Permalink to this headline">¶</a></h2>
+<p>Возвращает наименьшее круглое число, которое больше или равно, чем x.
+В остальном, аналогично функции floor, см. выше.</p>
+</div>
+<div class="section" id="round-x-n">
+<h2>round(x[, N])<a class="headerlink" href="#round-x-n" title="Permalink to this headline">¶</a></h2>
+<p>Возвращает ближайшее к num круглое число, которое может быть меньше или больше или равно x.
+Если x находится посередине от ближайших круглых чисел, то возвращается какое-либо одно из них (implementation specific).
+Число -0. может считаться или не считаться круглым (implementation specific).
+В остальном, аналогично функциям floor и ceil, см. выше.</p>
+</div>
+<div class="section" id="roundtoexp2-num">
+<h2>roundToExp2(num)<a class="headerlink" href="#roundtoexp2-num" title="Permalink to this headline">¶</a></h2>
+<p>Принимает число. Если число меньше единицы - возвращает 0. Иначе округляет число вниз до ближайшей (целой неотрицательной) степени двух.</p>
+</div>
+<div class="section" id="roundduration-num">
+<h2>roundDuration(num)<a class="headerlink" href="#roundduration-num" title="Permalink to this headline">¶</a></h2>
+<p>Принимает число. Если число меньше единицы - возвращает 0. Иначе округляет число вниз до чисел из набора: 1, 10, 30, 60, 120, 180, 240, 300, 600, 1200, 1800, 3600, 7200, 18000, 36000. Эта функция специфична для Яндекс.Метрики и предназначена для реализации отчёта по длительности визита.</p>
+</div>
+<div class="section" id="roundage-num">
+<h2>roundAge(num)<a class="headerlink" href="#roundage-num" title="Permalink to this headline">¶</a></h2>
+<p>Принимает число. Если число меньше 18 - возвращает 0. Иначе округляет число вниз до чисел из набора: 18, 25, 35, 45. Эта функция специфична для Яндекс.Метрики и предназначена для реализации отчёта по возрасту посетителей.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Функции округления</a><ul>
+<li><a class="reference internal" href="#floor-x-n">floor(x[, N])</a></li>
+<li><a class="reference internal" href="#ceil-x-n">ceil(x[, N])</a></li>
+<li><a class="reference internal" href="#round-x-n">round(x[, N])</a></li>
+<li><a class="reference internal" href="#roundtoexp2-num">roundToExp2(num)</a></li>
+<li><a class="reference internal" href="#roundduration-num">roundDuration(num)</a></li>
+<li><a class="reference internal" href="#roundage-num">roundAge(num)</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="random_functions.html"
+                        title="previous chapter">Функции генерации псевдослучайных чисел</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="splitting_merging_functions.html"
+                        title="next chapter">Функции разбиения и слияния строк и массивов</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/functions/rounding_functions.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="splitting_merging_functions.html" title="Функции разбиения и слияния строк и массивов"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="random_functions.html" title="Функции генерации псевдослучайных чисел"
+             >previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Функции</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

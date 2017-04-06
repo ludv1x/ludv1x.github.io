@@ -1,0 +1,273 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Функции для работы с датами и временем &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
+    <link rel="up" title="Функции" href="index.html" />
+    <link rel="next" title="Функции кодирования" href="encoding_functions.html" />
+    <link rel="prev" title="Условные функции" href="conditional_functions.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="encoding_functions.html" title="Функции кодирования"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="conditional_functions.html" title="Условные функции"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Функции</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Функции для работы с датами и временем<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>Поддержка часовых поясов</p>
+<p>Все функции по работе с датой и временем, для которых это имеет смысл, могут принимать второй, необязательный аргумент - имя часового пояса. Пример: Asia/Yekaterinburg. В этом случае, они используют не локальный часовой пояс (по умолчанию), а указанный.</p>
+<p>Поддерживаются только часовые пояса, отличающиеся от UTC на целое число часов.</p>
+<div class="section" id="toyear">
+<h2>toYear<a class="headerlink" href="#toyear" title="Permalink to this headline">¶</a></h2>
+<p>Переводит дату или дату-с-временем в число типа UInt16, содержащее номер года (AD).</p>
+</div>
+<div class="section" id="tomonth">
+<h2>toMonth<a class="headerlink" href="#tomonth" title="Permalink to this headline">¶</a></h2>
+<p>Переводит дату или дату-с-временем в число типа UInt8, содержащее номер месяца (1-12).</p>
+</div>
+<div class="section" id="todayofmonth">
+<h2>toDayOfMonth<a class="headerlink" href="#todayofmonth" title="Permalink to this headline">¶</a></h2>
+<p>Переводит дату или дату-с-временем в число типа UInt8, содержащее номер дня в месяце (1-31).</p>
+</div>
+<div class="section" id="todayofweek">
+<h2>toDayOfWeek<a class="headerlink" href="#todayofweek" title="Permalink to this headline">¶</a></h2>
+<p>Переводит дату или дату-с-временем в число типа UInt8, содержащее номер дня в неделе (понедельник - 1, воскресенье - 7).</p>
+</div>
+<div class="section" id="tohour">
+<h2>toHour<a class="headerlink" href="#tohour" title="Permalink to this headline">¶</a></h2>
+<p>Переводит дату-с-временем в число типа UInt8, содержащее номер часа в сутках (0-23).
+Функция исходит из допущения, что перевод стрелок вперёд, если осуществляется, то на час, в два часа ночи, а перевод стрелок назад, если осуществляется, то на час, в три часа ночи (что, в общем, не верно - даже в Москве два раза перевод стрелок был осуществлён в другое время).</p>
+</div>
+<div class="section" id="tominute">
+<h2>toMinute<a class="headerlink" href="#tominute" title="Permalink to this headline">¶</a></h2>
+<p>Переводит дату-с-временем в число типа UInt8, содержащее номер минуты в часе (0-59).</p>
+</div>
+<div class="section" id="tosecond">
+<h2>toSecond<a class="headerlink" href="#tosecond" title="Permalink to this headline">¶</a></h2>
+<p>Переводит дату-с-временем в число типа UInt8, содержащее номер секунды в минуте (0-59).
+Секунды координации не учитываются.</p>
+</div>
+<div class="section" id="tomonday">
+<h2>toMonday<a class="headerlink" href="#tomonday" title="Permalink to this headline">¶</a></h2>
+<p>Округляет дату или дату-с-временем вниз до ближайшего понедельника.
+Возвращается дата.</p>
+</div>
+<div class="section" id="tostartofmonth">
+<h2>toStartOfMonth<a class="headerlink" href="#tostartofmonth" title="Permalink to this headline">¶</a></h2>
+<p>Округляет дату или дату-с-временем вниз до первого дня месяца.
+Возвращается дата.</p>
+</div>
+<div class="section" id="tostartofquarter">
+<h2>toStartOfQuarter<a class="headerlink" href="#tostartofquarter" title="Permalink to this headline">¶</a></h2>
+<p>Округляет дату или дату-с-временем вниз до первого дня квартала.
+Первый день квартала - это одно из 1 января, 1 апреля, 1 июля, 1 октября.
+Возвращается дата.</p>
+</div>
+<div class="section" id="tostartofyear">
+<h2>toStartOfYear<a class="headerlink" href="#tostartofyear" title="Permalink to this headline">¶</a></h2>
+<p>Округляет дату или дату-с-временем вниз до первого дня года.
+Возвращается дата.</p>
+</div>
+<div class="section" id="tostartofminute">
+<h2>toStartOfMinute<a class="headerlink" href="#tostartofminute" title="Permalink to this headline">¶</a></h2>
+<p>Округляет дату-с-временем вниз до начала минуты.</p>
+</div>
+<div class="section" id="tostartoffiveminute">
+<h2>toStartOfFiveMinute<a class="headerlink" href="#tostartoffiveminute" title="Permalink to this headline">¶</a></h2>
+<p>Округляет дату-с-временем вниз до начала пятиминутного интервала.</p>
+<p>Замечание: если вам нужно округлить дату-с-временем до какого-либо другого количества секунд, минут или часов, вы можете перевести её в число с помощью функции toUInt32, затем округлить число с помощью функции intDiv и умножения, а затем перевести обратно, с помощью функции toDateTime.</p>
+</div>
+<div class="section" id="tostartofhour">
+<h2>toStartOfHour<a class="headerlink" href="#tostartofhour" title="Permalink to this headline">¶</a></h2>
+<p>Округляет дату-с-временем вниз до начала часа.</p>
+</div>
+<div class="section" id="totime">
+<h2>toTime<a class="headerlink" href="#totime" title="Permalink to this headline">¶</a></h2>
+<p>Переводит дату-с-временем на некоторую фиксированную дату, сохраняя при этом время.</p>
+</div>
+<div class="section" id="torelativeyearnum">
+<h2>toRelativeYearNum<a class="headerlink" href="#torelativeyearnum" title="Permalink to this headline">¶</a></h2>
+<p>Переводит дату-с-временем или дату в номер года, начиная с некоторого фиксированного момента в прошлом.</p>
+</div>
+<div class="section" id="torelativemonthnum">
+<h2>toRelativeMonthNum<a class="headerlink" href="#torelativemonthnum" title="Permalink to this headline">¶</a></h2>
+<p>Переводит дату-с-временем или дату в номер месяца, начиная с некоторого фиксированного момента в прошлом.</p>
+</div>
+<div class="section" id="torelativeweeknum">
+<h2>toRelativeWeekNum<a class="headerlink" href="#torelativeweeknum" title="Permalink to this headline">¶</a></h2>
+<p>Переводит дату-с-временем или дату в номер недели, начиная с некоторого фиксированного момента в прошлом.</p>
+</div>
+<div class="section" id="torelativedaynum">
+<h2>toRelativeDayNum<a class="headerlink" href="#torelativedaynum" title="Permalink to this headline">¶</a></h2>
+<p>Переводит дату-с-временем или дату в номер дня, начиная с некоторого фиксированного момента в прошлом.</p>
+</div>
+<div class="section" id="torelativehournum">
+<h2>toRelativeHourNum<a class="headerlink" href="#torelativehournum" title="Permalink to this headline">¶</a></h2>
+<p>Переводит дату-с-временем в номер часа, начиная с некоторого фиксированного момента в прошлом.</p>
+</div>
+<div class="section" id="torelativeminutenum">
+<h2>toRelativeMinuteNum<a class="headerlink" href="#torelativeminutenum" title="Permalink to this headline">¶</a></h2>
+<p>Переводит дату-с-временем в номер минуты, начиная с некоторого фиксированного момента в прошлом.</p>
+</div>
+<div class="section" id="torelativesecondnum">
+<h2>toRelativeSecondNum<a class="headerlink" href="#torelativesecondnum" title="Permalink to this headline">¶</a></h2>
+<p>Переводит дату-с-временем в номер секунды, начиная с некоторого фиксированного момента в прошлом.</p>
+</div>
+<div class="section" id="now">
+<h2>now<a class="headerlink" href="#now" title="Permalink to this headline">¶</a></h2>
+<p>Принимает ноль аргументов и возвращает текущее время на один из моментов выполнения запроса.
+Функция возвращает константу, даже если запрос выполнялся долго.</p>
+</div>
+<div class="section" id="today">
+<h2>today<a class="headerlink" href="#today" title="Permalink to this headline">¶</a></h2>
+<p>Принимает ноль аргументов и возвращает текущую дату на один из моментов выполнения запроса.
+То же самое, что toDate(now())</p>
+</div>
+<div class="section" id="yesterday">
+<h2>yesterday<a class="headerlink" href="#yesterday" title="Permalink to this headline">¶</a></h2>
+<p>Принимает ноль аргументов и возвращает вчерашнюю дату на один из моментов выполнения запроса.
+Делает то же самое, что today() - 1.</p>
+</div>
+<div class="section" id="timeslot">
+<h2>timeSlot<a class="headerlink" href="#timeslot" title="Permalink to this headline">¶</a></h2>
+<p>Округляет время до получаса.
+Эта функция является специфичной для Яндекс.Метрики, так как пол часа - минимальное время, для которого, если соседние по времени хиты одного посетителя на одном счётчике отстоят друг от друга строго более, чем на это время, визит может быть разбит на два визита. То есть, кортежи (номер счётчика, идентификатор посетителя, тайм-слот) могут использоваться для поиска хитов, входящий в соответствующий визит.</p>
+</div>
+<div class="section" id="timeslots-starttime-duration">
+<h2>timeSlots(StartTime, Duration)<a class="headerlink" href="#timeslots-starttime-duration" title="Permalink to this headline">¶</a></h2>
+<p>Для интервала времени, начинающегося в StartTime и продолжающегося Duration секунд, возвращает массив моментов времени, состоящий из округлений вниз до получаса точек из этого интервала.
+Например, <tt class="docutils literal"><span class="pre">timeSlots(toDateTime('2012-01-01</span> <span class="pre">12:20:00'),</span> <span class="pre">toUInt32(600))</span> <span class="pre">=</span> <span class="pre">[toDateTime('2012-01-01</span> <span class="pre">12:00:00'),</span> <span class="pre">toDateTime('2012-01-01</span> <span class="pre">12:30:00')]</span></tt>.
+Это нужно для поиска хитов, входящих в соответствующий визит.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Функции для работы с датами и временем</a><ul>
+<li><a class="reference internal" href="#toyear">toYear</a></li>
+<li><a class="reference internal" href="#tomonth">toMonth</a></li>
+<li><a class="reference internal" href="#todayofmonth">toDayOfMonth</a></li>
+<li><a class="reference internal" href="#todayofweek">toDayOfWeek</a></li>
+<li><a class="reference internal" href="#tohour">toHour</a></li>
+<li><a class="reference internal" href="#tominute">toMinute</a></li>
+<li><a class="reference internal" href="#tosecond">toSecond</a></li>
+<li><a class="reference internal" href="#tomonday">toMonday</a></li>
+<li><a class="reference internal" href="#tostartofmonth">toStartOfMonth</a></li>
+<li><a class="reference internal" href="#tostartofquarter">toStartOfQuarter</a></li>
+<li><a class="reference internal" href="#tostartofyear">toStartOfYear</a></li>
+<li><a class="reference internal" href="#tostartofminute">toStartOfMinute</a></li>
+<li><a class="reference internal" href="#tostartoffiveminute">toStartOfFiveMinute</a></li>
+<li><a class="reference internal" href="#tostartofhour">toStartOfHour</a></li>
+<li><a class="reference internal" href="#totime">toTime</a></li>
+<li><a class="reference internal" href="#torelativeyearnum">toRelativeYearNum</a></li>
+<li><a class="reference internal" href="#torelativemonthnum">toRelativeMonthNum</a></li>
+<li><a class="reference internal" href="#torelativeweeknum">toRelativeWeekNum</a></li>
+<li><a class="reference internal" href="#torelativedaynum">toRelativeDayNum</a></li>
+<li><a class="reference internal" href="#torelativehournum">toRelativeHourNum</a></li>
+<li><a class="reference internal" href="#torelativeminutenum">toRelativeMinuteNum</a></li>
+<li><a class="reference internal" href="#torelativesecondnum">toRelativeSecondNum</a></li>
+<li><a class="reference internal" href="#now">now</a></li>
+<li><a class="reference internal" href="#today">today</a></li>
+<li><a class="reference internal" href="#yesterday">yesterday</a></li>
+<li><a class="reference internal" href="#timeslot">timeSlot</a></li>
+<li><a class="reference internal" href="#timeslots-starttime-duration">timeSlots(StartTime, Duration)</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="conditional_functions.html"
+                        title="previous chapter">Условные функции</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="encoding_functions.html"
+                        title="next chapter">Функции кодирования</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/functions/date_time_functions.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="encoding_functions.html" title="Функции кодирования"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="conditional_functions.html" title="Условные функции"
+             >previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Функции</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

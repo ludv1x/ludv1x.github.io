@@ -1,0 +1,377 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Прочие функции &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
+    <link rel="up" title="Функции" href="index.html" />
+    <link rel="next" title="Функции генерации псевдослучайных чисел" href="random_functions.html" />
+    <link rel="prev" title="Математические функции" href="math_functions.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="random_functions.html" title="Функции генерации псевдослучайных чисел"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="math_functions.html" title="Математические функции"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Функции</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Прочие функции<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="hostname">
+<h2>hostName()<a class="headerlink" href="#hostname" title="Permalink to this headline">¶</a></h2>
+<p>Возвращает строку - имя хоста, на котором эта функция была выполнена. При распределённой обработке запроса, это будет имя хоста удалённого сервера, если функция выполняется на удалённом сервере.</p>
+</div>
+<div class="section" id="visiblewidth-x">
+<h2>visibleWidth(x)<a class="headerlink" href="#visiblewidth-x" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет приблизительную ширину при выводе значения в текстовом (tab-separated) виде на консоль.
+Функция используется системой для реализации Pretty форматов.</p>
+</div>
+<div class="section" id="totypename-x">
+<h2>toTypeName(x)<a class="headerlink" href="#totypename-x" title="Permalink to this headline">¶</a></h2>
+<p>Возвращает строку, содержащую имя типа переданного аргумента.</p>
+</div>
+<div class="section" id="blocksize">
+<h2>blockSize()<a class="headerlink" href="#blocksize" title="Permalink to this headline">¶</a></h2>
+<p>Получить размер блока.
+В ClickHouse выполнение запроса всегда идёт по блокам (наборам кусочков столбцов). Функция позволяет получить размер блока, для которого её вызвали.</p>
+</div>
+<div class="section" id="materialize-x">
+<h2>materialize(x)<a class="headerlink" href="#materialize-x" title="Permalink to this headline">¶</a></h2>
+<p>Превращает константу в полноценный столбец, содержащий только одно значение.
+В ClickHouse полноценные столбцы и константы представлены в памяти по-разному. Функции по-разному работают для аргументов-констант и обычных аргументов (выполняется разный код), хотя результат почти всегда должен быть одинаковым. Эта функция предназначена для отладки такого поведения.</p>
+</div>
+<div class="section" id="ignore">
+<h2>ignore(...)<a class="headerlink" href="#ignore" title="Permalink to this headline">¶</a></h2>
+<p>Принимает любые аргументы, всегда возвращает 0.
+При этом, аргумент всё равно вычисляется. Это может использоваться для бенчмарков.</p>
+</div>
+<div class="section" id="sleep-seconds">
+<h2>sleep(seconds)<a class="headerlink" href="#sleep-seconds" title="Permalink to this headline">¶</a></h2>
+<p>Спит seconds секунд на каждый блок данных. Можно указать как целое число, так и число с плавающей запятой.</p>
+</div>
+<div class="section" id="currentdatabase">
+<h2>currentDatabase()<a class="headerlink" href="#currentdatabase" title="Permalink to this headline">¶</a></h2>
+<p>Возвращает имя текущей базы данных.
+Эта функция может использоваться в параметрах движка таблицы в запросе CREATE TABLE там, где нужно указать базу данных.</p>
+</div>
+<div class="section" id="isfinite-x">
+<h2>isFinite(x)<a class="headerlink" href="#isfinite-x" title="Permalink to this headline">¶</a></h2>
+<p>Принимает Float32 или Float64 и возвращает UInt8, равный 1, если аргумент не бесконечный и не NaN, иначе 0.</p>
+</div>
+<div class="section" id="isinfinite-x">
+<h2>isInfinite(x)<a class="headerlink" href="#isinfinite-x" title="Permalink to this headline">¶</a></h2>
+<p>Принимает Float32 или Float64 и возвращает UInt8, равный 1, если аргумент бесконечный, иначе 0. Отметим, что в случае NaN возвращается 0.</p>
+</div>
+<div class="section" id="isnan-x">
+<h2>isNaN(x)<a class="headerlink" href="#isnan-x" title="Permalink to this headline">¶</a></h2>
+<p>Принимает Float32 или Float64 и возвращает UInt8, равный 1, если аргумент является NaN, иначе 0.</p>
+</div>
+<div class="section" id="hascolumnintable-database-table-column">
+<h2>hasColumnInTable(&#8216;database&#8217;, &#8216;table&#8217;, &#8216;column&#8217;)<a class="headerlink" href="#hascolumnintable-database-table-column" title="Permalink to this headline">¶</a></h2>
+<p>Принимает константные строки - имя базы данных, имя таблицы и название столбца. Возвращает константное выражение типа UInt8, равное 1,
+если есть столбец, иначе 0.
+Функция кидает исключение, если таблица не существует.
+Для элементов вложенной структуры данных функция проверяет существование столбца. Для самой же вложенной структуры данных функция возвращает 0.</p>
+</div>
+<div class="section" id="bar">
+<h2>bar<a class="headerlink" href="#bar" title="Permalink to this headline">¶</a></h2>
+<p>Позволяет построить unicode-art диаграмму.</p>
+<p><tt class="docutils literal"><span class="pre">bar(x,</span> <span class="pre">min,</span> <span class="pre">max,</span> <span class="pre">width)</span></tt> - рисует полосу ширины пропорциональной (x - min) и равной width символов при x == max.
+<tt class="docutils literal"><span class="pre">min,</span> <span class="pre">max</span></tt> - целочисленные константы, значение должно помещаться в Int64.
+<tt class="docutils literal"><span class="pre">width</span></tt> - константа, положительное число, может быть дробным.</p>
+<p>Полоса рисуется с точностью до одной восьмой символа.</p>
+<p>Пример:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span>SELECT
+    toHour(EventTime) AS h,
+    count() AS c,
+    bar(c, 0, 600000, 20) AS bar
+FROM test.hits
+GROUP BY h
+ORDER BY h ASC
+
+┌──h─┬──────c─┬─bar────────────────┐
+│  0 │ 292907 │ █████████▋         │
+│  1 │ 180563 │ ██████             │
+│  2 │ 114861 │ ███▋               │
+│  3 │  85069 │ ██▋                │
+│  4 │  68543 │ ██▎                │
+│  5 │  78116 │ ██▌                │
+│  6 │ 113474 │ ███▋               │
+│  7 │ 170678 │ █████▋             │
+│  8 │ 278380 │ █████████▎         │
+│  9 │ 391053 │ █████████████      │
+│ 10 │ 457681 │ ███████████████▎   │
+│ 11 │ 493667 │ ████████████████▍  │
+│ 12 │ 509641 │ ████████████████▊  │
+│ 13 │ 522947 │ █████████████████▍ │
+│ 14 │ 539954 │ █████████████████▊ │
+│ 15 │ 528460 │ █████████████████▌ │
+│ 16 │ 539201 │ █████████████████▊ │
+│ 17 │ 523539 │ █████████████████▍ │
+│ 18 │ 506467 │ ████████████████▊  │
+│ 19 │ 520915 │ █████████████████▎ │
+│ 20 │ 521665 │ █████████████████▍ │
+│ 21 │ 542078 │ ██████████████████ │
+│ 22 │ 493642 │ ████████████████▍  │
+│ 23 │ 400397 │ █████████████▎     │
+└────┴────────┴────────────────────┘
+</pre></div>
+</div>
+</div>
+<div class="section" id="transform">
+<h2>transform<a class="headerlink" href="#transform" title="Permalink to this headline">¶</a></h2>
+<p>Преобразовать значение согласно явно указанному отображению одних элементов на другие.
+Имеется два варианта функции:</p>
+<ol class="arabic simple">
+<li><tt class="docutils literal"><span class="pre">transform(x,</span> <span class="pre">array_from,</span> <span class="pre">array_to,</span> <span class="pre">default)</span></tt></li>
+</ol>
+<p><tt class="docutils literal"><span class="pre">x</span></tt> - что преобразовывать.</p>
+<p><tt class="docutils literal"><span class="pre">array_from</span></tt> - константный массив значений для преобразования.</p>
+<p><tt class="docutils literal"><span class="pre">array_to</span></tt> - константный массив значений, в которые должны быть преобразованы значения из from.</p>
+<p><tt class="docutils literal"><span class="pre">default</span></tt> - какое значение использовать, если x не равен ни одному из значений во from.</p>
+<p><tt class="docutils literal"><span class="pre">array_from</span></tt> и <tt class="docutils literal"><span class="pre">array_to</span></tt> - массивы одинаковых размеров.</p>
+<p>Типы:</p>
+<p><tt class="docutils literal"><span class="pre">transform(T,</span> <span class="pre">Array(T),</span> <span class="pre">Array(U),</span> <span class="pre">U)</span> <span class="pre">-&gt;</span> <span class="pre">U</span></tt></p>
+<p><tt class="docutils literal"><span class="pre">T</span></tt> и <tt class="docutils literal"><span class="pre">U</span></tt> - могут быть числовыми, строковыми, или Date или DateTime типами.
+При этом, где обозначена одна и та же буква (T или U), могут быть, в случае числовых типов, не совпадающие типы, а типы, для которых есть общий тип.
+Например, первый аргумент может иметь тип Int64, а второй - Array(UInt16).</p>
+<p>Если значение x равно одному из элементов массива array_from, то возвращает соответствующий (такой же по номеру) элемент массива array_to; иначе возвращает default. Если имеется несколько совпадающих элементов в array_from, то возвращает какой-нибудь из соответствующих.</p>
+<p>Пример:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span>SELECT
+    transform(SearchEngineID, [2, 3], [&#39;Яндекс&#39;, &#39;Google&#39;], &#39;Остальные&#39;) AS title,
+    count() AS c
+FROM test.hits
+WHERE SearchEngineID != 0
+GROUP BY title
+ORDER BY c DESC
+
+┌─title─────┬──────c─┐
+│ Яндекс    │ 498635 │
+│ Google    │ 229872 │
+│ Остальные │ 104472 │
+└───────────┴────────┘
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><tt class="docutils literal"><span class="pre">transform(x,</span> <span class="pre">array_from,</span> <span class="pre">array_to)</span></tt></li>
+</ol>
+<p>Отличается от первого варианта отсутствующим аргументом default.
+Если значение x равно одному из элементов массива array_from, то возвращает соответствующий (такой же по номеру) элемент массива array_to; иначе возвращает x.</p>
+<p>Типы:</p>
+<p><tt class="docutils literal"><span class="pre">transform(T,</span> <span class="pre">Array(T),</span> <span class="pre">Array(T))</span> <span class="pre">-&gt;</span> <span class="pre">T</span></tt></p>
+<p>Пример:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span>SELECT
+    transform(domain(Referer), [&#39;yandex.ru&#39;, &#39;google.ru&#39;, &#39;vk.com&#39;], [&#39;www.yandex&#39;, &#39;ввв.яндекс.рф&#39;, &#39;example.com&#39;]) AS s,
+    count() AS c
+FROM test.hits
+GROUP BY domain(Referer)
+ORDER BY count() DESC
+LIMIT 10
+
+┌─s──────────────┬───────c─┐
+│                │ 2906259 │
+│ www.yandex     │  867767 │
+│ ███████.ru     │  313599 │
+│ mail.yandex.ru │  107147 │
+│ ввв.яндекс.рф  │  105668 │
+│ ██████.ru      │  100355 │
+│ █████████.ru   │   65040 │
+│ news.yandex.ru │   64515 │
+│ ██████.net     │   59141 │
+│ example.com    │   57316 │
+└────────────────┴─────────┘
+</pre></div>
+</div>
+</div>
+<div class="section" id="formatreadablesize-x">
+<h2>formatReadableSize(x)<a class="headerlink" href="#formatreadablesize-x" title="Permalink to this headline">¶</a></h2>
+<p>Принимает размер (число байт). Возвращает округленный размер с суффиксом (KiB, MiB и т.д.) в виде строки.</p>
+<p>Пример:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span>SELECT
+    arrayJoin([1, 1024, 1024*1024, 192851925]) AS filesize_bytes,
+    formatReadableSize(filesize_bytes) AS filesize
+
+┌─filesize_bytes─┬─filesize───┐
+│              1 │ 1.00 B     │
+│           1024 │ 1.00 KiB   │
+│        1048576 │ 1.00 MiB   │
+│      192851925 │ 183.92 MiB │
+└────────────────┴────────────┘
+</pre></div>
+</div>
+</div>
+<div class="section" id="least-a-b">
+<h2>least(a, b)<a class="headerlink" href="#least-a-b" title="Permalink to this headline">¶</a></h2>
+<p>Возвращает наименьшее значение из a и b.</p>
+</div>
+<div class="section" id="greatest-a-b">
+<h2>greatest(a, b)<a class="headerlink" href="#greatest-a-b" title="Permalink to this headline">¶</a></h2>
+<p>Возвращает наибольшее значение из a и b.</p>
+</div>
+<div class="section" id="uptime">
+<h2>uptime()<a class="headerlink" href="#uptime" title="Permalink to this headline">¶</a></h2>
+<p>Возвращает аптайм сервера в секундах.</p>
+</div>
+<div class="section" id="version">
+<h2>version()<a class="headerlink" href="#version" title="Permalink to this headline">¶</a></h2>
+<p>Возвращает версию сервера в виде строки.</p>
+</div>
+<div class="section" id="rownumberinallblocks">
+<h2>rowNumberInAllBlocks()<a class="headerlink" href="#rownumberinallblocks" title="Permalink to this headline">¶</a></h2>
+<p>Возвращает порядковый номер строки в блоке данных. Функция учитывает только задействованные блоки данных.</p>
+</div>
+<div class="section" id="runningdifference-x">
+<h2>runningDifference(x)<a class="headerlink" href="#runningdifference-x" title="Permalink to this headline">¶</a></h2>
+<p>Считает разницу между последовательными значениями строк в блоке данных.
+Возвращает 0 для первой строки и разницу с предыдущей строкой для каждой последующей строки.</p>
+<p>Результат функции зависит от затронутых блоков данных и порядка данных в блоке.
+Если сделать подзапрос с ORDER BY и вызывать функцию извне подзапроса, можно будет получить ожидаемый результат.</p>
+<p>Пример:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span>SELECT
+    EventID,
+    EventTime,
+    runningDifference(EventTime) AS delta
+FROM
+(
+    SELECT
+        EventID,
+        EventTime
+    FROM events
+    WHERE EventDate = &#39;2016-11-24&#39;
+    ORDER BY EventTime ASC
+    LIMIT 5
+)
+
+┌─EventID─┬───────────EventTime─┬─delta─┐
+│    1106 │ 2016-11-24 00:00:04 │     0 │
+│    1107 │ 2016-11-24 00:00:05 │     1 │
+│    1108 │ 2016-11-24 00:00:05 │     0 │
+│    1109 │ 2016-11-24 00:00:09 │     4 │
+│    1110 │ 2016-11-24 00:00:10 │     1 │
+└─────────┴─────────────────────┴───────┘
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Прочие функции</a><ul>
+<li><a class="reference internal" href="#hostname">hostName()</a></li>
+<li><a class="reference internal" href="#visiblewidth-x">visibleWidth(x)</a></li>
+<li><a class="reference internal" href="#totypename-x">toTypeName(x)</a></li>
+<li><a class="reference internal" href="#blocksize">blockSize()</a></li>
+<li><a class="reference internal" href="#materialize-x">materialize(x)</a></li>
+<li><a class="reference internal" href="#ignore">ignore(...)</a></li>
+<li><a class="reference internal" href="#sleep-seconds">sleep(seconds)</a></li>
+<li><a class="reference internal" href="#currentdatabase">currentDatabase()</a></li>
+<li><a class="reference internal" href="#isfinite-x">isFinite(x)</a></li>
+<li><a class="reference internal" href="#isinfinite-x">isInfinite(x)</a></li>
+<li><a class="reference internal" href="#isnan-x">isNaN(x)</a></li>
+<li><a class="reference internal" href="#hascolumnintable-database-table-column">hasColumnInTable(&#8216;database&#8217;, &#8216;table&#8217;, &#8216;column&#8217;)</a></li>
+<li><a class="reference internal" href="#bar">bar</a></li>
+<li><a class="reference internal" href="#transform">transform</a></li>
+<li><a class="reference internal" href="#formatreadablesize-x">formatReadableSize(x)</a></li>
+<li><a class="reference internal" href="#least-a-b">least(a, b)</a></li>
+<li><a class="reference internal" href="#greatest-a-b">greatest(a, b)</a></li>
+<li><a class="reference internal" href="#uptime">uptime()</a></li>
+<li><a class="reference internal" href="#version">version()</a></li>
+<li><a class="reference internal" href="#rownumberinallblocks">rowNumberInAllBlocks()</a></li>
+<li><a class="reference internal" href="#runningdifference-x">runningDifference(x)</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="math_functions.html"
+                        title="previous chapter">Математические функции</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="random_functions.html"
+                        title="next chapter">Функции генерации псевдослучайных чисел</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/functions/other_functions.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="random_functions.html" title="Функции генерации псевдослучайных чисел"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="math_functions.html" title="Математические функции"
+             >previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Функции</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

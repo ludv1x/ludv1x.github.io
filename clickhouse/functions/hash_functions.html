@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Функции хэширования &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
+    <link rel="up" title="Функции" href="index.html" />
+    <link rel="next" title="Функции высшего порядка" href="higher_order_functions.html" />
+    <link rel="prev" title="Функции для работы с внешними словарями" href="ext_dict_functions.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="higher_order_functions.html" title="Функции высшего порядка"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ext_dict_functions.html" title="Функции для работы с внешними словарями"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Функции</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Функции хэширования<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>Функции хэширования могут использоваться для детерминированного псевдослучайного разбрасывания элементов.</p>
+<div class="section" id="halfmd5">
+<h2>halfMD5<a class="headerlink" href="#halfmd5" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет MD5 от строки. Затем берёт первые 8 байт от хэша и интерпретирует их как UInt64 в big endian.
+Принимает аргумент типа String. Возвращает UInt64.
+Функция работает достаточно медленно (5 миллионов коротких строк в секунду на одном процессорном ядре).
+Если вам не нужен конкретно MD5, то используйте вместо этого функцию sipHash64.</p>
+</div>
+<div class="section" id="md5">
+<h2>MD5<a class="headerlink" href="#md5" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет MD5 от строки и возвращает полученный набор байт в виде FixedString(16).
+Если вам не нужен конкретно MD5, а нужен неплохой криптографический 128-битный хэш, то используйте вместо этого функцию sipHash128.
+Если вы хотите получить такой же результат, как выдаёт утилита md5sum, напишите lower(hex(MD5(s))).</p>
+</div>
+<div class="section" id="siphash64">
+<h2>sipHash64<a class="headerlink" href="#siphash64" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет SipHash от строки.
+Принимает аргумент типа String. Возвращает UInt64.
+SipHash - криптографическая хэш-функция. Работает быстрее чем MD5 не менее чем в 3 раза.
+Подробнее смотрите по ссылке: <a class="reference external" href="https://131002.net/siphash/">https://131002.net/siphash/</a></p>
+</div>
+<div class="section" id="siphash128">
+<h2>sipHash128<a class="headerlink" href="#siphash128" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет SipHash от строки.
+Принимает аргумент типа String. Возвращает FixedString(16).
+Отличается от sipHash64 тем, что финальный xor-folding состояния делается только до 128 бит.</p>
+</div>
+<div class="section" id="cityhash64">
+<h2>cityHash64<a class="headerlink" href="#cityhash64" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет CityHash64 от строки или похожую хэш-функцию для произвольного количества аргументов произвольного типа.
+Если аргумент имеет тип String, то используется CityHash. Это быстрая некриптографическая хэш-функция неплохого качества для строк.
+Если аргумент имеет другой тип, то используется implementation specific быстрая некриптографическая хэш-функция неплохого качества.
+Если передано несколько аргументов, то функция вычисляется по тем же правилам, с помощью комбинации по цепочке с использованием комбинатора из CityHash.
+Например, так вы можете вычислить чексумму всей таблицы с точностью до порядка строк: <tt class="docutils literal"><span class="pre">SELECT</span> <span class="pre">sum(cityHash64(*))</span> <span class="pre">FROM</span> <span class="pre">table</span></tt>.</p>
+</div>
+<div class="section" id="inthash32">
+<h2>intHash32<a class="headerlink" href="#inthash32" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет 32-битный хэш-код от целого числа любого типа.
+Это сравнительно быстрая некриптографическая хэш-функция среднего качества для чисел.</p>
+</div>
+<div class="section" id="inthash64">
+<h2>intHash64<a class="headerlink" href="#inthash64" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет 64-битный хэш-код от целого числа любого типа.
+Работает быстрее, чем intHash32. Качество среднее.</p>
+</div>
+<div class="section" id="sha1">
+<h2>SHA1<a class="headerlink" href="#sha1" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="sha224">
+<h2>SHA224<a class="headerlink" href="#sha224" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="sha256">
+<h2>SHA256<a class="headerlink" href="#sha256" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет SHA-1, SHA-224, SHA-256 от строки и возвращает полученный набор байт в виде FixedString(20), FixedString(28), FixedString(32).
+Функция работает достаточно медленно (SHA-1 - примерно 5 миллионов коротких строк в секунду на одном процессорном ядре, SHA-224 и SHA-256 - примерно 2.2 миллионов).
+Рекомендуется использовать эти функции лишь в тех случаях, когда вам нужна конкретная хэш-функция и вы не можете её выбрать.
+Даже в этих случаях, рекомендуется применять функцию оффлайн - заранее вычисляя значения при вставке в таблицу, вместо того, чтобы применять её при SELECT-ах.</p>
+</div>
+<div class="section" id="urlhash-url-n">
+<h2>URLHash(url[, N])<a class="headerlink" href="#urlhash-url-n" title="Permalink to this headline">¶</a></h2>
+<p>Быстрая некриптографическая хэш-функция неплохого качества для строки, полученной из URL путём некоторой нормализации.
+<tt class="docutils literal"><span class="pre">URLHash(s)</span></tt> - вычислить хэш от строки без одного завершающего символа <tt class="docutils literal"><span class="pre">/</span></tt>, <tt class="docutils literal"><span class="pre">?</span></tt> или <tt class="docutils literal"><span class="pre">#</span></tt> на конце, если такой там есть.
+<tt class="docutils literal"><span class="pre">URLHash(s,</span> <span class="pre">N)</span></tt> - вычислить хэш от строки до N-го уровня в иерархии URL, без одного завершающего символа <tt class="docutils literal"><span class="pre">/</span></tt>, <tt class="docutils literal"><span class="pre">?</span></tt> или <tt class="docutils literal"><span class="pre">#</span></tt> на конце, если такой там есть.
+Уровни аналогичные URLHierarchy. Функция специфична для Яндекс.Метрики.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Функции хэширования</a><ul>
+<li><a class="reference internal" href="#halfmd5">halfMD5</a></li>
+<li><a class="reference internal" href="#md5">MD5</a></li>
+<li><a class="reference internal" href="#siphash64">sipHash64</a></li>
+<li><a class="reference internal" href="#siphash128">sipHash128</a></li>
+<li><a class="reference internal" href="#cityhash64">cityHash64</a></li>
+<li><a class="reference internal" href="#inthash32">intHash32</a></li>
+<li><a class="reference internal" href="#inthash64">intHash64</a></li>
+<li><a class="reference internal" href="#sha1">SHA1</a></li>
+<li><a class="reference internal" href="#sha224">SHA224</a></li>
+<li><a class="reference internal" href="#sha256">SHA256</a></li>
+<li><a class="reference internal" href="#urlhash-url-n">URLHash(url[, N])</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ext_dict_functions.html"
+                        title="previous chapter">Функции для работы с внешними словарями</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="higher_order_functions.html"
+                        title="next chapter">Функции высшего порядка</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/functions/hash_functions.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="higher_order_functions.html" title="Функции высшего порядка"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ext_dict_functions.html" title="Функции для работы с внешними словарями"
+             >previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Функции</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

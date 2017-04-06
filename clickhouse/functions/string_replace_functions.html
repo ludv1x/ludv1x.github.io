@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Функции поиска и замены в строках &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
+    <link rel="up" title="Функции" href="index.html" />
+    <link rel="next" title="Функции поиска в строках" href="string_search_functions.html" />
+    <link rel="prev" title="Функции для работы со строками" href="string_functions.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="string_search_functions.html" title="Функции поиска в строках"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="string_functions.html" title="Функции для работы со строками"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Функции</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Функции поиска и замены в строках<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="replaceone-haystack-pattern-replacement">
+<h2>replaceOne(haystack, pattern, replacement)<a class="headerlink" href="#replaceone-haystack-pattern-replacement" title="Permalink to this headline">¶</a></h2>
+<p>Замена первого вхождения, если такое есть, подстроки pattern в haystack на подстроку replacement.
+Здесь и далее, pattern и replacement должны быть константами.</p>
+</div>
+<div class="section" id="replaceall-haystack-pattern-replacement">
+<h2>replaceAll(haystack, pattern, replacement)<a class="headerlink" href="#replaceall-haystack-pattern-replacement" title="Permalink to this headline">¶</a></h2>
+<p>Замена всех вхождений подстроки pattern в haystack на подстроку replacement.</p>
+</div>
+<div class="section" id="replaceregexpone-haystack-pattern-replacement">
+<h2>replaceRegexpOne(haystack, pattern, replacement)<a class="headerlink" href="#replaceregexpone-haystack-pattern-replacement" title="Permalink to this headline">¶</a></h2>
+<p>Замена по регулярному выражению pattern. Регулярное выражение re2.
+Заменяется только первое вхождение, если есть.
+В качестве replacement может быть указан шаблон для замен. Этот шаблон может включать в себя подстановки <tt class="docutils literal"><span class="pre">\0-\9</span></tt>.
+Подстановка <tt class="docutils literal"><span class="pre">\0</span></tt> - вхождение регулярного выражения целиком. Подстановки <tt class="docutils literal"><span class="pre">\1-\9</span></tt> - соответствующие по номеру subpattern-ы.
+Для указания символа <tt class="docutils literal"><span class="pre">\</span></tt> в шаблоне, он должен быть экранирован с помощью символа <tt class="docutils literal"><span class="pre">\</span></tt>.
+Также помните о том, что строковый литерал требует ещё одно экранирование.</p>
+<p>Пример 1. Переведём дату в американский формат:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="k">DISTINCT</span>
+    <span class="n">EventDate</span><span class="p">,</span>
+    <span class="n">replaceRegexpOne</span><span class="p">(</span><span class="n">toString</span><span class="p">(</span><span class="n">EventDate</span><span class="p">),</span> <span class="s1">&#39;(\\d{4})-(\\d{2})-(\\d{2})&#39;</span><span class="p">,</span> <span class="s1">&#39;\\2/\\3/\\1&#39;</span><span class="p">)</span> <span class="k">AS</span> <span class="n">res</span>
+<span class="k">FROM</span> <span class="n">test</span><span class="p">.</span><span class="n">hits</span>
+<span class="k">LIMIT</span> <span class="mi">7</span>
+<span class="n">FORMAT</span> <span class="n">TabSeparated</span>
+
+<span class="mi">2014</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">17</span>      <span class="mi">03</span><span class="o">/</span><span class="mi">17</span><span class="o">/</span><span class="mi">2014</span>
+<span class="mi">2014</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">18</span>      <span class="mi">03</span><span class="o">/</span><span class="mi">18</span><span class="o">/</span><span class="mi">2014</span>
+<span class="mi">2014</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">19</span>      <span class="mi">03</span><span class="o">/</span><span class="mi">19</span><span class="o">/</span><span class="mi">2014</span>
+<span class="mi">2014</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">20</span>      <span class="mi">03</span><span class="o">/</span><span class="mi">20</span><span class="o">/</span><span class="mi">2014</span>
+<span class="mi">2014</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">21</span>      <span class="mi">03</span><span class="o">/</span><span class="mi">21</span><span class="o">/</span><span class="mi">2014</span>
+<span class="mi">2014</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">22</span>      <span class="mi">03</span><span class="o">/</span><span class="mi">22</span><span class="o">/</span><span class="mi">2014</span>
+<span class="mi">2014</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">23</span>      <span class="mi">03</span><span class="o">/</span><span class="mi">23</span><span class="o">/</span><span class="mi">2014</span>
+</pre></div>
+</div>
+<p>Пример 2. Размножить строку десять раз:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span>SELECT replaceRegexpOne(&#39;Hello, World!&#39;, &#39;.*&#39;, &#39;\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0&#39;) AS res
+
+┌─res────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ Hello, World!Hello, World!Hello, World!Hello, World!Hello, World!Hello, World!Hello, World!Hello, World!Hello, World!Hello, World! │
+└────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+</pre></div>
+</div>
+</div>
+<div class="section" id="replaceregexpall-haystack-pattern-replacement">
+<h2>replaceRegexpAll(haystack, pattern, replacement)<a class="headerlink" href="#replaceregexpall-haystack-pattern-replacement" title="Permalink to this headline">¶</a></h2>
+<p>То же самое, но делается замена всех вхождений. Пример:</p>
+<p>В качестве исключения, если регулярное выражение сработало на пустой подстроке, то замена делается не более одного раза.
+Пример:</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Функции поиска и замены в строках</a><ul>
+<li><a class="reference internal" href="#replaceone-haystack-pattern-replacement">replaceOne(haystack, pattern, replacement)</a></li>
+<li><a class="reference internal" href="#replaceall-haystack-pattern-replacement">replaceAll(haystack, pattern, replacement)</a></li>
+<li><a class="reference internal" href="#replaceregexpone-haystack-pattern-replacement">replaceRegexpOne(haystack, pattern, replacement)</a></li>
+<li><a class="reference internal" href="#replaceregexpall-haystack-pattern-replacement">replaceRegexpAll(haystack, pattern, replacement)</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="string_functions.html"
+                        title="previous chapter">Функции для работы со строками</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="string_search_functions.html"
+                        title="next chapter">Функции поиска в строках</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/functions/string_replace_functions.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="string_search_functions.html" title="Функции поиска в строках"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="string_functions.html" title="Функции для работы со строками"
+             >previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Функции</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

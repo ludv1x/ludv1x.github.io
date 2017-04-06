@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SummingMergeTree &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
+    <link rel="up" title="Движки таблиц" href="index.html" />
+    <link rel="next" title="TinyLog" href="tinylog.html" />
+    <link rel="prev" title="Set" href="set.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="tinylog.html" title="TinyLog"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="set.html" title="Set"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Движки таблиц</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="summingmergetree">
+<h1>SummingMergeTree<a class="headerlink" href="#summingmergetree" title="Permalink to this headline">¶</a></h1>
+<p>Отличается от <tt class="docutils literal"><span class="pre">MergeTree</span></tt> тем, что суммирует данные при слиянии.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="n">SummingMergeTree</span><span class="p">(</span><span class="n">EventDate</span><span class="p">,</span> <span class="p">(</span><span class="n">OrderID</span><span class="p">,</span> <span class="n">EventDate</span><span class="p">,</span> <span class="n">BannerID</span><span class="p">,</span> <span class="p">...),</span> <span class="mi">8192</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Столбцы для суммирования заданы неявно. При слиянии, для всех строчек с одинаковым значением первичного ключа (в примере - OrderID, EventDate, BannerID, ...), производится суммирование значений в числовых столбцах, не входящих в первичный ключ.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="n">SummingMergeTree</span><span class="p">(</span><span class="n">EventDate</span><span class="p">,</span> <span class="p">(</span><span class="n">OrderID</span><span class="p">,</span> <span class="n">EventDate</span><span class="p">,</span> <span class="n">BannerID</span><span class="p">,</span> <span class="p">...),</span> <span class="mi">8192</span><span class="p">,</span> <span class="p">(</span><span class="n">Shows</span><span class="p">,</span> <span class="n">Clicks</span><span class="p">,</span> <span class="n">Cost</span><span class="p">,</span> <span class="p">...))</span>
+</pre></div>
+</div>
+<p>Явно заданные столбцы для суммирования (последний параметр - Shows, Clicks, Cost, ...). При слиянии, для всех строчек с одинаковым значением первичного ключа, производится суммирование значений в указанных столбцах. Указанные столбцы также должны быть числовыми и не входить в первичный ключ.</p>
+<p>Если значения во всех таких столбцах оказались нулевыми, то строчка удаляется. (За исключением случаев, когда в куске данных не осталось бы ни одной строчки.)</p>
+<p>Для остальных столбцов, не входящих в первичный ключ, при слиянии выбирается первое попавшееся значение.</p>
+<p>При чтении, суммирование не делается само по себе. Если оно необходимо - напишите соответствующий GROUP BY.</p>
+<p>Дополнительно, таблица может иметь вложенные структуры данных, которые обрабатываются особым образом.
+Если название вложенной таблицы заканчивается на Map и она содержит не менее двух столбцов, удовлетворяющих следующим критериям:</p>
+<ul class="simple">
+<li>первый столбец - числовой ((U)IntN, Date, DateTime), назовем его условно key,</li>
+<li>остальные столбцы - арифметические ((U)IntN, Float32/64), условно (values...), то такая вложенная таблица воспринимается как отображение key =&gt; (values...) и при слиянии ее строк выполняется слияние элементов двух множеств по key со сложением соответствующих (values...).</li>
+</ul>
+<p>Примеры:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>[(1, 100)] + [(2, 150)] -&gt; [(1, 100), (2, 150)]
+[(1, 100)] + [(1, 150)] -&gt; [(1, 250)]
+[(1, 100)] + [(1, 150), (2, 150)] -&gt; [(1, 250), (2, 150)]
+[(1, 100), (2, 150)] + [(1, -100)] -&gt; [(2, 150)]
+</pre></div>
+</div>
+<p>Для вложенных структур данных не нужно указывать её столбцы в качестве списка столбцов для суммирования.</p>
+<p>Этот движок таблиц разработан по просьбе БК, и является мало полезным. Помните, что при хранении лишь предагрегированных данных, вы теряете часть преимуществ системы.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="set.html"
+                        title="previous chapter">Set</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tinylog.html"
+                        title="next chapter">TinyLog</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/table_engines/summingmergetree.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="tinylog.html" title="TinyLog"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="set.html" title="Set"
+             >previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Движки таблиц</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ReplacingMergeTree &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="replacingmergetree">
+<h1>ReplacingMergeTree<a class="headerlink" href="#replacingmergetree" title="Permalink to this headline">¶</a></h1>
+<p>Движок таблиц отличается от <tt class="docutils literal"><span class="pre">MergeTree</span></tt> тем, что выполняет удаление дублирующихся записей с одинаковым значением первичного ключа.</p>
+<p>Последний, необязательный параметр движка таблицы - столбец с &#8220;версией&#8221;. При слиянии, для всех строк с одинаковым значением первичного ключа, оставляет только одну строку: если задан столбец версии - строку с максимальной версией, иначе - последнюю строку.</p>
+<p>Столбец с версией должен иметь тип из семейства <tt class="docutils literal"><span class="pre">UInt</span></tt>, либо <tt class="docutils literal"><span class="pre">Date</span></tt> или <tt class="docutils literal"><span class="pre">DateTime</span></tt>.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="n">ReplacingMergeTree</span><span class="p">(</span><span class="n">EventDate</span><span class="p">,</span> <span class="p">(</span><span class="n">OrderID</span><span class="p">,</span> <span class="n">EventDate</span><span class="p">,</span> <span class="n">BannerID</span><span class="p">,</span> <span class="p">...),</span> <span class="mi">8192</span><span class="p">,</span> <span class="n">ver</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Обратите внимание, что дедупликация данных производится лишь во время слияний. Слияние происходят в фоне, в неизвестный момент времени, на который вы не можете ориентироваться. Некоторая часть данных может так и остаться необработанной. Хотя вы можете вызвать внеочередное слияние с помощью запроса OPTIMIZE, на это не стоит рассчитывать, так как запрос OPTIMIZE приводит к чтению и записи большого объёма данных.</p>
+<p>Таким образом, <tt class="docutils literal"><span class="pre">ReplacingMergeTree</span></tt> подходит для фоновой чистки дублирующихся данных в целях экономии места, но не даёт гарантий отсутствия дубликатов.</p>
+<p><em>Движок не используется в Яндекс.Метрике, но нашёл своё применение в других отделах Яндекса.</em></p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/ru/table_engines/replacingmergetree.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

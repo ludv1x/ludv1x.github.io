@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Функции для работы с JSON. &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
+    <link rel="up" title="Функции" href="index.html" />
+    <link rel="next" title="Логические функции" href="logical_functions.html" />
+    <link rel="prev" title="Функции для работы с IP-адресами" href="ip_address_functions.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="logical_functions.html" title="Логические функции"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ip_address_functions.html" title="Функции для работы с IP-адресами"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Функции</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="json">
+<h1>Функции для работы с JSON.<a class="headerlink" href="#json" title="Permalink to this headline">¶</a></h1>
+<p>В Яндекс.Метрике пользователями передаётся JSON в качестве параметров визитов. Для работы с таким JSON-ом, реализованы некоторые функции. (Хотя в большинстве случаев, JSON-ы дополнительно обрабатываются заранее, и полученные значения кладутся в отдельные столбцы в уже обработанном виде.) Все эти функции исходят из сильных допущений о том, каким может быть JSON, и при этом стараются почти ничего не делать.</p>
+<dl class="docutils">
+<dt>Делаются следующие допущения:</dt>
+<dd><ol class="first last arabic simple">
+<li>Имя поля (аргумент функции) должно быть константой;</li>
+<li>Считается, что имя поля в JSON-е закодировано некоторым каноническим образом. Например, <tt class="docutils literal"><span class="pre">visitParamHas('{&quot;abc&quot;:&quot;def&quot;}',</span> <span class="pre">'abc')</span> <span class="pre">=</span> <span class="pre">1</span></tt>, но <tt class="docutils literal"><span class="pre">visitParamHas('{&quot;\\u0061\\u0062\\u0063&quot;:&quot;def&quot;}',</span> <span class="pre">'abc')</span> <span class="pre">=</span> <span class="pre">0</span></tt></li>
+<li>Поля ищутся на любом уровне вложенности, без разбора. Если есть несколько подходящих полей - берётся первое.</li>
+<li>В JSON-е нет пробельных символов вне строковых литералов.</li>
+</ol>
+</dd>
+</dl>
+<div class="section" id="visitparamhas-params-name">
+<h2>visitParamHas(params, name)<a class="headerlink" href="#visitparamhas-params-name" title="Permalink to this headline">¶</a></h2>
+<p>Проверить наличие поля с именем name.</p>
+</div>
+<div class="section" id="visitparamextractuint-params-name">
+<h2>visitParamExtractUInt(params, name)<a class="headerlink" href="#visitparamextractuint-params-name" title="Permalink to this headline">¶</a></h2>
+<p>Распарсить UInt64 из значения поля с именем name. Если поле строковое - попытаться распарсить число из начала строки. Если такого поля нет, или если оно есть, но содержит не число, то вернуть 0.</p>
+</div>
+<div class="section" id="visitparamextractint-params-name">
+<h2>visitParamExtractInt(params, name)<a class="headerlink" href="#visitparamextractint-params-name" title="Permalink to this headline">¶</a></h2>
+<p>Аналогично для Int64.</p>
+</div>
+<div class="section" id="visitparamextractfloat-params-name">
+<h2>visitParamExtractFloat(params, name)<a class="headerlink" href="#visitparamextractfloat-params-name" title="Permalink to this headline">¶</a></h2>
+<p>Аналогично для Float64.</p>
+</div>
+<div class="section" id="visitparamextractbool-params-name">
+<h2>visitParamExtractBool(params, name)<a class="headerlink" href="#visitparamextractbool-params-name" title="Permalink to this headline">¶</a></h2>
+<p>Распарсить значение true/false. Результат - UInt8.</p>
+</div>
+<div class="section" id="visitparamextractraw-params-name">
+<h2>visitParamExtractRaw(params, name)<a class="headerlink" href="#visitparamextractraw-params-name" title="Permalink to this headline">¶</a></h2>
+<p>Вернуть значение поля, включая разделители.</p>
+<p>Примеры:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">visitParamExtractRaw</span><span class="p">(</span><span class="s1">&#39;{&quot;abc&quot;:&quot;</span><span class="se">\\</span><span class="s1">n</span><span class="se">\\</span><span class="s1">u0000&quot;}&#39;</span><span class="p">,</span> <span class="s1">&#39;abc&#39;</span><span class="p">)</span> <span class="o">=</span> <span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">n</span><span class="se">\\</span><span class="s1">u0000&quot;&#39;</span>
+<span class="n">visitParamExtractRaw</span><span class="p">(</span><span class="s1">&#39;{&quot;abc&quot;:{&quot;def&quot;:[1,2,3]}}&#39;</span><span class="p">,</span> <span class="s1">&#39;abc&#39;</span><span class="p">)</span> <span class="o">=</span> <span class="s1">&#39;{&quot;def&quot;:[1,2,3]}&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="visitparamextractstring-params-name">
+<h2>visitParamExtractString(params, name)<a class="headerlink" href="#visitparamextractstring-params-name" title="Permalink to this headline">¶</a></h2>
+<p>Распарсить строку в двойных кавычках. У значения убирается экранирование. Если убрать экранированные символы не удалось, то возвращается пустая строка.</p>
+<p>Примеры:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">visitParamExtractString</span><span class="p">(</span><span class="s1">&#39;{&quot;abc&quot;:&quot;</span><span class="se">\\</span><span class="s1">n</span><span class="se">\\</span><span class="s1">u0000&quot;}&#39;</span><span class="p">,</span> <span class="s1">&#39;abc&#39;</span><span class="p">)</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n\0</span><span class="s1">&#39;</span>
+<span class="n">visitParamExtractString</span><span class="p">(</span><span class="s1">&#39;{&quot;abc&quot;:&quot;</span><span class="se">\\</span><span class="s1">u263a&quot;}&#39;</span><span class="p">,</span> <span class="s1">&#39;abc&#39;</span><span class="p">)</span> <span class="o">=</span> <span class="s1">&#39;☺&#39;</span>
+<span class="n">visitParamExtractString</span><span class="p">(</span><span class="s1">&#39;{&quot;abc&quot;:&quot;</span><span class="se">\\</span><span class="s1">u263&quot;}&#39;</span><span class="p">,</span> <span class="s1">&#39;abc&#39;</span><span class="p">)</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="n">visitParamExtractString</span><span class="p">(</span><span class="s1">&#39;{&quot;abc&quot;:&quot;hello}&#39;</span><span class="p">,</span> <span class="s1">&#39;abc&#39;</span><span class="p">)</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</pre></div>
+</div>
+<p>На данный момент, не поддерживаются записанные в формате <tt class="docutils literal"><span class="pre">\uXXXX\uYYYY</span></tt> кодовые точки не из basic multilingual plane (они переводятся не в UTF-8, а в CESU-8).</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Функции для работы с JSON.</a><ul>
+<li><a class="reference internal" href="#visitparamhas-params-name">visitParamHas(params, name)</a></li>
+<li><a class="reference internal" href="#visitparamextractuint-params-name">visitParamExtractUInt(params, name)</a></li>
+<li><a class="reference internal" href="#visitparamextractint-params-name">visitParamExtractInt(params, name)</a></li>
+<li><a class="reference internal" href="#visitparamextractfloat-params-name">visitParamExtractFloat(params, name)</a></li>
+<li><a class="reference internal" href="#visitparamextractbool-params-name">visitParamExtractBool(params, name)</a></li>
+<li><a class="reference internal" href="#visitparamextractraw-params-name">visitParamExtractRaw(params, name)</a></li>
+<li><a class="reference internal" href="#visitparamextractstring-params-name">visitParamExtractString(params, name)</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ip_address_functions.html"
+                        title="previous chapter">Функции для работы с IP-адресами</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="logical_functions.html"
+                        title="next chapter">Логические функции</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/functions/json_functions.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="logical_functions.html" title="Логические функции"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ip_address_functions.html" title="Функции для работы с IP-адресами"
+             >previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Функции</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

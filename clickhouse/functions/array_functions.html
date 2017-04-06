@@ -1,0 +1,300 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Функции по работе с массивами &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
+    <link rel="up" title="Функции" href="index.html" />
+    <link rel="next" title="Функция arrayJoin" href="array_join.html" />
+    <link rel="prev" title="Арифметические функции" href="arithmetic_functions.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="array_join.html" title="Функция arrayJoin"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="arithmetic_functions.html" title="Арифметические функции"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Функции</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Функции по работе с массивами<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="empty">
+<h2>empty<a class="headerlink" href="#empty" title="Permalink to this headline">¶</a></h2>
+<p>Возвращает 1 для пустого массива, и 0 для непустого массива.
+Тип результата - UInt8.
+Функция также работает для строк.</p>
+</div>
+<div class="section" id="notempty">
+<h2>notEmpty<a class="headerlink" href="#notempty" title="Permalink to this headline">¶</a></h2>
+<p>Возвращает 0 для пустого массива, и 1 для непустого массива.
+Тип результата - UInt8.
+Функция также работает для строк.</p>
+</div>
+<div class="section" id="length">
+<h2>length<a class="headerlink" href="#length" title="Permalink to this headline">¶</a></h2>
+<p>Возвращает количество элементов в массиве.
+Тип результата - UInt64.
+Функция также работает для строк.</p>
+</div>
+<div class="section" id="emptyarrayuint8-emptyarrayuint16-emptyarrayuint32-emptyarrayuint64">
+<h2>emptyArrayUInt8, emptyArrayUInt16, emptyArrayUInt32, emptyArrayUInt64<a class="headerlink" href="#emptyarrayuint8-emptyarrayuint16-emptyarrayuint32-emptyarrayuint64" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="emptyarrayint8-emptyarrayint16-emptyarrayint32-emptyarrayint64">
+<h2>emptyArrayInt8, emptyArrayInt16, emptyArrayInt32, emptyArrayInt64<a class="headerlink" href="#emptyarrayint8-emptyarrayint16-emptyarrayint32-emptyarrayint64" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="emptyarrayfloat32-emptyarrayfloat64">
+<h2>emptyArrayFloat32, emptyArrayFloat64<a class="headerlink" href="#emptyarrayfloat32-emptyarrayfloat64" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="emptyarraydate-emptyarraydatetime">
+<h2>emptyArrayDate, emptyArrayDateTime<a class="headerlink" href="#emptyarraydate-emptyarraydatetime" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="emptyarraystring">
+<h2>emptyArrayString<a class="headerlink" href="#emptyarraystring" title="Permalink to this headline">¶</a></h2>
+<p>Принимает ноль аргументов и возвращает пустой массив соответствующего типа.</p>
+</div>
+<div class="section" id="emptyarraytosingle">
+<h2>emptyArrayToSingle<a class="headerlink" href="#emptyarraytosingle" title="Permalink to this headline">¶</a></h2>
+<p>Принимает пустой массив и возвращает массив из одного элемента, равного значению по умолчанию.</p>
+</div>
+<div class="section" id="range-n">
+<h2>range(N)<a class="headerlink" href="#range-n" title="Permalink to this headline">¶</a></h2>
+<p>Возвращает массив чисел от 0 до N-1.
+На всякий случай, если на блок данных, создаются массивы суммарной длины больше 100 000 000 элементов, то кидается исключение.</p>
+</div>
+<div class="section" id="array-x1-x1">
+<h2>array(x1, ...), оператор [x1, ...]<a class="headerlink" href="#array-x1-x1" title="Permalink to this headline">¶</a></h2>
+<p>Создаёт массив из аргументов функции.
+Аргументы должны быть константами и иметь типы, для которых есть наименьший общий тип. Должен быть передан хотя бы один аргумент, так как иначе непонятно, какого типа создавать массив. То есть, с помощью этой функции невозможно создать пустой массив (для этого используйте функции emptyArray*, описанные выше).
+Возвращает результат типа Array(T), где T - наименьший общий тип от переданных аргументов.</p>
+</div>
+<div class="section" id="arrayelement-arr-n-arr-n">
+<h2>arrayElement(arr, n), оператор arr[n]<a class="headerlink" href="#arrayelement-arr-n-arr-n" title="Permalink to this headline">¶</a></h2>
+<p>Достаёт элемент с индексом n из массива arr.
+n должен быть любым целочисленным типом.
+Индексы в массиве начинаются с единицы.
+Поддерживаются отрицательные индексы - в этом случае, будет выбран соответствующий по номеру элемент с конца. Например, arr[-1] - последний элемент массива.</p>
+<p>Если индекс выходит за границы массива, то
+- если оба аргумента - константы, то кидается исключение;
+- иначе, возвращается некоторое значение по умолчанию (0 для чисел, пустая строка для строк и т. п.).</p>
+</div>
+<div class="section" id="has-arr-elem">
+<h2>has(arr, elem)<a class="headerlink" href="#has-arr-elem" title="Permalink to this headline">¶</a></h2>
+<p>Проверяет наличие элемента elem в массиве arr.
+Возвращает 0, если элемента в массиве нет, или 1, если есть.
+elem должен быть константой.</p>
+</div>
+<div class="section" id="indexof-arr-x">
+<h2>indexOf(arr, x)<a class="headerlink" href="#indexof-arr-x" title="Permalink to this headline">¶</a></h2>
+<p>Возвращает индекс элемента x (начиная с 1), если он есть в массиве, или 0, если его нет.</p>
+</div>
+<div class="section" id="countequal-arr-x">
+<h2>countEqual(arr, x)<a class="headerlink" href="#countequal-arr-x" title="Permalink to this headline">¶</a></h2>
+<p>Возвращает количество элементов массива, равных x. Эквивалентно arrayCount(elem -&gt; elem = x, arr).</p>
+</div>
+<div class="section" id="arrayenumerate-arr">
+<h2>arrayEnumerate(arr)<a class="headerlink" href="#arrayenumerate-arr" title="Permalink to this headline">¶</a></h2>
+<p>Возвращает массив [1, 2, 3, ..., length(arr)]</p>
+<p>Эта функция обычно используется совместно с ARRAY JOIN. Она позволяет, после применения ARRAY JOIN, посчитать что-либо только один раз для каждого массива. Пример:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span>SELECT
+    count() AS Reaches,
+    countIf(num = 1) AS Hits
+FROM test.hits
+ARRAY JOIN
+    GoalsReached,
+    arrayEnumerate(GoalsReached) AS num
+WHERE CounterID = 160656
+LIMIT 10
+
+┌─Reaches─┬──Hits─┐
+│   95606 │ 31406 │
+└─────────┴───────┘
+</pre></div>
+</div>
+<p>В этом примере, Reaches - число достижений целей (строк, получившихся после применения ARRAY JOIN), а Hits - число хитов (строк, которые были до ARRAY JOIN). В данном случае, тот же результат можно получить проще:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span>SELECT
+    sum(length(GoalsReached)) AS Reaches,
+    count() AS Hits
+FROM test.hits
+WHERE (CounterID = 160656) AND notEmpty(GoalsReached)
+
+┌─Reaches─┬──Hits─┐
+│   95606 │ 31406 │
+└─────────┴───────┘
+</pre></div>
+</div>
+<p>Также эта функция может быть использована в функциях высшего порядка. Например, с её помощью можно достать индексы массива для элементов, удовлетворяющих некоторому условию.</p>
+</div>
+<div class="section" id="arrayenumerateuniq-arr">
+<h2>arrayEnumerateUniq(arr, ...)<a class="headerlink" href="#arrayenumerateuniq-arr" title="Permalink to this headline">¶</a></h2>
+<p>Возвращает массив, такого же размера, как исходный, где для каждого элемента указано, какой он по счету среди элементов с таким же значением.
+Например: arrayEnumerateUniq([10, 20, 10, 30]) = [1,  1,  2,  1].</p>
+<p>Эта функция полезна при использовании ARRAY JOIN и агрегации по элементам массива.
+Пример:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span>SELECT
+    Goals.ID AS GoalID,
+    sum(Sign) AS Reaches,
+    sumIf(Sign, num = 1) AS Visits
+FROM test.visits
+ARRAY JOIN
+    Goals,
+    arrayEnumerateUniq(Goals.ID) AS num
+WHERE CounterID = 160656
+GROUP BY GoalID
+ORDER BY Reaches DESC
+LIMIT 10
+
+┌──GoalID─┬─Reaches─┬─Visits─┐
+│   53225 │    3214 │   1097 │
+│ 2825062 │    3188 │   1097 │
+│   56600 │    2803 │    488 │
+│ 1989037 │    2401 │    365 │
+│ 2830064 │    2396 │    910 │
+│ 1113562 │    2372 │    373 │
+│ 3270895 │    2262 │    812 │
+│ 1084657 │    2262 │    345 │
+│   56599 │    2260 │    799 │
+│ 3271094 │    2256 │    812 │
+└─────────┴─────────┴────────┘
+</pre></div>
+</div>
+<p>В этом примере, для каждого идентификатора цели, посчитано количество достижений целей (каждый элемент вложенной структуры данных Goals является достижением целей) и количество визитов. Если бы не было ARRAY JOIN, мы бы считали количество визитов как sum(Sign). Но в данном случае, строчки были размножены по вложенной структуре Goals, и чтобы после этого учесть каждый визит один раз, мы поставили условие на значение функции arrayEnumerateUniq(Goals.ID).</p>
+<p>Функция arrayEnumerateUniq может принимать несколько аргументов - массивов одинаковых размеров. В этом случае, уникальность считается для кортежей элементов на одинаковых позициях всех массивов.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span>SELECT arrayEnumerateUniq([1, 1, 1, 2, 2, 2], [1, 1, 2, 1, 1, 2]) AS res
+
+┌─res───────────┐
+│ [1,2,1,1,2,1] │
+└───────────────┘
+</pre></div>
+</div>
+<p>Это нужно при использовании ARRAY JOIN с вложенной структурой данных и затем агрегации по нескольким элементам этой структуры.</p>
+</div>
+<div class="section" id="arrayuniq-arr">
+<h2>arrayUniq(arr, ...)<a class="headerlink" href="#arrayuniq-arr" title="Permalink to this headline">¶</a></h2>
+<p>Если передан один аргумент, считает количество разных элементов в массиве.
+Если передано несколько аргументов, считает количество разных кортежей из элементов на соответствующих позициях в нескольких массивах.</p>
+<p>Если необходимо получить список уникальных элементов массива, можно воспользоваться arrayReduce(&#8216;groupUniqArray&#8217;, arr).</p>
+</div>
+<div class="section" id="arrayjoin-arr">
+<h2>arrayJoin(arr)<a class="headerlink" href="#arrayjoin-arr" title="Permalink to this headline">¶</a></h2>
+<p>Особенная функция. Смотрите раздел &#8220;Функция arrayJoin&#8221;.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Функции по работе с массивами</a><ul>
+<li><a class="reference internal" href="#empty">empty</a></li>
+<li><a class="reference internal" href="#notempty">notEmpty</a></li>
+<li><a class="reference internal" href="#length">length</a></li>
+<li><a class="reference internal" href="#emptyarrayuint8-emptyarrayuint16-emptyarrayuint32-emptyarrayuint64">emptyArrayUInt8, emptyArrayUInt16, emptyArrayUInt32, emptyArrayUInt64</a></li>
+<li><a class="reference internal" href="#emptyarrayint8-emptyarrayint16-emptyarrayint32-emptyarrayint64">emptyArrayInt8, emptyArrayInt16, emptyArrayInt32, emptyArrayInt64</a></li>
+<li><a class="reference internal" href="#emptyarrayfloat32-emptyarrayfloat64">emptyArrayFloat32, emptyArrayFloat64</a></li>
+<li><a class="reference internal" href="#emptyarraydate-emptyarraydatetime">emptyArrayDate, emptyArrayDateTime</a></li>
+<li><a class="reference internal" href="#emptyarraystring">emptyArrayString</a></li>
+<li><a class="reference internal" href="#emptyarraytosingle">emptyArrayToSingle</a></li>
+<li><a class="reference internal" href="#range-n">range(N)</a></li>
+<li><a class="reference internal" href="#array-x1-x1">array(x1, ...), оператор [x1, ...]</a></li>
+<li><a class="reference internal" href="#arrayelement-arr-n-arr-n">arrayElement(arr, n), оператор arr[n]</a></li>
+<li><a class="reference internal" href="#has-arr-elem">has(arr, elem)</a></li>
+<li><a class="reference internal" href="#indexof-arr-x">indexOf(arr, x)</a></li>
+<li><a class="reference internal" href="#countequal-arr-x">countEqual(arr, x)</a></li>
+<li><a class="reference internal" href="#arrayenumerate-arr">arrayEnumerate(arr)</a></li>
+<li><a class="reference internal" href="#arrayenumerateuniq-arr">arrayEnumerateUniq(arr, ...)</a></li>
+<li><a class="reference internal" href="#arrayuniq-arr">arrayUniq(arr, ...)</a></li>
+<li><a class="reference internal" href="#arrayjoin-arr">arrayJoin(arr)</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="arithmetic_functions.html"
+                        title="previous chapter">Арифметические функции</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="array_join.html"
+                        title="next chapter">Функция arrayJoin</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/functions/array_functions.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="array_join.html" title="Функция arrayJoin"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="arithmetic_functions.html" title="Арифметические функции"
+             >previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Функции</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

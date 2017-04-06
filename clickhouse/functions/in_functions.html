@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Функции для реализации оператора IN. &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
+    <link rel="up" title="Функции" href="index.html" />
+    <link rel="next" title="Функции для работы с IP-адресами" href="ip_address_functions.html" />
+    <link rel="prev" title="Функции высшего порядка" href="higher_order_functions.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="ip_address_functions.html" title="Функции для работы с IP-адресами"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="higher_order_functions.html" title="Функции высшего порядка"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Функции</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="in">
+<h1>Функции для реализации оператора IN.<a class="headerlink" href="#in" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="in-notin-globalin-globalnotin">
+<h2>in, notIn, globalIn, globalNotIn<a class="headerlink" href="#in-notin-globalin-globalnotin" title="Permalink to this headline">¶</a></h2>
+<p>Смотрите раздел &#8220;Операторы IN&#8221;.</p>
+</div>
+<div class="section" id="tuple-x-y-x-y">
+<h2>tuple(x, y, ...), оператор (x, y, ...)<a class="headerlink" href="#tuple-x-y-x-y" title="Permalink to this headline">¶</a></h2>
+<p>Функция, позволяющая сгруппировать несколько столбцов.
+Для столбцов, имеющих типы T1, T2, ... возвращает кортеж типа Tuple(T1, T2, ...), содержащий эти столбцы. Выполнение функции ничего не стоит.
+Кортежи обычно используются как промежуточное значение в качестве аргумента операторов IN, или для создания списка формальных параметров лямбда-функций. Кортежи не могут быть записаны в таблицу.</p>
+</div>
+<div class="section" id="tupleelement-tuple-n-x-n">
+<h2>tupleElement(tuple, n), оператор x.N<a class="headerlink" href="#tupleelement-tuple-n-x-n" title="Permalink to this headline">¶</a></h2>
+<p>Функция, позволяющая достать столбец из кортежа.
+N - индекс столбца начиная с 1. N должно быть константой. N должно быть целым строго положительным числом не большим размера кортежа.
+Выполнение функции ничего не стоит.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Функции для реализации оператора IN.</a><ul>
+<li><a class="reference internal" href="#in-notin-globalin-globalnotin">in, notIn, globalIn, globalNotIn</a></li>
+<li><a class="reference internal" href="#tuple-x-y-x-y">tuple(x, y, ...), оператор (x, y, ...)</a></li>
+<li><a class="reference internal" href="#tupleelement-tuple-n-x-n">tupleElement(tuple, n), оператор x.N</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="higher_order_functions.html"
+                        title="previous chapter">Функции высшего порядка</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ip_address_functions.html"
+                        title="next chapter">Функции для работы с IP-адресами</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/functions/in_functions.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="ip_address_functions.html" title="Функции для работы с IP-адресами"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="higher_order_functions.html" title="Функции высшего порядка"
+             >previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Функции</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

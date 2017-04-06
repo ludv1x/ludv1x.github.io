@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Функции сравнения &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
+    <link rel="up" title="Функции" href="index.html" />
+    <link rel="next" title="Условные функции" href="conditional_functions.html" />
+    <link rel="prev" title="Битовые функции" href="bit_functions.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="conditional_functions.html" title="Условные функции"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="bit_functions.html" title="Битовые функции"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Функции</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Функции сравнения<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>Функции сравнения возвращают всегда 0 или 1 (UInt8).</p>
+<dl class="docutils">
+<dt>Сравнивать можно следующие типы:</dt>
+<dd><ul class="first last simple">
+<li>числа;</li>
+<li>строки и фиксированные строки;</li>
+<li>даты;</li>
+<li>даты-с-временем;</li>
+</ul>
+</dd>
+</dl>
+<p>внутри каждой группы, но не из разных групп.</p>
+<p>Например, вы не можете сравнить дату со строкой. Надо использовать функцию преобразования строки в дату или наоборот.</p>
+<p>Строки сравниваются побайтово. Более короткая строка меньше всех строк, начинающихся с неё и содержащих ещё хотя бы один символ.</p>
+<p>Замечание. До версии 1.1.54134 сравнение знаковых и беззнаковых целых чисел производилось также, как в C++. То есть, вы могли получить неверный результат в таких случаях: SELECT 9223372036854775807 &gt; -1. С версии 1.1.54134 поведение изменилось и стало математически корректным.</p>
+<div class="section" id="equals-a-b-a-b">
+<h2>equals, оператор a = b и a == b<a class="headerlink" href="#equals-a-b-a-b" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="notequals-a-b-a-b">
+<h2>notEquals, оператор a != b и a &lt;&gt; b<a class="headerlink" href="#notequals-a-b-a-b" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="less">
+<h2>less, оператор &lt;<a class="headerlink" href="#less" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="greater">
+<h2>greater, оператор &gt;<a class="headerlink" href="#greater" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="lessorequals">
+<h2>lessOrEquals, оператор &lt;=<a class="headerlink" href="#lessorequals" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="greaterorequals">
+<h2>greaterOrEquals, оператор &gt;=<a class="headerlink" href="#greaterorequals" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Функции сравнения</a><ul>
+<li><a class="reference internal" href="#equals-a-b-a-b">equals, оператор a = b и a == b</a></li>
+<li><a class="reference internal" href="#notequals-a-b-a-b">notEquals, оператор a != b и a &lt;&gt; b</a></li>
+<li><a class="reference internal" href="#less">less, оператор &lt;</a></li>
+<li><a class="reference internal" href="#greater">greater, оператор &gt;</a></li>
+<li><a class="reference internal" href="#lessorequals">lessOrEquals, оператор &lt;=</a></li>
+<li><a class="reference internal" href="#greaterorequals">greaterOrEquals, оператор &gt;=</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="bit_functions.html"
+                        title="previous chapter">Битовые функции</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="conditional_functions.html"
+                        title="next chapter">Условные функции</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/functions/comparison_functions.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="conditional_functions.html" title="Условные функции"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="bit_functions.html" title="Битовые функции"
+             >previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Функции</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

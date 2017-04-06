@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Функции разбиения и слияния строк и массивов &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Функции разбиения и слияния строк и массивов<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="splitbychar-separator-s">
+<h2>splitByChar(separator, s)<a class="headerlink" href="#splitbychar-separator-s" title="Permalink to this headline">¶</a></h2>
+<p>Разбивает строку на подстроки, используя в качестве разделителя separator.
+separator должен быть константной строкой из ровно одного символа.
+Возвращается массив выделенных подстрок. Могут выделяться пустые подстроки, если разделитель идёт в начале или в конце строки, или если идёт более одного разделителя подряд.</p>
+</div>
+<div class="section" id="splitbystring-separator-s">
+<h2>splitByString(separator, s)<a class="headerlink" href="#splitbystring-separator-s" title="Permalink to this headline">¶</a></h2>
+<p>То же самое, но использует строку из нескольких символов в качестве разделителя. Строка должна быть непустой.</p>
+</div>
+<div class="section" id="arraystringconcat-arr-separator">
+<h2>arrayStringConcat(arr[, separator])<a class="headerlink" href="#arraystringconcat-arr-separator" title="Permalink to this headline">¶</a></h2>
+<p>Склеивает строки, перечисленные в массиве, с разделителем separator.
+separator - необязательный параметр, константная строка, по умолчанию равен пустой строке.
+Возвращается строка.</p>
+</div>
+<div class="section" id="alphatokens-s">
+<h2>alphaTokens(s)<a class="headerlink" href="#alphatokens-s" title="Permalink to this headline">¶</a></h2>
+<p>Выделяет подстроки из подряд идущих байт из диапазонов a-z и A-Z.
+Возвращается массив выделенных подстрок.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Функции разбиения и слияния строк и массивов</a><ul>
+<li><a class="reference internal" href="#splitbychar-separator-s">splitByChar(separator, s)</a></li>
+<li><a class="reference internal" href="#splitbystring-separator-s">splitByString(separator, s)</a></li>
+<li><a class="reference internal" href="#arraystringconcat-arr-separator">arrayStringConcat(arr[, separator])</a></li>
+<li><a class="reference internal" href="#alphatokens-s">alphaTokens(s)</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/ru/functions/splitting_merging_functions.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

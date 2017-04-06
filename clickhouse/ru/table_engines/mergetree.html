@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>MergeTree &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="mergetree">
+<h1>MergeTree<a class="headerlink" href="#mergetree" title="Permalink to this headline">¶</a></h1>
+<p>Движок MergeTree поддерживает индекс по первичному ключу и по дате, и обеспечивает возможность обновления данных в реальном времени.
+Это наиболее продвинутый движок таблиц в ClickHouse. Не путайте с движком Merge.</p>
+<p>Движок принимает параметры: имя столбца типа Date, содержащего дату; выражение для семплирования (не обязательно); кортеж, определяющий первичный ключ таблицы; гранулированность индекса. Пример:</p>
+<p>Пример без поддержки сэмплирования:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">MergeTree</span><span class="p">(</span><span class="n">EventDate</span><span class="p">,</span> <span class="p">(</span><span class="n">CounterID</span><span class="p">,</span> <span class="n">EventDate</span><span class="p">),</span> <span class="mi">8192</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Пример с поддержкой сэмплирования:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">MergeTree</span><span class="p">(</span><span class="n">EventDate</span><span class="p">,</span> <span class="n">intHash32</span><span class="p">(</span><span class="n">UserID</span><span class="p">),</span> <span class="p">(</span><span class="n">CounterID</span><span class="p">,</span> <span class="n">EventDate</span><span class="p">,</span> <span class="n">intHash32</span><span class="p">(</span><span class="n">UserID</span><span class="p">)),</span> <span class="mi">8192</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>В таблице типа MergeTree обязательно должен быть отдельный столбец, содержащий дату. В этом примере, это - столбец EventDate. Тип столбца с датой - обязательно Date (а не DateTime).</p>
+<p>Первичным ключом может быть кортеж из произвольных выражений (обычно это просто кортеж столбцов) или одно выражение.</p>
+<p>Выражение для сэмплирования (использовать не обязательно) - произвольное выражение. Оно должно также присутствовать в первичном ключе. В примере используется хэширование по идентификатору посетителя, чтобы псевдослучайно перемешать данные в таблице для каждого CounterID и EventDate. То есть, при использовании секции SAMPLE в запросе, вы получите равномерно-псевдослучайную выборку данных для подмножества посетителей.</p>
+<p>Таблица реализована, как набор кусочков. Каждый кусочек сортирован по первичному ключу. Также, для каждого кусочка прописана минимальная и максимальная дата. При вставке в таблицу, создаётся новый сортированный кусочек. В фоне, периодически инициируется процесс слияния. При слиянии, выбирается несколько кусочков, обычно наименьших, и сливаются в один большой сортированный кусочек.</p>
+<p>То есть, при вставке в таблицу производится инкрементальная сортировка. Слияние реализовано таким образом, что таблица постоянно состоит из небольшого количества сортированных кусочков, а также само слияние делает не слишком много работы.</p>
+<p>При вставке, данные относящиеся к разным месяцам, разбиваются на разные кусочки. Кусочки, соответствующие разным месяцам, никогда не объединяются. Это сделано, чтобы обеспечить локальность модификаций данных (для упрощения бэкапов).</p>
+<p>Кусочки объединяются до некоторого предельного размера - чтобы не было слишком длительных слияний.</p>
+<p>Для каждого кусочка также пишется индексный файл. Индексный файл содержит значение первичного ключа для каждой index_granularity строки таблицы. То есть, это - разреженный индекс сортированных данных.</p>
+<p>Для столбцов также пишутся &#8220;засечки&#8221; каждую index_granularity строку, чтобы данные можно было читать в определённом диапазоне.</p>
+<p>При чтении из таблицы, запрос SELECT анализируется на предмет того, можно ли использовать индексы.
+Индекс может использоваться, если в секции WHERE/PREWHERE, в качестве одного из элементов конъюнкции, или целиком, есть выражение, представляющее операции сравнения на равенства, неравенства, а также IN над столбцами, входящими в первичный ключ / дату, а также логические связки над ними.</p>
+<p>Таким образом, обеспечивается возможность быстро выполнять запросы по одному или многим диапазонам первичного ключа. Например, в указанном примере, будут быстро работать запросы для конкретного счётчика; для конкретного счётчика и диапазона дат; для конкретного счётчика и даты, для нескольких счётчиков и диапазона дат и т. п.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="k">count</span><span class="p">()</span> <span class="k">FROM</span> <span class="k">table</span> <span class="k">WHERE</span> <span class="n">EventDate</span> <span class="o">=</span> <span class="n">toDate</span><span class="p">(</span><span class="n">now</span><span class="p">())</span> <span class="k">AND</span> <span class="n">CounterID</span> <span class="o">=</span> <span class="mi">34</span>
+<span class="k">SELECT</span> <span class="k">count</span><span class="p">()</span> <span class="k">FROM</span> <span class="k">table</span> <span class="k">WHERE</span> <span class="n">EventDate</span> <span class="o">=</span> <span class="n">toDate</span><span class="p">(</span><span class="n">now</span><span class="p">())</span> <span class="k">AND</span> <span class="p">(</span><span class="n">CounterID</span> <span class="o">=</span> <span class="mi">34</span> <span class="k">OR</span> <span class="n">CounterID</span> <span class="o">=</span> <span class="mi">42</span><span class="p">)</span>
+<span class="k">SELECT</span> <span class="k">count</span><span class="p">()</span> <span class="k">FROM</span> <span class="k">table</span> <span class="k">WHERE</span> <span class="p">((</span><span class="n">EventDate</span> <span class="o">&gt;=</span> <span class="n">toDate</span><span class="p">(</span><span class="s1">&#39;2014-01-01&#39;</span><span class="p">)</span> <span class="k">AND</span> <span class="n">EventDate</span> <span class="o">&lt;=</span> <span class="n">toDate</span><span class="p">(</span><span class="s1">&#39;2014-01-31&#39;</span><span class="p">))</span> <span class="k">OR</span> <span class="n">EventDate</span> <span class="o">=</span> <span class="n">toDate</span><span class="p">(</span><span class="s1">&#39;2014-05-01&#39;</span><span class="p">))</span> <span class="k">AND</span> <span class="n">CounterID</span> <span class="k">IN</span> <span class="p">(</span><span class="mi">101500</span><span class="p">,</span> <span class="mi">731962</span><span class="p">,</span> <span class="mi">160656</span><span class="p">)</span> <span class="k">AND</span> <span class="p">(</span><span class="n">CounterID</span> <span class="o">=</span> <span class="mi">101500</span> <span class="k">OR</span> <span class="n">EventDate</span> <span class="o">!=</span> <span class="n">toDate</span><span class="p">(</span><span class="s1">&#39;2014-05-01&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Во всех этих случаях будет использоваться индекс по дате и по первичному ключу. Видно, что индекс используется даже для достаточно сложных выражений. Чтение из таблицы организовано так, что использование индекса не может быть медленнее full scan-а.</p>
+<p>В этом примере, индекс не может использоваться:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="k">count</span><span class="p">()</span> <span class="k">FROM</span> <span class="k">table</span> <span class="k">WHERE</span> <span class="n">CounterID</span> <span class="o">=</span> <span class="mi">34</span> <span class="k">OR</span> <span class="n">URL</span> <span class="k">LIKE</span> <span class="s1">&#39;%upyachka%&#39;</span>
+</pre></div>
+</div>
+<p>Индекс по дате обеспечивает чтение только кусков, содержащих даты из нужного диапазона. При этом, кусок данных может содержать данные за многие даты (до целого месяца), а в пределах одного куска, данные лежат упорядоченными по первичному ключу, который может не содержать дату в качестве первого столбца. В связи с этим, при использовании запроса с указанием условия только на дату, но не на префикс первичного ключа, будет читаться данных больше, чем за одну дату.</p>
+<p>Для конкуррентного доступа к таблице, используется мульти-версионность. То есть, при одновременном чтении и обновлении таблицы, данные будут читаться из набора кусочков, актуального на момент запроса. Длинных блокировок нет. Вставки никак не мешают чтениям.</p>
+<p>Чтения из таблицы автоматически распараллеливаются.</p>
+<p>Поддерживается запрос <tt class="docutils literal"><span class="pre">OPTIMIZE</span></tt>, который вызывает один внеочередной шаг слияния.</p>
+<p>Вы можете использовать одну большую таблицу, постоянно добавляя в неё данные небольшими пачками - именно для этого предназначен движок MergeTree.</p>
+<p>Для всех типов таблиц семейства MergeTree возможна репликация данных - смотрите раздел &#8220;Репликация данных&#8221;.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/ru/table_engines/mergetree.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Возможные глупые вопросы &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
+    <link rel="up" title="Введение" href="index.html" />
+    <link rel="next" title="Производительность" href="performance.html" />
+    <link rel="prev" title="Использование в Яндекс.Метрике и других отделах Яндекса" href="use_case.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="performance.html" title="Производительность"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="use_case.html" title="Использование в Яндекс.Метрике и других отделах Яндекса"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Введение</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Возможные глупые вопросы<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="map-reduce">
+<h2>1. Почему бы не использовать системы типа map-reduce?<a class="headerlink" href="#map-reduce" title="Permalink to this headline">¶</a></h2>
+<p>Системами типа map-reduce будем называть системы распределённых вычислений, в которых операция reduce сделана на основе распределённой сортировки. Таким образом, к ним относятся YAMR, Hadoop, YT.</p>
+<p>Такие системы не подходят для онлайн запросов в силу слишком большой latency. То есть, не могут быть использованы в качестве бэкенда для веб-интерфейса.
+Такие системы не подходят для обновления данных в реальном времени.
+Распределённая сортировка не является оптимальным способом выполнения операции reduce, если результат выполнения операции и все промежуточные результаты, при их наличии, помещаются в оперативку на одном сервере, как обычно бывает в запросах, выполняющихся в режиме онлайн. В таком случае, оптимальным способом выполнения операции reduce является хэш-таблица. Частым способом оптимизации map-reduce задач является предагрегация (частичный reduce) с использованием хэш-таблицы в оперативке. Эта оптимизация делается пользователем в ручном режиме.
+Распределённая сортировка является основной причиной тормозов при выполнении несложных map-reduce задач.</p>
+<p>Системы типа map-reduce позволяют выполнять произвольный код на кластере. Но для OLAP задач лучше подходит декларативный язык запросов, который позволяет быстро проводить исследования. Для примера, для Hadoop существует Hive и Pig. Также смотрите Cloudera Impala, Shark (устаревший) для Spark а также Spark SQL, Presto, Apache Drill. Впрочем, производительность при выполнении таких задач является сильно неоптимальной по сравнению со специализированными системами, а сравнительно высокая latency не позволяет использовать эти системы в качестве бэкенда для веб-интерфейса.</p>
+<p>YT позволяет хранить группы столбцов по отдельности. Но YT нельзя назвать по-настоящему столбцовой системой, так как в системе отсутствуют типы данных постоянной длины (чтобы можно было эффективно хранить числа без &#8220;мусора&#8221;), а также за счёт отсутствия векторного движка. Задачи в YT выполняются с помощью произвольного кода в режиме streaming, то есть, не могут быть достаточно оптимизированы (до сотен миллионов строк в секунду на один сервер). В YT в 2014-2016 годах находится в разработке функциональность &#8220;динамических сортированных таблиц&#8221; с использованием Merge Tree, строгой типизацией значений и языком запросов типа SQL. Динамические сортированные таблицы не подходят для OLAP задач, так как данные в них хранятся по строкам. Разработка языка запросов в YT всё ещё находится в зачаточной стадии, что не позволяет ориентироваться на эту функциональность. Разработчики YT рассматривают динамические сортированные таблицы для применения в OLTP и Key-Value сценариях работы.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Возможные глупые вопросы</a><ul>
+<li><a class="reference internal" href="#map-reduce">1. Почему бы не использовать системы типа map-reduce?</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="use_case.html"
+                        title="previous chapter">Использование в Яндекс.Метрике и других отделах Яндекса</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="performance.html"
+                        title="next chapter">Производительность</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/introduction/possible_silly_questions.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="performance.html" title="Производительность"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="use_case.html" title="Использование в Яндекс.Метрике и других отделах Яндекса"
+             >previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Введение</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

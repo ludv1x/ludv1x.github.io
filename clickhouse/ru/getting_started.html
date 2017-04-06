@@ -1,0 +1,223 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Начало работы &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Начало работы<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id2">
+<h2>Системные требования<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>Система некроссплатформенная. Требуется ОС Linux Ubuntu не более старая, чем Precise (12.04); архитектура x86_64 с поддержкой набора инструкций SSE 4.2.
+Для проверки наличия SSE 4.2, выполните:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>grep -q sse4_2 /proc/cpuinfo &amp;&amp; echo &quot;SSE 4.2 supported&quot; || echo &quot;SSE 4.2 not supported&quot;
+</pre></div>
+</div>
+<p>Рекомендуется использовать Ubuntu Trusty или Ubuntu Xenial или Ubuntu Precise.
+Терминал должен работать в кодировке UTF-8 (как по умолчанию в Ubuntu).</p>
+</div>
+<div class="section" id="id3">
+<h2>Установка<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<p>В целях тестирования и разработки, система может быть установлена на один сервер или на рабочий компьютер.</p>
+<div class="section" id="id4">
+<h3>Установка из пакетов<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>Пропишите в <cite>/etc/apt/sources.list</cite> (или в отдельный файл <cite>/etc/apt/sources.list.d/clickhouse.list</cite>) репозитории:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>deb http://repo.yandex.ru/clickhouse/trusty stable main
+</pre></div>
+</div>
+<p>На других версиях Ubuntu, замените <cite>trusty</cite> на <cite>xenial</cite> или <cite>precise</cite>.</p>
+<p>Затем выполните:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>sudo apt-key adv --keyserver keyserver.ubuntu.com --recv E0C56BD4    # optional
+sudo apt-get update
+sudo apt-get install clickhouse-client clickhouse-server-common
+</pre></div>
+</div>
+<p>Также можно скачать и установить пакеты вручную, отсюда:
+<a class="reference external" href="http://repo.yandex.ru/clickhouse/trusty/pool/main/c/clickhouse/">http://repo.yandex.ru/clickhouse/trusty/pool/main/c/clickhouse/</a>,
+<a class="reference external" href="http://repo.yandex.ru/clickhouse/xenial/pool/main/c/clickhouse/">http://repo.yandex.ru/clickhouse/xenial/pool/main/c/clickhouse/</a>,
+<a class="reference external" href="http://repo.yandex.ru/clickhouse/precise/pool/main/c/clickhouse/">http://repo.yandex.ru/clickhouse/precise/pool/main/c/clickhouse/</a>.</p>
+<p>ClickHouse содержит настройки ограничения доступа. Они расположены в файле users.xml (рядом с config.xml).
+По умолчанию, разрешён доступ отовсюду для пользователя default без пароля. См. секцию users/default/networks.
+Подробнее смотрите в разделе &#8220;конфигурационные файлы&#8221;.</p>
+</div>
+<div class="section" id="id5">
+<h3>Установка из исходников<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+<p>Для сборки воспользуйтесь инструкцией: build.md</p>
+<p>Вы можете собрать пакеты и установить их.
+Также вы можете использовать программы без установки пакетов.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>Клиент: dbms/src/Client/
+Сервер: dbms/src/Server/
+</pre></div>
+</div>
+<p>Для сервера создаёте директории с данными, например:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>/opt/clickhouse/data/default/
+/opt/clickhouse/metadata/default/
+</pre></div>
+</div>
+<p>(Настраивается в конфиге сервера.)
+Сделайте chown под нужного пользователя.</p>
+<p>Обратите внимание на путь к логам в конфиге сервера (src/dbms/src/Server/config.xml).</p>
+</div>
+<div class="section" id="id6">
+<h3>Другие методы установки<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<p>Docker образ: <a class="reference external" href="https://hub.docker.com/r/yandex/clickhouse-server/">https://hub.docker.com/r/yandex/clickhouse-server/</a></p>
+<p>Gentoo overlay: <a class="reference external" href="https://github.com/kmeaw/clickhouse-overlay">https://github.com/kmeaw/clickhouse-overlay</a></p>
+</div>
+</div>
+<div class="section" id="id7">
+<h2>Запуск<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<p>Для запуска сервера (в качестве демона), выполните:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>sudo service clickhouse-server start
+</pre></div>
+</div>
+<p>Смотрите логи в директории <cite>/var/log/clickhouse-server/</cite></p>
+<p>Если сервер не стартует - проверьте правильность конфигурации в файле <cite>/etc/clickhouse-server/config.xml</cite></p>
+<p>Также можно запустить сервер из консоли:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>clickhouse-server --config-file=/etc/clickhouse-server/config.xml
+</pre></div>
+</div>
+<p>При этом, лог будет выводиться в консоль - удобно для разработки.
+Если конфигурационный файл лежит в текущей директории, то указывать параметр &#8211;config-file не требуется - по умолчанию будет использован файл ./config.xml</p>
+<p>Соединиться с сервером можно с помощью клиента командной строки:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">clickhouse</span><span class="o">-</span><span class="n">client</span>
+</pre></div>
+</div>
+<p>Параметры по умолчанию обозначают - соединяться с localhost:9000, от имени пользователя default без пароля.
+Клиент может быть использован для соединения с удалённым сервером. Пример:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">clickhouse</span><span class="o">-</span><span class="n">client</span> <span class="o">--</span><span class="n">host</span><span class="o">=</span><span class="n">example</span><span class="o">.</span><span class="n">com</span>
+</pre></div>
+</div>
+<p>Подробнее смотри раздел &#8220;Клиент командной строки&#8221;.</p>
+<p>Проверим работоспособность системы:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>milovidov@milovidov-Latitude-E6320:~/work/metrica/src/dbms/src/Client$ ./clickhouse-client
+ClickHouse client version 0.0.18749.
+Connecting to localhost:9000.
+Connected to ClickHouse server version 0.0.18749.
+
+:) SELECT 1
+
+SELECT 1
+
+┌─1─┐
+│ 1 │
+└───┘
+
+1 rows in set. Elapsed: 0.003 sec.
+
+:)
+</pre></div>
+</div>
+<p>Поздравляю, система работает!</p>
+</div>
+<div class="section" id="id8">
+<h2>Тестовые данные<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
+<p>Если вы сотрудник Яндекса, вы можете воспользоваться тестовыми данными Яндекс.Метрики для изучения возможностей системы.
+Как загрузить тестовые данные, написано здесь.</p>
+<p>Если вы внешний пользователь системы, вы можете воспользоваться использовать общедоступные данные, способы загрузки которых указаны здесь.</p>
+</div>
+<div class="section" id="id9">
+<h2>Если возникли вопросы<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h2>
+<p>Если вы являетесь сотрудником Яндекса, обращайтесь на внутреннюю рассылку по ClickHouse.
+Вы можете подписаться на эту рассылку, чтобы получать анонсы, быть в курсе нововведений, а также видеть вопросы, которые возникают у других пользователей.</p>
+<p>Иначе вы можете задавать вопросы на Stackoverflow или участвовать в обсуждениях на Google Groups. Также вы можете отправить приватное сообщение для разрабочиков по адресу <a class="reference external" href="mailto:clickhouse-feedback&#37;&#52;&#48;yandex-team&#46;com">clickhouse-feedback<span>&#64;</span>yandex-team<span>&#46;</span>com</a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Начало работы</a><ul>
+<li><a class="reference internal" href="#id2">Системные требования</a></li>
+<li><a class="reference internal" href="#id3">Установка</a><ul>
+<li><a class="reference internal" href="#id4">Установка из пакетов</a></li>
+<li><a class="reference internal" href="#id5">Установка из исходников</a></li>
+<li><a class="reference internal" href="#id6">Другие методы установки</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id7">Запуск</a></li>
+<li><a class="reference internal" href="#id8">Тестовые данные</a></li>
+<li><a class="reference internal" href="#id9">Если возникли вопросы</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/ru/getting_started.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

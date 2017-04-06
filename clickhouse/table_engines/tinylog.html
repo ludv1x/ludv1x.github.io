@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>TinyLog &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
+    <link rel="up" title="Движки таблиц" href="index.html" />
+    <link rel="next" title="View" href="view.html" />
+    <link rel="prev" title="SummingMergeTree" href="summingmergetree.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="view.html" title="View"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="summingmergetree.html" title="SummingMergeTree"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Движки таблиц</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="tinylog">
+<h1>TinyLog<a class="headerlink" href="#tinylog" title="Permalink to this headline">¶</a></h1>
+<p>Самый простой движок таблиц, который хранит данные на диске.
+Каждый столбец хранится в отдельном сжатом файле.
+При записи, данные дописываются в конец файлов.</p>
+<dl class="docutils">
+<dt>Конкуррентный доступ к данным никак не ограничивается:</dt>
+<dd><ul class="first last simple">
+<li>если вы одновременно читаете из таблицы и в другом запросе пишете в неё, то чтение будет завершено с ошибкой;</li>
+<li>если вы одновременно пишите в таблицу в нескольких запросах, то данные будут битыми.</li>
+</ul>
+</dd>
+</dl>
+<p>Типичный способ использования этой таблицы - это write-once: сначала один раз только пишем данные, а потом сколько угодно читаем.
+Запросы выполняются в один поток. То есть, этот движок предназначен для сравнительно маленьких таблиц (рекомендуется до 1 000 000 строк).
+Этот движок таблиц имеет смысл использовать лишь в случае, если у вас есть много маленьких таблиц, так как он проще, чем движок Log (требуется открывать меньше файлов).
+Случай, когда у вас много маленьких таблиц, является гарантированно плохим по производительности, но может уже использоваться при работе с другой СУБД, и вам может оказаться удобнее перейти на использование таблиц типа TinyLog.
+<strong>Индексы не поддерживаются.</strong></p>
+<p>В Яндекс.Метрике таблицы типа TinyLog используются для промежуточных данных, обрабатываемых маленькими пачками.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="summingmergetree.html"
+                        title="previous chapter">SummingMergeTree</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="view.html"
+                        title="next chapter">View</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/table_engines/tinylog.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="view.html" title="View"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="summingmergetree.html" title="SummingMergeTree"
+             >previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Движки таблиц</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

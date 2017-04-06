@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Встроенные словари &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
+    <link rel="up" title="Словари" href="index.html" />
+    <link rel="next" title="Настройки" href="../settings/index.html" />
+    <link rel="prev" title="Внешние словари" href="external_dicts.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../settings/index.html" title="Настройки"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="external_dicts.html" title="Внешние словари"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Словари</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Встроенные словари<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>ClickHouse содержит встроенную возможность работы с геобазой.</p>
+<dl class="docutils">
+<dt>Это позволяет:</dt>
+<dd><ul class="first last simple">
+<li>для идентификатора региона получить его имя на нужном языке;</li>
+<li>по идентификатору региона получить идентификатор города, области, федерального округа, страны, континента;</li>
+<li>проверить, что один регион входит в другой;</li>
+<li>получить цепочку родительских регионов.</li>
+</ul>
+</dd>
+</dl>
+<p>Все функции поддерживают &#8220;транслокальность&#8221;, то есть возможность использовать одновременно разные точки зрения на принадлежность регионов. Подробнее смотрите в разделе &#8220;Функции для работы со словарями Яндекс.Метрики&#8221;.</p>
+<p>В пакете по умолчанию, встроенные словари выключены.
+Для включения, раскомментируйте параметры <tt class="docutils literal"><span class="pre">path_to_regions_hierarchy_file</span></tt> и <tt class="docutils literal"><span class="pre">path_to_regions_names_files</span></tt> в конфигурационном файле сервера.</p>
+<p>Геобаза загружается из текстовых файлов.
+Если вы работаете в Яндексе, то для их создания вы можете воспользоваться инструкцией:
+<a class="reference external" href="https://github.yandex-team.ru/raw/Metrika/ClickHouse_private/master/doc/create_embedded_geobase_dictionaries.txt">https://github.yandex-team.ru/raw/Metrika/ClickHouse_private/master/doc/create_embedded_geobase_dictionaries.txt</a></p>
+<p>Положите файлы regions_hierarchy*.txt в директорию path_to_regions_hierarchy_file. Этот конфигурационный параметр должен содержать путь к файлу regions_hierarchy.txt (иерархия регионов по умолчанию), а другие файлы (regions_hierarchy_ua.txt) должны находиться рядом в той же директории.</p>
+<p>Положите файлы regions_names_*.txt в директорию path_to_regions_names_files.</p>
+<p>Также вы можете создать эти файлы самостоятельно. Формат файлов такой:</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">regions_hierarchy*.txt</span></tt>: TabSeparated (без заголовка), столбцы:</dt>
+<dd><ul class="first last simple">
+<li>идентификатор региона (UInt32);</li>
+<li>идентификатор родительского региона (UInt32);</li>
+<li>тип региона (UInt8): 1 - континент, 3 - страна, 4 - федеральный округ, 5 - область, 6 - город; остальные типы не имеют значения;</li>
+<li>население (UInt32) - не обязательный столбец.</li>
+</ul>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">regions_names_*.txt</span></tt>: TabSeparated (без заголовка), столбцы:</dt>
+<dd><ul class="first last simple">
+<li>идентификатор региона (UInt32);</li>
+<li>имя региона (String) - не может содержать табы или переводы строк, даже экранированные.</li>
+</ul>
+</dd>
+</dl>
+<p>Для хранения в оперативке используется плоский массив. Поэтому, идентификаторы не должны быть больше миллиона.</p>
+<p>Словари могут обновляться без перезапуска сервера. Но набор доступных словарей не обновляется.
+Для обновления проверяется время модификации файлов; если файл изменился, то словарь будет обновлён.
+Периодичность проверки настраивается конфигурационным параметром builtin_dictionaries_reload_interval.
+Обновление словарей (кроме загрузки при первом использовании) не блокирует запросы - во время обновления запросы используют старую версию словарей. Если при обновлении возникнет ошибка, то ошибка пишется в лог сервера, а запросы продолжат использовать старую версию словарей.</p>
+<p>Рекомендуется периодически обновлять словари с геобазой. При обновлении, генерируйте новые файлы, записывая их в отдельное место, а только когда всё готово - переименовывайте в файлы, которые использует сервер.</p>
+<p>Также имеются функции для работы с идентификаторами операционных систем и поисковых систем Яндекс.Метрики, пользоваться которыми не нужно.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="external_dicts.html"
+                        title="previous chapter">Внешние словари</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../settings/index.html"
+                        title="next chapter">Настройки</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/dicts/internal_dicts.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../settings/index.html" title="Настройки"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="external_dicts.html" title="Внешние словари"
+             >previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Словари</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>system.replicas &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="system-replicas">
+<h1>system.replicas<a class="headerlink" href="#system-replicas" title="Permalink to this headline">¶</a></h1>
+<p>Содержит информацию и статус для реплицируемых таблиц, расположенных на локальном сервере.
+Эту таблицу можно использовать для мониторинга. Таблица содержит по строчке для каждой Replicated*-таблицы.</p>
+<p>Пример:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span>SELECT *
+FROM system.replicas
+WHERE table = &#39;visits&#39;
+FORMAT Vertical
+
+Row 1:
+──────
+database:           merge
+table:              visits
+engine:             ReplicatedCollapsingMergeTree
+is_leader:          1
+is_readonly:        0
+is_session_expired: 0
+future_parts:       1
+parts_to_check:     0
+zookeeper_path:     /clickhouse/tables/01-06/visits
+replica_name:       example01-06-1.yandex.ru
+replica_path:       /clickhouse/tables/01-06/visits/replicas/example01-06-1.yandex.ru
+columns_version:    9
+queue_size:         1
+inserts_in_queue:   0
+merges_in_queue:    1
+log_max_index:      596273
+log_pointer:        596274
+total_replicas:     2
+active_replicas:    2
+</pre></div>
+</div>
+<p>Столбцы:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>database:           имя БД
+table:              имя таблицы
+engine:             имя движка таблицы
+
+is_leader:          является ли реплика лидером
+
+В один момент времени, не более одной из реплик является лидером. Лидер отвечает за выбор фоновых слияний, которые следует произвести.
+Замечу, что запись можно осуществлять на любую реплику (доступную и имеющую сессию в ZK), независимо от лидерства.
+
+is_readonly:        находится ли реплика в режиме &quot;только для чтения&quot;
+Этот режим включается, если в конфиге нет секции с ZK; если при переинициализации сессии в ZK произошла неизвестная ошибка; во время переинициализации сессии с ZK.
+
+is_session_expired: истекла ли сессия с ZK.
+В основном, то же самое, что и is_readonly.
+
+future_parts:       количество кусков с данными, которые появятся в результате INSERT-ов или слияний, которых ещё предстоит сделать
+
+parts_to_check:     количество кусков с данными в очереди на проверку
+Кусок помещается в очередь на проверку, если есть подозрение, что он может быть битым.
+
+zookeeper_path:     путь к данным таблицы в ZK
+replica_name:       имя реплики в ZK; разные реплики одной таблицы имеют разное имя
+replica_path:       путь к данным реплики в ZK. То же самое, что конкатенация zookeeper_path/replicas/replica_path.
+
+columns_version:    номер версии структуры таблицы
+Обозначает, сколько раз был сделан ALTER. Если на репликах разные версии, значит некоторые реплики сделали ещё не все ALTER-ы.
+
+queue_size:         размер очереди действий, которых предстоит сделать
+К действиям относятся вставки блоков данных, слияния, и некоторые другие действия.
+Как правило, совпадает с future_parts.
+
+inserts_in_queue:   количество вставок блоков данных, которых предстоит сделать
+Обычно вставки должны быстро реплицироваться. Если величина большая - значит что-то не так.
+
+merges_in_queue:    количество слияний, которых предстоит сделать
+Бывают длинные слияния - то есть, это значение может быть больше нуля продолжительное время.
+
+Следующие 4 столбца имеют ненулевое значение только если активна сессия с ZK.
+
+log_max_index:      максимальный номер записи в общем логе действий
+log_pointer:        максимальный номер записи из общего лога действий, которую реплика скопировала в свою очередь для выполнения, плюс единица
+Если log_pointer сильно меньше log_max_index, значит что-то не так.
+
+total_replicas:     общее число известных реплик этой таблицы
+active_replicas:    число реплик этой таблицы, имеющих сессию в ZK; то есть, число работающих реплик
+</pre></div>
+</div>
+<p>Если запрашивать все столбцы, то таблица может работать слегка медленно, так как на каждую строчку делается несколько чтений из ZK.
+Если не запрашивать последние 4 столбца (log_max_index, log_pointer, total_replicas, active_replicas), то таблица работает быстро.</p>
+<p>Например, так можно проверить, что всё хорошо:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span>
+    <span class="k">database</span><span class="p">,</span>
+    <span class="k">table</span><span class="p">,</span>
+    <span class="n">is_leader</span><span class="p">,</span>
+    <span class="n">is_readonly</span><span class="p">,</span>
+    <span class="n">is_session_expired</span><span class="p">,</span>
+    <span class="n">future_parts</span><span class="p">,</span>
+    <span class="n">parts_to_check</span><span class="p">,</span>
+    <span class="n">columns_version</span><span class="p">,</span>
+    <span class="n">queue_size</span><span class="p">,</span>
+    <span class="n">inserts_in_queue</span><span class="p">,</span>
+    <span class="n">merges_in_queue</span><span class="p">,</span>
+    <span class="n">log_max_index</span><span class="p">,</span>
+    <span class="n">log_pointer</span><span class="p">,</span>
+    <span class="n">total_replicas</span><span class="p">,</span>
+    <span class="n">active_replicas</span>
+<span class="k">FROM</span> <span class="k">system</span><span class="p">.</span><span class="n">replicas</span>
+<span class="k">WHERE</span>
+       <span class="n">is_readonly</span>
+    <span class="k">OR</span> <span class="n">is_session_expired</span>
+    <span class="k">OR</span> <span class="n">future_parts</span> <span class="o">&gt;</span> <span class="mi">20</span>
+    <span class="k">OR</span> <span class="n">parts_to_check</span> <span class="o">&gt;</span> <span class="mi">10</span>
+    <span class="k">OR</span> <span class="n">queue_size</span> <span class="o">&gt;</span> <span class="mi">20</span>
+    <span class="k">OR</span> <span class="n">inserts_in_queue</span> <span class="o">&gt;</span> <span class="mi">10</span>
+    <span class="k">OR</span> <span class="n">log_max_index</span> <span class="o">-</span> <span class="n">log_pointer</span> <span class="o">&gt;</span> <span class="mi">10</span>
+    <span class="k">OR</span> <span class="n">total_replicas</span> <span class="o">&lt;</span> <span class="mi">2</span>
+    <span class="k">OR</span> <span class="n">active_replicas</span> <span class="o">&lt;</span> <span class="n">total_replicas</span>
+</pre></div>
+</div>
+<p>Если этот запрос ничего не возвращает - значит всё хорошо.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/ru/system_tables/system.replicas.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

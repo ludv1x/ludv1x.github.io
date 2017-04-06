@@ -1,0 +1,228 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Операторы &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
+    <link rel="next" title="Функции" href="../functions/index.html" />
+    <link rel="prev" title="Set" href="../data_types/special_data_types/set.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../functions/index.html" title="Функции"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../data_types/special_data_types/set.html" title="Set"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Операторы<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>Все операторы преобразуются в соответствующие функции на этапе парсинга запроса, с учётом их приоритетов и ассоциативности.
+Далее будут перечислены группы операторов в порядке их приоритета (чем выше, тем раньше оператор связывается со своими аргументами).</p>
+<div class="section" id="id2">
+<h2>Операторы доступа<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">a[N]</span></tt> - доступ к элементу массива, функция <tt class="docutils literal"><span class="pre">arrayElement(a,</span> <span class="pre">N)</span></tt>.</p>
+<p><tt class="docutils literal"><span class="pre">a.N</span></tt> - доступ к элементу кортежа, функция <tt class="docutils literal"><span class="pre">tupleElement(a,</span> <span class="pre">N)</span></tt>.</p>
+</div>
+<div class="section" id="id3">
+<h2>Оператор числового отрицания<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">-a</span></tt> - функция <tt class="docutils literal"><span class="pre">negate(a)</span></tt>.</p>
+</div>
+<div class="section" id="id4">
+<h2>Операторы умножения и деления<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">*</span> <span class="pre">b</span></tt> - функция <tt class="docutils literal"><span class="pre">multiply(a,</span> <span class="pre">b)</span></tt></p>
+<p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">/</span> <span class="pre">b</span></tt> - функция <tt class="docutils literal"><span class="pre">divide(a,</span> <span class="pre">b)</span></tt></p>
+<p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">%</span> <span class="pre">b</span></tt> - функция <tt class="docutils literal"><span class="pre">modulo(a,</span> <span class="pre">b)</span></tt></p>
+</div>
+<div class="section" id="id5">
+<h2>Операторы сложения и вычитания<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">+</span> <span class="pre">b</span></tt> - функция <tt class="docutils literal"><span class="pre">plus(a,</span> <span class="pre">b)</span></tt></p>
+<p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">-</span> <span class="pre">b</span></tt> - функция <tt class="docutils literal"><span class="pre">minus(a,</span> <span class="pre">b)</span></tt></p>
+</div>
+<div class="section" id="id6">
+<h2>Операторы сравнения<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">b</span></tt> - функция <tt class="docutils literal"><span class="pre">equals(a,</span> <span class="pre">b)</span></tt></p>
+<p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">==</span> <span class="pre">b</span></tt> - функция <tt class="docutils literal"><span class="pre">equals(a,</span> <span class="pre">b)</span></tt></p>
+<p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">!=</span> <span class="pre">b</span></tt> - функция <tt class="docutils literal"><span class="pre">notEquals(a,</span> <span class="pre">b)</span></tt></p>
+<p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">&lt;&gt;</span> <span class="pre">b</span></tt> - функция <tt class="docutils literal"><span class="pre">notEquals(a,</span> <span class="pre">b)</span></tt></p>
+<p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">&lt;=</span> <span class="pre">b</span></tt> - функция <tt class="docutils literal"><span class="pre">lessOrEquals(a,</span> <span class="pre">b)</span></tt></p>
+<p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">&gt;=</span> <span class="pre">b</span></tt> - функция <tt class="docutils literal"><span class="pre">greaterOrEquals(a,</span> <span class="pre">b)</span></tt></p>
+<p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">&lt;</span> <span class="pre">b</span></tt> - функция <tt class="docutils literal"><span class="pre">less(a,</span> <span class="pre">b)</span></tt></p>
+<p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">&gt;</span> <span class="pre">b</span></tt> - функция <tt class="docutils literal"><span class="pre">greater(a,</span> <span class="pre">b)</span></tt></p>
+<p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">LIKE</span> <span class="pre">s</span></tt> - функция <tt class="docutils literal"><span class="pre">like(a,</span> <span class="pre">b)</span></tt></p>
+<p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">NOT</span> <span class="pre">LIKE</span> <span class="pre">s</span></tt> - функция <tt class="docutils literal"><span class="pre">notLike(a,</span> <span class="pre">b)</span></tt></p>
+<p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">BETWEEN</span> <span class="pre">b</span> <span class="pre">AND</span> <span class="pre">c</span></tt> - равнозначно <tt class="docutils literal"><span class="pre">a</span> <span class="pre">&gt;=</span> <span class="pre">b</span> <span class="pre">AND</span> <span class="pre">a</span> <span class="pre">&lt;=</span> <span class="pre">c</span></tt></p>
+</div>
+<div class="section" id="id7">
+<h2>Операторы для работы с множествами<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<p><em>Смотрите раздел &#8220;Операторы IN&#8221;.</em></p>
+<p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">IN</span> <span class="pre">...</span></tt> - функция <tt class="docutils literal"><span class="pre">in(a,</span> <span class="pre">b)</span></tt></p>
+<p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">NOT</span> <span class="pre">IN</span> <span class="pre">...</span></tt> - функция <tt class="docutils literal"><span class="pre">notIn(a,</span> <span class="pre">b)</span></tt></p>
+<p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">GLOBAL</span> <span class="pre">IN</span> <span class="pre">...</span></tt> - функция <tt class="docutils literal"><span class="pre">globalIn(a,</span> <span class="pre">b)</span></tt></p>
+<p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">GLOBAL</span> <span class="pre">NOT</span> <span class="pre">IN</span> <span class="pre">...</span></tt> - функция <tt class="docutils literal"><span class="pre">globalNotIn(a,</span> <span class="pre">b)</span></tt></p>
+</div>
+<div class="section" id="id8">
+<h2>Оператор логического отрицания<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">NOT</span> <span class="pre">a</span></tt> - функция <tt class="docutils literal"><span class="pre">not(a)</span></tt></p>
+</div>
+<div class="section" id="id9">
+<h2>Оператор логического &#8220;И&#8221;.<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">AND</span> <span class="pre">b</span></tt> - функция <tt class="docutils literal"><span class="pre">and(a,</span> <span class="pre">b)</span></tt></p>
+</div>
+<div class="section" id="id10">
+<h2>Оператор логического &#8220;ИЛИ&#8221;.<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">OR</span> <span class="pre">b</span></tt> - функция <tt class="docutils literal"><span class="pre">or(a,</span> <span class="pre">b)</span></tt></p>
+</div>
+<div class="section" id="id11">
+<h2>Условный оператор<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">a</span> <span class="pre">?</span> <span class="pre">b</span> <span class="pre">:</span> <span class="pre">c</span></tt> - функция <tt class="docutils literal"><span class="pre">if(a,</span> <span class="pre">b,</span> <span class="pre">c)</span></tt></p>
+</div>
+<div class="section" id="id12">
+<h2>Условное выражение<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">CASE</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span>
+    <span class="k">WHEN</span> <span class="n">a</span> <span class="k">THEN</span> <span class="n">b</span>
+    <span class="p">[</span><span class="k">WHEN</span> <span class="p">...</span> <span class="k">THEN</span> <span class="p">...]</span>
+    <span class="k">ELSE</span> <span class="k">c</span>
+<span class="k">END</span>
+</pre></div>
+</div>
+<p>В случае указания x - функция transform(x, [a, ...], [b, ...], c). Иначе - multiIf(a, b, ..., c).</p>
+</div>
+<div class="section" id="id13">
+<h2>Оператор склеивания строк<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">s1</span> <span class="pre">||</span> <span class="pre">s2</span></tt> - функция <tt class="docutils literal"><span class="pre">concat(s1,</span> <span class="pre">s2)</span></tt></p>
+</div>
+<div class="section" id="id14">
+<h2>Оператор создания лямбда-выражения<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">x</span> <span class="pre">-&gt;</span> <span class="pre">expr</span></tt> - функция <tt class="docutils literal"><span class="pre">lambda(x,</span> <span class="pre">expr)</span></tt></p>
+<p>Следующие операторы не имеют приоритета, так как представляют собой скобки:</p>
+</div>
+<div class="section" id="id15">
+<h2>Оператор создания массива<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">[x1,</span> <span class="pre">...]</span></tt> - функция <tt class="docutils literal"><span class="pre">array(x1,</span> <span class="pre">...)</span></tt></p>
+</div>
+<div class="section" id="id16">
+<h2>Оператор создания кортежа<a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">(x1,</span> <span class="pre">x2,</span> <span class="pre">...)</span></tt> - функция <tt class="docutils literal"><span class="pre">tuple(x2,</span> <span class="pre">x2,</span> <span class="pre">...)</span></tt></p>
+</div>
+<div class="section" id="id17">
+<h2>Ассоциативность<a class="headerlink" href="#id17" title="Permalink to this headline">¶</a></h2>
+<p>Все бинарные операторы имеют левую ассоциативность. Например, <tt class="docutils literal"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">2</span> <span class="pre">+</span> <span class="pre">3</span></tt> преобразуется в <tt class="docutils literal"><span class="pre">plus(plus(1,</span> <span class="pre">2),</span> <span class="pre">3)</span></tt>.
+Иногда это работает не так, как ожидается. Например, <tt class="docutils literal"><span class="pre">SELECT</span> <span class="pre">4</span> <span class="pre">&gt;</span> <span class="pre">3</span> <span class="pre">&gt;</span> <span class="pre">2</span></tt> выдаст 0.</p>
+<p>Для эффективности, реализованы функции <tt class="docutils literal"><span class="pre">and</span></tt> и <tt class="docutils literal"><span class="pre">or</span></tt>, принимающие произвольное количество аргументов. Соответствующие цепочки операторов <tt class="docutils literal"><span class="pre">AND</span></tt> и <tt class="docutils literal"><span class="pre">OR</span></tt>, преобразуются в один вызов этих функций.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Операторы</a><ul>
+<li><a class="reference internal" href="#id2">Операторы доступа</a></li>
+<li><a class="reference internal" href="#id3">Оператор числового отрицания</a></li>
+<li><a class="reference internal" href="#id4">Операторы умножения и деления</a></li>
+<li><a class="reference internal" href="#id5">Операторы сложения и вычитания</a></li>
+<li><a class="reference internal" href="#id6">Операторы сравнения</a></li>
+<li><a class="reference internal" href="#id7">Операторы для работы с множествами</a></li>
+<li><a class="reference internal" href="#id8">Оператор логического отрицания</a></li>
+<li><a class="reference internal" href="#id9">Оператор логического &#8220;И&#8221;.</a></li>
+<li><a class="reference internal" href="#id10">Оператор логического &#8220;ИЛИ&#8221;.</a></li>
+<li><a class="reference internal" href="#id11">Условный оператор</a></li>
+<li><a class="reference internal" href="#id12">Условное выражение</a></li>
+<li><a class="reference internal" href="#id13">Оператор склеивания строк</a></li>
+<li><a class="reference internal" href="#id14">Оператор создания лямбда-выражения</a></li>
+<li><a class="reference internal" href="#id15">Оператор создания массива</a></li>
+<li><a class="reference internal" href="#id16">Оператор создания кортежа</a></li>
+<li><a class="reference internal" href="#id17">Ассоциативность</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../data_types/special_data_types/set.html"
+                        title="previous chapter">Set</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../functions/index.html"
+                        title="next chapter">Функции</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/operators/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../functions/index.html" title="Функции"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../data_types/special_data_types/set.html" title="Set"
+             >previous</a> |</li>
+        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

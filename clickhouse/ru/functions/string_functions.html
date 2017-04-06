@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Функции для работы со строками &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Функции для работы со строками<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="empty">
+<h2>empty<a class="headerlink" href="#empty" title="Permalink to this headline">¶</a></h2>
+<p>Возвращает 1 для пустой строки, и 0 для непустой строки.
+Тип результата - UInt8.
+Строка считается непустой, если содержит хотя бы один байт, пусть даже это пробел или нулевой байт.
+Функция также работает для массивов.</p>
+</div>
+<div class="section" id="notempty">
+<h2>notEmpty<a class="headerlink" href="#notempty" title="Permalink to this headline">¶</a></h2>
+<p>Возвращает 0 для пустой строки, и 1 для непустой строки.
+Тип результата - UInt8.
+Функция также работает для массивов.</p>
+</div>
+<div class="section" id="length">
+<h2>length<a class="headerlink" href="#length" title="Permalink to this headline">¶</a></h2>
+<p>Возвращает длину строки в байтах (не символах, не кодовых точках).
+Тип результата - UInt64.
+Функция также работает для массивов.</p>
+</div>
+<div class="section" id="lengthutf8">
+<h2>lengthUTF8<a class="headerlink" href="#lengthutf8" title="Permalink to this headline">¶</a></h2>
+<p>Возвращает длину строки в кодовых точках Unicode (не символах), при допущении, что строка содержит набор байт, являющийся текстом в кодировке UTF-8. Если допущение не выполнено - то возвращает какой-нибудь результат (не кидает исключение).
+Тип результата - UInt64.</p>
+</div>
+<div class="section" id="lower">
+<h2>lower<a class="headerlink" href="#lower" title="Permalink to this headline">¶</a></h2>
+<p>Переводит ASCII-символы латиницы в строке в нижний регистр.</p>
+</div>
+<div class="section" id="upper">
+<h2>upper<a class="headerlink" href="#upper" title="Permalink to this headline">¶</a></h2>
+<p>Переводит ASCII-символы латиницы в строке в верхний регистр.</p>
+</div>
+<div class="section" id="lowerutf8">
+<h2>lowerUTF8<a class="headerlink" href="#lowerutf8" title="Permalink to this headline">¶</a></h2>
+<p>Переводит строку в нижний регистр, при допущении, что строка содержит набор байт, представляющий текст в кодировке UTF-8.
+Не учитывает язык. То есть, для турецкого языка, результат может быть не совсем верным.
+Если длина UTF-8 последовательности байт различна для верхнего и нижнего регистра кодовой точки, то для этой кодовой точки, результат работы может быть некорректным.
+Если строка содержит набор байт, не являющийся UTF-8, то поведение не определено.</p>
+</div>
+<div class="section" id="upperutf8">
+<h2>upperUTF8<a class="headerlink" href="#upperutf8" title="Permalink to this headline">¶</a></h2>
+<p>Переводит строку в верхний регистр, при допущении, что строка содержит набор байт, представляющий текст в кодировке UTF-8.
+Не учитывает язык. То есть, для турецкого языка, результат может быть не совсем верным.
+Если длина UTF-8 последовательности байт различна для верхнего и нижнего регистра кодовой точки, то для этой кодовой точки, результат работы может быть некорректным.
+Если строка содержит набор байт, не являющийся UTF-8, то поведение не определено.</p>
+</div>
+<div class="section" id="reverse">
+<h2>reverse<a class="headerlink" href="#reverse" title="Permalink to this headline">¶</a></h2>
+<p>Разворачивает строку (как последовательность байт).</p>
+</div>
+<div class="section" id="reverseutf8">
+<h2>reverseUTF8<a class="headerlink" href="#reverseutf8" title="Permalink to this headline">¶</a></h2>
+<p>Разворачивает последовательность кодовых точек Unicode, при допущении, что строка содержит набор байт, представляющий текст в кодировке UTF-8. Иначе - что-то делает (не кидает исключение).</p>
+</div>
+<div class="section" id="concat-s1-s2">
+<h2>concat(s1, s2, ...)<a class="headerlink" href="#concat-s1-s2" title="Permalink to this headline">¶</a></h2>
+<p>Склеивает строки, перечисленные в аргументах, без разделителей.</p>
+</div>
+<div class="section" id="substring-s-offset-length">
+<h2>substring(s, offset, length)<a class="headerlink" href="#substring-s-offset-length" title="Permalink to this headline">¶</a></h2>
+<p>Возвращает подстроку, начиная с байта по индексу offset, длины length байт. Индексация символов - начиная с единицы (как в стандартном SQL). Аргументы offset и length должны быть константами.</p>
+</div>
+<div class="section" id="substringutf8-s-offset-length">
+<h2>substringUTF8(s, offset, length)<a class="headerlink" href="#substringutf8-s-offset-length" title="Permalink to this headline">¶</a></h2>
+<p>Так же, как substring, но для кодовых точек Unicode. Работает при допущении, что строка содержит набор байт, представляющий текст в кодировке UTF-8. Если допущение не выполнено - то возвращает какой-нибудь результат (не кидает исключение).</p>
+</div>
+<div class="section" id="appendtrailingcharifabsent-s-c">
+<h2>appendTrailingCharIfAbsent(s, c)<a class="headerlink" href="#appendtrailingcharifabsent-s-c" title="Permalink to this headline">¶</a></h2>
+<p>Если строка s непустая и не содержит символ c на конце, то добавляет символ c в конец.</p>
+</div>
+<div class="section" id="convertcharset-s-from-to">
+<h2>convertCharset(s, from, to)<a class="headerlink" href="#convertcharset-s-from-to" title="Permalink to this headline">¶</a></h2>
+<p>Возвращает сконвертированную из кодировки from в кодировку to строку s.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Функции для работы со строками</a><ul>
+<li><a class="reference internal" href="#empty">empty</a></li>
+<li><a class="reference internal" href="#notempty">notEmpty</a></li>
+<li><a class="reference internal" href="#length">length</a></li>
+<li><a class="reference internal" href="#lengthutf8">lengthUTF8</a></li>
+<li><a class="reference internal" href="#lower">lower</a></li>
+<li><a class="reference internal" href="#upper">upper</a></li>
+<li><a class="reference internal" href="#lowerutf8">lowerUTF8</a></li>
+<li><a class="reference internal" href="#upperutf8">upperUTF8</a></li>
+<li><a class="reference internal" href="#reverse">reverse</a></li>
+<li><a class="reference internal" href="#reverseutf8">reverseUTF8</a></li>
+<li><a class="reference internal" href="#concat-s1-s2">concat(s1, s2, ...)</a></li>
+<li><a class="reference internal" href="#substring-s-offset-length">substring(s, offset, length)</a></li>
+<li><a class="reference internal" href="#substringutf8-s-offset-length">substringUTF8(s, offset, length)</a></li>
+<li><a class="reference internal" href="#appendtrailingcharifabsent-s-c">appendTrailingCharIfAbsent(s, c)</a></li>
+<li><a class="reference internal" href="#convertcharset-s-from-to">convertCharset(s, from, to)</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/ru/functions/string_functions.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

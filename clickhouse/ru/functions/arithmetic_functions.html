@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Арифметические функции &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="id1">
+<h1>Арифметические функции<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>Для всех арифметических функций, тип результата вычисляется, как минимальный числовой тип, который может вместить результат, если такой тип есть. Минимум берётся одновременно по числу бит, знаковости и &#8220;плавучести&#8221;. Если бит не хватает, то берётся тип максимальной битности.</p>
+<p>Пример:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span>:) SELECT toTypeName(0), toTypeName(0 + 0), toTypeName(0 + 0 + 0), toTypeName(0 + 0 + 0 + 0)
+
+┌─toTypeName(0)─┬─toTypeName(plus(0, 0))─┬─toTypeName(plus(plus(0, 0), 0))─┬─toTypeName(plus(plus(plus(0, 0), 0), 0))─┐
+│ UInt8         │ UInt16                 │ UInt32                          │ UInt64                                   │
+└───────────────┴────────────────────────┴─────────────────────────────────┴──────────────────────────────────────────┘
+</pre></div>
+</div>
+<p>Арифметические функции работают для любой пары типов из UInt8, UInt16, UInt32, UInt64, Int8, Int16, Int32, Int64, Float32, Float64.</p>
+<p>Переполнение производится также, как в C++.</p>
+<div class="section" id="plus-a-b-a-b">
+<h2>plus(a, b), оператор a + b<a class="headerlink" href="#plus-a-b-a-b" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет сумму чисел.
+Также можно складывать целые числа с датой и датой-с-временем. В случае даты, прибавление целого числа означает прибавление соответствующего количества дней. В случае даты-с-временем - прибавление соответствующего количества секунд.</p>
+</div>
+<div class="section" id="minus-a-b-a-b">
+<h2>minus(a, b), оператор a - b<a class="headerlink" href="#minus-a-b-a-b" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет разность чисел. Результат всегда имеет знаковый тип.</p>
+<p>Также можно вычитать целые числа из даты и даты-с-временем. Смысл аналогичен - смотрите выше для plus.</p>
+</div>
+<div class="section" id="multiply-a-b-a-b">
+<h2>multiply(a, b), оператор a * b<a class="headerlink" href="#multiply-a-b-a-b" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет произведение чисел.</p>
+</div>
+<div class="section" id="divide-a-b-a-b">
+<h2>divide(a, b), оператор a / b<a class="headerlink" href="#divide-a-b-a-b" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет частное чисел. Тип результата всегда является типом с плавающей запятой.
+То есть, деление не целочисленное. Для целочисленного деления, используйте функцию intDiv.
+При делении на ноль получится inf, -inf или nan.</p>
+</div>
+<div class="section" id="intdiv-a-b">
+<h2>intDiv(a, b)<a class="headerlink" href="#intdiv-a-b" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет частное чисел. Деление целочисленное, с округлением вниз (по абсолютному значению).
+При делении на ноль или при делении минимального отрицательного числа на минус единицу, кидается исключение.</p>
+</div>
+<div class="section" id="intdivorzero-a-b">
+<h2>intDivOrZero(a, b)<a class="headerlink" href="#intdivorzero-a-b" title="Permalink to this headline">¶</a></h2>
+<p>Отличается от intDiv тем, что при делении на ноль или при делении минимального отрицательного числа на минус единицу, возвращается ноль.</p>
+</div>
+<div class="section" id="modulo-a-b-a-b">
+<h2>modulo(a, b), оператор a % b<a class="headerlink" href="#modulo-a-b-a-b" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет остаток от деления.
+Если аргументы - числа с плавающей запятой, то они предварительно преобразуются в целые числа, путём отбрасывания дробной части.
+Берётся остаток в том же смысле, как это делается в C++. По факту, для отрицательных чисел, используется truncated division.
+При делении на ноль или при делении минимального отрицательного числа на минус единицу, кидается исключение.</p>
+</div>
+<div class="section" id="negate-a-a">
+<h2>negate(a), оператор -a<a class="headerlink" href="#negate-a-a" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет число, обратное по знаку. Результат всегда имеет знаковый тип.</p>
+</div>
+<div class="section" id="abs-a">
+<h2>abs(a)<a class="headerlink" href="#abs-a" title="Permalink to this headline">¶</a></h2>
+<p>Вычисляет абсолютное значение для числа a. То есть, если a &lt; 0, то возвращает -a.
+Для беззнаковых типов ничего не делает. Для чисел типа целых со знаком, возвращает число беззнакового типа.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Арифметические функции</a><ul>
+<li><a class="reference internal" href="#plus-a-b-a-b">plus(a, b), оператор a + b</a></li>
+<li><a class="reference internal" href="#minus-a-b-a-b">minus(a, b), оператор a - b</a></li>
+<li><a class="reference internal" href="#multiply-a-b-a-b">multiply(a, b), оператор a * b</a></li>
+<li><a class="reference internal" href="#divide-a-b-a-b">divide(a, b), оператор a / b</a></li>
+<li><a class="reference internal" href="#intdiv-a-b">intDiv(a, b)</a></li>
+<li><a class="reference internal" href="#intdivorzero-a-b">intDivOrZero(a, b)</a></li>
+<li><a class="reference internal" href="#modulo-a-b-a-b">modulo(a, b), оператор a % b</a></li>
+<li><a class="reference internal" href="#negate-a-a">negate(a), оператор -a</a></li>
+<li><a class="reference internal" href="#abs-a">abs(a)</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/ru/functions/arithmetic_functions.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

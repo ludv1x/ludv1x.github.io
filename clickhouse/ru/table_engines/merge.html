@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Merge &mdash; ClickHouse 1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="ClickHouse 1 documentation" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="merge">
+<h1>Merge<a class="headerlink" href="#merge" title="Permalink to this headline">¶</a></h1>
+<p>Движок Merge (не путайте с движком <tt class="docutils literal"><span class="pre">MergeTree</span></tt>) не хранит данные самостоятельно, а позволяет читать одновременно из произвольного количества других таблиц.
+Чтение автоматически распараллеливается. Запись в таблицу не поддерживается. При чтении будут использованы индексы тех таблиц, из которых реально идёт чтение, если они существуют.
+Движок Merge принимает параметры: имя базы данных и регулярное выражение для таблиц. Пример:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">Merge</span><span class="p">(</span><span class="n">hits</span><span class="p">,</span> <span class="s1">&#39;^WatchLog&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>данные будут читаться из таблиц в базе hits, имена которых соответствуют регулярному выражению &#8216;<tt class="docutils literal"><span class="pre">^WatchLog</span></tt>&#8216;.</li>
+</ul>
+<p>Вместо имени базы данных может использоваться константное выражение, возвращающее строку. Например, <tt class="docutils literal"><span class="pre">currentDatabase()</span></tt>.</p>
+<p>Регулярные выражения - re2 (как PCRE, но без особых извратов), регистрозависимые.
+Смотрите замечание об экранировании в регулярных выражениях в разделе &#8220;match&#8221;.</p>
+<p>При выборе таблиц для чтения, сама Merge-таблица не будет выбрана, даже если попадает под регулярное выражение - чтобы не возникло циклов.
+Впрочем, вы можете создать две Merge-таблицы, которые будут пытаться бесконечно читать данные друг-друга. Этого делать не нужно.</p>
+<p>Типичный способ использования движка Merge - возможность работы с большим количеством таблиц типа TinyLog, как с одной.</p>
+<div class="section" id="id1">
+<h2>Виртуальные столбцы<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>Виртуальные столбцы - столбцы, предоставляемые движком таблиц, независимо от определения таблицы. То есть, такие столбцы не указываются в CREATE TABLE, но доступны для SELECT-а.</p>
+<dl class="docutils">
+<dt>Виртуальные столбцы отличаются от обычных следующими особенностями:</dt>
+<dd><ul class="first last simple">
+<li>они не указываются в определении таблицы;</li>
+<li>в них нельзя вставить данные при INSERT-е;</li>
+<li>при INSERT-е без указания списка столбцов, виртуальные столбцы не учитываются;</li>
+<li>они не выбираются при использовании звёздочки (<tt class="docutils literal"><span class="pre">SELECT</span> <span class="pre">*</span></tt>);</li>
+<li>виртуальные столбцы не показываются в запросах <tt class="docutils literal"><span class="pre">SHOW</span> <span class="pre">CREATE</span> <span class="pre">TABLE</span></tt> и <tt class="docutils literal"><span class="pre">DESC</span> <span class="pre">TABLE</span></tt>;</li>
+</ul>
+</dd>
+</dl>
+<p>Таблица типа Merge содержит виртуальный столбец _table типа String. (Если в таблице уже есть столбец _table, то виртуальный столбец называется _table1; если уже есть _table1, то _table2 и т. п.) Он содержит имя таблицы, из которой были прочитаны данные.</p>
+<p>Если секция WHERE/PREWHERE содержит (в качестве одного из элементов конъюнкции или в качестве всего выражения) условия на столбец _table, не зависящие от других столбцов таблицы, то эти условия используются как индекс: условия выполняются над множеством имён таблиц, из которых нужно читать данные, и чтение будет производиться только из тех таблиц, для которых условия сработали.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Merge</a><ul>
+<li><a class="reference internal" href="#id1">Виртуальные столбцы</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/ru/table_engines/merge.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2017, Alexey Milovidov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

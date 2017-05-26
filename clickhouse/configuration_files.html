@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Конфигурационные файлы &mdash; ClickHouse 1 documentation</title>
+    <title>Configuration files &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,67 +23,110 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="index.html" />
-    <link rel="next" title="Права доступа" href="access_rights.html" />
-    <link rel="prev" title="Профили настроек" href="settings/settings_profiles.html" /> 
+    <link rel="top" title="ClickHouse  documentation" href="index.html" />
+    <link rel="next" title="Access rights" href="access_rights.html" />
+    <link rel="prev" title="Settings profiles" href="settings/settings_profiles.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="access_rights.html" title="Права доступа"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="settings/settings_profiles.html" title="Профили настроек"
-             accesskey="P">previous</a> |</li>
-        <li><a href="index.html">ClickHouse 1 documentation</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="id1">
-<h1>Конфигурационные файлы<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
-<p>Основной конфигурационный файл сервера - <tt class="docutils literal"><span class="pre">config.xml</span></tt>. Он расположен в директории <tt class="docutils literal"><span class="pre">/etc/clickhouse-server/</span></tt>.</p>
-<p>Отдельные настройки могут быть переопределены в файлах <tt class="docutils literal"><span class="pre">*.xml</span></tt> и <tt class="docutils literal"><span class="pre">*.conf</span></tt> из директорий <tt class="docutils literal"><span class="pre">conf.d</span></tt> и <tt class="docutils literal"><span class="pre">config.d</span></tt> рядом с конфигом.</p>
-<p>У элементов этих конфигурационных файлов могут быть указаны атрибуты <tt class="docutils literal"><span class="pre">replace</span></tt> или <tt class="docutils literal"><span class="pre">remove</span></tt>.</p>
-<p>Если ни один не указан - объединить содержимое элементов рекурсивно с заменой значений совпадающих детей.</p>
-<p>Если указано <tt class="docutils literal"><span class="pre">replace</span></tt> - заменить весь элемент на указанный.</p>
-<p>Если указано <tt class="docutils literal"><span class="pre">remove</span></tt> - удалить элемент.</p>
-<p>Также в конфиге могут быть указаны &#8220;подстановки&#8221;. Если у элемента присутствует атрибут <tt class="docutils literal"><span class="pre">incl</span></tt>, то в качестве значения будет использована соответствующая подстановка из файла. По умолчанию, путь к файлу с подстановками - <tt class="docutils literal"><span class="pre">/etc/metrika.xml</span></tt>. Он может быть изменён в конфиге в элементе <tt class="docutils literal"><span class="pre">include_from</span></tt>. Значения подстановок указываются в элементах <tt class="docutils literal"><span class="pre">/yandex/имя_подстановки</span></tt> этого файла.</p>
-<p>Подстановки могут также выполняться из ZooKeeper. Для этого укажите у элемента атрибут <tt class="docutils literal"><span class="pre">from_zk=&quot;/path/to/node&quot;</span></tt>. Значение элемента заменится на содержимое узла <tt class="docutils literal"><span class="pre">/path/to/node</span></tt> в ZooKeeper. В ZooKeeper-узел также можно положить целое XML-поддерево, оно будет целиком вставлено в исходный элемент.</p>
-<p>В <tt class="docutils literal"><span class="pre">config.xml</span></tt> может быть указан отдельный конфиг с настройками пользователей, профилей и квот. Относительный путь к нему указывается в элементе users_config. По умолчанию - <tt class="docutils literal"><span class="pre">users.xml</span></tt>. Если <tt class="docutils literal"><span class="pre">users_config</span></tt> не указан, то настройки пользователей, профилей и квот, указываются непосредственно в <tt class="docutils literal"><span class="pre">config.xml</span></tt>.</p>
-<p>Для <tt class="docutils literal"><span class="pre">users_config</span></tt> могут также существовать переопределения в файлах из директории <tt class="docutils literal"><span class="pre">users_config.d</span></tt> (например, <tt class="docutils literal"><span class="pre">users.d</span></tt>) и подстановки.</p>
-<p>Для каждого конфигурационного файла, сервер при запуске генерирует также файлы <tt class="docutils literal"><span class="pre">file-preprocessed.xml</span></tt>. Эти файлы содержат все выполненные подстановки и переопределения, и предназначены для информационных целей. Если в конфигурационных файлах были использованы ZooKeeper-подстановки, но при старте сервера ZooKeeper недоступен, то сервер загрузит конфигурацию из preprocessed-файла.</p>
-<p>Сервер следит за изменениями конфигурационных файлов, а также файлов и ZooKeeper-узлов, которые были использованы при выполнении подстановок и переопределений, и перезагружает настройки пользователей и кластеров на лету. То есть, можно изменять кластера, пользователей и их настройки без перезапуска сервера.</p>
+  <div class="section" id="configuration-files">
+<span id="id1"></span><h1>Configuration files<a class="headerlink" href="#configuration-files" title="Permalink to this headline">¶</a></h1>
+<p>The main server config file is <code class="docutils literal"><span class="pre">config.xml</span></code>. It resides in the <code class="docutils literal"><span class="pre">/etc/clickhouse-server/</span></code> directory.</p>
+<p>Certain settings can be overridden in the <code class="docutils literal"><span class="pre">*.xml</span></code> and <code class="docutils literal"><span class="pre">*.conf</span></code> files from the <code class="docutils literal"><span class="pre">conf.d</span></code> and <code class="docutils literal"><span class="pre">config.d</span></code> directories next to the config.</p>
+<p>The <code class="docutils literal"><span class="pre">replace</span></code> and <code class="docutils literal"><span class="pre">remove</span></code> attributes can be specified for the elements of these config files.
+If neither is specified, it combines the contents of elements recursively, replacing values of duplicate children.
+If <code class="docutils literal"><span class="pre">replace</span></code> is specified, it replaces the entire element with the specified one.
+If <code class="docutils literal"><span class="pre">remove</span></code> is specified, it deletes the element.</p>
+<p>The config can also define &#8220;substitutions&#8221;. If an element has the <code class="docutils literal"><span class="pre">incl</span></code> attribute, the corresponding substitution from the file will be used as the value. By default, the path to the file with substitutions is <code class="docutils literal"><span class="pre">/etc/metrika.xml</span></code>. This can be changed in the config in the <code class="docutils literal"><span class="pre">include_from</span></code> element. The substitution values are specified in  <code class="docutils literal"><span class="pre">/yandex/substitution_name</span></code> elements of this file.</p>
+<p>You can also perform substitutions from ZooKeeper nodes. To do that add the <code class="docutils literal"><span class="pre">from_zk=&quot;/path/to/node&quot;</span></code> attribute to a config element. Element contents will be substituted with the contents of the /path/to/node ZooKeeper node. The ZooKeeper node can contain a whole XML subtree, and it will be inserted as a child of the substituted node.</p>
+<p>The &#8216;config.xml&#8217; file can specify a separate config with user settings, profiles, and quotas. The relative path to this config is set in the &#8216;users_config&#8217; element. By default, it is &#8216;users.xml&#8217;. If &#8216;users_config&#8217; is omitted, the user settings, profiles, and quotas are specified directly in <code class="docutils literal"><span class="pre">config.xml</span></code>. For <code class="docutils literal"><span class="pre">users_config</span></code>, overrides and substitutions may also exist in files from the <code class="docutils literal"><span class="pre">users_config.d</span></code> directory (for example, <code class="docutils literal"><span class="pre">users.d</span></code>).</p>
+<p>For each config file, the server also generates <code class="docutils literal"><span class="pre">file-preprocessed.xml</span></code> files on launch. These files contain all the completed substitutions and overrides, and they are intended for informational use. If ZooKeeper substitutions were used in a config file and the ZooKeeper is unavailable during server startup, the configuration is loaded from the respective preprocessed file.</p>
+<p>The server tracks changes to config files and files and ZooKeeper nodes that were used for substitutions and overrides and reloads users and clusters configurations in runtime. That is, you can add or change users, clusters and their settings without relaunching the server.</p>
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="settings/settings_profiles.html"
-                        title="previous chapter">Профили настроек</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="access_rights.html"
-                        title="next chapter">Права доступа</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/configuration_files.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings/index.html">Settings</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quotas.html">Quotas</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="settings/settings_profiles.html" title="previous chapter">Settings profiles</a></li>
+      <li>Next: <a href="access_rights.html" title="next chapter">Access rights</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -100,24 +143,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="access_rights.html" title="Права доступа"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="settings/settings_profiles.html" title="Профили настроек"
-             >previous</a> |</li>
-        <li><a href="index.html">ClickHouse 1 documentation</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

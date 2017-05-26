@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>remote &mdash; ClickHouse 1 documentation</title>
+    <title>remote &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,47 +23,37 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Табличные функции" href="index.html" />
-    <link rel="next" title="Форматы" href="../formats/index.html" />
-    <link rel="prev" title="merge" href="merge.html" /> 
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Table functions" href="index.html" />
+    <link rel="next" title="Formats" href="../formats/index.html" />
+    <link rel="prev" title="merge" href="merge.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../formats/index.html" title="Форматы"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="merge.html" title="merge"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Табличные функции</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="remote">
 <h1>remote<a class="headerlink" href="#remote" title="Permalink to this headline">¶</a></h1>
-<p><tt class="docutils literal"><span class="pre">remote('addresses_expr',</span> <span class="pre">db,</span> <span class="pre">table[,</span> <span class="pre">'user'[,</span> <span class="pre">'password']])</span></tt></p>
-<p>или</p>
-<p><tt class="docutils literal"><span class="pre">remote('addresses_expr',</span> <span class="pre">db.table[,</span> <span class="pre">'user'[,</span> <span class="pre">'password']])</span></tt></p>
+<p><code class="docutils literal"><span class="pre">remote('addresses_expr',</span> <span class="pre">db,</span> <span class="pre">table[,</span> <span class="pre">'user'[,</span> <span class="pre">'password']])</span></code></p>
+<p>or</p>
+<p><code class="docutils literal"><span class="pre">remote('addresses_expr',</span> <span class="pre">db.table[,</span> <span class="pre">'user'[,</span> <span class="pre">'password']])</span></code></p>
 <ul class="simple">
-<li>позволяет обратиться к удалённым серверам без создания таблицы типа Distributed.</li>
+<li>Allows accessing a remote server without creating a Distributed table.</li>
 </ul>
-<p><tt class="docutils literal"><span class="pre">addresses_expr</span></tt> - выражение, генерирующее адреса удалённых серверов.</p>
-<p>Это может быть просто один адрес сервера. Адрес сервера - это хост:порт, или только хост. Хост может быть указан в виде имени сервера, или в виде IPv4 или IPv6 адреса. IPv6 адрес указывается в квадратных скобках. Порт - TCP-порт удалённого сервера. Если порт не указан, используется tcp_port из конфигурационного файла сервера (по умолчанию - 9000).</p>
-<p>Замечание: в качестве исключения, при указании IPv6-адреса, обязательно также указывать порт.</p>
-<p>Примеры:</p>
+<p><code class="docutils literal"><span class="pre">addresses_expr</span></code> - An expression that generates addresses of remote servers.</p>
+<p>This may be just one server address. The server address is host:port, or just the host. The host can be specified as the server name, or as the IPv4 or IPv6 address. An IPv6 address is specified in square brackets. The port is the TCP port on the remote server. If the port is omitted, it uses tcp_port from the server&#8217;s config file (by default, 9000).</p>
+<p>Note: As an exception, when specifying an IPv6 address, the port is required.</p>
+<p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>example01-01-1
 example01-01-1:9000
 localhost
@@ -72,60 +62,120 @@ localhost
 [2a02:6b8:0:1111::11]:9000
 </pre></div>
 </div>
-<p>Могут быть указаны адреса через запятую - в этом случае, запрос пойдёт на все указанные адреса (как на шарды с разными данными) и будет обработан распределённо.</p>
-<p>Пример:</p>
+<p>Multiple addresses can be comma-separated. In this case, the query goes to all the specified addresses (like to shards with different data) and uses distributed processing.</p>
+<p>Example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">example01</span><span class="o">-</span><span class="mo">01</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">example01</span><span class="o">-</span><span class="mo">02</span><span class="o">-</span><span class="mi">1</span>
 </pre></div>
 </div>
-<p>Часть выражения может быть указана в фигурных скобках. Предыдущий пример может быть записан следующим образом:</p>
+<p>Part of the expression can be specified in curly brackets. The previous example can be written as follows:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>example01-0{1,2}-1
 </pre></div>
 </div>
-<p>В фигурных скобках может быть указан диапазон (неотрицательных целых) чисел через две точки. В этом случае, диапазон раскрывается в множество значений, генерирующих адреса шардов. Если запись первого числа начинается с нуля, то значения формируются с таким же выравниванием нулями. Предыдущий пример может быть записан следующим образом:</p>
+<p>Curly brackets can contain a range of numbers separated by two dots (non-negative integers). In this case, the range is expanded to a set of values that generate shard addresses. If the first number starts with zero, the values are formed with the same zero alignment.
+The previous example can be written as follows:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>example01-{01..02}-1
 </pre></div>
 </div>
-<p>При наличии нескольких пар фигурных скобок, генерируется прямое произведение соответствующих множеств.</p>
-<p>Адреса или их фрагменты в фигурных скобках, могут быть указаны через символ <a href="#id1"><span class="problematic" id="id2">|</span></a>. В этом случае, соответствующие множества адресов понимаются как реплики - запрос будет отправлен на первую живую реплику. При этом, реплики перебираются в порядке, согласно текущей настройке load_balancing.</p>
-<p>Пример:</p>
+<p>If you have multiple pairs of curly brackets, it generates the direct product of the corresponding sets.</p>
+<p>Addresses and fragments in curly brackets can be separated by the pipe (|) symbol. In this case, the corresponding sets of addresses are interpreted as replicas, and the query will be sent to the first healthy replica. The replicas are evaluated in the order currently set in the &#8216;load_balancing&#8217; setting.</p>
+<p>Example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>example01-{01..02}-{1|2}
 </pre></div>
 </div>
-<p>В этом примере указано два шарда, в каждом из которых имеется две реплики.</p>
-<p>Количество генерируемых адресов ограничено некоторой константой - сейчас это 1000 штук.</p>
-<p>Использование табличной функции remote менее оптимально, чем создание таблицы типа Distributed, так как в этом случае, соединения с серверами устанавливаются заново при каждом запросе, в случае задания имён хостов, делается резолвинг имён, а также не ведётся подсчёт ошибок при работе с разными репликами. При обработке большого количества запросов, всегда создавайте Distributed таблицу заранее, не используйте табличную функцию remote.</p>
+<p>This example specifies two shards that each have two replicas.</p>
+<p>The number of addresses generated is limited by a constant. Right now this is 1000 addresses.</p>
+<p>Using the &#8216;remote&#8217; table function is less optimal than creating a Distributed table, because in this case, the server connection is re-established for every request. In addition, if host names are set, the names are resolved, and errors are not counted when working with various replicas. When processing a large number of queries, always create the Distributed table ahead of time, and don&#8217;t use the &#8216;remote&#8217; table function.</p>
 <dl class="docutils">
-<dt>Табличная функция remote может быть полезна для следующих случаев:</dt>
+<dt>The &#8216;remote&#8217; table function can be useful in the following cases:</dt>
 <dd><ul class="first last simple">
-<li>обращение на конкретный сервер в целях сравнения данных, отладки и тестирования;</li>
-<li>запросы между разными кластерами ClickHouse в целях исследований;</li>
-<li>нечастых распределённых запросов, задаваемых вручную;</li>
-<li>распределённых запросов, где набор серверов определяется каждый раз заново.</li>
+<li>Accessing a specific server for data comparison, debugging, and testing.</li>
+<li>Queries between various ClickHouse clusters for research purposes.</li>
+<li>Infrequent distributed requests that are made manually.</li>
+<li>Distributed requests where the set of servers is re-defined each time.</li>
 </ul>
 </dd>
 </dl>
-<p>Имя пользователя может быть не задано - тогда используется имя пользователя &#8216;default&#8217;.
-Пароль может быть не задан - тогда используется пустой пароль.</p>
+<p>The username can be omitted. In this case, the &#8216;default&#8217; username is used.
+The password can be omitted. In this case, an empty password is used.</p>
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="merge.html"
-                        title="previous chapter">merge</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="../formats/index.html"
-                        title="next chapter">Форматы</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/table_functions/remote.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Table functions</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="merge.html">merge</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">remote</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Table functions</a><ul>
+      <li>Previous: <a href="merge.html" title="previous chapter">merge</a></li>
+      <li>Next: <a href="../formats/index.html" title="next chapter">Formats</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -142,25 +192,13 @@ localhost
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../formats/index.html" title="Форматы"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="merge.html" title="merge"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Табличные функции</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

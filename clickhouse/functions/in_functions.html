@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Функции для реализации оператора IN. &mdash; ClickHouse 1 documentation</title>
+    <title>Functions for implementing the IN operator &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,52 +23,42 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Функции" href="index.html" />
-    <link rel="next" title="Функции для работы с IP-адресами" href="ip_address_functions.html" />
-    <link rel="prev" title="Функции высшего порядка" href="higher_order_functions.html" /> 
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Functions" href="index.html" />
+    <link rel="next" title="Functions for working with IP addresses" href="ip_address_functions.html" />
+    <link rel="prev" title="Higher-order functions" href="higher_order_functions.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="ip_address_functions.html" title="Функции для работы с IP-адресами"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="higher_order_functions.html" title="Функции высшего порядка"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Функции</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="in">
-<h1>Функции для реализации оператора IN.<a class="headerlink" href="#in" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="functions-for-implementing-the-in-operator">
+<h1>Functions for implementing the IN operator<a class="headerlink" href="#functions-for-implementing-the-in-operator" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="in-notin-globalin-globalnotin">
 <h2>in, notIn, globalIn, globalNotIn<a class="headerlink" href="#in-notin-globalin-globalnotin" title="Permalink to this headline">¶</a></h2>
-<p>Смотрите раздел &#8220;Операторы IN&#8221;.</p>
+<p>See the section &#8220;IN operators&#8221;.</p>
 </div>
 <div class="section" id="tuple-x-y-x-y">
 <h2>tuple(x, y, ...), оператор (x, y, ...)<a class="headerlink" href="#tuple-x-y-x-y" title="Permalink to this headline">¶</a></h2>
-<p>Функция, позволяющая сгруппировать несколько столбцов.
-Для столбцов, имеющих типы T1, T2, ... возвращает кортеж типа Tuple(T1, T2, ...), содержащий эти столбцы. Выполнение функции ничего не стоит.
-Кортежи обычно используются как промежуточное значение в качестве аргумента операторов IN, или для создания списка формальных параметров лямбда-функций. Кортежи не могут быть записаны в таблицу.</p>
+<p>A function that allows grouping multiple columns.
+For columns with the types T1, T2, ..., it returns a Tuple(T1, T2, ...) type tuple containing these columns. There is no cost to execute the function.
+Tuples are normally used as intermediate values for an argument of IN operators, or for creating a list of formal parameters of lambda functions. Tuples can&#8217;t be written to a table.</p>
 </div>
 <div class="section" id="tupleelement-tuple-n-x-n">
 <h2>tupleElement(tuple, n), оператор x.N<a class="headerlink" href="#tupleelement-tuple-n-x-n" title="Permalink to this headline">¶</a></h2>
-<p>Функция, позволяющая достать столбец из кортежа.
-N - индекс столбца начиная с 1. N должно быть константой. N должно быть целым строго положительным числом не большим размера кортежа.
-Выполнение функции ничего не стоит.</p>
+<p>A function that allows getting columns from a tuple.
+&#8216;N&#8217; is the column index, starting from 1. &#8216;N&#8217; must be a constant. &#8216;N&#8217; must be a strict postive integer no greater than the size of the tuple.
+There is no cost to execute the function.</p>
 </div>
 </div>
 
@@ -76,30 +66,116 @@ N - индекс столбца начиная с 1. N должно быть к�
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Функции для реализации оператора IN.</a><ul>
-<li><a class="reference internal" href="#in-notin-globalin-globalnotin">in, notIn, globalIn, globalNotIn</a></li>
-<li><a class="reference internal" href="#tuple-x-y-x-y">tuple(x, y, ...), оператор (x, y, ...)</a></li>
-<li><a class="reference internal" href="#tupleelement-tuple-n-x-n">tupleElement(tuple, n), оператор x.N</a></li>
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Functions</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="arithmetic_functions.html">Arithmetic functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="array_functions.html">Functions for working with arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="array_join.html">arrayJoin function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bit_functions.html">Bit functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comparison_functions.html">Comparison functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conditional_functions.html">Conditional functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="date_time_functions.html">Functions for working with dates and times</a></li>
+<li class="toctree-l2"><a class="reference internal" href="encoding_functions.html">Encoding functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ext_dict_functions.html">Functions for working with external dictionaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hash_functions.html">Hash functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="higher_order_functions.html">Higher-order functions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Functions for implementing the IN operator</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#in-notin-globalin-globalnotin">in, notIn, globalIn, globalNotIn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tuple-x-y-x-y">tuple(x, y, ...), оператор (x, y, ...)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tupleelement-tuple-n-x-n">tupleElement(tuple, n), оператор x.N</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="ip_address_functions.html">Functions for working with IP addresses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json_functions.html">Functions for working with JSON.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logical_functions.html">Logical functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="math_functions.html">Mathematical functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_functions.html">Other functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="random_functions.html">Functions for generating pseudo-random numbers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rounding_functions.html">Rounding functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="splitting_merging_functions.html">Functions for splitting and merging strings and arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_functions.html">Functions for working with strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_replace_functions.html">Functions for searching and replacing in strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_search_functions.html">Functions for searching strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="type_conversion_functions.html">Type conversion functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="url_functions.html">Functions for working with URLs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ym_dict_functions.html">Functions for working with Yandex.Metrica dictionaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#strong-typing">Strong typing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#common-subexpression-elimination">Common subexpression elimination</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#types-of-results">Types of results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#constants">Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#immutability">Immutability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#error-handling">Error handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#evaluation-of-argument-expressions">Evaluation of argument expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#performing-functions-for-distributed-query-processing">Performing functions for distributed query processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="higher_order_functions.html"
-                        title="previous chapter">Функции высшего порядка</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="ip_address_functions.html"
-                        title="next chapter">Функции для работы с IP-адресами</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/functions/in_functions.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Functions</a><ul>
+      <li>Previous: <a href="higher_order_functions.html" title="previous chapter">Higher-order functions</a></li>
+      <li>Next: <a href="ip_address_functions.html" title="next chapter">Functions for working with IP addresses</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -116,25 +192,13 @@ N - индекс столбца начиная с 1. N должно быть к�
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="ip_address_functions.html" title="Функции для работы с IP-адресами"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="higher_order_functions.html" title="Функции высшего порядка"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Функции</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

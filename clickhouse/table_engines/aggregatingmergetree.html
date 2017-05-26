@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>AggregatingMergeTree &mdash; ClickHouse 1 documentation</title>
+    <title>AggregatingMergeTree &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,41 +23,31 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Движки таблиц" href="index.html" />
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Table engines" href="index.html" />
     <link rel="next" title="Buffer" href="buffer.html" />
-    <link rel="prev" title="Движки таблиц" href="index.html" /> 
+    <link rel="prev" title="Table engines" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="buffer.html" title="Buffer"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="Движки таблиц"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Движки таблиц</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="aggregatingmergetree">
 <h1>AggregatingMergeTree<a class="headerlink" href="#aggregatingmergetree" title="Permalink to this headline">¶</a></h1>
-<p>Отличается от MergeTree тем, что при слиянии, выполняет объединение состояний агрегатных функций, хранимых в таблице, для строчек с одинаковым значением первичного ключа.</p>
-<p>Чтобы это работало, используются: тип данных AggregateFunction, а также модификаторы -State и -Merge для агрегатных функций. Рассмотрим подробнее.</p>
-<p>Существует тип данных AggregateFunction. Это параметрический тип данных. В качестве параметров передаются: имя агрегатной функции, затем типы её аргументов.
-Примеры:</p>
+<p>This engine differs from <code class="docutils literal"><span class="pre">MergeTree</span></code> in that the merge combines the states of aggregate functions stored in the table for rows with the same primary key value.</p>
+<p>In order for this to work, it uses the AggregateFunction data type and the -State and -Merge modifiers for aggregate functions. Let&#8217;s examine it more closely.</p>
+<p>There is an AggregateFunction data type, which is a parametric data type. As parameters, the name of the aggregate function is passed, then the types of its arguments.
+Examples:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t</span>
 <span class="p">(</span>
     <span class="n">column1</span> <span class="n">AggregateFunction</span><span class="p">(</span><span class="n">uniq</span><span class="p">,</span> <span class="n">UInt64</span><span class="p">),</span>
@@ -66,25 +56,25 @@
 <span class="p">)</span> <span class="n">ENGINE</span> <span class="o">=</span> <span class="p">...</span>
 </pre></div>
 </div>
-<p>Столбец такого типа хранит состояние агрегатной функции.</p>
-<p>Чтобы получить значение такого типа, следует использовать агрегатные функции с суффиксом <tt class="docutils literal"><span class="pre">State</span></tt>.
-Пример: <tt class="docutils literal"><span class="pre">uniqState(UserID),</span> <span class="pre">quantilesState(0.5,</span> <span class="pre">0.9)(SendTiming)</span></tt> - в отличие от соответствующих функций uniq, quantiles, такие функции возвращают не готовое значение, а состояние. То есть, значение типа AggregateFunction.</p>
-<p>Значение типа AggregateFunction нельзя вывести в Pretty-форматах. В других форматах, значения такого типа выводятся в виде implementation-specific бинарных данных. То есть, значения типа AggregateFunction не предназначены для вывода, сохранения в дамп.</p>
-<p>Единственную полезную вещь, которую можно сделать со значениями типа AggregateFunction - это объединить состояния и получить результат, по сути - доагрегировать до конца. Для этого используются агрегатные функции с суффиксом Merge.
-Пример: <tt class="docutils literal"><span class="pre">uniqMerge(UserIDState),</span> <span class="pre">где</span> <span class="pre">UserIDState</span> <span class="pre">имеет</span> <span class="pre">тип</span> <span class="pre">AggregateFunction</span></tt>.</p>
-<p>То есть, агрегатная функция с суффиксом Merge берёт множество состояний, объединяет их, и возвращает готовый результат.
-Для примера, эти два запроса возвращают один и тот же результат:</p>
+<p>This type of column stores the state of an aggregate function.</p>
+<p>To get this type of value, use aggregate functions with the &#8216;State&#8217; suffix.
+Example: uniqState(UserID), quantilesState(0.5, 0.9)(SendTiming) - in contrast to the corresponding &#8216;uniq&#8217; and &#8216;quantiles&#8217; functions, these functions return the state, rather than the prepared value. In other words, they return an AggregateFunction type value.</p>
+<p>An AggregateFunction type value can&#8217;t be output in Pretty formats. In other formats, these types of values are output as implementation-specific binary data. The AggregateFunction type values are not intended for output or saving in a dump.</p>
+<p>The only useful thing you can do with AggregateFunction type values is combine the states and get a result, which essentially means to finish aggregation. Aggregate functions with the &#8216;Merge&#8217; suffix are used for this purpose.
+Example: uniqMerge(UserIDState), where UserIDState has the AggregateFunction type.</p>
+<p>In other words, an aggregate function with the &#8216;Merge&#8217; suffix takes a set of states, combines them, and returns the result.
+As an example, these two queries return the same result:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">uniq</span><span class="p">(</span><span class="n">UserID</span><span class="p">)</span> <span class="k">FROM</span> <span class="k">table</span>
 
 <span class="k">SELECT</span> <span class="n">uniqMerge</span><span class="p">(</span><span class="k">state</span><span class="p">)</span> <span class="k">FROM</span> <span class="p">(</span><span class="k">SELECT</span> <span class="n">uniqState</span><span class="p">(</span><span class="n">UserID</span><span class="p">)</span> <span class="k">AS</span> <span class="k">state</span> <span class="k">FROM</span> <span class="k">table</span> <span class="k">GROUP</span> <span class="k">BY</span> <span class="n">RegionID</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Существует движок <tt class="docutils literal"><span class="pre">AggregatingMergeTree</span></tt>. Он занимается тем, что при слияниях, выполняет объединение состояний агрегатных функций из разных строчек таблицы с одним значением первичного ключа.</p>
-<p>В таблицу, содержащую столбцы типа AggregateFunction невозможно вставить строчку обычным запросом INSERT, так как невозможно явно указать значение типа AggregateFunction. Вместо этого, для вставки данных, следует использовать INSERT SELECT с агрегатными функциями -State.</p>
-<p>При SELECT-е из таблицы AggregatingMergeTree, используйте GROUP BY и агрегатные функции с модификатором -Merge, чтобы доагрегировать данные.</p>
-<p>Таблицы типа AggregatingMergeTree могут использоваться для инкрементальной агрегации данных, в том числе, для агрегирующих материализованных представлений.</p>
-<p>Пример:
-Создаём материализованное представление типа AggregatingMergeTree, следящее за таблицей test.visits:</p>
+<p>There is an AggregatingMergeTree engine. Its job during a merge is to combine the states of aggregate functions from different table rows with the same primary key value.</p>
+<p>You can&#8217;t use a normal INSERT to insert a row in a table containing AggregateFunction columns, because you can&#8217;t explicitly define the AggregateFunction value. Instead, use INSERT SELECT with &#8216;-State&#8217; aggregate functions for inserting data.</p>
+<p>With SELECT from an AggregatingMergeTree table, use GROUP BY and aggregate functions with the &#8216;-Merge&#8217; modifier in order to complete data aggregation.</p>
+<p>You can use AggregatingMergeTree tables for incremental data aggregation, including for aggregated materialized views.</p>
+<p>Example:
+Creating a materialized AggregatingMergeTree view that tracks the &#8216;test.visits&#8217; table:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="n">MATERIALIZED</span> <span class="k">VIEW</span> <span class="n">test</span><span class="p">.</span><span class="n">basic</span>
 <span class="n">ENGINE</span> <span class="o">=</span> <span class="n">AggregatingMergeTree</span><span class="p">(</span><span class="n">StartDate</span><span class="p">,</span> <span class="p">(</span><span class="n">CounterID</span><span class="p">,</span> <span class="n">StartDate</span><span class="p">),</span> <span class="mi">8192</span><span class="p">)</span>
 <span class="k">AS</span> <span class="k">SELECT</span>
@@ -96,11 +86,11 @@
 <span class="k">GROUP</span> <span class="k">BY</span> <span class="n">CounterID</span><span class="p">,</span> <span class="n">StartDate</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>Вставляем данные в таблицу test.visits. Данные будут также вставлены в представление, где они будут агрегированы:</p>
+<p>Inserting data in the &#8216;test.visits&#8217; table. Data will also be inserted in the view, where it will be aggregated:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">test</span><span class="p">.</span><span class="n">visits</span> <span class="p">...</span>
 </pre></div>
 </div>
-<p>Делаем SELECT из представления, используя GROUP BY, чтобы доагрегировать данные:</p>
+<p>Performing SELECT from the view using GROUP BY to finish data aggregation:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span>
     <span class="n">StartDate</span><span class="p">,</span>
     <span class="n">sumMerge</span><span class="p">(</span><span class="n">Visits</span><span class="p">)</span> <span class="k">AS</span> <span class="n">Visits</span><span class="p">,</span>
@@ -110,28 +100,104 @@
 <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">StartDate</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>Вы можете создать такое материализованное представление и навесить на него обычное представление, выполняющее доагрегацию данных.</p>
-<p>Заметим, что в большинстве случаев, использование <tt class="docutils literal"><span class="pre">AggregatingMergeTree</span></tt> является неоправданным, так как можно достаточно эффективно выполнять запросы по неагрегированным данных.</p>
+<p>You can create a materialized view like this and assign a normal view to it that finishes data aggregation.</p>
+<p>Note that in most cases, using AggregatingMergeTree is not justified, since queries can be run efficiently enough on non-aggregated data.</p>
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">Движки таблиц</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="buffer.html"
-                        title="next chapter">Buffer</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/table_engines/aggregatingmergetree.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Table engines</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="">AggregatingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buffer.html">Buffer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="collapsingmergetree.html">CollapsingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distributed.html">Distributed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file.html">File(InputFormat)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="join.html">Join</a></li>
+<li class="toctree-l2"><a class="reference internal" href="log.html">Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="materializedview.html">MaterializedView</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="merge.html">Merge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mergetree.html">MergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="null.html">Null</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replacingmergetree.html">ReplacingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replication.html">Data replication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resharding.html">Перешардирование</a></li>
+<li class="toctree-l2"><a class="reference internal" href="set.html">Set</a></li>
+<li class="toctree-l2"><a class="reference internal" href="summingmergetree.html">SummingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tinylog.html">TinyLog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="view.html">View</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Table engines</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Table engines</a></li>
+      <li>Next: <a href="buffer.html" title="next chapter">Buffer</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -148,25 +214,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="buffer.html" title="Buffer"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="Движки таблиц"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Движки таблиц</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Set &mdash; ClickHouse 1 documentation</title>
+    <title>Set &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,62 +23,128 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Движки таблиц" href="index.html" />
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Table engines" href="index.html" />
     <link rel="next" title="SummingMergeTree" href="summingmergetree.html" />
-    <link rel="prev" title="Перешардирование" href="resharding.html" /> 
+    <link rel="prev" title="Перешардирование" href="resharding.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="summingmergetree.html" title="SummingMergeTree"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="resharding.html" title="Перешардирование"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Движки таблиц</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="set">
 <h1>Set<a class="headerlink" href="#set" title="Permalink to this headline">¶</a></h1>
-<p>Представляет собой множество, постоянно находящееся в оперативке. Предназначено для использования в правой части оператора IN (смотрите раздел &#8220;Операторы IN&#8221;).</p>
-<p>В таблицу можно вставлять данные INSERT-ом - будут добавлены новые элементы в множество, с игнорированием дубликатов.
-Но из таблицы нельзя, непосредственно, делать SELECT. Единственная возможность чтения - использование в правой части оператора IN.</p>
-<p>Данные постоянно находятся в оперативке. При INSERT-е, в директорию таблицы на диске, также пишутся блоки вставленных данных. При запуске сервера, эти данные считываются в оперативку. То есть, после перезапуска, данные остаются на месте.</p>
-<p>При грубом перезапуске сервера, блок данных на диске может быть потерян или повреждён. В последнем случае, может потребоваться вручную удалить файл с повреждёнными данными.</p>
+<p>A data set that is always in RAM. It is intended for use on the right side of the IN operator (see the section &#8220;IN operators&#8221;).</p>
+<p>You can use INSERT to insert data in the table. New elements will be added to the data set, while duplicates will be ignored.
+But you can&#8217;t perform SELECT from the table. The only way to retrieve data is by using it in the right half of the IN operator.</p>
+<p>Data is always located in RAM. For INSERT, the blocks of inserted data are also written to the directory of tables on the disk. When starting the server, this data is loaded to RAM. In other words, after restarting, the data remains in place.</p>
+<p>For a rough server restart, the block of data on the disk might be lost or damaged. In the latter case, you may need to manually delete the file with damaged data.</p>
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="resharding.html"
-                        title="previous chapter">Перешардирование</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="summingmergetree.html"
-                        title="next chapter">SummingMergeTree</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/table_engines/set.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Table engines</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="aggregatingmergetree.html">AggregatingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buffer.html">Buffer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="collapsingmergetree.html">CollapsingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distributed.html">Distributed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file.html">File(InputFormat)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="join.html">Join</a></li>
+<li class="toctree-l2"><a class="reference internal" href="log.html">Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="materializedview.html">MaterializedView</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="merge.html">Merge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mergetree.html">MergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="null.html">Null</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replacingmergetree.html">ReplacingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replication.html">Data replication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resharding.html">Перешардирование</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Set</a></li>
+<li class="toctree-l2"><a class="reference internal" href="summingmergetree.html">SummingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tinylog.html">TinyLog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="view.html">View</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Table engines</a><ul>
+      <li>Previous: <a href="resharding.html" title="previous chapter">Перешардирование</a></li>
+      <li>Next: <a href="summingmergetree.html" title="next chapter">SummingMergeTree</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -95,25 +161,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="summingmergetree.html" title="SummingMergeTree"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="resharding.html" title="Перешардирование"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Движки таблиц</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Функции сравнения &mdash; ClickHouse 1 documentation</title>
+    <title>Comparison functions &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,69 +23,59 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Функции" href="index.html" />
-    <link rel="next" title="Условные функции" href="conditional_functions.html" />
-    <link rel="prev" title="Битовые функции" href="bit_functions.html" /> 
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Functions" href="index.html" />
+    <link rel="next" title="Conditional functions" href="conditional_functions.html" />
+    <link rel="prev" title="Bit functions" href="bit_functions.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="conditional_functions.html" title="Условные функции"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="bit_functions.html" title="Битовые функции"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Функции</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="id1">
-<h1>Функции сравнения<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
-<p>Функции сравнения возвращают всегда 0 или 1 (UInt8).</p>
+  <div class="section" id="comparison-functions">
+<h1>Comparison functions<a class="headerlink" href="#comparison-functions" title="Permalink to this headline">¶</a></h1>
+<p>Comparison functions always return 0 or 1 (Uint8).</p>
 <dl class="docutils">
-<dt>Сравнивать можно следующие типы:</dt>
+<dt>The following types can be compared:</dt>
 <dd><ul class="first last simple">
-<li>числа;</li>
-<li>строки и фиксированные строки;</li>
-<li>даты;</li>
-<li>даты-с-временем;</li>
+<li>numbers</li>
+<li>strings and fixed strings</li>
+<li>dates</li>
+<li>dates with times</li>
 </ul>
 </dd>
 </dl>
-<p>внутри каждой группы, но не из разных групп.</p>
-<p>Например, вы не можете сравнить дату со строкой. Надо использовать функцию преобразования строки в дату или наоборот.</p>
-<p>Строки сравниваются побайтово. Более короткая строка меньше всех строк, начинающихся с неё и содержащих ещё хотя бы один символ.</p>
-<p>Замечание. До версии 1.1.54134 сравнение знаковых и беззнаковых целых чисел производилось также, как в C++. То есть, вы могли получить неверный результат в таких случаях: SELECT 9223372036854775807 &gt; -1. С версии 1.1.54134 поведение изменилось и стало математически корректным.</p>
-<div class="section" id="equals-a-b-a-b">
-<h2>equals, оператор a = b и a == b<a class="headerlink" href="#equals-a-b-a-b" title="Permalink to this headline">¶</a></h2>
+<p>within each group, but not between different groups.</p>
+<p>For example, you can&#8217;t compare a date with a string. You have to use a function to convert the string to a date, or vice versa.</p>
+<p>Strings are compared by bytes. A shorter string is smaller than all strings that start with it and that contain at least one more character.</p>
+<p>Note: before version 1.1.54134 signed and unsigned numbers were compared the same way as in C++. That is, you could got an incorrect result in such cases: SELECT 9223372036854775807 &gt; -1. From version 1.1.54134, the behavior has changed and numbers are compared mathematically correct.</p>
+<div class="section" id="equals-a-b-and-a-b-operator">
+<h2>equals, a = b and a == b operator<a class="headerlink" href="#equals-a-b-and-a-b-operator" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="notequals-a-b-a-b">
-<h2>notEquals, оператор a != b и a &lt;&gt; b<a class="headerlink" href="#notequals-a-b-a-b" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="notequals-a-b-and-a-b-operator">
+<h2>notEquals, a != b and a &lt;&gt; b operator<a class="headerlink" href="#notequals-a-b-and-a-b-operator" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="less">
-<h2>less, оператор &lt;<a class="headerlink" href="#less" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="less-operator">
+<h2>less, &lt; operator<a class="headerlink" href="#less-operator" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="greater">
-<h2>greater, оператор &gt;<a class="headerlink" href="#greater" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="greater-operator">
+<h2>greater, &gt; operator<a class="headerlink" href="#greater-operator" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="lessorequals">
-<h2>lessOrEquals, оператор &lt;=<a class="headerlink" href="#lessorequals" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="lessorequals-operator">
+<h2>lessOrEquals, &lt;= operator<a class="headerlink" href="#lessorequals-operator" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="greaterorequals">
-<h2>greaterOrEquals, оператор &gt;=<a class="headerlink" href="#greaterorequals" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="greaterorequals-operator">
+<h2>greaterOrEquals, &gt;= operator<a class="headerlink" href="#greaterorequals-operator" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -93,33 +83,119 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Функции сравнения</a><ul>
-<li><a class="reference internal" href="#equals-a-b-a-b">equals, оператор a = b и a == b</a></li>
-<li><a class="reference internal" href="#notequals-a-b-a-b">notEquals, оператор a != b и a &lt;&gt; b</a></li>
-<li><a class="reference internal" href="#less">less, оператор &lt;</a></li>
-<li><a class="reference internal" href="#greater">greater, оператор &gt;</a></li>
-<li><a class="reference internal" href="#lessorequals">lessOrEquals, оператор &lt;=</a></li>
-<li><a class="reference internal" href="#greaterorequals">greaterOrEquals, оператор &gt;=</a></li>
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Functions</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="arithmetic_functions.html">Arithmetic functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="array_functions.html">Functions for working with arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="array_join.html">arrayJoin function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bit_functions.html">Bit functions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Comparison functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#equals-a-b-and-a-b-operator">equals, a = b and a == b operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#notequals-a-b-and-a-b-operator">notEquals, a != b and a &lt;&gt; b operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#less-operator">less, &lt; operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#greater-operator">greater, &gt; operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lessorequals-operator">lessOrEquals, &lt;= operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#greaterorequals-operator">greaterOrEquals, &gt;= operator</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="conditional_functions.html">Conditional functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="date_time_functions.html">Functions for working with dates and times</a></li>
+<li class="toctree-l2"><a class="reference internal" href="encoding_functions.html">Encoding functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ext_dict_functions.html">Functions for working with external dictionaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hash_functions.html">Hash functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="higher_order_functions.html">Higher-order functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="in_functions.html">Functions for implementing the IN operator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ip_address_functions.html">Functions for working with IP addresses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json_functions.html">Functions for working with JSON.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logical_functions.html">Logical functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="math_functions.html">Mathematical functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_functions.html">Other functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="random_functions.html">Functions for generating pseudo-random numbers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rounding_functions.html">Rounding functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="splitting_merging_functions.html">Functions for splitting and merging strings and arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_functions.html">Functions for working with strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_replace_functions.html">Functions for searching and replacing in strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_search_functions.html">Functions for searching strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="type_conversion_functions.html">Type conversion functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="url_functions.html">Functions for working with URLs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ym_dict_functions.html">Functions for working with Yandex.Metrica dictionaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#strong-typing">Strong typing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#common-subexpression-elimination">Common subexpression elimination</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#types-of-results">Types of results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#constants">Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#immutability">Immutability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#error-handling">Error handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#evaluation-of-argument-expressions">Evaluation of argument expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#performing-functions-for-distributed-query-processing">Performing functions for distributed query processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="bit_functions.html"
-                        title="previous chapter">Битовые функции</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="conditional_functions.html"
-                        title="next chapter">Условные функции</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/functions/comparison_functions.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Functions</a><ul>
+      <li>Previous: <a href="bit_functions.html" title="previous chapter">Bit functions</a></li>
+      <li>Next: <a href="conditional_functions.html" title="next chapter">Conditional functions</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -136,25 +212,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="conditional_functions.html" title="Условные функции"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="bit_functions.html" title="Битовые функции"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Функции</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

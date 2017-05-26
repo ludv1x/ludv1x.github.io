@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>XML &mdash; ClickHouse 1 documentation</title>
+    <title>XML &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,38 +23,28 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Форматы" href="index.html" />
-    <link rel="next" title="Типы данных" href="../data_types/index.html" />
-    <link rel="prev" title="Vertical" href="vertical.html" /> 
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Formats" href="index.html" />
+    <link rel="next" title="Data types" href="../data_types/index.html" />
+    <link rel="prev" title="Vertical" href="vertical.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../data_types/index.html" title="Типы данных"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="vertical.html" title="Vertical"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Форматы</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="xml">
 <h1>XML<a class="headerlink" href="#xml" title="Permalink to this headline">¶</a></h1>
-<p>Формат XML подходит только для вывода данных, не для парсинга. Пример:</p>
+<p>XML format is supported only for displaying data, not for INSERTS. Example:</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="cp">&lt;?xml version=&#39;1.0&#39; encoding=&#39;UTF-8&#39; ?&gt;</span>
 <span class="nt">&lt;result&gt;</span>
         <span class="nt">&lt;meta&gt;</span>
@@ -75,39 +65,39 @@
                         <span class="nt">&lt;field&gt;</span>8267016<span class="nt">&lt;/field&gt;</span>
                 <span class="nt">&lt;/row&gt;</span>
                 <span class="nt">&lt;row&gt;</span>
-                        <span class="nt">&lt;SearchPhrase&gt;</span>интерьер ванной комнаты<span class="nt">&lt;/SearchPhrase&gt;</span>
+                        <span class="nt">&lt;SearchPhrase&gt;</span>bathroom interior<span class="nt">&lt;/SearchPhrase&gt;</span>
                         <span class="nt">&lt;field&gt;</span>2166<span class="nt">&lt;/field&gt;</span>
                 <span class="nt">&lt;/row&gt;</span>
                 <span class="nt">&lt;row&gt;</span>
-                        <span class="nt">&lt;SearchPhrase&gt;</span>яндекс<span class="nt">&lt;/SearchPhrase&gt;</span>
+                        <span class="nt">&lt;SearchPhrase&gt;</span>yandex&gt;
                         <span class="nt">&lt;field&gt;</span>1655<span class="nt">&lt;/field&gt;</span>
                 <span class="nt">&lt;/row&gt;</span>
                 <span class="nt">&lt;row&gt;</span>
-                        <span class="nt">&lt;SearchPhrase&gt;</span>весна 2014 мода<span class="nt">&lt;/SearchPhrase&gt;</span>
+                        <span class="nt">&lt;SearchPhrase&gt;</span>spring 2014 fashion<span class="nt">&lt;/SearchPhrase&gt;</span>
                         <span class="nt">&lt;field&gt;</span>1549<span class="nt">&lt;/field&gt;</span>
                 <span class="nt">&lt;/row&gt;</span>
                 <span class="nt">&lt;row&gt;</span>
-                        <span class="nt">&lt;SearchPhrase&gt;</span>фриформ фото<span class="nt">&lt;/SearchPhrase&gt;</span>
+                        <span class="nt">&lt;SearchPhrase&gt;</span>free-form photo<span class="nt">&lt;/SearchPhrase&gt;</span>
                         <span class="nt">&lt;field&gt;</span>1480<span class="nt">&lt;/field&gt;</span>
                 <span class="nt">&lt;/row&gt;</span>
                 <span class="nt">&lt;row&gt;</span>
-                        <span class="nt">&lt;SearchPhrase&gt;</span>анджелина джоли<span class="nt">&lt;/SearchPhrase&gt;</span>
+                        <span class="nt">&lt;SearchPhrase&gt;</span>Angelina Jolie<span class="nt">&lt;/SearchPhrase&gt;</span>
                         <span class="nt">&lt;field&gt;</span>1245<span class="nt">&lt;/field&gt;</span>
                 <span class="nt">&lt;/row&gt;</span>
                 <span class="nt">&lt;row&gt;</span>
-                        <span class="nt">&lt;SearchPhrase&gt;</span>омск<span class="nt">&lt;/SearchPhrase&gt;</span>
+                        <span class="nt">&lt;SearchPhrase&gt;</span>omsk<span class="nt">&lt;/SearchPhrase&gt;</span>
                         <span class="nt">&lt;field&gt;</span>1112<span class="nt">&lt;/field&gt;</span>
                 <span class="nt">&lt;/row&gt;</span>
                 <span class="nt">&lt;row&gt;</span>
-                        <span class="nt">&lt;SearchPhrase&gt;</span>фото собак разных пород<span class="nt">&lt;/SearchPhrase&gt;</span>
+                        <span class="nt">&lt;SearchPhrase&gt;</span>photos of dog breeds<span class="nt">&lt;/SearchPhrase&gt;</span>
                         <span class="nt">&lt;field&gt;</span>1091<span class="nt">&lt;/field&gt;</span>
                 <span class="nt">&lt;/row&gt;</span>
                 <span class="nt">&lt;row&gt;</span>
-                        <span class="nt">&lt;SearchPhrase&gt;</span>дизайн штор<span class="nt">&lt;/SearchPhrase&gt;</span>
+                        <span class="nt">&lt;SearchPhrase&gt;</span>curtain design<span class="nt">&lt;/SearchPhrase&gt;</span>
                         <span class="nt">&lt;field&gt;</span>1064<span class="nt">&lt;/field&gt;</span>
                 <span class="nt">&lt;/row&gt;</span>
                 <span class="nt">&lt;row&gt;</span>
-                        <span class="nt">&lt;SearchPhrase&gt;</span>баку<span class="nt">&lt;/SearchPhrase&gt;</span>
+                        <span class="nt">&lt;SearchPhrase&gt;</span>baku<span class="nt">&lt;/SearchPhrase&gt;</span>
                         <span class="nt">&lt;field&gt;</span>1000<span class="nt">&lt;/field&gt;</span>
                 <span class="nt">&lt;/row&gt;</span>
         <span class="nt">&lt;/data&gt;</span>
@@ -116,31 +106,112 @@
 <span class="nt">&lt;/result&gt;</span>
 </pre></div>
 </div>
-<p>Если имя столбца не имеет некоторый допустимый вид, то в качестве имени элемента используется просто field. В остальном, структура XML повторяет структуру в формате JSON.
-Как и для формата JSON, невалидные UTF-8 последовательности заменяются на replacement character � и, таким образом, выводимый текст будет состоять из валидных UTF-8 последовательностей.</p>
-<p>В строковых значениях, экранируются символы <tt class="docutils literal"><span class="pre">&lt;</span></tt> и <tt class="docutils literal"><span class="pre">&amp;</span></tt> как <tt class="docutils literal"><span class="pre">&amp;lt;</span></tt> и <tt class="docutils literal"><span class="pre">&amp;amp;</span></tt>.</p>
-<p>Массивы выводятся как <tt class="docutils literal"><span class="pre">&lt;array&gt;&lt;elem&gt;Hello&lt;/elem&gt;&lt;elem&gt;World&lt;/elem&gt;...&lt;/array&gt;</span></tt>,
-а кортежи как <tt class="docutils literal"><span class="pre">&lt;tuple&gt;&lt;elem&gt;Hello&lt;/elem&gt;&lt;elem&gt;World&lt;/elem&gt;...&lt;/tuple&gt;</span></tt>.</p>
+<p>If name of a column contains some unacceptable character, field is used as a name. In other aspects XML uses JSON structure.
+As in case of JSON, invalid UTF-8 sequences are replaced by replacement character � so displayed text will only contain valid UTF-8 sequences.</p>
+<p>In string values <code class="docutils literal"><span class="pre">&lt;</span></code> and <code class="docutils literal"><span class="pre">&amp;</span></code> are displayed as <code class="docutils literal"><span class="pre">&amp;lt;</span></code> and <code class="docutils literal"><span class="pre">&amp;amp;</span></code>.</p>
+<p>Arrays are displayed as <code class="docutils literal"><span class="pre">&lt;array&gt;&lt;elem&gt;Hello&lt;/elem&gt;&lt;elem&gt;World&lt;/elem&gt;...&lt;/array&gt;</span></code>,
+and tuples as <code class="docutils literal"><span class="pre">&lt;tuple&gt;&lt;elem&gt;Hello&lt;/elem&gt;&lt;elem&gt;World&lt;/elem&gt;...&lt;/tuple&gt;</span></code>.</p>
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="vertical.html"
-                        title="previous chapter">Vertical</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="../data_types/index.html"
-                        title="next chapter">Типы данных</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/formats/xml.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Formats</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="blocktabseparated.html">BlockTabSeparated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="csv.html">CSV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="csvwithnames.html">CSVWithNames</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json.html">JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsoncompact.html">JSONCompact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsoneachrow.html">JSONEachRow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="native.html">Native</a></li>
+<li class="toctree-l2"><a class="reference internal" href="null.html">Null</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pretty.html">Pretty</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prettycompact.html">PrettyCompact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prettycompactmonoblock.html">PrettyCompactMonoBlock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prettynoescapes.html">PrettyNoEscapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prettynoescapes.html#prettycompactnoescapes">PrettyCompactNoEscapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prettynoescapes.html#prettyspacenoescapes">PrettySpaceNoEscapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prettyspace.html">PrettySpace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rowbinary.html">RowBinary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tabseparated.html">TabSeparated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tabseparatedraw.html">TabSeparatedRaw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tabseparatedwithnames.html">TabSeparatedWithNames</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tabseparatedwithnamesandtypes.html">TabSeparatedWithNamesAndTypes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tskv.html">TSKV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="values.html">Values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vertical.html">Vertical</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">XML</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Formats</a><ul>
+      <li>Previous: <a href="vertical.html" title="previous chapter">Vertical</a></li>
+      <li>Next: <a href="../data_types/index.html" title="next chapter">Data types</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -157,25 +228,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../data_types/index.html" title="Типы данных"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="vertical.html" title="Vertical"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Форматы</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

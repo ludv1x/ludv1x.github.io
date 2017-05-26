@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Производительность &mdash; ClickHouse 1 documentation</title>
+    <title>Performance &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,54 +23,44 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Введение" href="index.html" />
-    <link rel="next" title="Начало работы" href="../getting_started.html" />
-    <link rel="prev" title="Возможные глупые вопросы" href="possible_silly_questions.html" /> 
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Introduction" href="index.html" />
+    <link rel="next" title="Getting started" href="../getting_started.html" />
+    <link rel="prev" title="Possible silly questions" href="possible_silly_questions.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../getting_started.html" title="Начало работы"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="possible_silly_questions.html" title="Возможные глупые вопросы"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Введение</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="id1">
-<h1>Производительность<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
-<p>По результатам внутреннего тестирования, ClickHouse обладает наиболее высокой производительностью (как наиболее высоким throughput на длинных запросах, так и наиболее низкой latency на коротких запросах), при соответствующем сценарии работы, среди доступных для тестирования систем подобного класса. Результаты тестирования можно посмотреть на отдельной странице.</p>
-<div class="section" id="id2">
-<h2>Пропускная способность при обработке одного большого запроса<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
-<p>Пропускную способность можно измерять в строчках в секунду и в мегабайтах в секунду. При условии, что данные помещаются в page cache, не слишком сложный запрос обрабатывается на современном железе со скоростью около 2-10 GB/sec. несжатых данных на одном сервере (в простейшем случае скорость может достигать 30 GB/sec). Если данные не помещаются в page cache, то скорость работы зависит от скорости дисковой подсистемы и коэффициента сжатия данных. Например, если дисковая подсистема позволяет читать данные со скоростью 400 MB/sec., а коэффициент сжатия данных составляет 3, то скорость будет около 1.2GB/sec. Для получения скорости в строчках в секунду, следует поделить скорость в байтах в секунду на суммарный размер используемых в запросе столбцов. Например, если вынимаются столбцы на 10 байт, то скорость будет в районе 100-200 млн. строчек в секунду.</p>
-<p>При распределённой обработке запроса, скорость обработки запроса растёт почти линейно, но только при условии, что в результате агрегации или при сортировке получается не слишком большое множество строчек.</p>
+  <div class="section" id="performance">
+<h1>Performance<a class="headerlink" href="#performance" title="Permalink to this headline">¶</a></h1>
+<p>According to internal testing results, ClickHouse shows the best performance for comparable operating scenarios among systems of its class that were available for testing. This includes the highest throughput for long queries, and the lowest latency on short queries. Testing results are shown on this page.</p>
+<div class="section" id="throughput-for-a-single-large-query">
+<h2>Throughput for a single large query<a class="headerlink" href="#throughput-for-a-single-large-query" title="Permalink to this headline">¶</a></h2>
+<p>Throughput can be measured in rows per second or in megabytes per second. If the data is placed in the page cache, a query that is not too complex is processed on modern hardware at a speed of approximately 2-10 GB/s of uncompressed data on a single server (for the simplest cases, the speed may reach 30 GB/s). If data is not placed in the page cache, the speed depends on the disk subsystem and the data compression rate. For example, if the disk subsystem allows reading data at 400 MB/s, and the data compression rate is 3, the speed will be around 1.2 GB/s. To get the speed in rows per second, divide the speed in bytes per second by the total size of the columns used in the query. For example, if 10 bytes of columns are extracted, the speed will be around 100-200 million rows per second.</p>
+<p>The processing speed increases almost linearly for distributed processing, but only if the number of rows resulting from aggregation or sorting is not too large.</p>
 </div>
-<div class="section" id="id3">
-<h2>Задержки при обработке коротких запросов.<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
-<p>Если запрос использует первичный ключ, и выбирает для обработки не слишком большое количество строчек (сотни тысяч), и использует не слишком большое количество столбцов, то вы можете рассчитывать на latency менее 50 миллисекунд (от единиц миллисекунд в лучшем случае), при условии, что данные помещаются в page cache. Иначе latency вычисляется из количества seek-ов. Если вы используйте вращающиеся диски, то на не слишком сильно нагруженной системе, latency вычисляется по формуле: seek time (10 мс.) * количество столбцов в запросе * количество кусков с данными.</p>
+<div class="section" id="latency-when-processing-short-queries">
+<h2>Latency when processing short queries.<a class="headerlink" href="#latency-when-processing-short-queries" title="Permalink to this headline">¶</a></h2>
+<p>If a query uses a primary key and does not select too many rows to process (hundreds of thousands), and does not use too many columns, we can expect less than 50 milliseconds of latency (single digits of milliseconds in the best case) if data is placed in the page cache. Otherwise, latency is calculated from the number of seeks. If you use rotating drives, for a system that is not overloaded, the latency is calculated by this formula: seek time (10 ms) * number of columns queried * number of data parts.</p>
 </div>
-<div class="section" id="id4">
-<h2>Пропускная способность при обработке большого количества коротких запросов.<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
-<p>При тех же условиях, ClickHouse может обработать несколько сотен (до нескольких тысяч в лучшем случае) запросов в секунду на одном сервере. Так как такой сценарий работы не является типичным для аналитических СУБД, рекомендуется рассчитывать не более чем на 100 запросов в секунду.</p>
+<div class="section" id="throughput-when-processing-a-large-quantity-of-short-queries">
+<h2>Throughput when processing a large quantity of short queries.<a class="headerlink" href="#throughput-when-processing-a-large-quantity-of-short-queries" title="Permalink to this headline">¶</a></h2>
+<p>Under the same conditions, ClickHouse can handle several hundred queries per second on a single server (up to several thousand in the best case). Since this scenario is not typical for analytical DBMSs, we recommend expecting a maximum of 100 queries per second.</p>
 </div>
-<div class="section" id="id5">
-<h2>Производительность при вставке данных.<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
-<p>Данные рекомендуется вставлять пачками не менее 1000 строк или не более одного запроса в секунду. При вставке в таблицу типа MergeTree из tab-separated дампа, скорость вставки будет в районе 50-200 МБ/сек. Если вставляются строчки размером около 1 КБ, то скорость будет в районе 50 000 - 200 000 строчек в секунду. Если строчки маленькие - производительность в строчках в секунду будет выше (на данных БК - &gt; 500 000 строк в секунду, на данных Graphite - &gt; 1 000 000 строк в секунду). Для увеличения производительности, можно производить несколько запросов INSERT параллельно - при этом производительность растёт линейно.</p>
+<div class="section" id="performance-on-data-insertion">
+<h2>Performance on data insertion.<a class="headerlink" href="#performance-on-data-insertion" title="Permalink to this headline">¶</a></h2>
+<p>We recommend inserting data in packets of at least 1000 rows, or no more than a single request per second. When inserting to a MergeTree table from a tab-separated dump, the insertion speed will be from 50 to 200 MB/s. If the inserted rows are around 1 Kb in size, the speed will be from 50,000 to 200,000 rows per second. If the rows are small, the performance will be higher in rows per second (on Yandex Banner System data -&gt; 500,000 rows per second, on Graphite data -&gt; 1,000,000 rows per second). To improve performance, you can make multiple INSERT queries in parallel, and performance will increase linearly.</p>
 </div>
 </div>
 
@@ -78,31 +68,90 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Производительность</a><ul>
-<li><a class="reference internal" href="#id2">Пропускная способность при обработке одного большого запроса</a></li>
-<li><a class="reference internal" href="#id3">Задержки при обработке коротких запросов.</a></li>
-<li><a class="reference internal" href="#id4">Пропускная способность при обработке большого количества коротких запросов.</a></li>
-<li><a class="reference internal" href="#id5">Производительность при вставке данных.</a></li>
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Introduction</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="what_is_clickhouse.html">What is ClickHouse?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distinctive_features.html">Distinctive features of ClickHouse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="features.html">ClickHouse features that can be considered disadvantages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ya_metrika_task.html">The Yandex.Metrica task</a></li>
+<li class="toctree-l2"><a class="reference internal" href="use_case.html">Usage in Yandex.Metrica and other Yandex services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="possible_silly_questions.html">Possible silly questions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Performance</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#throughput-for-a-single-large-query">Throughput for a single large query</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#latency-when-processing-short-queries">Latency when processing short queries.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#throughput-when-processing-a-large-quantity-of-short-queries">Throughput when processing a large quantity of short queries.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#performance-on-data-insertion">Performance on data insertion.</a></li>
 </ul>
 </li>
 </ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
+</ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="possible_silly_questions.html"
-                        title="previous chapter">Возможные глупые вопросы</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="../getting_started.html"
-                        title="next chapter">Начало работы</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/introduction/performance.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Introduction</a><ul>
+      <li>Previous: <a href="possible_silly_questions.html" title="previous chapter">Possible silly questions</a></li>
+      <li>Next: <a href="../getting_started.html" title="next chapter">Getting started</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -119,25 +168,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../getting_started.html" title="Начало работы"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="possible_silly_questions.html" title="Возможные глупые вопросы"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Введение</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

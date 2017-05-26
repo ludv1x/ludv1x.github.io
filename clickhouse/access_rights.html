@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Права доступа &mdash; ClickHouse 1 documentation</title>
+    <title>Access rights &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,80 +23,54 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="index.html" />
-    <link rel="next" title="Квоты" href="quotas.html" />
-    <link rel="prev" title="Конфигурационные файлы" href="configuration_files.html" /> 
+    <link rel="top" title="ClickHouse  documentation" href="index.html" />
+    <link rel="next" title="Quotas" href="quotas.html" />
+    <link rel="prev" title="Configuration files" href="configuration_files.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="quotas.html" title="Квоты"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="configuration_files.html" title="Конфигурационные файлы"
-             accesskey="P">previous</a> |</li>
-        <li><a href="index.html">ClickHouse 1 documentation</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="id1">
-<h1>Права доступа<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
-<p>Пользователи и права доступа настраиваются в конфиге пользователей. Обычно это <tt class="docutils literal"><span class="pre">users.xml</span></tt>.</p>
-<p>Пользователи прописаны в секции users. Рассмотрим фрагмент файла <tt class="docutils literal"><span class="pre">users.xml</span></tt>:</p>
-<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="c">&lt;!-- Пользователи и ACL. --&gt;</span>
+  <div class="section" id="access-rights">
+<h1>Access rights<a class="headerlink" href="#access-rights" title="Permalink to this headline">¶</a></h1>
+<p>Users and access rights are set up in the user config. This is usually <code class="docutils literal"><span class="pre">users.xml</span></code>.</p>
+<p>Users are recorded in the <code class="docutils literal"><span class="pre">users</span></code> section. Let&#8217;s look at part of the <code class="docutils literal"><span class="pre">users.xml</span></code> file:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="c">&lt;!-- Users and ACL. --&gt;</span>
 <span class="nt">&lt;users&gt;</span>
-    <span class="c">&lt;!-- Если имя пользователя не указано, используется пользователь default. --&gt;</span>
+    <span class="c">&lt;!-- If the username is not specified, the default user is used. --&gt;</span>
     <span class="nt">&lt;default&gt;</span>
-        <span class="c">&lt;!-- Password could be specified in plaintext or in SHA256 (in hex format).</span>
-
-<span class="c">             If you want to specify password in plaintext (not recommended), place it in &#39;password&#39; element.</span>
-<span class="c">             Example: &lt;password&gt;qwerty&lt;/password&gt;.</span>
-<span class="c">             Password could be empty.</span>
-
-<span class="c">             If you want to specify SHA256, place it in &#39;password_sha256_hex&#39; element.</span>
-<span class="c">             Example: &lt;password_sha256_hex&gt;65e84be33532fb784c48129675f9eff3a682b27168c0ea744b2cf58ee02337c5&lt;/password_sha256_hex&gt;</span>
-
-<span class="c">             How to generate decent password:</span>
-<span class="c">             Execute: PASSWORD=$(base64 &lt; /dev/urandom | head -c8); echo &quot;$PASSWORD&quot;; echo -n &quot;$PASSWORD&quot; | sha256sum | tr -d &#39;-&#39;</span>
-<span class="c">             In first line will be password and in second - corresponding SHA256.</span>
-<span class="c">        --&gt;</span>
+        <span class="c">&lt;!-- Password (in plaintext). May be empty. --&gt;</span>
         <span class="nt">&lt;password&gt;&lt;/password&gt;</span>
 
-        <span class="c">&lt;!-- Список сетей, из которых разрешён доступ.</span>
-<span class="c">            Каждый элемент списка имеет одну из следующих форм:</span>
-<span class="c">            &lt;ip&gt; IP-адрес или маска подсети. Например, 222.111.222.3 или 10.0.0.1/8 или 2a02:6b8::3 или 2a02:6b8::3/64.</span>
-<span class="c">            &lt;host&gt; Имя хоста. Например: example01. Для проверки делается DNS-запрос, и все полученные адреса сравниваются с адресом клиента.</span>
-<span class="c">            &lt;host_regexp&gt; Регулярное выражение для имён хостов. Например, ^example\d\d-\d\d-\d\.yandex\.ru$</span>
-<span class="c">                Для проверки, для адреса клиента делается DNS PTR-запрос и к результату применяется регулярное выражение.</span>
-<span class="c">                Потом для результата PTR-запроса делается снова DNS-запрос, и все полученные адреса сравниваются с адресом клиента.</span>
-<span class="c">                Настоятельно рекомендуется, чтобы регулярное выражение заканчивалось на \.yandex\.ru$.</span>
+        <span class="c">&lt;!-- List of networks that access is allowed from. Each list item has one of the following forms:</span>
+<span class="c">            &lt;ip&gt; IP address or subnet mask. For example, 222.111.222.3 or 10.0.0.1/8 or 2a02:6b8::3 or 2a02:6b8::3/64.</span>
+<span class="c">            &lt;host&gt; Host name. Example: example01. A DNS query is made for verification, and all received address are compared to the client address.</span>
+<span class="c">            &lt;host_regexp&gt; Regex for host names. For example, ^example\d\d-\d\d-\d\.yandex\.ru$</span>
+<span class="c">                A DNS PTR query is made to verify the client address and the regex is applied to the result.</span>
+<span class="c">                Then another DNS query is made for the result of the PTR query, and all received address are compared to the client address.</span>
+<span class="c">                We strongly recommend that the regex ends with \.yandex\.ru$. If you are installing ClickHouse independently, here you should specify:</span>
+<span class="c">            &lt;networks&gt;</span>
+<span class="c">                &lt;ip&gt;::/0&lt;/ip&gt;</span>
+<span class="c">            &lt;/networks&gt; --&gt;</span>
 
-<span class="c">            Если вы устанавливаете ClickHouse самостоятельно, укажите здесь:</span>
-<span class="c">                &lt;networks&gt;</span>
-<span class="c">                        &lt;ip&gt;::/0&lt;/ip&gt;</span>
-<span class="c">                &lt;/networks&gt;</span>
-<span class="c">        --&gt;</span>
         <span class="nt">&lt;networks</span> <span class="na">incl=</span><span class="s">&quot;networks&quot;</span> <span class="nt">/&gt;</span>
-
-        <span class="c">&lt;!-- Профиль настроек, использующийся для пользователя. --&gt;</span>
+        <span class="c">&lt;!-- Settings profile for the user. --&gt;</span>
         <span class="nt">&lt;profile&gt;</span>default<span class="nt">&lt;/profile&gt;</span>
-
-        <span class="c">&lt;!-- Квота, использующаяся для пользователя. --&gt;</span>
+        <span class="c">&lt;!-- Quota for the user. --&gt;</span>
         <span class="nt">&lt;quota&gt;</span>default<span class="nt">&lt;/quota&gt;</span>
     <span class="nt">&lt;/default&gt;</span>
 
-    <span class="c">&lt;!-- Для запросов из пользовательского интерфейса Метрики через API для данных по отдельным счётчикам. --&gt;</span>
+    <span class="c">&lt;!-- For queries from the user interface. --&gt;</span>
     <span class="nt">&lt;web&gt;</span>
         <span class="nt">&lt;password&gt;&lt;/password&gt;</span>
         <span class="nt">&lt;networks</span> <span class="na">incl=</span><span class="s">&quot;networks&quot;</span> <span class="nt">/&gt;</span>
@@ -105,10 +79,10 @@
     <span class="nt">&lt;/web&gt;</span>
 </pre></div>
 </div>
-<p>Здесь видно объявление двух пользователей - <tt class="docutils literal"><span class="pre">default</span></tt> и <tt class="docutils literal"><span class="pre">web</span></tt>. Пользователя web мы добавили самостоятельно.
-Пользователь default выбирается в случаях, когда имя пользователя не передаётся, поэтому такой пользователь должен присутствовать в конфигурационном файле обязательно. Также пользователь default используется при распределённой обработки запроса - система ходит на удалённые серверы под ним. Поэтому, у пользователя default должен быть пустой пароль и не должно быть выставлено существенных ограничений или квот - иначе распределённые запросы сломаются.</p>
-<p>Пароль указывается либо в открытом виде (не рекомендуется), либо в виде SHA-256. Хэш не содержит соль. В связи с этим, не следует рассматривать такие пароли, как защиту от потенциального злоумышленника. Скорее, они нужны для защиты от сотрудников.</p>
-<p>Указывается список сетей, из которых разрешён доступ. В этом примере, список сетей для обеих пользователей, загружается из отдельного файла (/etc/metrika.xml), содержащего подстановку networks. Вот его фрагмент:</p>
+<p>Here we can see that two users are declared: <code class="docutils literal"><span class="pre">default</span></code> and <code class="docutils literal"><span class="pre">web</span></code>. We added the <code class="docutils literal"><span class="pre">web</span></code> user ourselves.
+The <code class="docutils literal"><span class="pre">default</span></code> user is chosen in cases when the username is not passed, so this user must be present in the config file. The <code class="docutils literal"><span class="pre">default</span></code> user is also used for distributed query processing - the system accesses remote servers under this username. So the <code class="docutils literal"><span class="pre">default</span></code> user must have an empty password and must not have substantial restrictions or quotas - otherwise, distributed queries will fail.</p>
+<p>The password is specified in plain text directly in the config. In this regard, you should not consider these passwords as providing security against potential malicious attacks. Rather, they are necessary for protection from Yandex employees.</p>
+<p>A list of networks is specified that access is allowed from. In this example, the list of networks for both users is loaded from a separate file (<code class="docutils literal"><span class="pre">/etc/metrika.xml</span></code>) containing the <code class="docutils literal"><span class="pre">networks</span></code> substitution. Here is a fragment of it:</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;yandex&gt;</span>
     ...
     <span class="nt">&lt;networks&gt;</span>
@@ -120,31 +94,84 @@
 <span class="nt">&lt;/yandex&gt;</span>
 </pre></div>
 </div>
-<p>Можно было бы указать этот список сетей непосредственно в users.xml, или в файле в директории users.d (подробнее смотрите раздел &#8220;Конфигурационные файлы&#8221;).</p>
-<p>В конфиге приведён комментарий, указывающий, как можно открыть доступ отовсюду.</p>
-<p>Для продакшен использования, указывайте только элементы вида ip (IP-адреса и их маски), так как использование host и host_regexp может вызывать лишние задержки.</p>
-<p>Далее указывается используемый профиль настроек пользователя (смотрите раздел &#8220;Профили настроек&#8221;). Вы можете указать профиль по умолчанию - default. Профиль может называться как угодно; один и тот же профиль может быть указан для разных пользователей. Наиболее важная вещь, которую вы можете прописать в профиле настроек - настройку readonly, равную 1, что обеспечивает доступ только на чтение.</p>
-<p>Затем указывается используемая квота (смотрите раздел &#8220;Квоты&#8221;). Вы можете указать квоту по умолчанию - default. Она настроена в конфиге по умолчанию так, что только считает использование ресурсов, но никак их не ограничивает. Квота может называться как угодно; одна и та же квота может быть указана для разных пользователей - в этом случае, подсчёт использования ресурсов делается для каждого пользователя по отдельности.</p>
+<p>We could have defined this list of networks directly in <code class="docutils literal"><span class="pre">users.xml</span></code>, or in a file in the <code class="docutils literal"><span class="pre">users.d</span></code> directory (for more information, see the section &#8220;Configuration files&#8221;).</p>
+<p>The config includes comments explaining how to open access from everywhere.</p>
+<p>For use in production, only specify IP elements (IP addresses and their masks), since using <code class="docutils literal"><span class="pre">host</span></code> and <code class="docutils literal"><span class="pre">host_regexp</span></code> might cause extra latency.</p>
+<p>Next the user settings profile is specified (see the section &#8220;Settings profiles&#8221;). You can specify the default profile, <code class="docutils literal"><span class="pre">default</span></code>. The profile can have any name. You can specify the same profile for different users. The most important thing you can write in the settings profile is <code class="docutils literal"><span class="pre">readonly</span></code> set to <code class="docutils literal"><span class="pre">1</span></code>, which provides read-only access.</p>
+<p>After this, the quota is defined (see the section &#8220;Quotas&#8221;). You can specify the default quota, <code class="docutils literal"><span class="pre">default</span></code>. It is set in the config by default so that it only counts resource usage, but does not restrict it. The quota can have any name. You can specify the same quota for different users - in this case, resource usage is calculated for each user individually.</p>
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="configuration_files.html"
-                        title="previous chapter">Конфигурационные файлы</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="quotas.html"
-                        title="next chapter">Квоты</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/access_rights.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quotas.html">Quotas</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="configuration_files.html" title="previous chapter">Configuration files</a></li>
+      <li>Next: <a href="quotas.html" title="next chapter">Quotas</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -161,24 +188,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="quotas.html" title="Квоты"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="configuration_files.html" title="Конфигурационные файлы"
-             >previous</a> |</li>
-        <li><a href="index.html">ClickHouse 1 documentation</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Функции хэширования &mdash; ClickHouse 1 documentation</title>
+    <title>Hash functions &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,81 +23,70 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Функции" href="index.html" />
-    <link rel="next" title="Функции высшего порядка" href="higher_order_functions.html" />
-    <link rel="prev" title="Функции для работы с внешними словарями" href="ext_dict_functions.html" /> 
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Functions" href="index.html" />
+    <link rel="next" title="Higher-order functions" href="higher_order_functions.html" />
+    <link rel="prev" title="Functions for working with external dictionaries" href="ext_dict_functions.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="higher_order_functions.html" title="Функции высшего порядка"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="ext_dict_functions.html" title="Функции для работы с внешними словарями"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Функции</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="id1">
-<h1>Функции хэширования<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
-<p>Функции хэширования могут использоваться для детерминированного псевдослучайного разбрасывания элементов.</p>
+  <div class="section" id="hash-functions">
+<h1>Hash functions<a class="headerlink" href="#hash-functions" title="Permalink to this headline">¶</a></h1>
+<p>Hash functions can be used for deterministic pseudo-random shuffling of elements.</p>
 <div class="section" id="halfmd5">
 <h2>halfMD5<a class="headerlink" href="#halfmd5" title="Permalink to this headline">¶</a></h2>
-<p>Вычисляет MD5 от строки. Затем берёт первые 8 байт от хэша и интерпретирует их как UInt64 в big endian.
-Принимает аргумент типа String. Возвращает UInt64.
-Функция работает достаточно медленно (5 миллионов коротких строк в секунду на одном процессорном ядре).
-Если вам не нужен конкретно MD5, то используйте вместо этого функцию sipHash64.</p>
+<p>Calculates the MD5 from a string. Then it takes the first 8 bytes of the hash and interprets them as UInt64 in big endian.
+Accepts a String-type argument. Returns UInt64.
+This function works fairly slowly (5 million short strings per second per processor core).
+If you don&#8217;t need MD5 in particular, use the &#8216;sipHash64&#8217; function instead.</p>
 </div>
 <div class="section" id="md5">
 <h2>MD5<a class="headerlink" href="#md5" title="Permalink to this headline">¶</a></h2>
-<p>Вычисляет MD5 от строки и возвращает полученный набор байт в виде FixedString(16).
-Если вам не нужен конкретно MD5, а нужен неплохой криптографический 128-битный хэш, то используйте вместо этого функцию sipHash128.
-Если вы хотите получить такой же результат, как выдаёт утилита md5sum, напишите lower(hex(MD5(s))).</p>
+<p>Calculates the MD5 from a string and returns the resulting set of bytes as FixedString(16).
+If you don&#8217;t need MD5 in particular, but you need a decent cryptographic 128-bit hash, use the &#8216;sipHash128&#8217; function instead.
+If you need the same result as gives &#8216;md5sum&#8217; utility, write <code class="docutils literal"><span class="pre">lower(hex(MD5(s)))</span></code>.</p>
 </div>
 <div class="section" id="siphash64">
 <h2>sipHash64<a class="headerlink" href="#siphash64" title="Permalink to this headline">¶</a></h2>
-<p>Вычисляет SipHash от строки.
-Принимает аргумент типа String. Возвращает UInt64.
-SipHash - криптографическая хэш-функция. Работает быстрее чем MD5 не менее чем в 3 раза.
-Подробнее смотрите по ссылке: <a class="reference external" href="https://131002.net/siphash/">https://131002.net/siphash/</a></p>
+<p>Calculates SipHash from a string.
+Accepts a String-type argument. Returns UInt64.
+SipHash is a cryptographic hash function. It works at least three times faster than MD5. For more information, see <a class="reference external" href="https://131002.net/siphash/">https://131002.net/siphash/</a></p>
 </div>
 <div class="section" id="siphash128">
 <h2>sipHash128<a class="headerlink" href="#siphash128" title="Permalink to this headline">¶</a></h2>
-<p>Вычисляет SipHash от строки.
-Принимает аргумент типа String. Возвращает FixedString(16).
-Отличается от sipHash64 тем, что финальный xor-folding состояния делается только до 128 бит.</p>
+<p>Calculates SipHash from a string.
+Accepts a String-type argument. Returns FixedString(16).
+Differs from sipHash64 in that the final xor-folding state is only done up to 128 bits.</p>
 </div>
 <div class="section" id="cityhash64">
 <h2>cityHash64<a class="headerlink" href="#cityhash64" title="Permalink to this headline">¶</a></h2>
-<p>Вычисляет CityHash64 от строки или похожую хэш-функцию для произвольного количества аргументов произвольного типа.
-Если аргумент имеет тип String, то используется CityHash. Это быстрая некриптографическая хэш-функция неплохого качества для строк.
-Если аргумент имеет другой тип, то используется implementation specific быстрая некриптографическая хэш-функция неплохого качества.
-Если передано несколько аргументов, то функция вычисляется по тем же правилам, с помощью комбинации по цепочке с использованием комбинатора из CityHash.
-Например, так вы можете вычислить чексумму всей таблицы с точностью до порядка строк: <tt class="docutils literal"><span class="pre">SELECT</span> <span class="pre">sum(cityHash64(*))</span> <span class="pre">FROM</span> <span class="pre">table</span></tt>.</p>
+<p>Calculates CityHash64 from a string or a similar hash function for any number of any type of arguments.
+For String-type arguments, CityHash is used. This is a fast non-cryptographic hash function for strings with decent quality.
+For other types of arguments, a decent implementation-specific fast non-cryptographic hash function is used.
+If multiple arguments are passed, the function is calculated using the same rules and chain combinations using the CityHash combinator.
+For example, you can compute the checksum of an entire table with accuracy up to the row order: <code class="docutils literal"><span class="pre">SELECT</span> <span class="pre">sum(cityHash64(*))</span> <span class="pre">FROM</span> <span class="pre">table</span></code>.</p>
 </div>
 <div class="section" id="inthash32">
 <h2>intHash32<a class="headerlink" href="#inthash32" title="Permalink to this headline">¶</a></h2>
-<p>Вычисляет 32-битный хэш-код от целого числа любого типа.
-Это сравнительно быстрая некриптографическая хэш-функция среднего качества для чисел.</p>
+<p>Calculates a 32-bit hash code from any type of integer.
+This is a relatively fast non-cryptographic hash function of average quality for numbers.</p>
 </div>
 <div class="section" id="inthash64">
 <h2>intHash64<a class="headerlink" href="#inthash64" title="Permalink to this headline">¶</a></h2>
-<p>Вычисляет 64-битный хэш-код от целого числа любого типа.
-Работает быстрее, чем intHash32. Качество среднее.</p>
+<p>Calculates a 64-bit hash code from any type of integer.
+It works faster than intHash32. Average quality.</p>
 </div>
 <div class="section" id="sha1">
 <h2>SHA1<a class="headerlink" href="#sha1" title="Permalink to this headline">¶</a></h2>
@@ -107,17 +96,17 @@ SipHash - криптографическая хэш-функция. Работа
 </div>
 <div class="section" id="sha256">
 <h2>SHA256<a class="headerlink" href="#sha256" title="Permalink to this headline">¶</a></h2>
-<p>Вычисляет SHA-1, SHA-224, SHA-256 от строки и возвращает полученный набор байт в виде FixedString(20), FixedString(28), FixedString(32).
-Функция работает достаточно медленно (SHA-1 - примерно 5 миллионов коротких строк в секунду на одном процессорном ядре, SHA-224 и SHA-256 - примерно 2.2 миллионов).
-Рекомендуется использовать эти функции лишь в тех случаях, когда вам нужна конкретная хэш-функция и вы не можете её выбрать.
-Даже в этих случаях, рекомендуется применять функцию оффлайн - заранее вычисляя значения при вставке в таблицу, вместо того, чтобы применять её при SELECT-ах.</p>
+<p>Calculates SHA-1, SHA-224, or SHA-256 from a string and returns the resulting set of bytes as FixedString(20), FixedString(28), or FixedString(32).
+The function works fairly slowly (SHA-1 processes about 5 million short strings per second per processor core, while SHA-224 and SHA-256 process about 2.2 million).
+We recommend using this function only in cases when you need a specific hash function and you can&#8217;t select it.
+Even in these cases, we recommend applying the function offline and pre-calculating values when inserting them into the table, instead of applying it in SELECTS.</p>
 </div>
 <div class="section" id="urlhash-url-n">
 <h2>URLHash(url[, N])<a class="headerlink" href="#urlhash-url-n" title="Permalink to this headline">¶</a></h2>
-<p>Быстрая некриптографическая хэш-функция неплохого качества для строки, полученной из URL путём некоторой нормализации.
-<tt class="docutils literal"><span class="pre">URLHash(s)</span></tt> - вычислить хэш от строки без одного завершающего символа <tt class="docutils literal"><span class="pre">/</span></tt>, <tt class="docutils literal"><span class="pre">?</span></tt> или <tt class="docutils literal"><span class="pre">#</span></tt> на конце, если такой там есть.
-<tt class="docutils literal"><span class="pre">URLHash(s,</span> <span class="pre">N)</span></tt> - вычислить хэш от строки до N-го уровня в иерархии URL, без одного завершающего символа <tt class="docutils literal"><span class="pre">/</span></tt>, <tt class="docutils literal"><span class="pre">?</span></tt> или <tt class="docutils literal"><span class="pre">#</span></tt> на конце, если такой там есть.
-Уровни аналогичные URLHierarchy. Функция специфична для Яндекс.Метрики.</p>
+<p>A fast, decent-quality non-cryptographic hash function for a string obtained from a URL using some type of normalization.</p>
+<p><code class="docutils literal"><span class="pre">URLHash(s)</span></code> - Calculates a hash from a string without one of the trailing symbols <code class="docutils literal"><span class="pre">/</span></code>,``?`` or <code class="docutils literal"><span class="pre">#</span></code> at the end, if present.</p>
+<p><code class="docutils literal"><span class="pre">URL</span> <span class="pre">Hash(s,</span> <span class="pre">N)</span></code> - Calculates a hash from a string up to the N level in the URL hierarchy, without one of the trailing symbols <code class="docutils literal"><span class="pre">/</span></code>,``?`` or <code class="docutils literal"><span class="pre">#</span></code> at the end, if present.
+Levels are the same as in URLHierarchy. This function is specific to Yandex.Metrica.</p>
 </div>
 </div>
 
@@ -125,38 +114,124 @@ SipHash - криптографическая хэш-функция. Работа
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Функции хэширования</a><ul>
-<li><a class="reference internal" href="#halfmd5">halfMD5</a></li>
-<li><a class="reference internal" href="#md5">MD5</a></li>
-<li><a class="reference internal" href="#siphash64">sipHash64</a></li>
-<li><a class="reference internal" href="#siphash128">sipHash128</a></li>
-<li><a class="reference internal" href="#cityhash64">cityHash64</a></li>
-<li><a class="reference internal" href="#inthash32">intHash32</a></li>
-<li><a class="reference internal" href="#inthash64">intHash64</a></li>
-<li><a class="reference internal" href="#sha1">SHA1</a></li>
-<li><a class="reference internal" href="#sha224">SHA224</a></li>
-<li><a class="reference internal" href="#sha256">SHA256</a></li>
-<li><a class="reference internal" href="#urlhash-url-n">URLHash(url[, N])</a></li>
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Functions</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="arithmetic_functions.html">Arithmetic functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="array_functions.html">Functions for working with arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="array_join.html">arrayJoin function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bit_functions.html">Bit functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comparison_functions.html">Comparison functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conditional_functions.html">Conditional functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="date_time_functions.html">Functions for working with dates and times</a></li>
+<li class="toctree-l2"><a class="reference internal" href="encoding_functions.html">Encoding functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ext_dict_functions.html">Functions for working with external dictionaries</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Hash functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#halfmd5">halfMD5</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#md5">MD5</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siphash64">sipHash64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#siphash128">sipHash128</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cityhash64">cityHash64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#inthash32">intHash32</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#inthash64">intHash64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sha1">SHA1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sha224">SHA224</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sha256">SHA256</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#urlhash-url-n">URLHash(url[, N])</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="higher_order_functions.html">Higher-order functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="in_functions.html">Functions for implementing the IN operator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ip_address_functions.html">Functions for working with IP addresses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json_functions.html">Functions for working with JSON.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logical_functions.html">Logical functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="math_functions.html">Mathematical functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_functions.html">Other functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="random_functions.html">Functions for generating pseudo-random numbers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rounding_functions.html">Rounding functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="splitting_merging_functions.html">Functions for splitting and merging strings and arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_functions.html">Functions for working with strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_replace_functions.html">Functions for searching and replacing in strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_search_functions.html">Functions for searching strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="type_conversion_functions.html">Type conversion functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="url_functions.html">Functions for working with URLs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ym_dict_functions.html">Functions for working with Yandex.Metrica dictionaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#strong-typing">Strong typing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#common-subexpression-elimination">Common subexpression elimination</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#types-of-results">Types of results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#constants">Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#immutability">Immutability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#error-handling">Error handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#evaluation-of-argument-expressions">Evaluation of argument expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#performing-functions-for-distributed-query-processing">Performing functions for distributed query processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="ext_dict_functions.html"
-                        title="previous chapter">Функции для работы с внешними словарями</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="higher_order_functions.html"
-                        title="next chapter">Функции высшего порядка</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/functions/hash_functions.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Functions</a><ul>
+      <li>Previous: <a href="ext_dict_functions.html" title="previous chapter">Functions for working with external dictionaries</a></li>
+      <li>Next: <a href="higher_order_functions.html" title="next chapter">Higher-order functions</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -173,25 +248,13 @@ SipHash - криптографическая хэш-функция. Работа
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="higher_order_functions.html" title="Функции высшего порядка"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="ext_dict_functions.html" title="Функции для работы с внешними словарями"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Функции</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

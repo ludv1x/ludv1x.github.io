@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Типы данных &mdash; ClickHouse 1 documentation</title>
+    <title>Data types &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,50 +23,41 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
     <link rel="next" title="Array(T)" href="array.html" />
-    <link rel="prev" title="XML" href="../formats/xml.html" /> 
+    <link rel="prev" title="XML" href="../formats/xml.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="array.html" title="Array(T)"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="../formats/xml.html" title="XML"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="id1">
-<h1>Типы данных<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="data-types">
+<h1>Data types<a class="headerlink" href="#data-types" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="array.html">Array(T)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="boolean.html">Булевы значения</a></li>
+<li class="toctree-l1"><a class="reference internal" href="boolean.html">Boolean</a></li>
 <li class="toctree-l1"><a class="reference internal" href="date.html">Date</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datetime.html">DateTime</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="datetime.html#id1">Часовые пояса</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datetime.html#time-zones">Time zones</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="enum.html">Enum</a></li>
 <li class="toctree-l1"><a class="reference internal" href="fixedstring.html">FixedString(N)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="float.html">Float32, Float64</a></li>
 <li class="toctree-l1"><a class="reference internal" href="int_uint.html">UInt8, UInt16, UInt32, UInt64, Int8, Int16, Int32, Int64</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="int_uint.html#int">Диапазоны Int</a></li>
-<li class="toctree-l2"><a class="reference internal" href="int_uint.html#uint">Диапазоны Uint</a></li>
+<li class="toctree-l2"><a class="reference internal" href="int_uint.html#int-ranges">Int ranges</a></li>
+<li class="toctree-l2"><a class="reference internal" href="int_uint.html#uint-ranges">Uint ranges</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="string.html">String</a><ul>
@@ -74,12 +65,12 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="tuple.html">Tuple(T1, T2, ...)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nested_data_structures/index.html">Вложенные структуры данных</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="nested_data_structures/index.html">Nested data structures</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="nested_data_structures/aggregatefunction.html">AggregateFunction(name, types_of_arguments...)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nested_data_structures/nested.html">Nested(Name1 Type1, Name2 Type2, ...)</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="special_data_types/index.html">Служебные типы данных</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="special_data_types/index.html">Special data types</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="special_data_types/expression.html">Expression</a></li>
 <li class="toctree-l2"><a class="reference internal" href="special_data_types/set.html">Set</a></li>
 </ul>
@@ -92,20 +83,87 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="../formats/xml.html"
-                        title="previous chapter">XML</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="array.html"
-                        title="next chapter">Array(T)</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/data_types/index.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Data types</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="array.html">Array(T)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="boolean.html">Boolean</a></li>
+<li class="toctree-l2"><a class="reference internal" href="date.html">Date</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datetime.html">DateTime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum.html">Enum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fixedstring.html">FixedString(N)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="float.html">Float32, Float64</a></li>
+<li class="toctree-l2"><a class="reference internal" href="int_uint.html">UInt8, UInt16, UInt32, UInt64, Int8, Int16, Int32, Int64</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string.html">String</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tuple.html">Tuple(T1, T2, ...)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nested_data_structures/index.html">Nested data structures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="special_data_types/index.html">Special data types</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../formats/xml.html" title="previous chapter">XML</a></li>
+      <li>Next: <a href="array.html" title="next chapter">Array(T)</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -122,24 +180,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="array.html" title="Array(T)"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="../formats/xml.html" title="XML"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

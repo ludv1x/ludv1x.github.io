@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Enum &mdash; ClickHouse 1 documentation</title>
+    <title>Enum &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,77 +23,136 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Типы данных" href="index.html" />
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Data types" href="index.html" />
     <link rel="next" title="FixedString(N)" href="fixedstring.html" />
-    <link rel="prev" title="DateTime" href="datetime.html" /> 
+    <link rel="prev" title="DateTime" href="datetime.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="fixedstring.html" title="FixedString(N)"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="datetime.html" title="DateTime"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Типы данных</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="enum">
 <h1>Enum<a class="headerlink" href="#enum" title="Permalink to this headline">¶</a></h1>
-<p>Enum8 или Enum16. Представляет собой конечное множество строковых значений, сохраняемых более эффективно, чем это делает тип данных <tt class="docutils literal"><span class="pre">String</span></tt>.</p>
-<p>Пример:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">Enum8</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;world&#39;</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
-</pre></div>
-</div>
+<p>Enum8 or Enum16. A set of enumerated string values that are stored as Int8 or Int16.</p>
+<p>Example:</p>
+<dl class="docutils">
+<dt>::</dt>
+<dd>Enum8(&#8216;hello&#8217; = 1, &#8216;world&#8217; = 2)</dd>
+</dl>
 <ul class="simple">
-<li>тип данных с двумя возможными значениями - &#8216;hello&#8217; и &#8216;world&#8217;.</li>
+<li>This data type has two possible values - &#8216;hello&#8217; and &#8216;world&#8217;.</li>
 </ul>
-<p>Для каждого из значений прописывается число в диапазоне -128..127 для <tt class="docutils literal"><span class="pre">Enum8</span></tt> или в диапазоне -32768..32767 для <tt class="docutils literal"><span class="pre">Enum16</span></tt>. Все строки должны быть разными, числа - тоже. Разрешена пустая строка. При указании такого типа (в определении таблицы), числа могут идти не подряд и в произвольном порядке. При этом, порядок не имеет значения.</p>
-<p>В оперативке столбец такого типа представлен так же, как <tt class="docutils literal"><span class="pre">Int8</span></tt> или <tt class="docutils literal"><span class="pre">Int16</span></tt> соответствующими числовыми значениями.
-При чтении в текстовом виде, парсит значение как строку и ищет соответствующую строку из множества значений Enum-а. Если не находит - кидается исключение.
-При записи в текстовом виде, записывает значение как соответствующую строку. Если в данных столбца есть мусор - числа не из допустимого множества, то кидается исключение. При чтении и записи в бинарном виде, оно осуществляется так же, как для типов данных Int8, Int16.
-Неявное значение по умолчанию - это значение с минимальным номером.</p>
-<p>При <tt class="docutils literal"><span class="pre">ORDER</span> <span class="pre">BY</span></tt>, <tt class="docutils literal"><span class="pre">GROUP</span> <span class="pre">BY</span></tt>, <tt class="docutils literal"><span class="pre">IN</span></tt>, <tt class="docutils literal"><span class="pre">DISTINCT</span></tt> и т. п., Enum-ы ведут себя так же, как соответствующие числа. Например, при ORDER BY они сортируются по числовым значениям. Функции сравнения на равенство и сравнения на отношение порядка двух Enum-ов работают с Enum-ами так же, как с числами.</p>
-<p>Сравнивать Enum с числом нельзя. Можно сравнивать Enum с константной строкой - при этом, для строки ищется соответствующее значение Enum-а; если не находится - кидается исключение. Поддерживается оператор IN, где слева стоит Enum, а справа - множество строк. В этом случае, строки рассматриваются как значения соответствующего Enum-а.</p>
-<p>Большинство операций с числами и со строками не имеет смысла и не работают для Enum-ов: например, к Enum-у нельзя прибавить число.
-Для Enum-а естественным образом определяется функция <tt class="docutils literal"><span class="pre">toString</span></tt>, которая возвращает его строковое значение.</p>
-<p>Также для Enum-а определяются функции <tt class="docutils literal"><span class="pre">toT</span></tt>, где T - числовой тип. При совпадении T с типом столбца Enum-а, преобразование работает бесплатно.
-При ALTER, есть возможность бесплатно изменить тип Enum-а, если меняется только множество значений. При этом, можно добавлять новые значения; можно удалять старые значения (это безопасно только если они ни разу не использовались, так как это не проверяется). В качестве &#8220;защиты от дурака&#8221;, нельзя менять числовые значения у имеющихся строк - в этом случае, кидается исключение.</p>
-<p>При ALTER, есть возможность поменять Enum8 на Enum16 и обратно - так же, как можно поменять Int8 на Int16.</p>
+<p>The numeric values must be within -128..127 for <code class="docutils literal"><span class="pre">Enum8</span></code> and -32768..32767 for <code class="docutils literal"><span class="pre">Enum16</span></code>. Every member of the enum must also have different numbers. The empty string is a valid value. The numbers do not need to be sequential and can be in any order. The order does not matter.</p>
+<p>In memory, the data is stored in the same way as the numeric types <code class="docutils literal"><span class="pre">Int8</span></code> and <code class="docutils literal"><span class="pre">Int16</span></code>.
+When reading in text format, the string is read and the corresponding numeric value is looked up. An exception will be thrown if it is not found.
+When writing in text format, the stored number is looked up and the corresponding string is written out. An exception will be thrown if the number does not correspond to a known value.
+In binary format, the information is saved in the same way as <code class="docutils literal"><span class="pre">Int8</span></code> and <code class="docutils literal"><span class="pre">Int16</span></code>.
+The implicit default value for an Enum is the value having the smallest numeric value.</p>
+<p>In ORDER BY, GROUP BY, IN, DISTINCT, etc. Enums behave like the numeric value. e.g. they will be sorted by the numeric value in an <code class="docutils literal"><span class="pre">ORDER</span> <span class="pre">BY</span></code>. Equality and comparison operators behave like they do on the underlying numeric value.</p>
+<p>Enum values cannot be compared to numbers, they must be compared to a string. If the string compared to is not a valid value for the Enum, an exception will be thrown. The <code class="docutils literal"><span class="pre">IN</span></code> operator is supported with the Enum on the left hand side and a set of strings on the right hand side.</p>
+<p>Most numeric and string operations are not defined for Enum values, e.g. adding a number to an Enum or concatenating a string to an Enum. However, the toString function can be used to convert the Enum to its string value. Enum values are also convertible to numeric types using the <code class="docutils literal"><span class="pre">toT</span></code> function where <code class="docutils literal"><span class="pre">T</span></code> is a numeric type. When <code class="docutils literal"><span class="pre">T</span></code> corresponds to the enum&#8217;s underlying numeric type, this conversion is zero-cost.</p>
+<p>It is possible to add new members to the <code class="docutils literal"><span class="pre">Enum</span></code> using <code class="docutils literal"><span class="pre">ALTER</span></code>. If the only change is to the set of values, the operation will be almost instant. It is also possible to remove members of the Enum using ALTER. Removing members is only safe if the removed value has never been used in the table. As a safeguard, changing the numeric value of a previously defined Enum member will throw an exception.</p>
+<p>Using <code class="docutils literal"><span class="pre">ALTER</span></code>, it is possible to change an <code class="docutils literal"><span class="pre">Enum8</span></code> to an <code class="docutils literal"><span class="pre">Enum16</span></code> or vice versa - just like changing an <code class="docutils literal"><span class="pre">Int8</span></code> to <code class="docutils literal"><span class="pre">Int16</span></code>.</p>
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="datetime.html"
-                        title="previous chapter">DateTime</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="fixedstring.html"
-                        title="next chapter">FixedString(N)</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/data_types/enum.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Data types</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="array.html">Array(T)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="boolean.html">Boolean</a></li>
+<li class="toctree-l2"><a class="reference internal" href="date.html">Date</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datetime.html">DateTime</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Enum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fixedstring.html">FixedString(N)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="float.html">Float32, Float64</a></li>
+<li class="toctree-l2"><a class="reference internal" href="int_uint.html">UInt8, UInt16, UInt32, UInt64, Int8, Int16, Int32, Int64</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string.html">String</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tuple.html">Tuple(T1, T2, ...)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nested_data_structures/index.html">Nested data structures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="special_data_types/index.html">Special data types</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Data types</a><ul>
+      <li>Previous: <a href="datetime.html" title="previous chapter">DateTime</a></li>
+      <li>Next: <a href="fixedstring.html" title="next chapter">FixedString(N)</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -110,25 +169,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="fixedstring.html" title="FixedString(N)"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="datetime.html" title="DateTime"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Типы данных</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

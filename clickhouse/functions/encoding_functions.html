@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Функции кодирования &mdash; ClickHouse 1 documentation</title>
+    <title>Encoding functions &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,61 +23,55 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Функции" href="index.html" />
-    <link rel="next" title="Функции для работы с внешними словарями" href="ext_dict_functions.html" />
-    <link rel="prev" title="Функции для работы с датами и временем" href="date_time_functions.html" /> 
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Functions" href="index.html" />
+    <link rel="next" title="Functions for working with external dictionaries" href="ext_dict_functions.html" />
+    <link rel="prev" title="Functions for working with dates and times" href="date_time_functions.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="ext_dict_functions.html" title="Функции для работы с внешними словарями"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="date_time_functions.html" title="Функции для работы с датами и временем"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Функции</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="id1">
-<h1>Функции кодирования<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="encoding-functions">
+<h1>Encoding functions<a class="headerlink" href="#encoding-functions" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="hex">
 <h2>hex<a class="headerlink" href="#hex" title="Permalink to this headline">¶</a></h2>
-<p>Принимает строку, число, дату или дату-с-временем. Возвращает строку, содержащую шестнадцатеричное представление аргумента. Используются заглавные буквы A-F. Не используются префиксы 0x и суффиксы h. Для строк просто все байты кодируются в виде двух шестнадцатеричных цифр. Числа выводятся в big endian (&#8220;человеческом&#8221;) формате. Для чисел вырезаются старшие нули, но только по целым байтам. Например, hex(1) = &#8216;01&#8217;. Даты кодируются как число дней с начала unix-эпохи. Даты-с-временем кодируются как число секунд с начала unix-эпохи.</p>
+<p>Accepts a string, number, date, or date with time. Returns a string containing the argument&#8217;s hexadecimal representation. Uses uppercase letters A-F.
+Doesn&#8217;t use <code class="docutils literal"><span class="pre">0x</span></code> prefixes or <code class="docutils literal"><span class="pre">h</span></code> suffixes.
+For strings, all bytes are simply encoded as two hexadecimal numbers. Numbers are converted to big endian (&#8220;human readable&#8221;) format.
+For numbers, older zeros are trimmed, but only by entire bytes.
+For example, <code class="docutils literal"><span class="pre">hex(1)</span> <span class="pre">=</span> <span class="pre">'01'</span></code>. Dates are encoded as the number of days since the beginning of the Unix Epoch. Dates with times are encoded as the number of seconds since the beginning of the Unix Epoch.</p>
 </div>
 <div class="section" id="unhex-str">
 <h2>unhex(str)<a class="headerlink" href="#unhex-str" title="Permalink to this headline">¶</a></h2>
-<p>Принимает строку, содержащую произвольное количество шестнадцатеричных цифр, и возвращает строку, содержащую соответствующие байты. Поддерживаются как строчные, так и заглавные буквы A-F. Число шестнадцатеричных цифр не обязано быть чётным. Если оно нечётное - последняя цифра интерпретируется как младшая половинка байта 00-0F. Если строка-аргумент содержит что-либо кроме шестнадцатеричных цифр, то будет возвращён какой-либо implementation-defined результат (не кидается исключение).
-Если вы хотите преобразовать результат в число, то вы можете использовать функции reverse и reinterpretAsType.</p>
+<p>Accepts a string containing any number of hexadecimal digits, and returns a string containing the corresponding bytes. Supports both uppercase and lowercase letters A-F. The number of hexadecimal digits doesn&#8217;t have to be even. If it is odd, the last digit is interpreted as the younger half of the 00-0F byte. If the argument string contains anything other than hexadecimal digits, some implementation-defined result is returned (an exception isn&#8217;t thrown).
+If you want to convert the result to a number, you can use the functions &#8216;reverse&#8217; and &#8216;reinterpretAsType&#8217;</p>
 </div>
 <div class="section" id="uuidstringtonum-str">
 <h2>UUIDStringToNum(str)<a class="headerlink" href="#uuidstringtonum-str" title="Permalink to this headline">¶</a></h2>
-<p>Принимает строку, содержащую 36 символов в формате 123e4567-e89b-12d3-a456-426655440000, и возвращает в виде набора байт в FixedString(16).</p>
+<p>Accepts a string containing the UUID in the text format (<code class="docutils literal"><span class="pre">123e4567-e89b-12d3-a456-426655440000</span></code>). Returns a binary representation of the UUID in <code class="docutils literal"><span class="pre">FixedString(16)</span></code>.</p>
 </div>
 <div class="section" id="uuidnumtostring-str">
 <h2>UUIDNumToString(str)<a class="headerlink" href="#uuidnumtostring-str" title="Permalink to this headline">¶</a></h2>
-<p>Принимает значение типа FixedString(16). Возвращает строку из 36 символов в текстовом виде.</p>
+<p>Accepts a FixedString(16) value containing the UUID in the binary format. Returns a readable string containing the UUID in the text format.</p>
 </div>
 <div class="section" id="bitmasktolist-num">
 <h2>bitmaskToList(num)<a class="headerlink" href="#bitmasktolist-num" title="Permalink to this headline">¶</a></h2>
-<p>Принимает целое число. Возвращает строку, содержащую список степеней двойки, в сумме дающих исходное число; по возрастанию, в текстовом виде, через запятую, без пробелов.</p>
+<p>Accepts an integer. Returns a string containing the list of powers of two that total the source number when summed. They are comma-separated without spaces in text format, in ascending order.</p>
 </div>
 <div class="section" id="bitmasktoarray-num">
 <h2>bitmaskToArray(num)<a class="headerlink" href="#bitmasktoarray-num" title="Permalink to this headline">¶</a></h2>
-<p>Принимает целое число. Возвращает массив чисел типа UInt64, содержащий степени двойки, в сумме дающих исходное число; числа в массиве идут по возрастанию.</p>
+<p>Accepts an integer. Returns an array of UInt64 numbers containing the list of powers of two that total the source number when summed. Numbers in the array are in ascending order.</p>
 </div>
 </div>
 
@@ -85,33 +79,119 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Функции кодирования</a><ul>
-<li><a class="reference internal" href="#hex">hex</a></li>
-<li><a class="reference internal" href="#unhex-str">unhex(str)</a></li>
-<li><a class="reference internal" href="#uuidstringtonum-str">UUIDStringToNum(str)</a></li>
-<li><a class="reference internal" href="#uuidnumtostring-str">UUIDNumToString(str)</a></li>
-<li><a class="reference internal" href="#bitmasktolist-num">bitmaskToList(num)</a></li>
-<li><a class="reference internal" href="#bitmasktoarray-num">bitmaskToArray(num)</a></li>
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Functions</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="arithmetic_functions.html">Arithmetic functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="array_functions.html">Functions for working with arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="array_join.html">arrayJoin function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bit_functions.html">Bit functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comparison_functions.html">Comparison functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conditional_functions.html">Conditional functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="date_time_functions.html">Functions for working with dates and times</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Encoding functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hex">hex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#unhex-str">unhex(str)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#uuidstringtonum-str">UUIDStringToNum(str)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#uuidnumtostring-str">UUIDNumToString(str)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bitmasktolist-num">bitmaskToList(num)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bitmasktoarray-num">bitmaskToArray(num)</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="ext_dict_functions.html">Functions for working with external dictionaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hash_functions.html">Hash functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="higher_order_functions.html">Higher-order functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="in_functions.html">Functions for implementing the IN operator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ip_address_functions.html">Functions for working with IP addresses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json_functions.html">Functions for working with JSON.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logical_functions.html">Logical functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="math_functions.html">Mathematical functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_functions.html">Other functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="random_functions.html">Functions for generating pseudo-random numbers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rounding_functions.html">Rounding functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="splitting_merging_functions.html">Functions for splitting and merging strings and arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_functions.html">Functions for working with strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_replace_functions.html">Functions for searching and replacing in strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_search_functions.html">Functions for searching strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="type_conversion_functions.html">Type conversion functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="url_functions.html">Functions for working with URLs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ym_dict_functions.html">Functions for working with Yandex.Metrica dictionaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#strong-typing">Strong typing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#common-subexpression-elimination">Common subexpression elimination</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#types-of-results">Types of results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#constants">Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#immutability">Immutability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#error-handling">Error handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#evaluation-of-argument-expressions">Evaluation of argument expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#performing-functions-for-distributed-query-processing">Performing functions for distributed query processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="date_time_functions.html"
-                        title="previous chapter">Функции для работы с датами и временем</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="ext_dict_functions.html"
-                        title="next chapter">Функции для работы с внешними словарями</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/functions/encoding_functions.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Functions</a><ul>
+      <li>Previous: <a href="date_time_functions.html" title="previous chapter">Functions for working with dates and times</a></li>
+      <li>Next: <a href="ext_dict_functions.html" title="next chapter">Functions for working with external dictionaries</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -128,25 +208,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="ext_dict_functions.html" title="Функции для работы с внешними словарями"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="date_time_functions.html" title="Функции для работы с датами и временем"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Функции</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>max_block_size &mdash; ClickHouse 1 documentation</title>
+    <title>max_block_size &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,86 +23,76 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Настройки" href="index.html" />
-    <link rel="next" title="Профили настроек" href="settings_profiles.html" />
-    <link rel="prev" title="Ограничения на сложность запроса" href="query_complexity.html" /> 
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Settings" href="index.html" />
+    <link rel="next" title="Settings profiles" href="settings_profiles.html" />
+    <link rel="prev" title="Restrictions on query complexity" href="query_complexity.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="settings_profiles.html" title="Профили настроек"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="query_complexity.html" title="Ограничения на сложность запроса"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Настройки</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="max-block-size">
 <h1>max_block_size<a class="headerlink" href="#max-block-size" title="Permalink to this headline">¶</a></h1>
-<p>Данные в ClickHouse обрабатываются по блокам (наборам кусочков столбцов). Внутренние циклы обработки одного блока достаточно эффективны, но при этом существуют заметные издержки на каждый блок. max_block_size - это рекомендация, какого размера блоки (в количестве строк) загружать из таблицы. Размер блока должен быть не слишком маленьким, чтобы издержки на каждый блок оставались незаметными, и не слишком большим, чтобы запрос с LIMIT-ом, который завершается уже после первого блока, выполнялся быстро; чтобы не использовалось слишком много оперативки при вынимании большого количества столбцов в несколько потоков; чтобы оставалась хоть какая-нибудь кэш-локальность.</p>
-<p>По умолчанию - 65 536.</p>
-<p>Из таблицы не всегда загружаются блоки размера max_block_size. Если ясно, что нужно прочитать меньше данных, то будет считан блок меньшего размера.</p>
+<p>In ClickHouse, data is processed by blocks (sets of column parts). The internal processing cycles for a single block are efficient enough, but there are noticeable expenditures on each block. &#8216;max_block_size&#8217; is a recommendation for what size of block (in number of rows) to load from tables. The block size shouldn&#8217;t be too small, so that the expenditures on each block are still noticeable, but not too large, so that the query with LIMIT that is completed after the first block is processed quickly, so that too much memory isn&#8217;t consumed when extracting a large number of columns in multiple threads, and so that at least some cache locality is preserved.</p>
+<p>By default, it is 65,536.</p>
+<p>Blocks the size of &#8216;max_block_size&#8217; are not always loaded from the table. If it is obvious that less data needs to be retrieved, a smaller block is processed.</p>
 </div>
 <div class="section" id="max-insert-block-size">
 <h1>max_insert_block_size<a class="headerlink" href="#max-insert-block-size" title="Permalink to this headline">¶</a></h1>
-<p>Формировать блоки указанного размера, при вставке в таблицу.
-Эта настройка действует только в тех случаях, когда сервер сам формирует такие блоки.
-Например, при INSERT-е через HTTP интерфейс, сервер парсит формат данных, и формирует блоки указанного размера.
-А при использовании clickhouse-client, клиент сам парсит данные, и настройка max_insert_block_size на сервере не влияет на размер вставляемых блоков.
-При использовании INSERT SELECT, настройка так же не имеет смысла, так как данные будут вставляться теми блоками, которые вышли после SELECT-а.</p>
-<p><tt class="docutils literal"><span class="pre">По</span> <span class="pre">умолчанию</span> <span class="pre">-</span> <span class="pre">1</span> <span class="pre">048</span> <span class="pre">576.</span></tt></p>
-<p>Это намного больше, чем max_block_size. Это сделано, потому что некоторые движки таблиц (<a href="#id1"><span class="problematic" id="id2">*</span></a>MergeTree) будут на каждый вставляемый блок формировать кусок данных на диске, что является довольно большой сущностью. Также, в таблицах типа <a href="#id3"><span class="problematic" id="id4">*</span></a>MergeTree, данные сортируются при вставке, и достаточно большой размер блока позволяет отсортировать больше данных в оперативке.</p>
+<p>The size of blocks to form for insertion into a table.
+This setting only applies in cases when the server forms the blocks.
+For example, for an INSERT via the HTTP interface, the server parses the data format and forms blocks of the specified size.
+But when using clickhouse-client, the client parses the data itself, and the <code class="docutils literal"><span class="pre">max_insert_block_size</span></code> setting on the server doesn&#8217;t affect the size of the inserted blocks.
+The setting also doesn&#8217;t have a purpose when using INSERT SELECT, since data is inserted in the same blocks that are formed after SELECT.</p>
+<p>By default, it is 1,048,576.</p>
+<p>This is slightly more than &#8216;max_block_size&#8217;. The reason for this is because certain table engines (<a href="#id1"><span class="problematic" id="id2">*</span></a>MergeTree) form a data part on the disk for each inserted block, which is a fairly large entity. Similarly, <a href="#id3"><span class="problematic" id="id4">*</span></a>MergeTree tables sort data during insertion, and a large enough block size allows sorting more data in RAM.</p>
 </div>
 <div class="section" id="max-threads">
 <h1>max_threads<a class="headerlink" href="#max-threads" title="Permalink to this headline">¶</a></h1>
-<p>Максимальное количество потоков обработки запроса
-- без учёта потоков для чтения данных с удалённых серверов (смотрите параметр max_distributed_connections).</p>
-<p>Этот параметр относится к потокам, которые выполняют параллельно одни стадии конвейера выполнения запроса.
-Например, если чтение из таблицы, вычисление выражений с функциями, фильтрацию с помощью WHERE и предварительную агрегацию для GROUP BY можно делать параллельно с использованием как минимум max_threads потоков, то будет использовано max_threads потоков.</p>
-<p><tt class="docutils literal"><span class="pre">По</span> <span class="pre">умолчанию</span> <span class="pre">-</span> <span class="pre">8.</span></tt></p>
-<p>Если на сервере обычно исполняется менее одного запроса SELECT одновременно, то выставите этот параметр в значение чуть меньше количества реальных процессорных ядер.</p>
-<p>Для запросов, которые быстро завершаются из-за LIMIT-а, имеет смысл выставить max_threads поменьше. Например, если нужное количество записей находится в каждом блоке, то при max_threads = 8 будет считано 8 блоков, хотя достаточно было прочитать один.</p>
-<p>Чем меньше <tt class="docutils literal"><span class="pre">max_threads</span></tt>, тем меньше будет использоваться оперативки.</p>
+<p>The maximum number of query processing threads
+- excluding threads for retrieving data from remote servers (see the <code class="docutils literal"><span class="pre">max_distributed_connections</span></code> parameter).</p>
+<p>This parameter applies to threads that perform the same stages of the query execution pipeline in parallel.
+For example, if reading from a table, evaluating expressions with functions, filtering with WHERE and pre-aggregating for GROUP BY can all be done in parallel using at least <code class="docutils literal"><span class="pre">max_threads</span></code> number of threads, then &#8216;max_threads&#8217; are used.</p>
+<p>By default, <code class="docutils literal"><span class="pre">8</span></code>.</p>
+<p>If less than one SELECT query is normally run on a server at a time, set this parameter to a value slightly less than the actual number of processor cores.</p>
+<p>For queries that are completed quickly because of a LIMIT, you can set a lower <code class="docutils literal"><span class="pre">max_threads</span></code>. For example, if the necessary number of entries are located in every block and <code class="docutils literal"><span class="pre">max_threads</span> <span class="pre">=</span> <span class="pre">8</span></code>, 8 blocks are retrieved, although it would have been enough to read just one.</p>
+<p>The smaller the <code class="docutils literal"><span class="pre">max_threads</span></code> value, the less memory is consumed.</p>
 </div>
 <div class="section" id="max-compress-block-size">
 <h1>max_compress_block_size<a class="headerlink" href="#max-compress-block-size" title="Permalink to this headline">¶</a></h1>
-<p>Максимальный размер блоков не сжатых данных перед сжатием при записи в таблицу. По умолчанию - 1 048 576 (1 MiB). При уменьшении размера, незначительно уменьшается коэффициент сжатия, незначительно возрастает скорость сжатия и разжатия за счёт кэш-локальности, и уменьшается потребление оперативки. Как правило, не имеет смысла менять эту настройку.</p>
-<p>Не путайте блоки для сжатия (кусок памяти, состоящий из байт) и блоки для обработки запроса (пачка строк из таблицы).</p>
+<p>The maximum size of blocks of uncompressed data before compressing for writing to a table. By default, <code class="docutils literal"><span class="pre">1,048,576</span> <span class="pre">(1</span> <span class="pre">MiB)</span></code>. If the size is reduced, the compression rate is significantly reduced, the compression and decompression speed increases slightly due to cache locality, and memory consumption is reduced. There usually isn&#8217;t any reason to change this setting.</p>
+<p>Don&#8217;t confuse blocks for compression (a chunk of memory consisting of bytes) and blocks for query processing (a set of rows from a table).</p>
 </div>
 <div class="section" id="min-compress-block-size">
 <h1>min_compress_block_size<a class="headerlink" href="#min-compress-block-size" title="Permalink to this headline">¶</a></h1>
-<p>Для таблиц типа <a href="#id5"><span class="problematic" id="id6">*</span></a>MergeTree. В целях уменьшения задержек при обработке запросов, блок сжимается при записи следующей засечки, если его размер не меньше min_compress_block_size. По умолчанию - 65 536.</p>
-<p>Реальный размер блока, если несжатых данных меньше max_compress_block_size, будет не меньше этого значения и не меньше объёма данных на одну засечку.</p>
-<p>Рассмотрим пример. Пусть index_granularity, указанная при создании таблицы - 8192.</p>
-<p>Пусть мы записываем столбец типа UInt32 (4 байта на значение). При записи 8192 строк, будет всего 32 КБ данных. Так как min_compress_block_size = 65 536, сжатый блок будет сформирован на каждые две засечки.</p>
-<p>Пусть мы записываем столбец URL типа String (средний размер - 60 байт на значение). При записи 8192 строк, будет, в среднем, чуть меньше 500 КБ данных. Так как это больше 65 536 строк, то сжатый блок будет сформирован на каждую засечку. В этом случае, при чтении с диска данных из диапазона в одну засечку, не будет разжато лишних данных.</p>
-<p>Как правило, не имеет смысла менять эту настройку.</p>
+<p>For <a href="#id5"><span class="problematic" id="id6">*</span></a>MergeTree tables. In order to reduce latency when processing queries, a block is compressed when writing the next mark if its size is at least <code class="docutils literal"><span class="pre">min_compress_block_size</span></code>. By default, 65,536.</p>
+<p>The actual size of the block, if the uncompressed data less than <code class="docutils literal"><span class="pre">max_compress_block_size</span></code> is no less than this value and no less than the volume of data for one mark.</p>
+<p>Let&#8217;s look at an example. Assume that <code class="docutils literal"><span class="pre">index_granularity</span></code> was set to 8192 during table creation.</p>
+<p>We are writing a UInt32-type column (4 bytes per value). When writing 8192 rows, the total will be 32 KB of data. Since <code class="docutils literal"><span class="pre">min_compress_block_size</span> <span class="pre">=</span> <span class="pre">65,536</span></code>, a compressed block will be formed for every two marks.</p>
+<p>We are writing a URL column with the String type (average size of 60 bytes per value). When writing 8192 rows, the average will be slightly less than 500 KB of data. Since this is more than 65,536, a compressed block will be formed for each mark. In this case, when reading data from the disk in the range of a single mark, extra data won&#8217;t be decompressed.</p>
+<p>There usually isn&#8217;t any reason to change this setting.</p>
 </div>
 <div class="section" id="max-query-size">
 <h1>max_query_size<a class="headerlink" href="#max-query-size" title="Permalink to this headline">¶</a></h1>
-<p>Максимальный кусок запроса, который будет считан в оперативку для разбора парсером языка SQL.
-Запрос INSERT также содержит данные для INSERT-а, которые обрабатываются отдельным, потоковым парсером (расходующим O(1) оперативки), и не учитываются в этом ограничении.</p>
-<p><tt class="docutils literal"><span class="pre">По</span> <span class="pre">умолчанию</span> <span class="pre">-</span> <span class="pre">256</span> <span class="pre">KiB.</span></tt></p>
+<p>The maximum part of a query that can be taken to RAM for parsing with the SQL parser.
+The INSERT query also contains data for INSERT that is processed by a separate stream parser (that consumes O(1) RAM), which is not included in this restriction.</p>
+<p><code class="docutils literal"><span class="pre">By</span> <span class="pre">default,</span> <span class="pre">256</span> <span class="pre">KiB.</span></code></p>
 </div>
 <div class="section" id="interactive-delay">
 <h1>interactive_delay<a class="headerlink" href="#interactive-delay" title="Permalink to this headline">¶</a></h1>
-<p>Интервал в микросекундах для проверки, не запрошена ли остановка выполнения запроса, и отправки прогресса.
-По умолчанию - 100 000 (проверять остановку запроса и отправлять прогресс десять раз в секунду).</p>
+<p>The interval in microseconds for checking whether request execution has been canceled and sending the progress.
+By default, 100,000 (check for canceling and send progress ten times per second).</p>
 </div>
 <div class="section" id="connect-timeout">
 <h1>connect_timeout<a class="headerlink" href="#connect-timeout" title="Permalink to this headline">¶</a></h1>
@@ -112,178 +102,237 @@
 </div>
 <div class="section" id="send-timeout">
 <h1>send_timeout<a class="headerlink" href="#send-timeout" title="Permalink to this headline">¶</a></h1>
-<p>Таймауты в секундах на сокет, по которому идёт общение с клиентом.
-<tt class="docutils literal"><span class="pre">По</span> <span class="pre">умолчанию</span> <span class="pre">-</span> <span class="pre">10,</span> <span class="pre">300,</span> <span class="pre">300.</span></tt></p>
+<p>Timeouts in seconds on the socket used for communicating with the client.
+<code class="docutils literal"><span class="pre">By</span> <span class="pre">default,</span> <span class="pre">10,</span> <span class="pre">300,</span> <span class="pre">300.</span></code></p>
 </div>
 <div class="section" id="poll-interval">
 <h1>poll_interval<a class="headerlink" href="#poll-interval" title="Permalink to this headline">¶</a></h1>
-<p>Блокироваться в цикле ожидания запроса в сервере на указанное количество секунд.
-<tt class="docutils literal"><span class="pre">По</span> <span class="pre">умолчанию</span> <span class="pre">-</span> <span class="pre">10.</span></tt></p>
+<p>Lock in a wait loop for the specified number of seconds.
+<code class="docutils literal"><span class="pre">By</span> <span class="pre">default,</span> <span class="pre">10</span></code>.</p>
 </div>
 <div class="section" id="max-distributed-connections">
 <h1>max_distributed_connections<a class="headerlink" href="#max-distributed-connections" title="Permalink to this headline">¶</a></h1>
-<p>Максимальное количество одновременных соединений с удалёнными серверами при распределённой обработке одного запроса к одной таблице типа Distributed. Рекомендуется выставлять не меньше, чем количество серверов в кластере.</p>
-<p><tt class="docutils literal"><span class="pre">По</span> <span class="pre">умолчанию</span> <span class="pre">-</span> <span class="pre">100.</span></tt></p>
-<p>Следующие параметры имеют значение только на момент создания таблицы типа Distributed (и при запуске сервера), поэтому их не имеет смысла менять в рантайме.</p>
+<p>The maximum number of simultaneous connections with remote servers for distributed processing of a single query to a single Distributed table. We recommend setting a value no less than the number of servers in the cluster.</p>
+<p><code class="docutils literal"><span class="pre">By</span> <span class="pre">default,</span> <span class="pre">100.</span></code></p>
+<p>The following parameters are only used when creating Distributed tables (and when launching a server), so there is no reason to change them at runtime.</p>
 </div>
 <div class="section" id="distributed-connections-pool-size">
 <h1>distributed_connections_pool_size<a class="headerlink" href="#distributed-connections-pool-size" title="Permalink to this headline">¶</a></h1>
-<p>Максимальное количество одновременных соединений с удалёнными серверами при распределённой обработке всех запросов к одной таблице типа Distributed. Рекомендуется выставлять не меньше, чем количество серверов в кластере.</p>
-<p><tt class="docutils literal"><span class="pre">По</span> <span class="pre">умолчанию</span> <span class="pre">-</span> <span class="pre">128.</span></tt></p>
+<p>The maximum number of simultaneous connections with remote servers for distributed processing of all queries to a single Distributed table. We recommend setting a value no less than the number of servers in the cluster.</p>
+<p><code class="docutils literal"><span class="pre">By</span> <span class="pre">default,</span> <span class="pre">128.</span></code></p>
 </div>
 <div class="section" id="connect-timeout-with-failover-ms">
 <h1>connect_timeout_with_failover_ms<a class="headerlink" href="#connect-timeout-with-failover-ms" title="Permalink to this headline">¶</a></h1>
-<p>Таймаут в миллисекундах на соединение с удалённым сервером, для движка таблиц Distributed, если используются секции shard и replica в описании кластера.
-В случае неуспеха, делается несколько попыток соединений с разными репликами.
-<tt class="docutils literal"><span class="pre">По</span> <span class="pre">умолчанию</span> <span class="pre">-</span> <span class="pre">50.</span></tt></p>
+<p>The timeout in milliseconds for connecting to a remote server for a Distributed table engine, if the &#8216;shard&#8217; and &#8216;replica&#8217; sections are used in the cluster definition.
+If unsuccessful, several attempts are made to connect to various replicas.</p>
+<p><code class="docutils literal"><span class="pre">By</span> <span class="pre">default,</span> <span class="pre">50.</span></code></p>
 </div>
 <div class="section" id="connections-with-failover-max-tries">
 <h1>connections_with_failover_max_tries<a class="headerlink" href="#connections-with-failover-max-tries" title="Permalink to this headline">¶</a></h1>
-<p>Максимальное количество попыток соединения с каждой репликой, для движка таблиц Distributed.
-<tt class="docutils literal"><span class="pre">По</span> <span class="pre">умолчанию</span> <span class="pre">-</span> <span class="pre">3</span></tt></p>
+<p>The maximum number of connection attempts with each replica, for the Distributed table engine.</p>
+<p><code class="docutils literal"><span class="pre">By</span> <span class="pre">default,</span> <span class="pre">3.</span></code></p>
 </div>
 <div class="section" id="extremes">
 <h1>extremes<a class="headerlink" href="#extremes" title="Permalink to this headline">¶</a></h1>
-<p>Считать ли экстремальные значения (минимумы и максимумы по столбцам результата запроса). Принимает 0 или 1. По умолчанию - 0 (выключено).
-Подробнее смотрите раздел &#8220;Экстремальные значения&#8221;.</p>
+<p>Whether to count extreme values (the minimums and maximums in columns of a query result).
+Accepts 0 or 1. By default, 0 (disabled).
+For more information, see the section &#8220;Extreme values&#8221;.</p>
 </div>
 <div class="section" id="use-uncompressed-cache">
 <h1>use_uncompressed_cache<a class="headerlink" href="#use-uncompressed-cache" title="Permalink to this headline">¶</a></h1>
-<p>Использовать ли кэш разжатых блоков. Принимает 0 или 1. По умолчанию - 0 (выключено).
-Кэш разжатых блоков (только для таблиц семейства MergeTree) позволяет существенно уменьшить задержки и увеличить пропускную способность при обработке большого количества коротких запросов. Включите эту настройку для пользователей, от которых идут частые короткие запросы. Также обратите внимание на конфигурационный параметр uncompressed_cache_size (настраивается только в конфигурационном файле) - размер кэша разжатых блоков. По умолчанию - 8 GiB. Кэш разжатых блоков заполняется по мере надобности; наиболее невостребованные данные автоматически удаляются.</p>
-<p>Для запросов, читающих хоть немного приличный объём данных (миллион строк и больше), кэш разжатых блоков автоматически выключается, чтобы оставить место для действительно мелких запросов. Поэтому, можно держать настройку use_uncompressed_cache всегда выставленной в 1.</p>
+<p>Whether to use a cache of uncompressed blocks. Accepts 0 or 1. By default, 0 (disabled).
+The uncompressed cache (only for tables in the MergeTree family) allows significantly reducing latency and increasing throughput when working with a large number of short queries. Enable this setting for users who send frequent short requests. Also pay attention to the <code class="docutils literal"><span class="pre">uncompressed_cache_size</span></code> configuration parameter (only set in the config file) - the size of uncompressed cache blocks.
+By default, it is 8 GiB. The uncompressed cache is filled in as needed; the least-used data is automatically deleted.</p>
+<p>For queries that read at least a somewhat large volume of data (one million rows or more), the uncompressed cache is disabled automatically in order to save space for truly small queries. So you can keep the <code class="docutils literal"><span class="pre">use_uncompressed_cache</span></code> setting always set to 1.</p>
 </div>
 <div class="section" id="replace-running-query">
 <h1>replace_running_query<a class="headerlink" href="#replace-running-query" title="Permalink to this headline">¶</a></h1>
-<p>При использовании HTTP-интерфейса, может быть передан параметр query_id - произвольная строка, являющаяся идентификатором запроса.
-Если в этот момент, уже существует запрос от того же пользователя с тем же query_id, то поведение определяется параметром replace_running_query.</p>
-<p><tt class="docutils literal"><span class="pre">0</span></tt> - (по умолчанию) кинуть исключение (не давать выполнить запрос, если запрос с таким же query_id уже выполняется);</p>
-<p><tt class="docutils literal"><span class="pre">1</span></tt> - отменить старый запрос и начать выполнять новый.</p>
-<p>Эта настройка, выставленная в 1, используется в Яндекс.Метрике для реализации suggest-а значений для условий сегментации. После ввода очередного символа, если старый запрос ещё не выполнился, его следует отменить.</p>
+<p>When using the HTTP interface, the &#8216;query_id&#8217; parameter can be passed. This is any string that serves as the query identifier.
+If a query from the same user with the same &#8216;query_id&#8217; already exists at this time, the behavior depends on the &#8216;replace_running_query&#8217; parameter.</p>
+<p><code class="docutils literal"><span class="pre">0</span> <span class="pre">(default)</span></code> - Throw an exception (don&#8217;t allow the query to run if a query with the same &#8216;query_id&#8217; is already running).
+<code class="docutils literal"><span class="pre">1</span></code> - Cancel the old query and start running the new one.</p>
+<p>Yandex.Metrica uses this parameter set to 1 for implementing suggestions for segmentation conditions. After entering the next character, if the old query hasn&#8217;t finished yet, it should be canceled.</p>
 </div>
 <div class="section" id="load-balancing">
 <h1>load_balancing<a class="headerlink" href="#load-balancing" title="Permalink to this headline">¶</a></h1>
-<p>На какие реплики (среди живых реплик) предпочитать отправлять запрос (при первой попытке) при распределённой обработке запроса.</p>
+<p>Which replicas (among healthy replicas) to preferably send a query to (on the first attempt) for distributed processing.</p>
 <div class="section" id="random">
 <h2>random (по умолчанию)<a class="headerlink" href="#random" title="Permalink to this headline">¶</a></h2>
-<p>Для каждой реплики считается количество ошибок. Запрос отправляется на реплику с минимальным числом ошибок, а если таких несколько, то на случайную из них.
-Недостатки: не учитывается близость серверов; если на репликах оказались разные данные, то вы будете получать так же разные данные.</p>
+<p>The number of errors is counted for each replica. The query is sent to the replica with the fewest errors, and if there are several of these, to any one of them.
+Disadvantages: Server proximity is not accounted for; if the replicas have different data, you will also get different data.</p>
 </div>
 <div class="section" id="nearest-hostname">
 <h2>nearest_hostname<a class="headerlink" href="#nearest-hostname" title="Permalink to this headline">¶</a></h2>
-<p>Для каждой реплики считается количество ошибок. Каждые 5 минут, число ошибок целочисленно делится на 2 - таким образом, обеспечивается расчёт числа ошибок за недавнее время с экспоненциальным сглаживанием. Если есть одна реплика с минимальным числом ошибок (то есть, на других репликах недавно были ошибки) - запрос отправляется на неё. Если есть несколько реплик с одинаковым минимальным числом ошибок, то запрос отправляется на реплику, имя хоста которой в конфигурационном файле минимально отличается от имени хоста сервера (по количеству отличающихся символов на одинаковых позициях, до минимальной длины обеих имён хостов).</p>
-<p>Для примера, example01-01-1 и example01-01-2.yandex.ru отличаются в одной позиции, а example01-01-1 и example01-02-2 - в двух.
-Этот способ может показаться несколько дурацким, но он не использует внешние данные о топологии сети, и не сравнивает IP-адреса, что было бы сложным для наших IPv6-адресов.</p>
-<p>Таким образом, если есть равнозначные реплики, предпочитается ближайшая по имени.
-Также можно сделать предположение, что при отправке запроса на один и тот же сервер, в случае отсутствия сбоев, распределённый запрос будет идти тоже на одни и те же серверы. То есть, даже если на репликах расположены разные данные, запрос будет возвращать в основном одинаковые результаты.</p>
+<p>The number of errors is counted for each replica. Every 5 minutes, the number of errors is integrally divided by 2. Thus, the number of errors is calculated for a recent time with exponential smoothing. If there is one replica with a minimal number of errors (i.e. errors occurred recently on the other replicas), the query is sent to it. If there are multiple replicas with the same minimal number of errors, the query is sent to the replica with a host name that is most similar to the server&#8217;s host name in the config file (for the number of different characters in identical positions, up to the minimum length of both host names).</p>
+<p>As an example, example01-01-1 and example01-01-2.yandex.ru are different in one position, while example01-01-1 and example01-02-2 differ in two places.
+This method might seem a little stupid, but it doesn&#8217;t use external data about network topology, and it doesn&#8217;t compare IP addresses, which would be complicated for our IPv6 addresses.</p>
+<p>Thus, if there are equivalent replicas, the closest one by name is preferred.
+We can also assume that when sending a query to the same server, in the absence of failures, a distributed query will also go to the same servers. So even if different data is placed on the replicas, the query will return mostly the same results.</p>
 </div>
 <div class="section" id="in-order">
 <h2>in_order<a class="headerlink" href="#in-order" title="Permalink to this headline">¶</a></h2>
-<p>Реплики перебираются в таком порядке, в каком они указаны. Количество ошибок не имеет значения.
-Этот способ подходит для тех случаев, когда вы точно знаете, какая реплика предпочтительнее.</p>
+<p>Replicas are accessed in the same order as they are specified. The number of errors does not matter. This method is appropriate when you know exactly which replica is preferable.</p>
 </div>
 </div>
 <div class="section" id="totals-mode">
 <h1>totals_mode<a class="headerlink" href="#totals-mode" title="Permalink to this headline">¶</a></h1>
-<p>Каким образом вычислять TOTALS при наличии HAVING, а также при наличии max_rows_to_group_by и group_by_overflow_mode = &#8216;any&#8217;.
-Смотрите раздел &#8220;Модификатор WITH TOTALS&#8221;.</p>
+<p>How to calculate TOTALS when HAVING is present, as well as when max_rows_to_group_by and group_by_overflow_mode = &#8216;any&#8217; are present.
+See the section &#8220;WITH TOTALS modifier&#8221;.</p>
 </div>
 <div class="section" id="totals-auto-threshold">
 <h1>totals_auto_threshold<a class="headerlink" href="#totals-auto-threshold" title="Permalink to this headline">¶</a></h1>
-<p>Порог для <tt class="docutils literal"><span class="pre">totals_mode</span> <span class="pre">=</span> <span class="pre">'auto'</span></tt>.
-Смотрите раздел &#8220;Модификатор WITH TOTALS&#8221;.</p>
+<p>The threshold for <code class="docutils literal"><span class="pre">totals_mode</span> <span class="pre">=</span> <span class="pre">'auto'</span></code>.
+See the section &#8220;WITH TOTALS modifier&#8221;.</p>
 </div>
 <div class="section" id="default-sample">
 <h1>default_sample<a class="headerlink" href="#default-sample" title="Permalink to this headline">¶</a></h1>
-<p>Число с плавающей запятой от 0 до 1. По умолчанию - 1.
-Позволяет выставить коэффициент сэмплирования по умолчанию для всех запросов SELECT.
-(Для таблиц, не поддерживающих сэмплирование, будет кидаться исключение.)
-Если равно 1 - сэмплирование по умолчанию не делается.</p>
+<p>A floating-point number from 0 to 1. By default, 1.
+Allows setting a default sampling coefficient for all SELECT queries.
+(For tables that don&#8217;t support sampling, an exception will be thrown.)
+If set to 1, default sampling is not performed.</p>
 </div>
 <div class="section" id="max-parallel-replicas">
 <h1>max_parallel_replicas<a class="headerlink" href="#max-parallel-replicas" title="Permalink to this headline">¶</a></h1>
-<p>Максимальное количество используемых реплик каждого шарда при выполнении запроса.
-Для консистентности (чтобы получить разные части одного и того же разбиения), эта опция работает только при заданном ключе сэмплирования.
-Отставание реплик не контролируется.</p>
+<p>The maximum number of replicas of each shard used when the query is executed.
+For consistency (to get different parts of the same partition), this option only works for the specified sampling key.
+The lag of the replicas is not controlled.</p>
 </div>
 <div class="section" id="compile">
 <h1>compile<a class="headerlink" href="#compile" title="Permalink to this headline">¶</a></h1>
-<p>Включить компиляцию запросов. По умолчанию - 0 (выключено).</p>
-<p>Компиляция предусмотрена только для части конвейера обработки запроса - для первой стадии агрегации (GROUP BY).
-В случае, если эта часть конвейера была скомпилирована, запрос может работать быстрее, за счёт разворачивания коротких циклов и инлайнинга вызовов агрегатных функций. Максимальный прирост производительности (до четырёх раз в редких случаях) достигается на запросах с несколькими простыми агрегатными функциями. Как правило, прирост производительности незначителен. В очень редких случаях возможно замедление выполнения запроса.</p>
+<p>Enable query compilation. The default is 0 (disabled).</p>
+<p>Compilation is provided for only part of the request processing pipeline - for the first aggregation step (GROUP BY).
+In the event that this part of the pipeline was compiled, the query can work faster, by deploying short loops and inlining the aggregate function calls. The maximum performance increase (up to four times in rare cases) is achieved on queries with several simple aggregate functions. Typically, the performance gain is negligible. In very rare cases, the request may be slowed down.</p>
 </div>
 <div class="section" id="min-count-to-compile">
 <h1>min_count_to_compile<a class="headerlink" href="#min-count-to-compile" title="Permalink to this headline">¶</a></h1>
-<p>После скольких раз, когда скомпилированный кусок кода мог пригодиться, выполнить его компиляцию. По умолчанию - 3.
-В случае, если значение равно нулю, то компиляция выполняется синхронно, и запрос будет ждать окончания процесса компиляции перед продолжением выполнения. Это можно использовать для тестирования, иначе используйте значения, начиная с 1. Как правило, компиляция занимает по времени около 5-10 секунд.
-В случае, если значение равно 1 или больше, компиляция выполняется асинхронно, в отдельном потоке. При готовности результата, он сразу же будет использован, в том числе, уже выполняющимися в данный момент запросами.</p>
-<p>Скомпилированный код требуется для каждого разного сочетания используемых в запросе агрегатных функций и вида ключей в GROUP BY.
-Результаты компиляции сохраняются в директории build в виде .so файлов. Количество результатов компиляции не ограничено, так как они не занимают много места. При перезапуске сервера, старые результаты будут использованы, за исключением случая обновления сервера - тогда старые результаты удаляются.</p>
+<p>After how many times, when the compiled piece of code could come in handy, perform its compilation. The default is 3.
+In case the value is zero, the compilation is executed synchronously, and the request will wait for the compilation process to finish before continuing. This can be used for testing, otherwise use values ​​starting with 1. Typically, compilation takes about 5-10 seconds.
+If the value is 1 or more, the compilation is performed asynchronously, in a separate thread. If the result is ready, it will be immediately used, including those already running at the moment requests.</p>
+<p>The compiled code is required for each different combination of aggregate functions used in the query and the type of keys in GROUP BY.
+The compilation results are saved in the build directory as .so files. The number of compilation results is unlimited, since they do not take up much space. When the server is restarted, the old results will be used, except for the server update - then the old results are deleted.</p>
 </div>
 <div class="section" id="input-format-skip-unknown-fields">
 <h1>input_format_skip_unknown_fields<a class="headerlink" href="#input-format-skip-unknown-fields" title="Permalink to this headline">¶</a></h1>
-<p>Если значение истинно, то при выполнении INSERT из входных данных пропускаются (не рассматриваются) колонки с неизвестными именами, иначе в данной ситуации будет сгенерировано исключение.
-Работает для форматов JSONEachRow и TSKV.</p>
+<p>If the parameter is true, INSERT operation will skip columns with unknown names from input.
+Otherwise, an exception will be generated, it is default behavior.
+The parameter works only for JSONEachRow and TSKV input formats.</p>
 </div>
 <div class="section" id="output-format-json-quote-64bit-integers">
 <h1>output_format_json_quote_64bit_integers<a class="headerlink" href="#output-format-json-quote-64bit-integers" title="Permalink to this headline">¶</a></h1>
-<p>Если значение истинно, то при использовании JSON* форматов UInt64 и Int64 числа выводятся в кавычках (из соображений совместимости с большинством реализаций JavaScript), иначе - без кавычек.</p>
+<p>If the parameter is true (default value), UInt64 and Int64 numbers are printed as quoted strings in all JSON output formats.
+Such behavior is compatible with most JavaScript interpreters that stores all numbers as double-precision floating point numbers.
+Otherwise, they are printed as regular numbers.</p>
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">max_block_size</a></li>
-<li><a class="reference internal" href="#max-insert-block-size">max_insert_block_size</a></li>
-<li><a class="reference internal" href="#max-threads">max_threads</a></li>
-<li><a class="reference internal" href="#max-compress-block-size">max_compress_block_size</a></li>
-<li><a class="reference internal" href="#min-compress-block-size">min_compress_block_size</a></li>
-<li><a class="reference internal" href="#max-query-size">max_query_size</a></li>
-<li><a class="reference internal" href="#interactive-delay">interactive_delay</a></li>
-<li><a class="reference internal" href="#connect-timeout">connect_timeout</a></li>
-<li><a class="reference internal" href="#receive-timeout">receive_timeout</a></li>
-<li><a class="reference internal" href="#send-timeout">send_timeout</a></li>
-<li><a class="reference internal" href="#poll-interval">poll_interval</a></li>
-<li><a class="reference internal" href="#max-distributed-connections">max_distributed_connections</a></li>
-<li><a class="reference internal" href="#distributed-connections-pool-size">distributed_connections_pool_size</a></li>
-<li><a class="reference internal" href="#connect-timeout-with-failover-ms">connect_timeout_with_failover_ms</a></li>
-<li><a class="reference internal" href="#connections-with-failover-max-tries">connections_with_failover_max_tries</a></li>
-<li><a class="reference internal" href="#extremes">extremes</a></li>
-<li><a class="reference internal" href="#use-uncompressed-cache">use_uncompressed_cache</a></li>
-<li><a class="reference internal" href="#replace-running-query">replace_running_query</a></li>
-<li><a class="reference internal" href="#load-balancing">load_balancing</a><ul>
-<li><a class="reference internal" href="#random">random (по умолчанию)</a></li>
-<li><a class="reference internal" href="#nearest-hostname">nearest_hostname</a></li>
-<li><a class="reference internal" href="#in-order">in_order</a></li>
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Settings</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html">Restrictions on query complexity</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">max_block_size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#max-insert-block-size">max_insert_block_size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#max-threads">max_threads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#max-compress-block-size">max_compress_block_size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#min-compress-block-size">min_compress_block_size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#max-query-size">max_query_size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interactive-delay">interactive_delay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#connect-timeout">connect_timeout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#receive-timeout">receive_timeout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#send-timeout">send_timeout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#poll-interval">poll_interval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#max-distributed-connections">max_distributed_connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#distributed-connections-pool-size">distributed_connections_pool_size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#connect-timeout-with-failover-ms">connect_timeout_with_failover_ms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#connections-with-failover-max-tries">connections_with_failover_max_tries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#extremes">extremes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#use-uncompressed-cache">use_uncompressed_cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#replace-running-query">replace_running_query</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#load-balancing">load_balancing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#random">random (по умолчанию)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nearest-hostname">nearest_hostname</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#in-order">in_order</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#totals-mode">totals_mode</a></li>
-<li><a class="reference internal" href="#totals-auto-threshold">totals_auto_threshold</a></li>
-<li><a class="reference internal" href="#default-sample">default_sample</a></li>
-<li><a class="reference internal" href="#max-parallel-replicas">max_parallel_replicas</a></li>
-<li><a class="reference internal" href="#compile">compile</a></li>
-<li><a class="reference internal" href="#min-count-to-compile">min_count_to_compile</a></li>
-<li><a class="reference internal" href="#input-format-skip-unknown-fields">input_format_skip_unknown_fields</a></li>
-<li><a class="reference internal" href="#output-format-json-quote-64bit-integers">output_format_json_quote_64bit_integers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#totals-mode">totals_mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#totals-auto-threshold">totals_auto_threshold</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#default-sample">default_sample</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#max-parallel-replicas">max_parallel_replicas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#compile">compile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#min-count-to-compile">min_count_to_compile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#input-format-skip-unknown-fields">input_format_skip_unknown_fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#output-format-json-quote-64bit-integers">output_format_json_quote_64bit_integers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings_profiles.html">Settings profiles</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="query_complexity.html"
-                        title="previous chapter">Ограничения на сложность запроса</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="settings_profiles.html"
-                        title="next chapter">Профили настроек</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/settings/settings.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Settings</a><ul>
+      <li>Previous: <a href="query_complexity.html" title="previous chapter">Restrictions on query complexity</a></li>
+      <li>Next: <a href="settings_profiles.html" title="next chapter">Settings profiles</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -300,25 +349,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="settings_profiles.html" title="Профили настроек"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="query_complexity.html" title="Ограничения на сложность запроса"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Настройки</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

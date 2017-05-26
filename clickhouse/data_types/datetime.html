@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>DateTime &mdash; ClickHouse 1 documentation</title>
+    <title>DateTime &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,45 +23,34 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Типы данных" href="index.html" />
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Data types" href="index.html" />
     <link rel="next" title="Enum" href="enum.html" />
-    <link rel="prev" title="Date" href="date.html" /> 
+    <link rel="prev" title="Date" href="date.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="enum.html" title="Enum"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="date.html" title="Date"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Типы данных</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="datetime">
 <h1>DateTime<a class="headerlink" href="#datetime" title="Permalink to this headline">¶</a></h1>
-<p>Дата-с-временем. Хранится в 4 байтах, в виде (беззнакового) unix timestamp. Позволяет хранить значения в том же интервале, что и для типа Date. Минимальное значение выводится как 0000-00-00 00:00:00.
-Время хранится с точностью до одной секунды (без учёта секунд координации).</p>
-<div class="section" id="id1">
-<h2>Часовые пояса<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<p>Дата-с-временем преобразуется из текстового (разбитого на составляющие) в бинарный вид и обратно, с использованием системного часового пояса на момент старта клиента или сервера. В текстовом виде, теряется информация о том, был ли произведён перевод стрелок.</p>
-<p>По умолчанию клиент переключается на часовой пояс сервера при подключении. Это поведение можно изменить, включив у клиента параметр командной строки <tt class="docutils literal"><span class="pre">--use_client_time_zone</span></tt>.</p>
-<p>Поддерживаются только часовые пояса, для которых для всего диапазона времён, с которым вы будете работать, не существовало моментов времени, в которые время отличалось от UTC на нецелое число часов (без учёта секунд координации).</p>
-<p>То есть, при работе с датой в виде текста (например, при сохранении текстовых дампов), следует иметь ввиду о проблемах с неоднозначностью во время перевода стрелок назад, и о проблемах с соответствием данных, при смене часового пояса.</p>
+<p>Date with time. Stored in four bytes as a Unix timestamp (unsigned). Allows storing values in the same range as for the Date type. The minimal value is output as 0000-00-00 00:00:00. The time is stored with accuracy up to one second (without leap seconds).</p>
+<div class="section" id="time-zones">
+<h2>Time zones<a class="headerlink" href="#time-zones" title="Permalink to this headline">¶</a></h2>
+<p>The date with time is converted from text (divided into component parts) to binary and back, using the system&#8217;s time zone at the time the client or server starts. In text format, information about daylight savings is lost.</p>
+<p>Note that by default the client adopts the server time zone at the beginning of the session. You can change this behaviour with the &#8211;use_client_time_zone command line switch.</p>
+<p>Supports only those time zones that never had the time differ from UTC for a partial number of hours (without leap seconds) over the entire time range you will be working with.</p>
+<p>So when working with a textual date (for example, when saving text dumps), keep in mind that there may be ambiguity during changes for daylight savings time, and there may be problems matching data if the time zone changed.</p>
 </div>
 </div>
 
@@ -69,28 +58,92 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">DateTime</a><ul>
-<li><a class="reference internal" href="#id1">Часовые пояса</a></li>
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Data types</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="array.html">Array(T)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="boolean.html">Boolean</a></li>
+<li class="toctree-l2"><a class="reference internal" href="date.html">Date</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">DateTime</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#time-zones">Time zones</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="enum.html">Enum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fixedstring.html">FixedString(N)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="float.html">Float32, Float64</a></li>
+<li class="toctree-l2"><a class="reference internal" href="int_uint.html">UInt8, UInt16, UInt32, UInt64, Int8, Int16, Int32, Int64</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string.html">String</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tuple.html">Tuple(T1, T2, ...)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nested_data_structures/index.html">Nested data structures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="special_data_types/index.html">Special data types</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="date.html"
-                        title="previous chapter">Date</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="enum.html"
-                        title="next chapter">Enum</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/data_types/datetime.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Data types</a><ul>
+      <li>Previous: <a href="date.html" title="previous chapter">Date</a></li>
+      <li>Next: <a href="enum.html" title="next chapter">Enum</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -107,25 +160,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="enum.html" title="Enum"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="date.html" title="Date"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Типы данных</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

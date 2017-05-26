@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Pretty &mdash; ClickHouse 1 documentation</title>
+    <title>Pretty &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,43 +23,32 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Форматы" href="index.html" />
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Formats" href="index.html" />
     <link rel="next" title="PrettyCompact" href="prettycompact.html" />
-    <link rel="prev" title="Null" href="null.html" /> 
+    <link rel="prev" title="Null" href="null.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="prettycompact.html" title="PrettyCompact"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="null.html" title="Null"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Форматы</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pretty">
 <h1>Pretty<a class="headerlink" href="#pretty" title="Permalink to this headline">¶</a></h1>
-<p>Выводит данные в виде Unicode-art табличек, также используя ANSI-escape последовательности для установки цветов в терминале.
-Рисуется полная сетка таблицы и, таким образом, каждая строчка занимает две строки в терминале.
-Каждый блок результата выводится в виде отдельной таблицы. Это нужно, чтобы можно было выводить блоки без буферизации результата (буферизация потребовалась бы, чтобы заранее вычислить видимую ширину всех значений.)
-Для защиты от вываливания слишком большого количества данных в терминал, выводится только первые 10 000 строк. Если строк больше или равно 10 000, то будет написано &#8220;Showed first 10 000.&#8221;
-Этот формат подходит только для вывода результата выполнения запроса, но не для парсинга (приёма данных для вставки в таблицу).</p>
-<p>Формат Pretty поддерживает вывод тотальных значений (при использовании WITH TOTALS) и экстремальных значений (при настройке extremes выставленной в 1). В этих случаях, после основных данных выводятся тотальные значения, и экстремальные значения, в отдельных табличках. Пример (показан для формата PrettyCompact):</p>
+<p>Writes data as Unicode-art tables, also using ANSI-escape sequences for setting colors in the terminal.
+A full grid of the table is drawn, and each row occupies two lines in the terminal. Each result block is output as a separate table. This is necessary so that blocks can be output without buffering results (buffering would be necessary in order to pre-calculate the visible width of all the values).
+To avoid dumping too much data to the terminal, only the first 10,000 rows are printed. If the number of rows is greater than or equal to 10,000, the message &#8220;Showed first 10,000&#8221; is printed.
+This format is only appropriate for outputting a query result, not for parsing.</p>
+<p>The Pretty format supports outputting total values (when using WITH TOTALS) and extremes (when &#8216;extremes&#8217; is set to 1). In these cases, total values and extreme values are output after the main data, in separate tables. Example (shown for the PrettyCompact format):</p>
 <div class="highlight-sql"><div class="highlight"><pre><span></span>SELECT EventDate, count() AS c FROM test.hits GROUP BY EventDate WITH TOTALS ORDER BY EventDate FORMAT PrettyCompact
 
 ┌──EventDate─┬───────c─┐
@@ -90,20 +79,101 @@ Extremes:
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="null.html"
-                        title="previous chapter">Null</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="prettycompact.html"
-                        title="next chapter">PrettyCompact</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/formats/pretty.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Formats</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="blocktabseparated.html">BlockTabSeparated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="csv.html">CSV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="csvwithnames.html">CSVWithNames</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json.html">JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsoncompact.html">JSONCompact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsoneachrow.html">JSONEachRow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="native.html">Native</a></li>
+<li class="toctree-l2"><a class="reference internal" href="null.html">Null</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Pretty</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prettycompact.html">PrettyCompact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prettycompactmonoblock.html">PrettyCompactMonoBlock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prettynoescapes.html">PrettyNoEscapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prettynoescapes.html#prettycompactnoescapes">PrettyCompactNoEscapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prettynoescapes.html#prettyspacenoescapes">PrettySpaceNoEscapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prettyspace.html">PrettySpace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rowbinary.html">RowBinary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tabseparated.html">TabSeparated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tabseparatedraw.html">TabSeparatedRaw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tabseparatedwithnames.html">TabSeparatedWithNames</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tabseparatedwithnamesandtypes.html">TabSeparatedWithNamesAndTypes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tskv.html">TSKV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="values.html">Values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vertical.html">Vertical</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xml.html">XML</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Formats</a><ul>
+      <li>Previous: <a href="null.html" title="previous chapter">Null</a></li>
+      <li>Next: <a href="prettycompact.html" title="next chapter">PrettyCompact</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -120,25 +190,13 @@ Extremes:
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="prettycompact.html" title="PrettyCompact"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="null.html" title="Null"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Форматы</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

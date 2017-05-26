@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Использование в Яндекс.Метрике и других отделах Яндекса &mdash; ClickHouse 1 documentation</title>
+    <title>Usage in Yandex.Metrica and other Yandex services &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,71 +23,124 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Введение" href="index.html" />
-    <link rel="next" title="Возможные глупые вопросы" href="possible_silly_questions.html" />
-    <link rel="prev" title="Постановка задачи в Яндекс.Метрике" href="ya_metrika_task.html" /> 
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Introduction" href="index.html" />
+    <link rel="next" title="Possible silly questions" href="possible_silly_questions.html" />
+    <link rel="prev" title="The Yandex.Metrica task" href="ya_metrika_task.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="possible_silly_questions.html" title="Возможные глупые вопросы"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="ya_metrika_task.html" title="Постановка задачи в Яндекс.Метрике"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Введение</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="id1">
-<h1>Использование в Яндекс.Метрике и других отделах Яндекса<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
-<p>В Яндекс.Метрике ClickHouse используется для нескольких задач.
-Основная задача - построение отчётов в режиме онлайн по неагрегированным данным. Для решения этой задачи используется кластер из 374 серверов, хранящий более 20,3 триллионов строк в базе данных. Объём сжатых данных, без учёта дублирования и репликации, составляет около 2 ПБ. Объём несжатых данных (в формате tsv) составил бы, приблизительно, 17 ПБ.</p>
+  <div class="section" id="usage-in-yandex-metrica-and-other-yandex-services">
+<h1>Usage in Yandex.Metrica and other Yandex services<a class="headerlink" href="#usage-in-yandex-metrica-and-other-yandex-services" title="Permalink to this headline">¶</a></h1>
+<p>ClickHouse is used for multiple purposes in Yandex.Metrica. Its main task is to build reports in online mode using non-aggregated data. It uses a cluster of 374 servers, which store over 20.3 trillion rows in the database. The volume of compressed data, without counting duplication and replication, is about 2 PB. The volume of uncompressed data (in TSV format) would be approximately 17 PB.</p>
 <dl class="docutils">
-<dt>Также ClickHouse используется:</dt>
+<dt>ClickHouse is also used for:</dt>
 <dd><ul class="first last simple">
-<li>для хранения данных Вебвизора;</li>
-<li>для обработки промежуточных данных;</li>
-<li>для построения глобальных отчётов Аналитиками;</li>
-<li>для выполнения запросов в целях отладки движка Метрики;</li>
-<li>для анализа логов работы API и пользовательского интерфейса.</li>
+<li>Storing WebVisor data.</li>
+<li>Processing intermediate data.</li>
+<li>Building global reports with Analytics.</li>
+<li>Running queries for debugging the Metrica engine.</li>
+<li>Analyzing logs from the API and the user interface.</li>
 </ul>
 </dd>
 </dl>
-<p>ClickHouse имеет более десятка инсталляций в других отделах Яндекса: в Вертикальных сервисах, Маркете, Директе, БК, Бизнес аналитике, Мобильной разработке, AdFox, Персональных сервисах и т п.</p>
+<p>ClickHouse has at least a dozen installations in other Yandex services: in search verticals, Market, Direct, business analytics, mobile development, AdFox, personal services, and others.</p>
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="ya_metrika_task.html"
-                        title="previous chapter">Постановка задачи в Яндекс.Метрике</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="possible_silly_questions.html"
-                        title="next chapter">Возможные глупые вопросы</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/introduction/use_case.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Introduction</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="what_is_clickhouse.html">What is ClickHouse?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distinctive_features.html">Distinctive features of ClickHouse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="features.html">ClickHouse features that can be considered disadvantages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ya_metrika_task.html">The Yandex.Metrica task</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Usage in Yandex.Metrica and other Yandex services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="possible_silly_questions.html">Possible silly questions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html">Performance</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Introduction</a><ul>
+      <li>Previous: <a href="ya_metrika_task.html" title="previous chapter">The Yandex.Metrica task</a></li>
+      <li>Next: <a href="possible_silly_questions.html" title="next chapter">Possible silly questions</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -104,25 +157,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="possible_silly_questions.html" title="Возможные глупые вопросы"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="ya_metrika_task.html" title="Постановка задачи в Яндекс.Метрике"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Введение</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

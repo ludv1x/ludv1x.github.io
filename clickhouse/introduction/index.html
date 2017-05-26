@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Введение &mdash; ClickHouse 1 documentation</title>
+    <title>Introduction &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,68 +23,59 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="next" title="Что такое ClickHouse" href="what_is_clickhouse.html" />
-    <link rel="prev" title="Документация" href="../index.html" /> 
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="next" title="What is ClickHouse?" href="what_is_clickhouse.html" />
+    <link rel="prev" title="Documentation" href="../index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="what_is_clickhouse.html" title="Что такое ClickHouse"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="../index.html" title="Документация"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="id1">
-<h1>Введение<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="what_is_clickhouse.html">Что такое ClickHouse</a></li>
-<li class="toctree-l1"><a class="reference internal" href="distinctive_features.html">Отличительные возможности ClickHouse</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="distinctive_features.html#id1">1. По-настоящему столбцовая СУБД.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="distinctive_features.html#id2">2. Сжатие данных.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="distinctive_features.html#id3">3. Хранение данных на диске.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="distinctive_features.html#id4">4. Параллельная обработка запроса на многих процессорных ядрах.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="distinctive_features.html#id5">5. Распределённая обработка запроса на многих серверах.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="distinctive_features.html#sql">6. Поддержка SQL.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="distinctive_features.html#id6">7. Векторный движок.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="distinctive_features.html#id7">8. Обновление данных в реальном времени.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="distinctive_features.html#id8">9. Наличие индексов.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="distinctive_features.html#id9">10. Подходит для онлайн запросов.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="distinctive_features.html#id10">11. Поддержка приближённых вычислений.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="distinctive_features.html#id11">14. Репликация данных, поддержка целостности данных на репликах.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="what_is_clickhouse.html">What is ClickHouse?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="distinctive_features.html">Distinctive features of ClickHouse</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="distinctive_features.html#true-column-oriented-dbms">1. True column-oriented DBMS.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distinctive_features.html#data-compression">2. Data compression.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distinctive_features.html#disk-storage-of-data">3. Disk storage of data.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distinctive_features.html#parallel-processing-on-multiple-cores">4. Parallel processing on multiple cores.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distinctive_features.html#distributed-processing-on-multiple-servers">5. Distributed processing on multiple servers.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distinctive_features.html#sql-support">6. SQL support.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distinctive_features.html#vector-engine">7. Vector engine.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distinctive_features.html#real-time-data-updates">8. Real-time data updates.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distinctive_features.html#indexes">9. Indexes.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distinctive_features.html#suitable-for-online-queries">10. Suitable for online queries.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distinctive_features.html#support-for-approximated-calculations">11. Support for approximated calculations.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distinctive_features.html#data-replication-and-support-for-data-integrity-on-replicas">14. Data replication and support for data integrity on replicas.</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="features.html">Особенности ClickHouse, которые могут считаться недостатками</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ya_metrika_task.html">Постановка задачи в Яндекс.Метрике</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="ya_metrika_task.html#id2">Агрегированные и неагрегированные данные</a></li>
+<li class="toctree-l1"><a class="reference internal" href="features.html">ClickHouse features that can be considered disadvantages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ya_metrika_task.html">The Yandex.Metrica task</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ya_metrika_task.html#aggregated-and-non-aggregated-data">Aggregated and non-aggregated data</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="use_case.html">Использование в Яндекс.Метрике и других отделах Яндекса</a></li>
-<li class="toctree-l1"><a class="reference internal" href="possible_silly_questions.html">Возможные глупые вопросы</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="possible_silly_questions.html#map-reduce">1. Почему бы не использовать системы типа map-reduce?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="use_case.html">Usage in Yandex.Metrica and other Yandex services</a></li>
+<li class="toctree-l1"><a class="reference internal" href="possible_silly_questions.html">Possible silly questions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="possible_silly_questions.html#why-not-to-use-systems-like-map-reduce">1. Why not to use systems like map-reduce?</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="performance.html">Производительность</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="performance.html#id2">Пропускная способность при обработке одного большого запроса</a></li>
-<li class="toctree-l2"><a class="reference internal" href="performance.html#id3">Задержки при обработке коротких запросов.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="performance.html#id4">Пропускная способность при обработке большого количества коротких запросов.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="performance.html#id5">Производительность при вставке данных.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="performance.html">Performance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="performance.html#throughput-for-a-single-large-query">Throughput for a single large query</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html#latency-when-processing-short-queries">Latency when processing short queries.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html#throughput-when-processing-a-large-quantity-of-short-queries">Throughput when processing a large quantity of short queries.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html#performance-on-data-insertion">Performance on data insertion.</a></li>
 </ul>
 </li>
 </ul>
@@ -95,20 +86,82 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="../index.html"
-                        title="previous chapter">Документация</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="what_is_clickhouse.html"
-                        title="next chapter">Что такое ClickHouse</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/introduction/index.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="what_is_clickhouse.html">What is ClickHouse?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distinctive_features.html">Distinctive features of ClickHouse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="features.html">ClickHouse features that can be considered disadvantages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ya_metrika_task.html">The Yandex.Metrica task</a></li>
+<li class="toctree-l2"><a class="reference internal" href="use_case.html">Usage in Yandex.Metrica and other Yandex services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="possible_silly_questions.html">Possible silly questions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html">Performance</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../index.html" title="previous chapter">Documentation</a></li>
+      <li>Next: <a href="what_is_clickhouse.html" title="next chapter">What is ClickHouse?</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -125,24 +178,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="what_is_clickhouse.html" title="Что такое ClickHouse"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="../index.html" title="Документация"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

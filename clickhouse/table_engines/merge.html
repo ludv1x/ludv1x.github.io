@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Merge &mdash; ClickHouse 1 documentation</title>
+    <title>Merge &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,68 +23,57 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Движки таблиц" href="index.html" />
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Table engines" href="index.html" />
     <link rel="next" title="MergeTree" href="mergetree.html" />
-    <link rel="prev" title="Memory" href="memory.html" /> 
+    <link rel="prev" title="Memory" href="memory.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="mergetree.html" title="MergeTree"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="memory.html" title="Memory"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Движки таблиц</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="merge">
 <h1>Merge<a class="headerlink" href="#merge" title="Permalink to this headline">¶</a></h1>
-<p>Движок Merge (не путайте с движком <tt class="docutils literal"><span class="pre">MergeTree</span></tt>) не хранит данные самостоятельно, а позволяет читать одновременно из произвольного количества других таблиц.
-Чтение автоматически распараллеливается. Запись в таблицу не поддерживается. При чтении будут использованы индексы тех таблиц, из которых реально идёт чтение, если они существуют.
-Движок Merge принимает параметры: имя базы данных и регулярное выражение для таблиц. Пример:</p>
+<p>The Merge engine (not to be confused with MergeTree) does not store data itself, but allows reading from any number of other tables simultaneously.
+Reading is automatically parallelized. Writing to a table is not supported. When reading, the indexes of tables that are actually being read are used, if they exist.
+The Merge engine accepts parameters: the database name and a regular expression for tables. Example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">Merge</span><span class="p">(</span><span class="n">hits</span><span class="p">,</span> <span class="s1">&#39;^WatchLog&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <ul class="simple">
-<li>данные будут читаться из таблиц в базе hits, имена которых соответствуют регулярному выражению &#8216;<tt class="docutils literal"><span class="pre">^WatchLog</span></tt>&#8216;.</li>
+<li>Data will be read from the tables in the &#8216;hits&#8217; database with names that match the regex <code class="docutils literal"><span class="pre">'^WatchLog'</span></code>.</li>
 </ul>
-<p>Вместо имени базы данных может использоваться константное выражение, возвращающее строку. Например, <tt class="docutils literal"><span class="pre">currentDatabase()</span></tt>.</p>
-<p>Регулярные выражения - re2 (как PCRE, но без особых извратов), регистрозависимые.
-Смотрите замечание об экранировании в регулярных выражениях в разделе &#8220;match&#8221;.</p>
-<p>При выборе таблиц для чтения, сама Merge-таблица не будет выбрана, даже если попадает под регулярное выражение - чтобы не возникло циклов.
-Впрочем, вы можете создать две Merge-таблицы, которые будут пытаться бесконечно читать данные друг-друга. Этого делать не нужно.</p>
-<p>Типичный способ использования движка Merge - возможность работы с большим количеством таблиц типа TinyLog, как с одной.</p>
-<div class="section" id="id1">
-<h2>Виртуальные столбцы<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<p>Виртуальные столбцы - столбцы, предоставляемые движком таблиц, независимо от определения таблицы. То есть, такие столбцы не указываются в CREATE TABLE, но доступны для SELECT-а.</p>
+<p>Instead of the database name, you can use a constant expression that returns a string. For example, <code class="docutils literal"><span class="pre">currentDatabase()</span></code>.</p>
+<p>Regular expressions are re2 (similar to PCRE), case-sensitive. See the notes about escaping symbols in regular expressions in the &#8220;match&#8221; section.</p>
+<p>When selecting tables to read, the Merge table itself will not be selected, even if it matches the regex. This is to avoid loops.
+It is possible to create two Merge tables that will endlessly try to read each others&#8217; data. But don&#8217;t do this.</p>
+<p>The typical way to use the Merge engine is for working with a large number of TinyLog tables as if with a single table.</p>
+<div class="section" id="virtual-columns">
+<h2>Virtual columns<a class="headerlink" href="#virtual-columns" title="Permalink to this headline">¶</a></h2>
+<p>Virtual columns are columns that are provided by the table engine, regardless of the table definition. In other words, these columns are not specified in CREATE TABLE, but they are accessible for SELECT.</p>
 <dl class="docutils">
-<dt>Виртуальные столбцы отличаются от обычных следующими особенностями:</dt>
+<dt>Virtual columns differ from normal columns in the following ways:</dt>
 <dd><ul class="first last simple">
-<li>они не указываются в определении таблицы;</li>
-<li>в них нельзя вставить данные при INSERT-е;</li>
-<li>при INSERT-е без указания списка столбцов, виртуальные столбцы не учитываются;</li>
-<li>они не выбираются при использовании звёздочки (<tt class="docutils literal"><span class="pre">SELECT</span> <span class="pre">*</span></tt>);</li>
-<li>виртуальные столбцы не показываются в запросах <tt class="docutils literal"><span class="pre">SHOW</span> <span class="pre">CREATE</span> <span class="pre">TABLE</span></tt> и <tt class="docutils literal"><span class="pre">DESC</span> <span class="pre">TABLE</span></tt>;</li>
+<li>They are not specified in table definitions.</li>
+<li>Data can&#8217;t be added to them with <code class="docutils literal"><span class="pre">INSERT</span></code>.</li>
+<li>When using <code class="docutils literal"><span class="pre">INSERT</span></code> without specifying the list of columns, virtual columns are ignored.</li>
+<li>They are not selected when using the asterisk (<code class="docutils literal"><span class="pre">SELECT</span> <span class="pre">*</span></code>).</li>
+<li>Virtual columns are not shown in <code class="docutils literal"><span class="pre">SHOW</span> <span class="pre">CREATE</span> <span class="pre">TABLE</span></code> and <code class="docutils literal"><span class="pre">DESC</span> <span class="pre">TABLE</span></code> queries.</li>
 </ul>
 </dd>
 </dl>
-<p>Таблица типа Merge содержит виртуальный столбец _table типа String. (Если в таблице уже есть столбец _table, то виртуальный столбец называется _table1; если уже есть _table1, то _table2 и т. п.) Он содержит имя таблицы, из которой были прочитаны данные.</p>
-<p>Если секция WHERE/PREWHERE содержит (в качестве одного из элементов конъюнкции или в качестве всего выражения) условия на столбец _table, не зависящие от других столбцов таблицы, то эти условия используются как индекс: условия выполняются над множеством имён таблиц, из которых нужно читать данные, и чтение будет производиться только из тех таблиц, для которых условия сработали.</p>
+<p>A Merge table contains the virtual column <strong>_table</strong> of the String type. (If the table already has a &#8216;_table&#8217; column, the virtual column is named &#8216;_table1&#8217;, and if it already has &#8216;_table1&#8217;, it is named &#8216;_table2&#8217;, and so on.) It contains the name of the table that data was read from.</p>
+<p>If the WHERE or PREWHERE clause contains conditions for the &#8216;_table&#8217; column that do not depend on other table columns (as one of the conjunction elements, or as an entire expression), these conditions are used as an index. The conditions are performed on a data set of table names to read data from, and the read operation will be performed from only those tables that the condition was triggered on.</p>
 </div>
 </div>
 
@@ -92,28 +81,99 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Merge</a><ul>
-<li><a class="reference internal" href="#id1">Виртуальные столбцы</a></li>
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Table engines</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="aggregatingmergetree.html">AggregatingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buffer.html">Buffer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="collapsingmergetree.html">CollapsingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distributed.html">Distributed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file.html">File(InputFormat)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="join.html">Join</a></li>
+<li class="toctree-l2"><a class="reference internal" href="log.html">Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="materializedview.html">MaterializedView</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Merge</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#virtual-columns">Virtual columns</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="mergetree.html">MergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="null.html">Null</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replacingmergetree.html">ReplacingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replication.html">Data replication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resharding.html">Перешардирование</a></li>
+<li class="toctree-l2"><a class="reference internal" href="set.html">Set</a></li>
+<li class="toctree-l2"><a class="reference internal" href="summingmergetree.html">SummingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tinylog.html">TinyLog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="view.html">View</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="memory.html"
-                        title="previous chapter">Memory</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="mergetree.html"
-                        title="next chapter">MergeTree</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/table_engines/merge.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Table engines</a><ul>
+      <li>Previous: <a href="memory.html" title="previous chapter">Memory</a></li>
+      <li>Next: <a href="mergetree.html" title="next chapter">MergeTree</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -130,25 +190,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="mergetree.html" title="MergeTree"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="memory.html" title="Memory"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Движки таблиц</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

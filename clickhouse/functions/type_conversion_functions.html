@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Функции преобразования типов &mdash; ClickHouse 1 documentation</title>
+    <title>Type conversion functions &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,37 +23,27 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Функции" href="index.html" />
-    <link rel="next" title="Функции для работы с URL" href="url_functions.html" />
-    <link rel="prev" title="Функции поиска в строках" href="string_search_functions.html" /> 
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Functions" href="index.html" />
+    <link rel="next" title="Functions for working with URLs" href="url_functions.html" />
+    <link rel="prev" title="Functions for searching strings" href="string_search_functions.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="url_functions.html" title="Функции для работы с URL"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="string_search_functions.html" title="Функции поиска в строках"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Функции</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="id1">
-<h1>Функции преобразования типов<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="type-conversion-functions">
+<h1>Type conversion functions<a class="headerlink" href="#type-conversion-functions" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="touint8-touint16-touint32-touint64">
 <h2>toUInt8, toUInt16, toUInt32, toUInt64<a class="headerlink" href="#touint8-touint16-touint32-touint64" title="Permalink to this headline">¶</a></h2>
 </div>
@@ -71,20 +61,19 @@
 </div>
 <div class="section" id="tostring">
 <h2>toString<a class="headerlink" href="#tostring" title="Permalink to this headline">¶</a></h2>
-<p>Функции преобразования между числами, строками (но не фиксированными строками), датами и датами-с-временем.
-Все эти функции принимают один аргумент.</p>
-<p>При преобразовании в строку или из строки, производится форматирование или парсинг значения по тем же правилам, что и для формата TabSeparated (и почти всех остальных текстовых форматов). Если распарсить строку не удаётся - кидается исключение и выполнение запроса прерывается.</p>
-<p>При преобразовании даты в число или наоборот, дате соответствует число дней от начала unix эпохи.
-При преобразовании даты-с-временем в число или наоборот, дате-с-временем соответствует число секунд от начала unix эпохи.</p>
-<p>Форматы даты и даты-с-временем для функций toDate/toDateTime определены следующим образом:</p>
+<p>Functions for converting between numbers, strings (but not fixed strings), dates, and dates with times. All these functions accept one argument.</p>
+<p>When converting to or from a string, the value is formatted or parsed using the same rules as for the TabSeparated format (and almost all other text formats). If the string can&#8217;t be parsed, an exception is thrown and the request is canceled.</p>
+<p>When converting dates to numbers or vice versa, the date corresponds to the number of days since the beginning of the Unix epoch.
+When converting dates with times to numbers or vice versa, the date with time corresponds to the number of seconds since the beginning of the Unix epoch.</p>
+<p>Formats of date and date with time for toDate/toDateTime functions are defined as follows:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>YYYY-MM-DD
 YYYY-MM-DD hh:mm:ss
 </pre></div>
 </div>
-<p>В качестве исключения, если делается преобразование из числа типа UInt32, Int32, UInt64, Int64 в Date, и если число больше или равно 65536, то число рассматривается как unix timestamp (а не как число дней) и округляется до даты. Это позволяет поддержать распространённый случай, когда пишут toDate(unix_timestamp), что иначе было бы ошибкой и требовало бы написания более громоздкого toDate(toDateTime(unix_timestamp))</p>
-<p>Преобразование между датой и датой-с-временем производится естественным образом: добавлением нулевого времени или отбрасыванием времени.</p>
-<p>Преобразование между числовыми типами производится по тем же правилам, что и присваивание между разными числовыми типами в C++.</p>
-<p>Дополнительно, функция toString от аргумента типа DateTime может принимать второй аргумент String - имя тайм-зоны. Пример: <tt class="docutils literal"><span class="pre">Asia/Yekaterinburg</span></tt> В этом случае, форматирование времени производится согласно указанной тайм-зоне.</p>
+<p>As an exception, if converting from UInt32, Int32, UInt64, or Int64 type numbers to Date, and if the number is greater than or equal to 65536, the number is interpreted as a Unix timestamp (and not as the number of days) and is rounded to the date. This allows support for the common occurrence of writing &#8216;toDate(unix_timestamp)&#8217;, which otherwise would be an error and would require writing the more cumbersome &#8216;toDate(toDateTime(unix_timestamp))&#8217;.</p>
+<p>Conversion between a date and date with time is performed the natural way: by adding a null time or dropping the time.</p>
+<p>Conversion between numeric types uses the same rules as assignments between different numeric types in C++.</p>
+<p>To do transformations on DateTime in given time zone, pass second argument with time zone name:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span></span>SELECT
     now() AS now_local,
     toString(now(), &#39;Asia/Yekaterinburg&#39;) AS now_yekat
@@ -94,17 +83,23 @@ YYYY-MM-DD hh:mm:ss
 └─────────────────────┴─────────────────────┘
 </pre></div>
 </div>
-<p>Также смотрите функцию <tt class="docutils literal"><span class="pre">toUnixTimestamp</span></tt>.</p>
+<p>To format DateTime in given time zone:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">toString</span><span class="p">(</span><span class="n">now</span><span class="p">(),</span> <span class="s1">&#39;Asia/Yekaterinburg&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To get unix timestamp for string with datetime in specified time zone:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">toUnixTimestamp</span><span class="p">(</span><span class="s1">&#39;2000-01-01 00:00:00&#39;</span><span class="p">,</span> <span class="s1">&#39;Asia/Yekaterinburg&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="tofixedstring-s-n">
 <h2>toFixedString(s, N)<a class="headerlink" href="#tofixedstring-s-n" title="Permalink to this headline">¶</a></h2>
-<p>Преобразует аргумент типа String в тип FixedString(N) (строку фиксированной длины N). N должно быть константой.
-Если строка имеет меньше байт, чем N, то она дополняется нулевыми байтами справа. Если строка имеет больше байт, чем N - кидается исключение.</p>
+<p>Converts a String type argument to a FixedString(N) type (a string with fixed length N). N must be a constant. If the string has fewer bytes than N, it is passed with null bytes to the right. If the string has more bytes than N, an exception is thrown.</p>
 </div>
 <div class="section" id="tostringcuttozero-s">
 <h2>toStringCutToZero(s)<a class="headerlink" href="#tostringcuttozero-s" title="Permalink to this headline">¶</a></h2>
-<p>Принимает аргумент типа String или FixedString. Возвращает String, вырезая содержимое строки до первого найденного нулевого байта.</p>
-<p>Пример:</p>
+<p>Accepts a String or FixedString argument. Returns a String that is cut to a first null byte occurrence.</p>
+<p>Example:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span></span>:) SELECT toFixedString(&#39;foo&#39;, 8) AS s, toStringCutToZero(s) AS s_cut
 
 ┌─s─────────────┬─s_cut─┐
@@ -130,17 +125,17 @@ YYYY-MM-DD hh:mm:ss
 </div>
 <div class="section" id="reinterpretasdate-reinterpretasdatetime">
 <h2>reinterpretAsDate, reinterpretAsDateTime<a class="headerlink" href="#reinterpretasdate-reinterpretasdatetime" title="Permalink to this headline">¶</a></h2>
-<p>Функции принимают строку и интерпретируют байты, расположенные в начале строки, как число в host order (little endian). Если строка имеет недостаточную длину, то функции работают так, как будто строка дополнена необходимым количеством нулевых байт. Если строка длиннее, чем нужно, то лишние байты игнорируются. Дата интерпретируется, как число дней с начала unix-эпохи, а дата-с-временем - как число секунд с начала unix-эпохи.</p>
+<p>These functions accept a string and interpret the bytes placed at the beginning of the string as a number in host order (little endian). If the string isn&#8217;t long enough, the functions work as if the string is padded with the necessary number of null bytes. If the string is longer than needed, the extra bytes are ignored. A date is interpreted as the number of days since the beginning of the Unix Epoch, and a date with time is interpreted as the number of seconds since the beginning of the Unix Epoch.</p>
 </div>
 <div class="section" id="reinterpretasstring">
 <h2>reinterpretAsString<a class="headerlink" href="#reinterpretasstring" title="Permalink to this headline">¶</a></h2>
-<p>Функция принимает число или дату или дату-с-временем и возвращает строку, содержащую байты, представляющие соответствующее значение в host order (little endian). При этом, отбрасываются нулевые байты с конца. Например, значение 255 типа UInt32 будет строкой длины 1 байт.</p>
+<p>This function accepts a number or date or date with time, and returns a string containing bytes representing the corresponding value in host order (little endian). Null bytes are dropped from the end. For example, a UInt32 type value of 255 is a string that is one byte long.</p>
 </div>
 <div class="section" id="cast-x-t">
 <h2>CAST(x, t)<a class="headerlink" href="#cast-x-t" title="Permalink to this headline">¶</a></h2>
-<p>Преобразует x в тип данных t.
-Поддерживается также синтаксис CAST(x AS t).</p>
-<p>Пример:</p>
+<p>Casts x to the t data type.
+The syntax <code class="docutils literal"><span class="pre">CAST(x</span> <span class="pre">AS</span> <span class="pre">t)</span></code> is also supported.</p>
+<p>Example:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span></span>SELECT
     &#39;2016-06-15 23:00:00&#39; AS timestamp,
     CAST(timestamp AS DateTime) AS datetime,
@@ -153,7 +148,7 @@ YYYY-MM-DD hh:mm:ss
 └─────────────────────┴─────────────────────┴────────────┴─────────────────────┴───────────────────────────┘
 </pre></div>
 </div>
-<p>Преобразование в FixedString(N) работает только для аргументов типа String или FixedString(N).</p>
+<p>Casting to FixedString(N) works only for String and FixedString(N).</p>
 </div>
 </div>
 
@@ -161,41 +156,127 @@ YYYY-MM-DD hh:mm:ss
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Функции преобразования типов</a><ul>
-<li><a class="reference internal" href="#touint8-touint16-touint32-touint64">toUInt8, toUInt16, toUInt32, toUInt64</a></li>
-<li><a class="reference internal" href="#toint8-toint16-toint32-toint64">toInt8, toInt16, toInt32, toInt64</a></li>
-<li><a class="reference internal" href="#tofloat32-tofloat64">toFloat32, toFloat64</a></li>
-<li><a class="reference internal" href="#touint8orzero-touint16orzero-touint32orzero-touint64orzero-toint8orzero-toint16orzero-toint32orzero-toint64orzero-tofloat32orzero-tofloat64orzero">toUInt8OrZero, toUInt16OrZero, toUInt32OrZero, toUInt64OrZero, toInt8OrZero, toInt16OrZero, toInt32OrZero, toInt64OrZero, toFloat32OrZero, toFloat64OrZero</a></li>
-<li><a class="reference internal" href="#todate-todatetime">toDate, toDateTime</a></li>
-<li><a class="reference internal" href="#tostring">toString</a></li>
-<li><a class="reference internal" href="#tofixedstring-s-n">toFixedString(s, N)</a></li>
-<li><a class="reference internal" href="#tostringcuttozero-s">toStringCutToZero(s)</a></li>
-<li><a class="reference internal" href="#reinterpretasuint8-reinterpretasuint16-reinterpretasuint32-reinterpretasuint64">reinterpretAsUInt8, reinterpretAsUInt16, reinterpretAsUInt32, reinterpretAsUInt64</a></li>
-<li><a class="reference internal" href="#reinterpretasint8-reinterpretasint16-reinterpretasint32-reinterpretasint64">reinterpretAsInt8, reinterpretAsInt16, reinterpretAsInt32, reinterpretAsInt64</a></li>
-<li><a class="reference internal" href="#reinterpretasfloat32-reinterpretasfloat64">reinterpretAsFloat32, reinterpretAsFloat64</a></li>
-<li><a class="reference internal" href="#reinterpretasdate-reinterpretasdatetime">reinterpretAsDate, reinterpretAsDateTime</a></li>
-<li><a class="reference internal" href="#reinterpretasstring">reinterpretAsString</a></li>
-<li><a class="reference internal" href="#cast-x-t">CAST(x, t)</a></li>
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Functions</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="arithmetic_functions.html">Arithmetic functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="array_functions.html">Functions for working with arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="array_join.html">arrayJoin function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bit_functions.html">Bit functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comparison_functions.html">Comparison functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conditional_functions.html">Conditional functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="date_time_functions.html">Functions for working with dates and times</a></li>
+<li class="toctree-l2"><a class="reference internal" href="encoding_functions.html">Encoding functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ext_dict_functions.html">Functions for working with external dictionaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hash_functions.html">Hash functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="higher_order_functions.html">Higher-order functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="in_functions.html">Functions for implementing the IN operator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ip_address_functions.html">Functions for working with IP addresses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json_functions.html">Functions for working with JSON.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logical_functions.html">Logical functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="math_functions.html">Mathematical functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_functions.html">Other functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="random_functions.html">Functions for generating pseudo-random numbers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rounding_functions.html">Rounding functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="splitting_merging_functions.html">Functions for splitting and merging strings and arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_functions.html">Functions for working with strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_replace_functions.html">Functions for searching and replacing in strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_search_functions.html">Functions for searching strings</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Type conversion functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#touint8-touint16-touint32-touint64">toUInt8, toUInt16, toUInt32, toUInt64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#toint8-toint16-toint32-toint64">toInt8, toInt16, toInt32, toInt64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tofloat32-tofloat64">toFloat32, toFloat64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#touint8orzero-touint16orzero-touint32orzero-touint64orzero-toint8orzero-toint16orzero-toint32orzero-toint64orzero-tofloat32orzero-tofloat64orzero">toUInt8OrZero, toUInt16OrZero, toUInt32OrZero, toUInt64OrZero, toInt8OrZero, toInt16OrZero, toInt32OrZero, toInt64OrZero, toFloat32OrZero, toFloat64OrZero</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#todate-todatetime">toDate, toDateTime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tostring">toString</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tofixedstring-s-n">toFixedString(s, N)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tostringcuttozero-s">toStringCutToZero(s)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reinterpretasuint8-reinterpretasuint16-reinterpretasuint32-reinterpretasuint64">reinterpretAsUInt8, reinterpretAsUInt16, reinterpretAsUInt32, reinterpretAsUInt64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reinterpretasint8-reinterpretasint16-reinterpretasint32-reinterpretasint64">reinterpretAsInt8, reinterpretAsInt16, reinterpretAsInt32, reinterpretAsInt64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reinterpretasfloat32-reinterpretasfloat64">reinterpretAsFloat32, reinterpretAsFloat64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reinterpretasdate-reinterpretasdatetime">reinterpretAsDate, reinterpretAsDateTime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reinterpretasstring">reinterpretAsString</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cast-x-t">CAST(x, t)</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="url_functions.html">Functions for working with URLs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ym_dict_functions.html">Functions for working with Yandex.Metrica dictionaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#strong-typing">Strong typing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#common-subexpression-elimination">Common subexpression elimination</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#types-of-results">Types of results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#constants">Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#immutability">Immutability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#error-handling">Error handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#evaluation-of-argument-expressions">Evaluation of argument expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#performing-functions-for-distributed-query-processing">Performing functions for distributed query processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="string_search_functions.html"
-                        title="previous chapter">Функции поиска в строках</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="url_functions.html"
-                        title="next chapter">Функции для работы с URL</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/functions/type_conversion_functions.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Functions</a><ul>
+      <li>Previous: <a href="string_search_functions.html" title="previous chapter">Functions for searching strings</a></li>
+      <li>Next: <a href="url_functions.html" title="next chapter">Functions for working with URLs</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -212,25 +293,13 @@ YYYY-MM-DD hh:mm:ss
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="url_functions.html" title="Функции для работы с URL"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="string_search_functions.html" title="Функции поиска в строках"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Функции</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

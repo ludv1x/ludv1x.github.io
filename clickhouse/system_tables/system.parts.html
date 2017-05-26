@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>system.parts &mdash; ClickHouse 1 documentation</title>
+    <title>system.parts &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,51 +23,41 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Системные таблицы" href="index.html" />
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="System tables" href="index.html" />
     <link rel="next" title="system.processes" href="system.processes.html" />
-    <link rel="prev" title="system.one" href="system.one.html" /> 
+    <link rel="prev" title="system.one" href="system.one.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="system.processes.html" title="system.processes"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="system.one.html" title="system.one"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Системные таблицы</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="system-parts">
 <h1>system.parts<a class="headerlink" href="#system-parts" title="Permalink to this headline">¶</a></h1>
-<p>Содержит информацию о кусках таблиц семейства MergeTree.</p>
-<p>Столбцы:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>database String            - имя базы данных, в которой находится таблица, к которой относится кусок
-table String               - имя таблицы, к которой относится кусок
-engine String              - имя движка таблицы, без параметров
-partition String           - имя партиции - имеет формат YYYYMM
-name String                - имя куска
-replicated UInt8           - относится ли кусок к реплицируемым данным
-active UInt8               - используется ли кусок в таблице, или же он уже не нужен и скоро будет удалён - неактивные куски остаются после слияния
-marks UInt64               - количество засечек - умножьте на гранулированность индекса (обычно 8192), чтобы получить примерное количество строк в куске
-bytes UInt64               - количество байт в сжатом виде
-modification_time DateTime - время модификации директории с куском - обычно соответствует времени создания куска
-remove_time DateTime       - только для неактивных кусков - время, когда кусок стал неактивным
-refcount UInt32            - количество мест, в котором кусок используется - значение больше 2 говорит о том, что этот кусок участвует в запросах или в слияниях
+<p>Contains information about parts of a table in the MergeTree family.</p>
+<p>Columns:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>database String            - Name of the database where the table that this part belongs to is located.
+table String               - Name of the table that this part belongs to.
+engine String              - Name of the table engine, without parameters.
+partition String           - Name of the partition, in the format YYYYMM.
+name String                - Name of the part.
+replicated UInt8           - Whether the part belongs to replicated data.
+active UInt8               - Whether the part is used in a table, or is no longer needed and will be deleted soon. Inactive parts remain after merging.
+marks UInt64               - Number of marks - multiply by the index granularity (usually 8192) to get the approximate number of rows in the part.
+bytes UInt64               - Number of bytes when compressed.
+modification_time DateTime - Time the directory with the part was modified. Usually corresponds to the part&#39;s creation time.
+remove_time DateTime       - For inactive parts only - the time when the part became inactive.
+refcount UInt32            - The number of places where the part is used. A value greater than 2 indicates that this part participates in queries or merges.
 </pre></div>
 </div>
 </div>
@@ -76,20 +66,95 @@ refcount UInt32            - количество мест, в котором к
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="system.one.html"
-                        title="previous chapter">system.one</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="system.processes.html"
-                        title="next chapter">system.processes</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/system_tables/system.parts.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">System tables</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="system.asynchronous_metrics.html">system.asynchronous_metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.clusters.html">system.clusters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.columns.html">system.columns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.databases.html">system.databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.dictionaries.html">system.dictionaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.events.html">system.events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.functions.html">system.functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.merges.html">system.merges</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.metrics.html">system.metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.numbers.html">system.numbers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.numbers_mt.html">system.numbers_mt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.one.html">system.one</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">system.parts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.processes.html">system.processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.replicas.html">system.replicas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.settings.html">system.settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.tables.html">system.tables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.zookeeper.html">system.zookeeper</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">System tables</a><ul>
+      <li>Previous: <a href="system.one.html" title="previous chapter">system.one</a></li>
+      <li>Next: <a href="system.processes.html" title="next chapter">system.processes</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -106,25 +171,13 @@ refcount UInt32            - количество мест, в котором к
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="system.processes.html" title="system.processes"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="system.one.html" title="system.one"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Системные таблицы</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

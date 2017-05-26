@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Функции поиска и замены в строках &mdash; ClickHouse 1 documentation</title>
+    <title>Functions for searching and replacing in strings &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,55 +23,45 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Функции" href="index.html" />
-    <link rel="next" title="Функции поиска в строках" href="string_search_functions.html" />
-    <link rel="prev" title="Функции для работы со строками" href="string_functions.html" /> 
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Functions" href="index.html" />
+    <link rel="next" title="Functions for searching strings" href="string_search_functions.html" />
+    <link rel="prev" title="Functions for working with strings" href="string_functions.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="string_search_functions.html" title="Функции поиска в строках"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="string_functions.html" title="Функции для работы со строками"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Функции</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="id1">
-<h1>Функции поиска и замены в строках<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="functions-for-searching-and-replacing-in-strings">
+<h1>Functions for searching and replacing in strings<a class="headerlink" href="#functions-for-searching-and-replacing-in-strings" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="replaceone-haystack-pattern-replacement">
 <h2>replaceOne(haystack, pattern, replacement)<a class="headerlink" href="#replaceone-haystack-pattern-replacement" title="Permalink to this headline">¶</a></h2>
-<p>Замена первого вхождения, если такое есть, подстроки pattern в haystack на подстроку replacement.
-Здесь и далее, pattern и replacement должны быть константами.</p>
+<p>Replaces the first occurrence, if it exists, of the &#8216;pattern&#8217; substring in &#8216;haystack&#8217; with the &#8216;replacement&#8217; substring.
+Hereafter, &#8216;pattern&#8217; and &#8216;replacement&#8217; must be constants.</p>
 </div>
 <div class="section" id="replaceall-haystack-pattern-replacement">
 <h2>replaceAll(haystack, pattern, replacement)<a class="headerlink" href="#replaceall-haystack-pattern-replacement" title="Permalink to this headline">¶</a></h2>
-<p>Замена всех вхождений подстроки pattern в haystack на подстроку replacement.</p>
+<p>Replaces all occurrences of the &#8216;pattern&#8217; substring in &#8216;haystack&#8217; with the &#8216;replacement&#8217; substring.</p>
 </div>
 <div class="section" id="replaceregexpone-haystack-pattern-replacement">
 <h2>replaceRegexpOne(haystack, pattern, replacement)<a class="headerlink" href="#replaceregexpone-haystack-pattern-replacement" title="Permalink to this headline">¶</a></h2>
-<p>Замена по регулярному выражению pattern. Регулярное выражение re2.
-Заменяется только первое вхождение, если есть.
-В качестве replacement может быть указан шаблон для замен. Этот шаблон может включать в себя подстановки <tt class="docutils literal"><span class="pre">\0-\9</span></tt>.
-Подстановка <tt class="docutils literal"><span class="pre">\0</span></tt> - вхождение регулярного выражения целиком. Подстановки <tt class="docutils literal"><span class="pre">\1-\9</span></tt> - соответствующие по номеру subpattern-ы.
-Для указания символа <tt class="docutils literal"><span class="pre">\</span></tt> в шаблоне, он должен быть экранирован с помощью символа <tt class="docutils literal"><span class="pre">\</span></tt>.
-Также помните о том, что строковый литерал требует ещё одно экранирование.</p>
-<p>Пример 1. Переведём дату в американский формат:</p>
+<p>Replacement using the &#8216;pattern&#8217; regular expression. A re2 regular expression. Replaces only the first occurrence, if it exists.
+A pattern can be specified as &#8216;replacement&#8217;. This pattern can include substitutions 0-9.
+The substitution 0 includes the entire regular expression.
+The substitutions 1-9 include the subpattern corresponding to the number.
+In order to specify the symbol in a pattern, you must use a symbol to escape it.
+Also keep in mind that a string literal requires an extra escape.</p>
+<p>Example 1. Converting the date to American format:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="k">DISTINCT</span>
     <span class="n">EventDate</span><span class="p">,</span>
     <span class="n">replaceRegexpOne</span><span class="p">(</span><span class="n">toString</span><span class="p">(</span><span class="n">EventDate</span><span class="p">),</span> <span class="s1">&#39;(\\d{4})-(\\d{2})-(\\d{2})&#39;</span><span class="p">,</span> <span class="s1">&#39;\\2/\\3/\\1&#39;</span><span class="p">)</span> <span class="k">AS</span> <span class="n">res</span>
@@ -88,7 +78,7 @@
 <span class="mi">2014</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">23</span>      <span class="mi">03</span><span class="o">/</span><span class="mi">23</span><span class="o">/</span><span class="mi">2014</span>
 </pre></div>
 </div>
-<p>Пример 2. Размножить строку десять раз:</p>
+<p>Example 2. Copy the string ten times:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span></span>SELECT replaceRegexpOne(&#39;Hello, World!&#39;, &#39;.*&#39;, &#39;\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0&#39;) AS res
 
 ┌─res────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
@@ -99,9 +89,9 @@
 </div>
 <div class="section" id="replaceregexpall-haystack-pattern-replacement">
 <h2>replaceRegexpAll(haystack, pattern, replacement)<a class="headerlink" href="#replaceregexpall-haystack-pattern-replacement" title="Permalink to this headline">¶</a></h2>
-<p>То же самое, но делается замена всех вхождений. Пример:</p>
-<p>В качестве исключения, если регулярное выражение сработало на пустой подстроке, то замена делается не более одного раза.
-Пример:</p>
+<p>This does the same thing, but replaces all the occurrences. Example:</p>
+<p>As an exception, if a regular expression worked on an empty substring, the replacement is not made more than once.
+Example:</p>
 </div>
 </div>
 
@@ -109,31 +99,117 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Функции поиска и замены в строках</a><ul>
-<li><a class="reference internal" href="#replaceone-haystack-pattern-replacement">replaceOne(haystack, pattern, replacement)</a></li>
-<li><a class="reference internal" href="#replaceall-haystack-pattern-replacement">replaceAll(haystack, pattern, replacement)</a></li>
-<li><a class="reference internal" href="#replaceregexpone-haystack-pattern-replacement">replaceRegexpOne(haystack, pattern, replacement)</a></li>
-<li><a class="reference internal" href="#replaceregexpall-haystack-pattern-replacement">replaceRegexpAll(haystack, pattern, replacement)</a></li>
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Functions</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="arithmetic_functions.html">Arithmetic functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="array_functions.html">Functions for working with arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="array_join.html">arrayJoin function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bit_functions.html">Bit functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comparison_functions.html">Comparison functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conditional_functions.html">Conditional functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="date_time_functions.html">Functions for working with dates and times</a></li>
+<li class="toctree-l2"><a class="reference internal" href="encoding_functions.html">Encoding functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ext_dict_functions.html">Functions for working with external dictionaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hash_functions.html">Hash functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="higher_order_functions.html">Higher-order functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="in_functions.html">Functions for implementing the IN operator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ip_address_functions.html">Functions for working with IP addresses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json_functions.html">Functions for working with JSON.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logical_functions.html">Logical functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="math_functions.html">Mathematical functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_functions.html">Other functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="random_functions.html">Functions for generating pseudo-random numbers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rounding_functions.html">Rounding functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="splitting_merging_functions.html">Functions for splitting and merging strings and arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_functions.html">Functions for working with strings</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Functions for searching and replacing in strings</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#replaceone-haystack-pattern-replacement">replaceOne(haystack, pattern, replacement)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#replaceall-haystack-pattern-replacement">replaceAll(haystack, pattern, replacement)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#replaceregexpone-haystack-pattern-replacement">replaceRegexpOne(haystack, pattern, replacement)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#replaceregexpall-haystack-pattern-replacement">replaceRegexpAll(haystack, pattern, replacement)</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="string_search_functions.html">Functions for searching strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="type_conversion_functions.html">Type conversion functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="url_functions.html">Functions for working with URLs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ym_dict_functions.html">Functions for working with Yandex.Metrica dictionaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#strong-typing">Strong typing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#common-subexpression-elimination">Common subexpression elimination</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#types-of-results">Types of results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#constants">Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#immutability">Immutability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#error-handling">Error handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#evaluation-of-argument-expressions">Evaluation of argument expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#performing-functions-for-distributed-query-processing">Performing functions for distributed query processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="string_functions.html"
-                        title="previous chapter">Функции для работы со строками</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="string_search_functions.html"
-                        title="next chapter">Функции поиска в строках</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/functions/string_replace_functions.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Functions</a><ul>
+      <li>Previous: <a href="string_functions.html" title="previous chapter">Functions for working with strings</a></li>
+      <li>Next: <a href="string_search_functions.html" title="next chapter">Functions for searching strings</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -150,25 +226,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="string_search_functions.html" title="Функции поиска в строках"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="string_functions.html" title="Функции для работы со строками"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Функции</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

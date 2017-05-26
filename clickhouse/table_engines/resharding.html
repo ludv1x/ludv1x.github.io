@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Перешардирование &mdash; ClickHouse 1 documentation</title>
+    <title>Перешардирование &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,53 +23,43 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Движки таблиц" href="index.html" />
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Table engines" href="index.html" />
     <link rel="next" title="Set" href="set.html" />
-    <link rel="prev" title="Репликация данных" href="replication.html" /> 
+    <link rel="prev" title="Data replication" href="replication.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="set.html" title="Set"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="replication.html" title="Репликация данных"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Движки таблиц</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="id1">
 <h1>Перешардирование<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
-<div class="highlight-sql"><div class="highlight"><pre><span></span>ALTER TABLE t RESHARD [COPY] [PARTITION partition] TO описание кластера USING ключ шардирования
+<div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">t</span> <span class="n">RESHARD</span> <span class="p">[</span><span class="k">COPY</span><span class="p">]</span> <span class="p">[</span><span class="n">PARTITION</span> <span class="n">partition</span><span class="p">]</span> <span class="k">TO</span> <span class="k">cluster</span> <span class="n">description</span> <span class="k">USING</span> <span class="n">sharding</span> <span class="k">key</span>
 </pre></div>
 </div>
-<p>Запрос работает только для Replicated-таблиц и для Distributed-таблиц, смотрящих на Replicated-таблицы.</p>
-<p>При выполнении, запрос сначала проверяет корректность запроса, наличие свободного места на серверах и кладёт в ZooKeeper по некоторому пути задачу, которую нужно сделать. Дальнейшее выполнение делается асинхронно.</p>
-<p>Для того, чтобы использовать перешардирование, в конфигурационном файле каждого сервера должен быть указан путь в ZooKeeper к очереди задач:</p>
+<p>Query works only for Replicated tables and for Distributed tables that are looking at Replicated tables.</p>
+<p>When executing, query first checks correctness of query, sufficiency of free space on nodes and writes to ZooKeeper at some path a task to to. Next work is done asynchronously.</p>
+<p>For using resharding, you must specify path in ZooKeeper for task queue in configuration file:</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;resharding&gt;</span>
       <span class="nt">&lt;task_queue_path&gt;</span>/clickhouse/task_queue<span class="nt">&lt;/task_queue_path&gt;</span>
 <span class="nt">&lt;/resharding&gt;</span>
 </pre></div>
 </div>
-<p>При выполнении запроса <tt class="docutils literal"><span class="pre">ALTER</span> <span class="pre">TABLE</span> <span class="pre">t</span> <span class="pre">RESHARD</span></tt>, узел в ZooKeeper создаётся, если его не было.</p>
-<p>Описание кластера - список шардов с весами, на которые нужно перераспределить указанные данные.
-Шард указывается в виде адреса таблицы в ZooKeeper. Например, <tt class="docutils literal"><span class="pre">/clickhouse/tables/01-03/hits</span></tt>
-Относительный вес шарда (не обязательно, по умолчанию, 1) может быть указан после ключевого слова WEIGHT.
-Пример:</p>
+<p>When running <code class="docutils literal"><span class="pre">ALTER</span> <span class="pre">TABLE</span> <span class="pre">t</span> <span class="pre">RESHARD</span></code> query, node in ZooKeeper is created if not exists.</p>
+<p>Cluster description is list of shards with weights to distribute the data.
+Shard is specified as address of table in ZooKeeper. Example: /clickhouse/tables/01-03/hits
+Relative weight of shard (optional, default is 1) could be specified after WEIGHT keyword.
+Example:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">merge</span><span class="p">.</span><span class="n">hits</span>
 <span class="n">RESHARD</span> <span class="n">PARTITION</span> <span class="mi">201501</span>
 <span class="k">TO</span>
@@ -80,67 +70,148 @@
 <span class="k">USING</span> <span class="n">UserID</span>
 </pre></div>
 </div>
-<p>Ключ шардирования (в примере: <tt class="docutils literal"><span class="pre">UserID</span></tt>) имеет такой же смысл, как для Distributed таблиц. Вы можете указать rand() в качестве ключа шардирования для случайного перераспределения данных.</p>
+<p>Sharding key (<code class="docutils literal"><span class="pre">UserID</span></code> in example) has same semantic as for Distributed tables. You could specify <code class="docutils literal"><span class="pre">rand()</span></code> as sharding key for random distribution of data.</p>
 <dl class="docutils">
-<dt>При выполнении запроса, сразу проверяется:</dt>
+<dt>When query is run, it checks:</dt>
 <dd><ul class="first last simple">
-<li>совпадение структур таблиц локально и на всех указанных шардах.</li>
-<li>наличие на локальном сервере свободного места в количестве, равном размеру партиции в байтах, с запасом в 10%.</li>
-<li>наличие на всех репликах всех указанных шардов, кроме являющейся локальной, если такая есть, свободного места в количестве равном размеру партиции, домноженном на отношение веса шарда к суммарному весу, с запасом в 10%.</li>
+<li>identity of table structure on all shards.</li>
+<li>availability of free space on local node in amount of partition size in bytes, with additional 10% reserve.</li>
+<li>availability of free space on all replicas of all specified shards, except local replica, if exists, in amount of patition size times ratio of shard weight to total weight of all shards, with additional 10% reserve.</li>
 </ul>
 </dd>
-<dt>Далее, асинхронное выполнение задачи состоит из следующих шагов:</dt>
+<dt>Next, asynchronous processing of query is of following steps:</dt>
 <dd><ol class="first last arabic">
-<li><p class="first">Нарезка партиции на кусочки на локальном сервере.
-Для этого делается слияние всех кусков, входящих в партицию и, одновременно, разбиение их на несколько, согласно ключу шардирования.
-Результат складывается в директорию /reshard в директории с данными таблицы.
-Исходные куски никак не модифицируются и весь процесс не влияет на рабочие данные таблицы.</p>
+<li><dl class="first docutils">
+<dt>Split patition to parts on local node.</dt>
+<dd><p class="first last">It merges all parts forming a partition and in the same time, splits them to several, according sharding key.
+Result is placed to /reshard directory in table data directory.
+Source parts doesn&#8217;t modified and all process doesn&#8217;t intervent table working data set.</p>
+</dd>
+</dl>
 </li>
-<li><p class="first">Копирование всех кусков на удалённые серверы (на каждую реплику соответствующих шардов).</p>
+<li><p class="first">Copying all parts to remote nodes (to each replica of corresponding shard).</p>
 </li>
-<li><p class="first">Выполнение запроса ALTER TABLE t DROP PARTITION на локальном сервере, выполнение запросов ALTER TABLE t ATTACH PARTITION на всех шардах.
-Замечание: это делается неатомарно. Есть момент времени, в течение которого пользователь может увидеть отсутствие данных партиции.</p>
-<p>В случае указания в запросе слова COPY, исходные данные не удаляются. Это подходит для копирования данных с одного кластера на другой с одновременным изменением схемы шардирования.</p>
+<li><dl class="first docutils">
+<dt>Execution of queries <code class="docutils literal"><span class="pre">ALTER</span> <span class="pre">TABLE</span> <span class="pre">t</span> <span class="pre">DROP</span> <span class="pre">PARTITION</span></code> on local node and <code class="docutils literal"><span class="pre">ALTER</span> <span class="pre">TABLE</span> <span class="pre">t</span> <span class="pre">ATTACH</span> <span class="pre">PARTITION</span></code> on all shards.</dt>
+<dd><p class="first">Note: this operation is not atomic. There are time point when user could see absence of data.</p>
+<p class="last">When <code class="docutils literal"><span class="pre">COPY</span></code> keyword is specified, source data is not removed. It is suitable for copying data from one cluster to another with changing sharding scheme in same time.</p>
+</dd>
+</dl>
 </li>
-<li><p class="first">Удаление временных данных с локального сервера.</p>
+<li><p class="first">Removing temporary data from local node.</p>
 </li>
 </ol>
 </dd>
 </dl>
-<p>При наличии нескольких запросов на перешардирование, соответствующие задачи будут делаться последовательно.</p>
-<p>Указанный выше запрос предназначен для того, чтобы перешардировать одну партицию.
-Если не указать партицию в запросе, то в задачи на перешардирование будут добавлены все партиции. Пример:</p>
+<p>When having multiple resharding queries, their tasks will be done sequentially.</p>
+<p>Query in example is to reshard single partition.
+If you don&#8217;t specify partition in query, then tasks to reshard all partitions will be created. Example:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span></span><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">merge</span><span class="p">.</span><span class="n">hits</span>
 <span class="n">RESHARD</span>
 <span class="k">TO</span> <span class="p">...</span>
 </pre></div>
 </div>
-<p>В этом случае, последовательно вставляются задачи на перешардирование каждой партиции.</p>
-<p>В случае перешардирования Distributed-таблицы, производится перешардирование каждого шарда (соответствующий запрос отправляется на каждый шард).</p>
-<p>Вы можете перешардировать Distributed-таблицу как в саму себя, так и в другую таблицу.</p>
-<p>Перешардирование предназначено для перераспределения &#8220;старых&#8221; данных: в случае, если во время работы, перешардируемая партиция была изменена, то перешардирование этой партиции отменяется.</p>
-<p>На каждом сервере, перешардирование осуществляется в один поток, чтобы в процессе длительных операций перешардирования, не мешать другим задачам.</p>
-<p>По состоянию на июнь 2016, перешардирование находится в состоянии &#8220;бета&#8221;: тестировалось лишь на небольшом объёме данных - до 5 ТБ.</p>
+<p>When resharding Distributed tables, each shard will be resharded (corresponding query is sent to each shard).</p>
+<p>You could reshard Distributed table to itself or to another table.</p>
+<p>Resharding is intended for &#8220;old&#8221; data: in case when during job, resharded partition was modified, task for that partition will be cancelled.</p>
+<p>On each server, resharding is done in single thread. It is doing that way to not disturb normal query processing.</p>
+<p>As of June 2016, resharding is in &#8220;beta&#8221; state: it was tested only for small data sets - up to 5 TB.</p>
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="replication.html"
-                        title="previous chapter">Репликация данных</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="set.html"
-                        title="next chapter">Set</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/table_engines/resharding.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Table engines</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="aggregatingmergetree.html">AggregatingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buffer.html">Buffer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="collapsingmergetree.html">CollapsingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distributed.html">Distributed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file.html">File(InputFormat)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="join.html">Join</a></li>
+<li class="toctree-l2"><a class="reference internal" href="log.html">Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="materializedview.html">MaterializedView</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="merge.html">Merge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mergetree.html">MergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="null.html">Null</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replacingmergetree.html">ReplacingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replication.html">Data replication</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Перешардирование</a></li>
+<li class="toctree-l2"><a class="reference internal" href="set.html">Set</a></li>
+<li class="toctree-l2"><a class="reference internal" href="summingmergetree.html">SummingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tinylog.html">TinyLog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="view.html">View</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Table engines</a><ul>
+      <li>Previous: <a href="replication.html" title="previous chapter">Data replication</a></li>
+      <li>Next: <a href="set.html" title="next chapter">Set</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -157,25 +228,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="set.html" title="Set"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="replication.html" title="Репликация данных"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Движки таблиц</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

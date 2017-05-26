@@ -1,0 +1,267 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>GraphiteMergeTree &mdash; Документация ClickHouse </title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/translations.js"></script>
+    <link rel="top" title="Документация ClickHouse " href="../index.html" />
+    <link rel="up" title="Движки таблиц" href="index.html" />
+    <link rel="next" title="Join" href="join.html" />
+    <link rel="prev" title="File(InputFormat)" href="file.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="graphitemergetree">
+<h1>GraphiteMergeTree<a class="headerlink" href="#graphitemergetree" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Движок предназначен для rollup (прореживания и агрегирования/усреднения) данных <a class="reference external" href="http://graphite.readthedocs.io/en/latest/index.html">Graphite</a>. Он может быть интересен разработчикам, которые хотят использовать ClickHouse как хранилище данных для Graphite.</p>
+<p>Graphite хранит в ClickHouse полные данные, а получать их может следующими способами:</p>
+<ul>
+<li><p class="first">Без прореживания.</p>
+<p>Используется движок <a class="reference internal" href="mergetree.html#table-engines-mergetree"><span>MergeTree</span></a>.</p>
+</li>
+<li><p class="first">С прореживанием.</p>
+<p>Используется движок <code class="docutils literal"><span class="pre">GraphiteMergeTree</span></code>.</p>
+</li>
+</ul>
+<p>Движок наследует свойства <cite>MergeTree</cite>. Настройки прореживания данных размещаются в <a class="reference internal" href="../configuration_files.html#configuration-files"><span>общей конфигурации</span></a> ClickHouse (config.xml).</p>
+<div class="section" id="id1">
+<h2>Использование движка<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h2>
+<p>Таблица с данными Graphite должна содержать как минимум следующие поля:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">Path</span></code> - имя метрики (сенсора Graphite).</li>
+<li><code class="docutils literal"><span class="pre">Time</span></code> - время измерения.</li>
+<li><code class="docutils literal"><span class="pre">Value</span></code> - значение метрики в момент времени Time.</li>
+<li><code class="docutils literal"><span class="pre">Version</span></code> - настройка, которая определяет какое значение метрики с одинаковыми Path и Time останется в базе.</li>
+</ul>
+<p>Шаблон правил rollup:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>    pattern
+    regexp
+    function
+    age -&gt; precision
+    ...
+pattern
+    ...
+default
+    function
+       age -&gt; precision
+    ...
+</pre></div>
+</div>
+<p>При обработке записи ClickHouse проверит правила в секции <code class="docutils literal"><span class="pre">`pattern`</span></code>. Если имя метрики соответствует шаблону <code class="docutils literal"><span class="pre">`regexp`</span></code>, то  применяются правила из <code class="docutils literal"><span class="pre">`pattern`</span></code>, в противном случае из <code class="docutils literal"><span class="pre">`default`</span></code>.</p>
+<p>Поля шаблона правил.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="89%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Поле</th>
+<th class="head">Описание</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">age</span></code></td>
+<td>Минимальный возраст данных в секундах.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">function</span></code></td>
+<td>Имя агрегирующей функции, которую следует применить к данным, чей возраст оказался в интервале <code class="docutils literal"><span class="pre">[age,</span> <span class="pre">age</span> <span class="pre">+</span> <span class="pre">precision]</span></code>.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">precision</span></code></td>
+<td>Точность определения возраста данных в секундах.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">regexp</span></code></td>
+<td>Шаблон имени метрики.</td>
+</tr>
+</tbody>
+</table>
+<p>Пример настройки:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;graphite_rollup&gt;</span>
+    <span class="nt">&lt;pattern&gt;</span>
+        <span class="nt">&lt;regexp&gt;</span>click_cost<span class="nt">&lt;/regexp&gt;</span>
+        <span class="nt">&lt;function&gt;</span>any<span class="nt">&lt;/function&gt;</span>
+        <span class="nt">&lt;retention&gt;</span>
+            <span class="nt">&lt;age&gt;</span>0<span class="nt">&lt;/age&gt;</span>
+            <span class="nt">&lt;precision&gt;</span>5<span class="nt">&lt;/precision&gt;</span>
+        <span class="nt">&lt;/retention&gt;</span>
+        <span class="nt">&lt;retention&gt;</span>
+            <span class="nt">&lt;age&gt;</span>86400<span class="nt">&lt;/age&gt;</span>
+            <span class="nt">&lt;precision&gt;</span>60<span class="nt">&lt;/precision&gt;</span>
+        <span class="nt">&lt;/retention&gt;</span>
+    <span class="nt">&lt;/pattern&gt;</span>
+    <span class="nt">&lt;default&gt;</span>
+        <span class="nt">&lt;function&gt;</span>max<span class="nt">&lt;/function&gt;</span>
+        <span class="nt">&lt;retention&gt;</span>
+            <span class="nt">&lt;age&gt;</span>0<span class="nt">&lt;/age&gt;</span>
+            <span class="nt">&lt;precision&gt;</span>60<span class="nt">&lt;/precision&gt;</span>
+        <span class="nt">&lt;/retention&gt;</span>
+        <span class="nt">&lt;retention&gt;</span>
+            <span class="nt">&lt;age&gt;</span>3600<span class="nt">&lt;/age&gt;</span>
+            <span class="nt">&lt;precision&gt;</span>300<span class="nt">&lt;/precision&gt;</span>
+        <span class="nt">&lt;/retention&gt;</span>
+        <span class="nt">&lt;retention&gt;</span>
+            <span class="nt">&lt;age&gt;</span>86400<span class="nt">&lt;/age&gt;</span>
+            <span class="nt">&lt;precision&gt;</span>3600<span class="nt">&lt;/precision&gt;</span>
+        <span class="nt">&lt;/retention&gt;</span>
+    <span class="nt">&lt;/default&gt;</span>
+<span class="nt">&lt;/graphite_rollup&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Навигация</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Введение</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Начало работы</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Интерфейсы</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Язык запросов</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">Внешние данные для обработки запроса</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Движки таблиц</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="aggregatingmergetree.html">AggregatingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buffer.html">Buffer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="collapsingmergetree.html">CollapsingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distributed.html">Distributed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file.html">File(InputFormat)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">GraphiteMergeTree</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Использование движка</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="join.html">Join</a></li>
+<li class="toctree-l2"><a class="reference internal" href="log.html">Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="materializedview.html">MaterializedView</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="merge.html">Merge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mergetree.html">MergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="null.html">Null</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replacingmergetree.html">ReplacingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replication.html">Репликация данных</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resharding.html">Перешардирование</a></li>
+<li class="toctree-l2"><a class="reference internal" href="set.html">Set</a></li>
+<li class="toctree-l2"><a class="reference internal" href="summingmergetree.html">SummingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tinylog.html">TinyLog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="view.html">View</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">Системные таблицы</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Табличные функции</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Форматы</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Типы данных</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Операторы</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Функции</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Агрегатные функции</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#id2">Параметрические агрегатные функции</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#id3">Комбинаторы агрегатных функций</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Словари</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Настройки</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Конфигурационные файлы</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Права доступа</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Квоты</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/en/">Documentation in English</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/ru/single/">Документация на одной странице</a></li>
+    
+    <li class="toctree-l1"><a href="/">Главная страница сайта</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Движки таблиц</a><ul>
+      <li>Previous: <a href="file.html" title="предыдущая глава">File(InputFormat)</a></li>
+      <li>Next: <a href="join.html" title="следующая глава">Join</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Быстрый поиск</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Искать" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Введите слова для поиска или имя модуля, класса или функции.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016–2017 Yandex LLC.
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

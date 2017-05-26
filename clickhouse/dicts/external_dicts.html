@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Внешние словари &mdash; ClickHouse 1 documentation</title>
+    <title>External dictionaries &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,74 +23,62 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Словари" href="index.html" />
-    <link rel="next" title="Встроенные словари" href="internal_dicts.html" />
-    <link rel="prev" title="Словари" href="index.html" /> 
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Dictionaries" href="index.html" />
+    <link rel="next" title="Internal dictionaries" href="internal_dicts.html" />
+    <link rel="prev" title="Dictionaries" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="internal_dicts.html" title="Встроенные словари"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="Словари"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Словари</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="id1">
-<h1>Внешние словари<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
-<p>Существует возможность подключать свои собственные словари из различных источников данных.
-Источником данных для словаря может быть файл на локальной файловой системе, сервер ClickHouse, сервер MySQL, MongoDB или любой ODBC источник.
-Словарь может полностью храниться в оперативке и периодически обновляться, или быть частично закэшированным в оперативке и динамически подгружать отсутствующие значения.</p>
-<p>Конфигурация внешних словарей находится в отдельном файле или файлах, указанных в конфигурационном параметре dictionaries_config.
-Этот параметр содержит абсолютный или относительный путь к файлу с конфигурацией словарей. Относительный путь - относительно директории с конфигурационным файлом сервера. Путь может содержать wildcard-ы * и ? - тогда рассматриваются все подходящие файлы. Пример: dictionaries/<a href="#id2"><span class="problematic" id="id3">*</span></a>.xml.</p>
-<p>Конфигурация словарей, а также множество файлов с конфигурацией, может обновляться без перезапуска сервера. Сервер проверяет обновления каждые 5 секунд. То есть, словари могут подключаться динамически.</p>
-<p>Создание словарей может производиться при старте сервера или при первом использовании. Это определяется конфигурационном параметром dictionaries_lazy_load (в основном конфигурационном файле сервера). Параметр не обязателен, по умолчанию - true. Если true, то каждый словарь создаётся при первом использовании;  если словарь не удалось создать - вызов функции, использующей словарь, кидает исключение. Если false, то все словари создаются при старте сервера, и в случае ошибки, сервер завершает работу.</p>
-<p>Конфигурационный файл словарей имеет вид:</p>
+  <div class="section" id="external-dictionaries">
+<h1>External dictionaries<a class="headerlink" href="#external-dictionaries" title="Permalink to this headline">¶</a></h1>
+<p>It is possible to add your own dictionaries from various data sources. The data source for a dictionary can be a file in the local file system, the ClickHouse server, or a MySQL server.
+A dictionary can be stored completely in RAM and updated regularly, or it can be partially cached in RAM and dynamically load missing values.</p>
+<p>The configuration of external dictionaries is in a separate file or files specified in the &#8216;dictionaries_config&#8217; configuration parameter.
+This parameter contains the absolute or relative path to the file with the dictionary configuration. A relative path is relative to the directory with the server config file. The path can contain wildcards * and ?, in which case all matching files are found. Example: dictionaries/<a href="#id1"><span class="problematic" id="id2">*</span></a>.xml.</p>
+<p>The dictionary configuration, as well as the set of files with the configuration, can be updated without restarting the server. The server checks updates every 5 seconds. This means that dictionaries can be enabled dynamically.</p>
+<p>Dictionaries can be created when starting the server, or at first use. This is defined by the &#8216;dictionaries_lazy_load&#8217; parameter in the main server config file. This parameter is optional, &#8216;true&#8217; by default. If set to &#8216;true&#8217;, each dictionary is created at first use. If dictionary creation failed, the function that was using the dictionary throws an exception. If &#8216;false&#8217;, all dictionaries are created when the server starts, and if there is an error, the server shuts down.</p>
+<p>The dictionary config file has the following format:</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;dictionaries&gt;</span>
-    <span class="nt">&lt;comment&gt;</span>Не обязательный элемент с любым содержимым; полностью игнорируется.<span class="nt">&lt;/comment&gt;</span>
+    <span class="nt">&lt;comment&gt;</span>Optional element with any content; completely ignored.<span class="nt">&lt;/comment&gt;</span>
 
-    <span class="c">&lt;!-- Можно задать произвольное количество разных словарей. --&gt;</span>
+    <span class="c">&lt;!--You can set any number of different dictionaries. --&gt;</span>
     <span class="nt">&lt;dictionary&gt;</span>
-        <span class="c">&lt;!-- Имя словаря. Под этим именем словарь будет доступен для использования. --&gt;</span>
+        <span class="c">&lt;!-- Dictionary name. The dictionary will be accessed for use by this name. --&gt;</span>
         <span class="nt">&lt;name&gt;</span>os<span class="nt">&lt;/name&gt;</span>
 
-        <span class="c">&lt;!-- Источник данных. --&gt;</span>
+        <span class="c">&lt;!-- Data source. --&gt;</span>
         <span class="nt">&lt;source&gt;</span>
-
-            <span class="c">&lt;!-- Источник - файл на локальной файловой системе. --&gt;</span>
+            <span class="c">&lt;!-- Source is a file in the local file system. --&gt;</span>
             <span class="nt">&lt;file&gt;</span>
-                <span class="c">&lt;!-- Путь на локальной файловой системе. --&gt;</span>
+                <span class="c">&lt;!-- Path on the local file system. --&gt;</span>
                 <span class="nt">&lt;path&gt;</span>/opt/dictionaries/os.tsv<span class="nt">&lt;/path&gt;</span>
-                <span class="c">&lt;!-- С помощью какого формата понимать файл. --&gt;</span>
+                <span class="c">&lt;!-- Which format to use for reading the file. --&gt;</span>
                 <span class="nt">&lt;format&gt;</span>TabSeparated<span class="nt">&lt;/format&gt;</span>
             <span class="nt">&lt;/file&gt;</span>
 
-            <span class="c">&lt;!-- или источник - таблица на сервере MySQL.</span>
+            <span class="c">&lt;!-- or the source is a table on a MySQL server.</span>
 <span class="c">            &lt;mysql&gt;</span>
-<span class="c">                &lt;!- - Эти параметры могут быть указаны как снаружи (общие для всех реплик), так и внутри конкретной реплики - -&gt;</span>
+<span class="c">                &lt;!- - These parameters can be specified outside (common for all replicas) or inside a specific replica - -&gt;</span>
 <span class="c">                &lt;port&gt;3306&lt;/port&gt;</span>
 <span class="c">                &lt;user&gt;clickhouse&lt;/user&gt;</span>
 <span class="c">                &lt;password&gt;qwerty&lt;/password&gt;</span>
-<span class="c">                &lt;!- - Можно указать от одной до произвольного количества реплик для отказоустойчивости. - -&gt;</span>
+<span class="c">                &lt;!- - Specify from one to any number of replicas for fault tolerance. - -&gt;</span>
 <span class="c">                &lt;replica&gt;</span>
 <span class="c">                    &lt;host&gt;example01-1&lt;/host&gt;</span>
-<span class="c">                    &lt;priority&gt;1&lt;/priority&gt; &lt;!- - Меньше значение - больше приоритет. - -&gt;</span>
+<span class="c">                    &lt;priority&gt;1&lt;/priority&gt; &lt;!- - The lower the value, the higher the priority. - -&gt;</span>
 <span class="c">                &lt;/replica&gt;</span>
 <span class="c">                &lt;replica&gt;</span>
 <span class="c">                    &lt;host&gt;example01-2&lt;/host&gt;</span>
@@ -101,7 +89,7 @@
 <span class="c">            &lt;/mysql&gt;</span>
 <span class="c">            --&gt;</span>
 
-            <span class="c">&lt;!-- или источник - таблица на сервере ClickHouse.</span>
+            <span class="c">&lt;!-- or the source is a table on the ClickHouse server.</span>
 <span class="c">            &lt;clickhouse&gt;</span>
 <span class="c">                &lt;host&gt;example01-01-1&lt;/host&gt;</span>
 <span class="c">                &lt;port&gt;9000&lt;/port&gt;</span>
@@ -110,79 +98,75 @@
 <span class="c">                &lt;db&gt;default&lt;/db&gt;</span>
 <span class="c">                &lt;table&gt;counters&lt;/table&gt;</span>
 <span class="c">            &lt;/clickhouse&gt;</span>
-<span class="c">            &lt;!- - Если адрес похож на localhost, то запрос будет идти без сетевого взаимодействия.</span>
-<span class="c">                  Для отказоустойчивости, вы можете создать Distributed таблицу на localhost и прописать её. - -&gt;</span>
+<span class="c">            &lt;!- - If the address is similar to localhost, the request is made without network interaction. For fault tolerance, you can create a Distributed table on localhost and enter it. - -&gt;</span>
 <span class="c">            --&gt;</span>
 
-            <span class="c">&lt;!-- или источник - исполняемый файл. Если layout.cache - список нужных ключей будет записан в поток STDIN программы --&gt;</span>
+            <span class="c">&lt;!-- or the source is a executable. If layout.complex_key_cache - list of needed keys will be written in STDIN of program --&gt;</span>
             <span class="nt">&lt;executable&gt;</span>
-                <span class="c">&lt;!-- Путь или имя программы (если директория есть в переменной окружения PATH) и параметры --&gt;</span>
+                <span class="c">&lt;!-- Path on the local file system or name located in one of env PATH dirs. --&gt;</span>
                 <span class="nt">&lt;command&gt;</span>cat /opt/dictionaries/os.tsv<span class="nt">&lt;/command&gt;</span>
-                <span class="c">&lt;!-- С помощью какого формата понимать вывод и формировать список ключей. --&gt;</span>
+                <span class="c">&lt;!-- Which format to use for reading/writing stream. --&gt;</span>
                 <span class="nt">&lt;format&gt;</span>TabSeparated<span class="nt">&lt;/format&gt;</span>
             <span class="nt">&lt;/executable&gt;</span>
 
-            <span class="c">&lt;!-- или источник - http сервер. Если layout.cache - список нужных ключей будет послан как POST запрос --&gt;</span>
+            <span class="c">&lt;!-- or the source is a http server. If layout.complex_key_cache - list of needed keys will be sent as POST  --&gt;</span>
             <span class="nt">&lt;http&gt;</span>
+                <span class="c">&lt;!-- Host. --&gt;</span>
                 <span class="nt">&lt;url&gt;</span>http://[::1]/os.tsv<span class="nt">&lt;/url&gt;</span>
-                <span class="c">&lt;!-- С помощью какого формата понимать ответ и формировать список ключей. --&gt;</span>
+                <span class="c">&lt;!-- Which format to use for reading answer and making POST. --&gt;</span>
                 <span class="nt">&lt;format&gt;</span>TabSeparated<span class="nt">&lt;/format&gt;</span>
             <span class="nt">&lt;/http&gt;</span>
 
         <span class="nt">&lt;/source&gt;</span>
 
-        <span class="c">&lt;!-- Периодичность обновления для полностью загружаемых словарей. 0 - никогда не обновлять. --&gt;</span>
+        <span class="c">&lt;!-- Update interval for fully loaded dictionaries. 0 - never update. --&gt;</span>
         <span class="nt">&lt;lifetime&gt;</span>
             <span class="nt">&lt;min&gt;</span>300<span class="nt">&lt;/min&gt;</span>
             <span class="nt">&lt;max&gt;</span>360<span class="nt">&lt;/max&gt;</span>
-            <span class="c">&lt;!-- Периодичность обновления выбирается равномерно-случайно между min и max,</span>
-<span class="c">                 чтобы размазать по времени нагрузку при обновлении словарей на большом количестве серверов. --&gt;</span>
+            <span class="c">&lt;!-- The update interval is selected uniformly randomly between min and max, in order to spread out the load when updating dictionaries on a large number of servers. --&gt;</span>
         <span class="nt">&lt;/lifetime&gt;</span>
 
-        <span class="c">&lt;!-- или</span>
-<span class="c">        &lt;!- - Периодичность обновления для полностью загружаемых словарей или время инвалидации для кэшируемых словарей.</span>
-<span class="c">              0 - никогда не обновлять. - -&gt;</span>
+        <span class="c">&lt;!-- or &lt;!- - The update interval for fully loaded dictionaries or invalidation time for cached dictionaries. 0 - never update. - -&gt;</span>
 <span class="c">        &lt;lifetime&gt;300&lt;/lifetime&gt;</span>
 <span class="c">        --&gt;</span>
 
-        <span class="nt">&lt;layout&gt;</span>   <span class="c">&lt;!-- Способ размещения в памяти. --&gt;</span>
+        <span class="nt">&lt;layout&gt;</span> <span class="c">&lt;!-- Method for storing in memory. --&gt;</span>
             <span class="nt">&lt;flat</span> <span class="nt">/&gt;</span>
-            <span class="c">&lt;!-- или</span>
-<span class="c">            &lt;hashed /&gt;</span>
-<span class="c">            или</span>
+            <span class="c">&lt;!-- or &lt;hashed /&gt;</span>
+<span class="c">            or</span>
 <span class="c">            &lt;cache&gt;</span>
-<span class="c">                &lt;!- - Размер кэша в количестве ячеек; округляется вверх до степени двух. - -&gt;</span>
+<span class="c">                &lt;!- - Cache size in number of cells; rounded up to a degree of two. - -&gt;</span>
 <span class="c">                &lt;size_in_cells&gt;1000000000&lt;/size_in_cells&gt;</span>
 <span class="c">            &lt;/cache&gt;</span>
+<span class="c">            or</span>
+<span class="c">            &lt;ip_trie /&gt;</span>
 <span class="c">            --&gt;</span>
         <span class="nt">&lt;/layout&gt;</span>
 
-        <span class="c">&lt;!-- Структура. --&gt;</span>
+        <span class="c">&lt;!-- Structure. --&gt;</span>
         <span class="nt">&lt;structure&gt;</span>
-            <span class="c">&lt;!-- Описание столбца, являющегося идентификатором (ключом) словаря. --&gt;</span>
+            <span class="c">&lt;!-- Description of the column that serves as the dictionary identifier (key). --&gt;</span>
             <span class="nt">&lt;id&gt;</span>
-                <span class="c">&lt;!-- Имя столбца с идентификатором. --&gt;</span>
+                <span class="c">&lt;!-- Column name with ID. --&gt;</span>
                 <span class="nt">&lt;name&gt;</span>Id<span class="nt">&lt;/name&gt;</span>
             <span class="nt">&lt;/id&gt;</span>
 
-            <span class="nt">&lt;attribute&gt;</span>    <span class="c">&lt;!-- id уже входит в атрибуты и дополнительно указывать его здесь не нужно. --&gt;</span>
-                <span class="c">&lt;!-- Имя столбца. --&gt;</span>
+            <span class="nt">&lt;attribute&gt;</span>
+                <span class="c">&lt;!-- Column name. --&gt;</span>
                 <span class="nt">&lt;name&gt;</span>Name<span class="nt">&lt;/name&gt;</span>
-                <span class="c">&lt;!-- Тип столбца. (Как столбец понимается при загрузке.</span>
-<span class="c">                     В случае MySQL, в таблице может быть TEXT, VARCHAR, BLOB, но загружается всё как String) --&gt;</span>
-                <span class="nt">&lt;type&gt;</span>String<span class="nt">&lt;/type&gt;</span>
-                <span class="c">&lt;!-- Какое значение использовать для несуществующего элемента. В примере - пустая строка. --&gt;</span>
+                <span class="c">&lt;!-- Column type. (How the column is understood when loading. For MySQL, a table can have TEXT, VARCHAR, and BLOB, but these are all loaded as String) --&gt;</span>
+                 <span class="nt">&lt;type&gt;</span>String<span class="nt">&lt;/type&gt;</span>
+                <span class="c">&lt;!-- Value to use for a non-existing element. In the example, an empty string. --&gt;</span>
                 <span class="nt">&lt;null_value&gt;&lt;/null_value&gt;</span>
             <span class="nt">&lt;/attribute&gt;</span>
-
-            <span class="c">&lt;!-- Может быть указано произвольное количество атрибутов. --&gt;</span>
+            <span class="c">&lt;!-- Any number of attributes can be specified. --&gt;</span>
             <span class="nt">&lt;attribute&gt;</span>
                 <span class="nt">&lt;name&gt;</span>ParentID<span class="nt">&lt;/name&gt;</span>
                 <span class="nt">&lt;type&gt;</span>UInt64<span class="nt">&lt;/type&gt;</span>
                 <span class="nt">&lt;null_value&gt;</span>0<span class="nt">&lt;/null_value&gt;</span>
-                <span class="c">&lt;!-- Определяет ли иерархию - отображение в идентификатор родителя (по умолчанию, false). --&gt;</span>
+                <span class="c">&lt;!-- Whether it defines a hierarchy - mapping to the parent ID (by default, false). --&gt;</span>
                 <span class="nt">&lt;hierarchical&gt;</span>true<span class="nt">&lt;/hierarchical&gt;</span>
-                <span class="c">&lt;!-- Можно считать отображение id -&gt; attribute инъективным, чтобы оптимизировать GROUP BY. (по умолчанию, false) --&gt;</span>
+                <span class="c">&lt;!-- The mapping id -&gt; attribute can be considered injective, in order to optimize GROUP BY. (by default, false) --&gt;</span>
                 <span class="nt">&lt;injective&gt;</span>true<span class="nt">&lt;/injective&gt;</span>
             <span class="nt">&lt;/attribute&gt;</span>
         <span class="nt">&lt;/structure&gt;</span>
@@ -190,36 +174,35 @@
 <span class="nt">&lt;/dictionaries&gt;</span>
 </pre></div>
 </div>
-<p>Идентификатор (ключевой атрибут) словаря должен быть числом, помещающимся в UInt64.
-Также есть возможность задавать произвольные составные ключи (см. раздел &#8220;Словари с составными ключами&#8221;). Замечание: составной ключ может состоять и из одного элемента, что даёт возможность использовать в качестве ключа, например, строку.</p>
-<p>Существует шесть способов размещения словаря в памяти.</p>
+<p>The dictionary identifier (key attribute) should be a number that fits into UInt64. Also, you can use arbitrary tuples as keys (see section &#8220;Dictionaries with complex keys&#8221;). Note: you can use complex keys consisting of just one element. This allows using e.g. Strings as dictionary keys.</p>
+<p>There are six ways to store dictionaries in memory.</p>
 <div class="section" id="flat">
 <h2>flat<a class="headerlink" href="#flat" title="Permalink to this headline">¶</a></h2>
-<p>В виде плоских массивов. Самый эффективный способ. Он подходит, если все ключи меньше 500 000. Если при создании словаря обнаружен ключ больше, то кидается исключение и словарь не создаётся. Словарь загружается в оперативку целиком. Словарь использует количество оперативки, пропорциональное максимальному значению ключа. Ввиду ограничения на 500 000, потребление оперативки вряд ли может быть большим.
-Поддерживаются все виды источников. При обновлении, данные (из файла, из таблицы) читаются целиком.</p>
+<p>This is the most effective method. It works if all keys are smaller than <code class="docutils literal"><span class="pre">500,000</span></code>.  If a larger key is discovered when creating the dictionary, an exception is thrown and the dictionary is not created. The dictionary is loaded to RAM in its entirety. The dictionary uses the amount of memory proportional to maximum key value. With the limit of 500,000, memory consumption is not likely to be high. All types of sources are supported. When updating, data (from a file or from a table) is read in its entirety.</p>
 </div>
 <div class="section" id="hashed">
 <h2>hashed<a class="headerlink" href="#hashed" title="Permalink to this headline">¶</a></h2>
-<p>В виде хэш-таблиц. Слегка менее эффективный способ. Словарь тоже загружается в оперативку целиком, и может содержать произвольное количество элементов с произвольными идентификаторами. На практике, имеет смысл использовать до десятков миллионов элементов, пока хватает оперативки.
-Поддерживаются все виды источников. При обновлении, данные (из файла, из таблицы) читаются целиком.</p>
+<p>This method is slightly less effective than the first one. The dictionary is also loaded to RAM in its entirety, and can contain any number of items with any identifiers. In practice, it makes sense to use up to tens of millions of items, while there is enough RAM.
+All types of sources are supported. When updating, data (from a file or from a table) is read in its entirety.</p>
 </div>
 <div class="section" id="cache">
 <h2>cache<a class="headerlink" href="#cache" title="Permalink to this headline">¶</a></h2>
-<p>Наименее эффективный способ. Подходит, если словарь не помещается в оперативку. Представляет собой кэш из фиксированного количества ячеек, в которых могут быть расположены часто используемые данные. Поддерживается источник MySQL, ClickHouse, executable, http; источник-файл не поддерживается. При поиске в словаре, сначала просматривается кэш. На каждый блок данных, все не найденные в кэше ключи (или устаревшие ключи) собираются в пачку, и с этой пачкой делается запрос к источнику вида SELECT attrs... FROM db.table WHERE id IN (k1, k2, ...). Затем полученные данные записываются в кэш.</p>
+<p>This is the least effective method. It is appropriate if the dictionary doesn&#8217;t fit in RAM. It is a cache of a fixed number of cells, where frequently-used data can be located. MySQL, ClickHouse, executable, http sources are supported, but file sources are not supported.
+When searching a dictionary, the cache is searched first. For each data block, all keys not found in the cache (or expired keys) are collected in a package, which is sent to the source with the query <code class="docutils literal"><span class="pre">SELECT</span> <span class="pre">attrs...</span> <span class="pre">FROM</span> <span class="pre">db.table</span> <span class="pre">WHERE</span> <span class="pre">id</span> <span class="pre">IN</span> <span class="pre">(k1,</span> <span class="pre">k2,</span> <span class="pre">...)</span></code>. The received data is then written to the cache.</p>
 </div>
 <div class="section" id="range-hashed">
 <h2>range_hashed<a class="headerlink" href="#range-hashed" title="Permalink to this headline">¶</a></h2>
-<p>В таблице прописаны какие-то данные для диапазонов дат, для каждого ключа. Дать возможность доставать эти данные для заданного ключа, для заданной даты.</p>
-<p>Пример: в таблице записаны скидки для каждого рекламодателя в виде:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>id рекламодателя    дата начала действия скидки    дата конца    величина
+<p>The table lists some data for date ranges, for each key. To give the possibility to extract this data for a given key, for a given date.</p>
+<p>Example: in the table there are discounts for each advertiser in the form:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>advertiser id    discount start date    end date    value
 123                 2015-01-01                     2015-01-15    0.15
 123                 2015-01-16                     2015-01-31    0.25
 456                 2015-01-01                     2015-01-15    0.05
 </pre></div>
 </div>
-<p>Добавляем layout = range_hashed.
-При использовании такого layout, в structure должны быть элементы range_min, range_max.</p>
-<p>Пример:</p>
+<p>Adding layout = range_hashed.
+When using such a layout, the structure should have the elements range_min, range_max.</p>
+<p>Example:</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;structure&gt;</span>
     <span class="nt">&lt;id&gt;</span>
         <span class="nt">&lt;name&gt;</span>Id<span class="nt">&lt;/name&gt;</span>
@@ -233,15 +216,15 @@
     ...
 </pre></div>
 </div>
-<p>Эти столбцы должны иметь тип Date. Другие типы пока не поддерживаем.
-Столбцы обозначают закрытый диапазон дат.</p>
-<p>Для работы с такими словарями, функции dictGetT должны принимать ещё один аргумент - дату:</p>
-<p><tt class="docutils literal"><span class="pre">dictGetT('dict_name',</span> <span class="pre">'attr_name',</span> <span class="pre">id,</span> <span class="pre">date)</span></tt></p>
-<p>Функция достаёт значение для данного id и для диапазона дат, в который входит переданная дата. Если не найден id или для найденного id не найден диапазон, то возвращается значение по умолчанию для словаря.</p>
-<p>Если есть перекрывающиеся диапазоны, то можно использовать любой подходящий.</p>
-<p>Если граница диапазона является NULL или является некорректной датой (1900-01-01, 2039-01-01), то диапазон следует считать открытым. Диапазон может быть открытым с обеих сторон.</p>
-<p>В оперативке данные представлены в виде хэш-таблицы со значением в виде упорядоченного массива диапазонов и соответствующих им значений.</p>
-<p>Пример словаря по диапазонам:</p>
+<p>These columns must be of type Date. Other types are not yet supported.
+The columns indicate a closed date range.</p>
+<p>To work with such dictionaries, dictGetT functions must take one more argument - the date:</p>
+<p><code class="docutils literal"><span class="pre">dictGetT('dict_name',</span> <span class="pre">'attr_name',</span> <span class="pre">id,</span> <span class="pre">date)</span></code></p>
+<p>The function takes out the value for this id and for the date range, which includes the transmitted date. If no id is found or the range found is not found for the found id, the default value for the dictionary is returned.</p>
+<p>If there are overlapping ranges, then any suitable one can be used.</p>
+<p>If the range boundary is NULL or is an incorrect date (1900-01-01, 2039-01-01), then the range should be considered open. The range can be open on both sides.</p>
+<p>In the RAM, the data is presented as a hash table with a value in the form of an ordered array of ranges and their corresponding values.</p>
+<p>Example of a dictionary by ranges:</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;dictionaries&gt;</span>
         <span class="nt">&lt;dictionary&gt;</span>
                 <span class="nt">&lt;name&gt;</span>xxx<span class="nt">&lt;/name&gt;</span>
@@ -286,34 +269,75 @@
 </pre></div>
 </div>
 </div>
+<div class="section" id="ip-trie">
+<h2>ip_trie<a class="headerlink" href="#ip-trie" title="Permalink to this headline">¶</a></h2>
+<p>The table stores IP prefixes for each key (IP address), which makes it possible to map IP addresses to metadata such as ASN or threat score.</p>
+<p>Example: in the table there are prefixes matches to AS number and country:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>prefix            asn       cca2
+202.79.32.0/20    17501     NP
+2620:0:870::/48   3856      US
+2a02:6b8:1::/48   13238     RU
+2001:db8::/32     65536     ZZ
+</pre></div>
+</div>
+<p>When using such a layout, the structure should have the &#8220;key&#8221; element.</p>
+<p>Example:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;structure&gt;</span>
+    <span class="nt">&lt;key&gt;</span>
+        <span class="nt">&lt;attribute&gt;</span>
+            <span class="nt">&lt;name&gt;</span>prefix<span class="nt">&lt;/name&gt;</span>
+            <span class="nt">&lt;type&gt;</span>String<span class="nt">&lt;/type&gt;</span>
+        <span class="nt">&lt;/attribute&gt;</span>
+    <span class="nt">&lt;/key&gt;</span>
+    <span class="nt">&lt;attribute&gt;</span>
+            <span class="nt">&lt;name&gt;</span>asn<span class="nt">&lt;/name&gt;</span>
+            <span class="nt">&lt;type&gt;</span>UInt32<span class="nt">&lt;/type&gt;</span>
+            <span class="nt">&lt;null_value</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/attribute&gt;</span>
+    <span class="nt">&lt;attribute&gt;</span>
+            <span class="nt">&lt;name&gt;</span>cca2<span class="nt">&lt;/name&gt;</span>
+            <span class="nt">&lt;type&gt;</span>String<span class="nt">&lt;/type&gt;</span>
+            <span class="nt">&lt;null_value&gt;</span>??<span class="nt">&lt;/null_value&gt;</span>
+    <span class="nt">&lt;/attribute&gt;</span>
+    ...
+</pre></div>
+</div>
+<p>These key must have only one attribute of type String, containing a valid IP prefix. Other types are not yet supported.</p>
+<p>For querying, same functions (dictGetT with tuple) as for complex key dictionaries have to be used:</p>
+<p><code class="docutils literal"><span class="pre">dictGetT('dict_name',</span> <span class="pre">'attr_name',</span> <span class="pre">tuple(ip))</span></code></p>
+<p>The function accepts either UInt32 for IPv4 address or FixedString(16) for IPv6 address in wire format:</p>
+<p><code class="docutils literal"><span class="pre">dictGetString('prefix',</span> <span class="pre">'asn',</span> <span class="pre">tuple(IPv6StringToNum('2001:db8::1')))</span></code></p>
+<p>No other type is supported. The function returns attribute for a prefix matching the given IP address. If there are overlapping prefixes, the most specific one is returned.</p>
+<p>The data is stored currently in a bitwise trie, it has to fit in memory.</p>
+</div>
 <div class="section" id="complex-key-hashed">
 <h2>complex_key_hashed<a class="headerlink" href="#complex-key-hashed" title="Permalink to this headline">¶</a></h2>
-<p>Для использования с составными ключами. Аналогичен hashed.</p>
+<p>The same as <code class="docutils literal"><span class="pre">hashed</span></code>, but for complex keys.</p>
 </div>
 <div class="section" id="complex-key-cache">
 <h2>complex_key_cache<a class="headerlink" href="#complex-key-cache" title="Permalink to this headline">¶</a></h2>
-<p>Для использования с составными ключами. Аналогичен cache.</p>
+<p>The same as <code class="docutils literal"><span class="pre">cache</span></code>, but for complex keys.</p>
 </div>
-<div class="section" id="id4">
-<h2>Примечания<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
-<p>Рекомендуется использовать способ <tt class="docutils literal"><span class="pre">flat</span></tt>, если возможно, или <tt class="docutils literal"><span class="pre">hashed</span></tt>, <tt class="docutils literal"><span class="pre">complex_key_hashed</span></tt>. Скорость работы словарей с таким размещением в памяти является безупречной.</p>
-<p>Способы <tt class="docutils literal"><span class="pre">cache</span></tt> и <tt class="docutils literal"><span class="pre">complex_key_cache</span></tt> следует использовать лишь если это неизбежно. Скорость работы кэша очень сильно зависит от правильности настройки и сценария использования. Словарь типа cache нормально работает лишь при достаточно больших hit rate-ах (рекомендуется 99% и выше). Посмотреть средний hit rate можно в таблице system.dictionaries. Укажите достаточно большой размер кэша. Количество ячеек следует подобрать экспериментальным путём - выставить некоторое значение, с помощью запроса добиться полной заполненности кэша, посмотреть на потребление оперативки (эта информация находится в таблице system.dictionaries); затем пропорционально увеличить количество ячеек так, чтобы расходовалось разумное количество оперативки. В качестве источника для кэша рекомендуется MySQL, MongoDB, так как ClickHouse плохо обрабатывает запросы со случайными чтениями.</p>
-<p>Во всех случаях, производительность будет выше, если вызывать функцию для работы со словарём после <tt class="docutils literal"><span class="pre">GROUP</span> <span class="pre">BY</span></tt>, или если доставаемый атрибут помечен как инъективный. Для cache словарей, производительность будет лучше, если вызывать функцию после LIMIT-а - для этого можно использовать подзапрос с LIMIT-ом, и снаружи вызывать функцию со словарём.</p>
-<p>Атрибут называется инъективным, если разным ключам соответствуют разные значения атрибута. Тогда при использовании в <tt class="docutils literal"><span class="pre">GROUP</span> <span class="pre">BY</span></tt> функции, достающей значение атрибута по ключу, эта функция автоматически выносится из GROUP BY.</p>
-<p>При обновлении словарей из файла, сначала проверяется время модификации файла, и загрузка производится только если файл изменился.
-При обновлении из MySQL, для flat и hashed словарей, сначала делается запрос <tt class="docutils literal"><span class="pre">SHOW</span> <span class="pre">TABLE</span> <span class="pre">STATUS</span></tt> и смотрится время обновления таблицы. И если оно не NULL, то оно сравнивается с запомненным временем. Это работает для MyISAM таблиц, а для InnoDB таблиц время обновления неизвестно, поэтому загрузка из InnoDB делается при каждом обновлении.</p>
-<p>Для cache-словарей может быть задано время устаревания (<tt class="docutils literal"><span class="pre">lifetime</span></tt>) данных в кэше. Если от загрузки данных в ячейке прошло больше времени, чем lifetime, то значение не используется, и будет запрошено заново при следующей необходимости его использовать.</p>
-<p>Если словарь не удалось ни разу загрузить, то при попытке его использования, будет брошено исключение.
-Если при запросе к источнику cached словаря возникла ошибка, то будет брошено исключение.
-Обновление словарей (кроме загрузки при первом использовании) не блокирует запросы - во время обновления используется старая версия словаря. Если при обновлении возникнет ошибка, то ошибка пишется в лог сервера, а запросы продолжат использовать старую версию словарей.</p>
-<p>Список внешних словарей и их статус можно посмотреть в таблице <tt class="docutils literal"><span class="pre">system.dictionaries</span></tt>.</p>
-<p>Для использования внешних словарей, смотрите раздел &#8220;Функции для работы с внешними словарями&#8221;.</p>
-<p>Обратите внимание, что вы можете преобразовать значения по небольшому словарю, указав всё содержимое словаря прямо в запросе SELECT - смотрите раздел &#8220;Функция transform&#8221;. Эта функциональность никак не связана с внешними словарями.</p>
+<div class="section" id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h2>
+<p>We recommend using the <code class="docutils literal"><span class="pre">flat</span></code> method when possible, or <code class="docutils literal"><span class="pre">hashed</span></code>. The speed of the dictionaries is impeccable with this type of memory storage.</p>
+<p>Use the cache method only in cases when it is unavoidable. The speed of the cache depends strongly on correct settings and the usage scenario. A cache type dictionary only works normally for high enough hit rates (recommended 99% and higher). You can view the average hit rate in the system.dictionaries table. Set a large enough cache size. You will need to experiment to find the right number of cells - select a value, use a query to get the cache completely full, look at the memory consumption (this information is in the system.dictionaries table), then proportionally increase the number of cells so that a reasonable amount of memory is consumed. We recommend MySQL as the source for the cache, because ClickHouse doesn&#8217;t handle requests with random reads very well.</p>
+<p>In all cases, performance is better if you call the function for working with a dictionary after <code class="docutils literal"><span class="pre">GROUP</span> <span class="pre">BY</span></code>, and if the attribute being fetched is marked as injective. For a dictionary cache, performance improves if you call the function after LIMIT. To do this, you can use a subquery with LIMIT, and call the function with the dictionary from the outside.</p>
+<p>An attribute is called injective if different attribute values correspond to different keys. So when <code class="docutils literal"><span class="pre">GROUP</span> <span class="pre">BY</span></code> uses a function that fetches an attribute value by the key, this function is automatically taken out of <code class="docutils literal"><span class="pre">GROUP</span> <span class="pre">BY</span></code>.</p>
+<p>When updating dictionaries from a file, first the file modification time is checked, and it is loaded only if the file has changed.
+When updating from MySQL, for flat and hashed dictionaries, first a <code class="docutils literal"><span class="pre">SHOW</span> <span class="pre">TABLE</span> <span class="pre">STATUS</span></code> query is made, and the table update time is checked. If it is not NULL, it is compared to the stored time. This works for MyISAM tables, but for InnoDB tables the update time is unknown, so loading from InnoDB is performed on each update.</p>
+<p>For cache dictionaries, the expiration (lifetime) of data in the cache can be set. If more time than &#8216;lifetime&#8217; has passed since loading the data in a cell, the cell&#8217;s value is not used, and it is re-requested the next time it needs to be used.</p>
+<p>If a dictionary couldn&#8217;t be loaded even once, an attempt to use it throws an exception.
+If an error occurred during a request to a cached source, an exception is thrown.
+Dictionary updates (other than loading for first use) do not block queries. During updates, the old version of a dictionary is used. If an error occurs during an update, the error is written to the server log, and queries continue using the old version of dictionaries.</p>
+<p>You can view the list of external dictionaries and their status in the system.dictionaries table.</p>
+<p>To use external dictionaries, see the section &#8220;Functions for working with external dictionaries&#8221;.</p>
+<p>Note that you can convert values for a small dictionary by specifying all the contents of the dictionary directly in a <code class="docutils literal"><span class="pre">SELECT</span></code> query (see the section &#8220;transform function&#8221;). This functionality is not related to external dictionaries.</p>
 </div>
-<div class="section" id="id5">
-<h2>Словари с составными ключами<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
-<p>В качестве ключа может выступать кортеж (tuple) из полей произвольных типов. Параметр layout в этом случае должен быть равен complex_key_hashed или complex_key_cache.</p>
-<p>Структура ключа задаётся не в элементе <tt class="docutils literal"><span class="pre">&lt;id&gt;</span></tt>, а в элементе <tt class="docutils literal"><span class="pre">&lt;key&gt;</span></tt>. Поля ключа задаются в том же формате, что и атрибуты словаря. Пример:</p>
+<div class="section" id="dictionaries-with-complex-keys">
+<h2>Dictionaries with complex keys<a class="headerlink" href="#dictionaries-with-complex-keys" title="Permalink to this headline">¶</a></h2>
+<p>You can use tuples consisting of fields of arbitrary types as keys. Configure your dictionary with <code class="docutils literal"><span class="pre">complex_key_hashed</span></code> or <code class="docutils literal"><span class="pre">complex_key_cache</span></code> layout in this case.</p>
+<p>Key structure is configured not in the <code class="docutils literal"><span class="pre">&lt;id&gt;</span></code> element but in the <code class="docutils literal"><span class="pre">&lt;key&gt;</span></code> element. Fields of the key tuple are configured analogously to dictionary attributes. Example:</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;structure&gt;</span>
     <span class="nt">&lt;key&gt;</span>
         <span class="nt">&lt;attribute&gt;</span>
@@ -329,7 +353,7 @@
 ...
 </pre></div>
 </div>
-<p>При использовании такого словаря, в функции dictGet* в качестве ключа передаётся Tuple со значениями полей. Пример: <tt class="docutils literal"><span class="pre">dictGetString('dict_name',</span> <span class="pre">'attr_name',</span> <span class="pre">tuple('field1',</span> <span class="pre">123))</span></tt>.</p>
+<p>When using such dictionary, use a Tuple of field values as a key in dictGet* functions. Example: <code class="docutils literal"><span class="pre">dictGetString('dict_name',</span> <span class="pre">'attr_name',</span> <span class="pre">tuple('field1_value',</span> <span class="pre">123))</span></code>.</p>
 </div>
 </div>
 
@@ -337,35 +361,90 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Внешние словари</a><ul>
-<li><a class="reference internal" href="#flat">flat</a></li>
-<li><a class="reference internal" href="#hashed">hashed</a></li>
-<li><a class="reference internal" href="#cache">cache</a></li>
-<li><a class="reference internal" href="#range-hashed">range_hashed</a></li>
-<li><a class="reference internal" href="#complex-key-hashed">complex_key_hashed</a></li>
-<li><a class="reference internal" href="#complex-key-cache">complex_key_cache</a></li>
-<li><a class="reference internal" href="#id4">Примечания</a></li>
-<li><a class="reference internal" href="#id5">Словари с составными ключами</a></li>
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Dictionaries</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="">External dictionaries</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#flat">flat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hashed">hashed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cache">cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#range-hashed">range_hashed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ip-trie">ip_trie</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#complex-key-hashed">complex_key_hashed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#complex-key-cache">complex_key_cache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#notes">Notes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dictionaries-with-complex-keys">Dictionaries with complex keys</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="internal_dicts.html">Internal dictionaries</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">Словари</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="internal_dicts.html"
-                        title="next chapter">Встроенные словари</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/dicts/external_dicts.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Dictionaries</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Dictionaries</a></li>
+      <li>Next: <a href="internal_dicts.html" title="next chapter">Internal dictionaries</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -382,25 +461,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="internal_dicts.html" title="Встроенные словари"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="Словари"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Словари</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Постановка задачи в Яндекс.Метрике &mdash; ClickHouse 1 documentation</title>
+    <title>The Yandex.Metrica task &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,62 +23,45 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Введение" href="index.html" />
-    <link rel="next" title="Использование в Яндекс.Метрике и других отделах Яндекса" href="use_case.html" />
-    <link rel="prev" title="Особенности ClickHouse, которые могут считаться недостатками" href="features.html" /> 
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Introduction" href="index.html" />
+    <link rel="next" title="Usage in Yandex.Metrica and other Yandex services" href="use_case.html" />
+    <link rel="prev" title="ClickHouse features that can be considered disadvantages" href="features.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="use_case.html" title="Использование в Яндекс.Метрике и других отделах Яндекса"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="features.html" title="Особенности ClickHouse, которые могут считаться недостатками"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Введение</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="id1">
-<h1>Постановка задачи в Яндекс.Метрике<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
-<p>Нужно получать произвольные отчёты на основе хитов и визитов, с произвольными сегментами, задаваемыми пользователем. Данные для отчётов обновляются в реальном времени. Запросы должны выполняться сразу (в режиме онлайн). Отчёты должно быть возможно строить за произвольный период. Требуется вычислять сложные агрегаты типа количества уникальных посетителей.
-На данный момент (апрель 2014), каждый день в Яндекс.Метрику поступает около 12 миллиардов событий (хитов и кликов мыши). Все эти события должны быть сохранены для возможности строить произвольные отчёты. Один запрос может потребовать просканировать сотни миллионов строк за время не более нескольких секунд, или миллионы строк за время не более нескольких сотен миллисекунд.</p>
-<div class="section" id="id2">
-<h2>Агрегированные и неагрегированные данные<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
-<p>Существует мнение, что для того, чтобы эффективно считать статистику, данные нужно агрегировать, так как это позволяет уменьшить объём данных.</p>
-<dl class="docutils">
-<dt>Но агрегированные данные являются очень ограниченным решением, по следующим причинам:</dt>
-<dd><ul class="first last simple">
-<li>вы должны заранее знать перечень отчётов, необходимых пользователю;</li>
-<li>то есть, пользователь не может построить произвольный отчёт;</li>
-<li>при агрегации по большому количеству ключей, объём данных не уменьшается и агрегация бесполезна;</li>
-<li>при большом количестве отчётов, получается слишком много вариантов агрегации (комбинаторный взрыв);</li>
-<li>при агрегации по ключам высокой кардинальности (например, URL) объём данных уменьшается не сильно (менее чем в 2 раза);</li>
-<li>из-за этого, объём данных при агрегации может не уменьшиться, а вырасти;</li>
-<li>пользователи будут смотреть не все отчёты, которые мы для них посчитаем - то есть, большая часть вычислений бесполезна;</li>
-<li>возможно нарушение логической целостности данных для разных агрегаций;</li>
+  <div class="section" id="the-yandex-metrica-task">
+<h1>The Yandex.Metrica task<a class="headerlink" href="#the-yandex-metrica-task" title="Permalink to this headline">¶</a></h1>
+<p>We need to get custom reports based on hits and sessions, with custom segments set by the user. Data for the reports is updated in real-time. Queries must be run immediately (in online mode). We must be able to build reports for any time period. Complex aggregates must be calculated, such as the number of unique visitors.
+At this time (April 2014), Yandex.Metrica receives approximately 12 billion events (pageviews and mouse clicks) daily. All these events must be stored in order to build custom reports. A single query may require scanning hundreds of millions of rows over a few seconds, or millions of rows in no more than a few hundred milliseconds.</p>
+<div class="section" id="aggregated-and-non-aggregated-data">
+<h2>Aggregated and non-aggregated data<a class="headerlink" href="#aggregated-and-non-aggregated-data" title="Permalink to this headline">¶</a></h2>
+<p>There is a popular opinion that in order to effectively calculate statistics, you must aggregate data, since this reduces the volume of data.</p>
+<p>But data aggregation is a very limited solution, for the following reasons:</p>
+<ul class="simple">
+<li>You must have a pre-defined list of reports the user will need. The user can&#8217;t make custom reports.</li>
+<li>When aggregating a large quantity of keys, the volume of data is not reduced, and aggregation is useless.</li>
+<li>For a large number of reports, there are too many aggregation variations (combinatorial explosion).</li>
+<li>When aggregating keys with high cardinality (such as URLs), the volume of data is not reduced by much (less than twofold). For this reason, the volume of data with aggregation might grow instead of shrink.</li>
+<li>Users will not view all the reports we calculate for them. A large portion of calculations are useless.</li>
+<li>The logical integrity of data may be violated for various aggregations.</li>
 </ul>
-</dd>
-</dl>
-<p>Как видно, если ничего не агрегировать, и работать с неагрегированными данными, то это даже может уменьшить объём вычислений.</p>
-<p>Впрочем, при агрегации, существенная часть работы выносится в оффлайне, и её можно делать сравнительно спокойно. Для сравнения, при онлайн вычислениях, вычисления надо делать так быстро, как это возможно, так как именно в момент вычислений пользователь ждёт результата.</p>
-<p>В Яндекс.Метрике есть специализированная система для агрегированных данных - Metrage, на основе которой работает большинство отчётов.
-Также в Яндекс.Метрике с 2009 года использовалась специализированная OLAP БД для неагрегированных данных - OLAPServer, на основе которой раньше работал конструктор отчётов.
-OLAPServer хорошо подходил для неагрегированных данных, но содержал много ограничений, не позволяющих использовать его для всех отчётах так, как хочется: отсутствие поддержки типов данных (только числа), невозможность инкрементального обновления данных в реальном времени (только перезаписью данных за сутки). OLAPServer не является СУБД, а является специализированной БД.</p>
-<p>Чтобы снять ограничения OLAPServer-а и решить задачу работы с неагрегированными данными для всех отчётов, разработана СУБД ClickHouse.</p>
+<p>If we do not aggregate anything and work with non-aggregated data, this might actually reduce the volume of calculations.</p>
+<p>However, with aggregation, a significant part of the work is taken offline and completed relatively calmly. In contrast, online calculations require calculating as fast as possible, since the user is waiting for the result.</p>
+<p>Yandex.Metrica has a specialized system for aggregating data called Metrage, which is used for the majority of reports. Starting in 2009, Yandex.Metrica also used a specialized OLAP database for non-aggregated data called OLAPServer, which was previously used for the report builder. OLAPServer worked well for non-aggregated data, but it had many restrictions that did not allow it to be used for all reports as desired. These included the lack of support for data types (only numbers), and the inability to incrementally update data in real-time (it could only be done by rewriting data daily). OLAPServer is not a DBMS, but a specialized DB.</p>
+<p>To remove the limitations of OLAPServer and solve the problem of working with non-aggregated data for all reports, we developed the ClickHouse DBMS.</p>
 </div>
 </div>
 
@@ -86,28 +69,87 @@ OLAPServer хорошо подходил для неагрегированных
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Постановка задачи в Яндекс.Метрике</a><ul>
-<li><a class="reference internal" href="#id2">Агрегированные и неагрегированные данные</a></li>
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Introduction</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="what_is_clickhouse.html">What is ClickHouse?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distinctive_features.html">Distinctive features of ClickHouse</a></li>
+<li class="toctree-l2"><a class="reference internal" href="features.html">ClickHouse features that can be considered disadvantages</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">The Yandex.Metrica task</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#aggregated-and-non-aggregated-data">Aggregated and non-aggregated data</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="use_case.html">Usage in Yandex.Metrica and other Yandex services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="possible_silly_questions.html">Possible silly questions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance.html">Performance</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="features.html"
-                        title="previous chapter">Особенности ClickHouse, которые могут считаться недостатками</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="use_case.html"
-                        title="next chapter">Использование в Яндекс.Метрике и других отделах Яндекса</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/introduction/ya_metrika_task.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Introduction</a><ul>
+      <li>Previous: <a href="features.html" title="previous chapter">ClickHouse features that can be considered disadvantages</a></li>
+      <li>Next: <a href="use_case.html" title="next chapter">Usage in Yandex.Metrica and other Yandex services</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -124,25 +166,13 @@ OLAPServer хорошо подходил для неагрегированных
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="use_case.html" title="Использование в Яндекс.Метрике и других отделах Яндекса"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="features.html" title="Особенности ClickHouse, которые могут считаться недостатками"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Введение</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

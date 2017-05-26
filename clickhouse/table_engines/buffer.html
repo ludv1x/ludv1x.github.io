@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Buffer &mdash; ClickHouse 1 documentation</title>
+    <title>Buffer &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,92 +23,158 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Движки таблиц" href="index.html" />
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Table engines" href="index.html" />
     <link rel="next" title="CollapsingMergeTree" href="collapsingmergetree.html" />
-    <link rel="prev" title="AggregatingMergeTree" href="aggregatingmergetree.html" /> 
+    <link rel="prev" title="AggregatingMergeTree" href="aggregatingmergetree.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="collapsingmergetree.html" title="CollapsingMergeTree"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="aggregatingmergetree.html" title="AggregatingMergeTree"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Движки таблиц</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="buffer">
 <h1>Buffer<a class="headerlink" href="#buffer" title="Permalink to this headline">¶</a></h1>
-<p>Буферизует записываемые данные в оперативке, периодически сбрасывая их в другую таблицу. При чтении, производится чтение данных одновременно из буфера и из другой таблицы.</p>
+<p>Buffers the data to write in RAM, periodically flushing it to another table. During the read operation, data is read from the buffer and the other table simultaneously.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">Buffer</span><span class="p">(</span><span class="n">database</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span> <span class="n">num_layers</span><span class="p">,</span> <span class="n">min_time</span><span class="p">,</span> <span class="n">max_time</span><span class="p">,</span> <span class="n">min_rows</span><span class="p">,</span> <span class="n">max_rows</span><span class="p">,</span> <span class="n">min_bytes</span><span class="p">,</span> <span class="n">max_bytes</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Параметры движка:
-database, table - таблица, в которую сбрасывать данные. Вместо имени базы данных может использоваться константное выражение, возвращающее строку.
-num_layers - уровень параллелизма. Физически таблица будет представлена в виде num_layers независимых буферов. Рекомендуемое значение - 16.
-min_time, max_time, min_rows, max_rows, min_bytes, max_bytes - условия для сброса данных из буфера.</p>
-<p>Данные сбрасываются из буфера и записываются в таблицу назначения, если выполнены все min-условия или хотя бы одно max-условие.
-min_time, max_time - условие на время в секундах от момента первой записи в буфер;
-min_rows, max_rows - условие на количество строк в буфере;
-min_bytes, max_bytes - условие на количество байт в буфере.</p>
-<p>При записи, данные вставляются в случайный из num_layers буферов. Или, если размер куска вставляемых данных достаточно большой (больше max_rows или max_bytes), то он записывается в таблицу назначения минуя буфер.</p>
-<p>Условия для сброса данных учитываются отдельно для каждого из num_layers буферов. Например, если num_layers = 16 и max_bytes = 100000000, то максимальный расход оперативки будет 1.6 GB.</p>
-<p>Пример:</p>
+<p>Engine parameters:
+database, table - The table to flush data to. Instead of the database name, you can use a constant expression that returns a string.
+num_layers - The level of parallelism. Physically, the table will be represented as &#8216;num_layers&#8217; of independent buffers. The recommended value is 16.
+min_time, max_time, min_rows, max_rows, min_bytes, and max_bytes are conditions for flushing data from the buffer.</p>
+<p>Data is flushed from the buffer and written to the destination table if all the &#8216;min&#8217; conditions or at least one &#8216;max&#8217; condition are met.
+min_time, max_time - Condition for the time in seconds from the moment of the first write to the buffer.
+min_rows, max_rows - Condition for the number of rows in the buffer.
+min_bytes, max_bytes - Condition for the number of bytes in the buffer.</p>
+<p>During the write operation, data is inserted to a &#8216;num_layers&#8217; number of random buffers. Or, if the data part to insert is large enough (greater than &#8216;max_rows&#8217; or &#8216;max_bytes&#8217;), it is written directly to the destination table, omitting the buffer.</p>
+<p>The conditions for flushing the data are calculated separately for each of the &#8216;num_layers&#8217; buffers. For example, if num_layers = 16 and max_bytes = 100000000, the maximum RAM consumption is 1.6 GB.</p>
+<p>Example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>CREATE TABLE merge.hits_buffer AS merge.hits ENGINE = Buffer(merge, hits, 16, 10, 100, 10000, 1000000, 10000000, 100000000)
 </pre></div>
 </div>
-<p>Создаём таблицу merge.hits_buffer такой же структуры как merge.hits и движком Buffer. При записи в эту таблицу, данные буферизуются в оперативке и, в дальнейшем, записываются в таблицу merge.hits. Создаётся 16 буферов. Данные, имеющиеся в каждом из них будут сбрасываться, если прошло сто секунд, или записан миллион строк, или записано сто мегабайт данных; или если одновременно прошло десять секунд и записано десять тысяч строк и записано десять мегабайт данных. Для примера, если записана всего лишь одна строка, то через сто секунд она будет сброшена в любом случае. А если записано много строк, то они будут сброшены раньше.</p>
-<p>При остановке сервера, при DROP TABLE или DETACH TABLE, данные из буфера тоже сбрасываются в таблицу назначения.</p>
-<p>В качестве имени базы данных и имени таблицы можно указать пустые строки в одинарных кавычках. Это обозначает отсутствие таблицы назначения. В таком случае, при достижении условий на сброс данных, буфер будет просто очищаться. Это может быть полезным, чтобы хранить в оперативке некоторое окно данных.</p>
-<p>При чтении из таблицы типа Buffer, будут обработаны данные, как находящиеся в буфере, так и данные из таблицы назначения (если такая есть).
-Но следует иметь ввиду, что таблица Buffer не поддерживает индекс. То есть, данные в буфере будут просканированы полностью, что может быть медленно для буферов большого размера. (Для данных в подчинённой таблице, будет использоваться тот индекс, который она поддерживает.)</p>
-<p>Если множество столбцов таблицы Buffer не совпадает с множеством столбцов подчинённой таблицы, то будут вставлено подмножество столбцов, которое присутствует в обеих таблицах.</p>
-<p>Если у одного из столбцов таблицы Buffer и подчинённой таблицы не совпадает тип, то в лог сервера будет записано сообщение об ошибке и буфер будет очищен.
-То же самое происходит, если подчинённая таблица не существует в момент сброса буфера.</p>
-<p>Если есть необходимость выполнить ALTER для подчинённой таблицы и для таблицы Buffer, то рекомендуется удалить таблицу Buffer, затем выполнить ALTER подчинённой таблицы, а затем создать таблицу Buffer заново.</p>
-<p>При нештатном перезапуске сервера, данные, находящиеся в буфере, будут потеряны.</p>
-<p>Для таблиц типа Buffer неправильно работают PREWHERE, FINAL и SAMPLE. Эти условия пробрасываются в таблицу назначения, но не используются для обработки данных в буфере. В связи с этим, рекомендуется использовать таблицу типа Buffer только для записи, а читать из таблицы назначения.</p>
-<p>При добавлении данных в Buffer, один из буферов блокируется. Это приводит к задержкам, если одновременно делается чтение из таблицы.</p>
-<p>Данные, вставляемые в таблицу Buffer, попадают в подчинённую таблицу в порядке, возможно отличающимся от порядка вставки, и блоками, возможно отличающимися от вставленных блоков. В связи с этим, трудно корректно использовать таблицу типа Buffer для записи в CollapsingMergeTree. Чтобы избежать проблемы, можно выставить num_layers в 1.</p>
-<p>Если таблица назначения является реплицируемой, то при записи в таблицу Buffer будут потеряны некоторые ожидаемые свойства реплицируемых таблиц. Из-за произвольного изменения порядка строк и размеров блоков данных, перестаёт работать дедупликация данных, в результате чего исчезает возможность надёжной exactly once записи в реплицируемые таблицы.</p>
-<p>В связи с этими недостатками, таблицы типа Buffer можно рекомендовать к применению лишь в очень редких случаях.</p>
-<p>Таблицы типа Buffer используются в тех случаях, когда от большого количества серверов поступает слишком много INSERT-ов в единицу времени, и нет возможности заранее самостоятельно буферизовать данные перед вставкой, в результате чего, INSERT-ы не успевают выполняться.</p>
-<p>Заметим, что даже для таблиц типа Buffer не имеет смысла вставлять данные по одной строке, так как таким образом будет достигнута скорость всего лишь в несколько тысяч строк в секунду, тогда как при вставке более крупными блоками, достижимо более миллиона строк в секунду (смотрите раздел &#8220;Производительность&#8221;).</p>
+<p>Creating a &#8216;merge.hits_buffer&#8217; table with the same structure as &#8216;merge.hits&#8217; and using the Buffer engine. When writing to this table, data is buffered in RAM and later written to the &#8216;merge.hits&#8217; table. 16 buffers are created. The data in each of them is flushed if either 100 seconds have passed, or one million rows have been written, or 100 MB of data have been written; or if simultaneously 10 seconds have passed and 10,000 rows and 10 MB of data have been written. For example, if just one row has been written, after 100 seconds it will be flushed, no matter what. But if many rows have been written, the data will be flushed sooner.</p>
+<p>When the server is stopped, with DROP TABLE or DETACH TABLE, buffer data is also flushed to the destination table.</p>
+<p>You can set empty strings in single quotation marks for the database and table name. This indicates the absence of a destination table. In this case, when the data flush conditions are reached, the buffer is simply cleared. This may be useful for keeping a window of data in memory.</p>
+<p>When reading from a Buffer table, data is processed both from the buffer and from the destination table (if there is one).
+Note that the Buffer tables does not support an index. In other words, data in the buffer is fully scanned, which might be slow for large buffers. (For data in a subordinate table, the index it supports will be used.)</p>
+<p>If the set of columns in the Buffer table doesn&#8217;t match the set of columns in a subordinate table, a subset of columns that exist in both tables is inserted.</p>
+<p>If the types don&#8217;t match for one of the columns in the Buffer table and a subordinate table, an error message is entered in the server log and the buffer is cleared.
+The same thing happens if the subordinate table doesn&#8217;t exist when the buffer is flushed.</p>
+<p>If you need to run ALTER for a subordinate table and the Buffer table, we recommend first deleting the Buffer table, running ALTER for the subordinate table, then creating the Buffer table again.</p>
+<p>If the server is restarted abnormally, the data in the buffer is lost.</p>
+<p>PREWHERE, FINAL and SAMPLE do not work correctly for Buffer tables. These conditions are passed to the destination table, but are not used for processing data in the buffer. Because of this, we recommend only using the Buffer table for writing, while reading from the destination table.</p>
+<p>When adding data to a Buffer, one of the buffers is locked. This causes delays if a read operation is simultaneously being performed from the table.</p>
+<p>Data that is inserted to a Buffer table may end up in the subordinate table in a different order and in different blocks. Because of this, a Buffer table is difficult to use for writing to a CollapsingMergeTree correctly. To avoid problems, you can set &#8216;num_layers&#8217; to 1.</p>
+<p>If the destination table is replicated, some expected characteristics of replicated tables are lost when writing to a Buffer table. The random changes to the order of rows and sizes of data parts cause data deduplication to quit working, which means it is not possible to have a reliable &#8216;exactly once&#8217; write to replicated tables.</p>
+<p>Due to these disadvantages, we can only recommend using a Buffer table in rare cases.</p>
+<p>A Buffer table is used when too many INSERTs are received from a large number of servers over a unit of time and data can&#8217;t be buffered before insertion, which means the INSERTs can&#8217;t run fast enough.</p>
+<p>Note that it doesn&#8217;t make sense to insert data one row at a time, even for Buffer tables. This will only produce a speed of a few thousand rows per second, while inserting larger blocks of data can produce over a million rows per second (see the section &#8220;Performance&#8221;).</p>
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="aggregatingmergetree.html"
-                        title="previous chapter">AggregatingMergeTree</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="collapsingmergetree.html"
-                        title="next chapter">CollapsingMergeTree</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/table_engines/buffer.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Table engines</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="aggregatingmergetree.html">AggregatingMergeTree</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Buffer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="collapsingmergetree.html">CollapsingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distributed.html">Distributed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file.html">File(InputFormat)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="join.html">Join</a></li>
+<li class="toctree-l2"><a class="reference internal" href="log.html">Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="materializedview.html">MaterializedView</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="merge.html">Merge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mergetree.html">MergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="null.html">Null</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replacingmergetree.html">ReplacingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replication.html">Data replication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resharding.html">Перешардирование</a></li>
+<li class="toctree-l2"><a class="reference internal" href="set.html">Set</a></li>
+<li class="toctree-l2"><a class="reference internal" href="summingmergetree.html">SummingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tinylog.html">TinyLog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="view.html">View</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Table engines</a><ul>
+      <li>Previous: <a href="aggregatingmergetree.html" title="previous chapter">AggregatingMergeTree</a></li>
+      <li>Next: <a href="collapsingmergetree.html" title="next chapter">CollapsingMergeTree</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -125,25 +191,13 @@ min_bytes, max_bytes - условие на количество байт в бу
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="collapsingmergetree.html" title="CollapsingMergeTree"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="aggregatingmergetree.html" title="AggregatingMergeTree"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Движки таблиц</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

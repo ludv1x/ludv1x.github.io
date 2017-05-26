@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>CollapsingMergeTree &mdash; ClickHouse 1 documentation</title>
+    <title>CollapsingMergeTree &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,60 +23,49 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Движки таблиц" href="index.html" />
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Table engines" href="index.html" />
     <link rel="next" title="Distributed" href="distributed.html" />
-    <link rel="prev" title="Buffer" href="buffer.html" /> 
+    <link rel="prev" title="Buffer" href="buffer.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="distributed.html" title="Distributed"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="buffer.html" title="Buffer"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Движки таблиц</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="collapsingmergetree">
 <h1>CollapsingMergeTree<a class="headerlink" href="#collapsingmergetree" title="Permalink to this headline">¶</a></h1>
-<p><em>Движок достаточно специфичен для Яндекс.Метрики.</em></p>
-<p>Отличается от <tt class="docutils literal"><span class="pre">MergeTree</span></tt> тем, что позволяет автоматически удалять - &#8220;схлопывать&#8221; некоторые пары строк при слиянии.</p>
-<p>В Яндекс.Метрике есть обычные логи (например, лог хитов) и логи изменений. Логи изменений используются, чтобы инкрементально считать статистику по постоянно меняющимся данным. Например - логи изменений визитов, логи изменений истории посетителей. Визиты в Яндекс.Метрике постоянно меняются - например, увеличивается количество хитов в визите. Изменением какого либо объекта будем называть пару (?старые значения, ?новые значения). Старые значения могут отсутствовать, если объект создался. Новые значения могут отсутствовать, если объект удалился. Если объект изменился, но был раньше и не удалился - присутствует оба значения. В лог изменений, для каждого изменения, пишется от одной до двух записей. Каждая запись содержит все те же атрибуты, что и сам объект, и ещё специальный атрибут, который позволяет отличить старые и новые значения. Видно, что при изменении объектов, в лог изменений лишь дописываются новые записи и не трогаются уже имеющиеся.</p>
-<p>Лог изменений позволяет инкрементально считать почти любую статистику. Для этого надо учитывать &#8220;новые&#8221; строки с положительным знаком, и &#8220;старые&#8221; строки с отрицательным знаком. То есть, возможно инкрементально считать все статистики, алгебраическая структура которых содержит операцию взятия обратного элемента. Большинство статистик именно такие. Также удаётся посчитать &#8220;идемпотентные&#8221; статистики, например, количество уникальных посетителей, так как при изменении визитов, уникальные посетители не удаляются.</p>
-<p>Это - основная идея, благодаря которой Яндекс.Метрика работает в реальном времени.</p>
-<p>CollapsingMergeTree принимает дополнительный параметр - имя столбца типа Int8, содержащего &#8220;знак&#8221; строки. Пример:</p>
+<p>This engine differs from MergeTree in that it allows automatic deletion, or &#8220;collapsing&#8221; certain pairs of rows when merging.</p>
+<p>Yandex.Metrica has normal logs (such as hit logs) and change logs. Change logs are used for incrementally calculating statistics on data that is constantly changing. Examples are the log of session changes, or logs of changes to user histories. Sessions are constantly changing in Yandex.Metrica. For example, the number of hits per session increases. We refer to changes in any object as a pair (?old values, ?new values). Old values may be missing if the object was created. New values may be missing if the object was deleted. If the object was changed, but existed previously and was not deleted, both values are present. In the change log, one or two entries are made for each change. Each entry contains all the attributes that the object has, plus a special attribute for differentiating between the old and new values. When objects change, only the new entries are added to the change log, and the existing ones are not touched.</p>
+<p>The change log makes it possible to incrementally calculate almost any statistics. To do this, we need to consider &#8220;new&#8221; rows with a plus sign, and &#8220;old&#8221; rows with a minus sign. In other words, incremental calculation is possible for all statistics whose algebraic structure contains an operation for taking the inverse of an element. This is true of most statistics. We can also calculate &#8220;idempotent&#8221; statistics, such as the number of unique visitors, since the unique visitors are not deleted when making changes to sessions.</p>
+<p>This is the main concept that allows Yandex.Metrica to work in real time.</p>
+<p>CollapsingMergeTree accepts an additional parameter - the name of an Int8-type column that contains the row&#8217;s &#8220;sign&#8221;. Example:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span></span><span class="n">CollapsingMergeTree</span><span class="p">(</span><span class="n">EventDate</span><span class="p">,</span> <span class="p">(</span><span class="n">CounterID</span><span class="p">,</span> <span class="n">EventDate</span><span class="p">,</span> <span class="n">intHash32</span><span class="p">(</span><span class="n">UniqID</span><span class="p">),</span> <span class="n">VisitID</span><span class="p">),</span> <span class="mi">8192</span><span class="p">,</span> <span class="n">Sign</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Здесь <tt class="docutils literal"><span class="pre">Sign</span></tt> - столбец, содержащий -1 для &#8220;старых&#8221; значений и 1 для &#8220;новых&#8221; значений.</p>
-<p>При слиянии, для каждой группы идущих подряд одинаковых значений первичного ключа (столбцов, по которым сортируются данные), остаётся не более одной строки со значением столбца sign_column = -1 (&#8220;отрицательной строки&#8221;) и не более одной строки со значением столбца sign_column = 1 (&#8220;положительной строки&#8221;). То есть - производится схлопывание записей из лога изменений.</p>
-<p>Если количество положительных и отрицательных строк совпадает - то пишет первую отрицательную и последнюю положительную строку.
-Если положительных на 1 больше, чем отрицательных - то пишет только последнюю положительную строку.
-Если отрицательных на 1 больше, чем положительных - то пишет только первую отрицательную строку.
-Иначе - логическая ошибка, и ни одна из таких строк не пишется. (Логическая ошибка может возникать, если случайно один кусок лога был вставлен более одного раза. Поэтому, об ошибке всего лишь пишется в лог сервера, и слияние продолжает работать.)</p>
-<p>Как видно, от схлопывания не должны меняться результаты расчётов статистик.
-Изменения постепенно схлопываются так что в конце-концов, для почти каждого объекта, остаются лишь его последние значения.
-По сравнению с MergeTree, движок CollapsingMergeTree позволяет в несколько раз уменьшить объём данных.</p>
+<p>Here, &#8216;Sign&#8217; is a column containing -1 for &#8220;old&#8221; values and 1 for &#8220;new&#8221; values.</p>
+<p>When merging, each group of consecutive identical primary key values (columns for sorting data) is reduced to no more than one row with the column value &#8216;sign_column = -1&#8217; (the &#8220;negative row&#8221;) and no more than one row with the column value &#8216;sign_column = 1&#8217; (the &#8220;positive row&#8221;). In other words, entries from the change log are collapsed.</p>
+<p>If the number of positive and negative rows matches, the first negative row and the last positive row are written.
+If there is one more positive row than negative rows, only the last positive row is written.
+If there is one more negative row than positive rows, only the first negative row is written.
+Otherwise, there will be a logical error and none of the rows will be written. (A logical error can occur if the same section of the log was accidentally inserted more than once. The error is just recorded in the server log, and the merge continues.)</p>
+<p>Thus, collapsing should not change the results of calculating statistics.
+Changes are gradually collapsed so that in the end only the last value of almost every object is left.
+Compared to MergeTree, the CollapsingMergeTree engine allows a multifold reduction of data volume.</p>
 <dl class="docutils">
-<dt>Существует несколько способов получения полностью &#8220;схлопнутых&#8221; данных из таблицы типа <tt class="docutils literal"><span class="pre">CollapsingMergeTree</span></tt>:</dt>
+<dt>There are several ways to get completely &#8220;collapsed&#8221; data from a CollapsingMergeTree table:</dt>
 <dd><ol class="first last arabic simple">
-<li>Написать запрос с GROUP BY и агрегатными функциями, учитывающими знак. Например, чтобы посчитать количество, надо вместо count() написать sum(Sign); чтобы посчитать сумму чего-либо, надо вместо sum(x) написать sum(Sign * x) и т. п., а также добавить HAVING sum(Sign) &gt; 0. Не все величины можно посчитать подобным образом. Например, агрегатные функции min, max не могут быть переписаны.</li>
-<li>Если необходимо вынимать данные без агрегации (например, проверить наличие строк, самые новые значения которых удовлетворяют некоторым условиям), можно использовать модификатор FINAL для секции FROM. Это вариант существенно менее эффективен.</li>
+<li>Write a query with GROUP BY and aggregate functions that accounts for the sign. For example, to calculate quantity, write &#8216;sum(Sign)&#8217; instead of &#8216;count()&#8217;. To calculate the sum of something, write &#8216;sum(Sign * x)&#8217; instead of &#8216;sum(x)&#8217;, and so on, and also add &#8216;HAVING sum(Sign) &gt; 0&#8217;. Not all amounts can be calculated this way. For example, the aggregate functions &#8216;min&#8217; and &#8216;max&#8217; can&#8217;t be rewritten.</li>
+<li>If you must extract data without aggregation (for example, to check whether rows are present whose newest values match certain conditions), you can use the FINAL modifier for the FROM clause. This approach is significantly less efficient.</li>
 </ol>
 </dd>
 </dl>
@@ -86,20 +75,96 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="buffer.html"
-                        title="previous chapter">Buffer</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="distributed.html"
-                        title="next chapter">Distributed</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/table_engines/collapsingmergetree.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Table engines</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="aggregatingmergetree.html">AggregatingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buffer.html">Buffer</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">CollapsingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distributed.html">Distributed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file.html">File(InputFormat)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="join.html">Join</a></li>
+<li class="toctree-l2"><a class="reference internal" href="log.html">Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="materializedview.html">MaterializedView</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="merge.html">Merge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mergetree.html">MergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="null.html">Null</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replacingmergetree.html">ReplacingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replication.html">Data replication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resharding.html">Перешардирование</a></li>
+<li class="toctree-l2"><a class="reference internal" href="set.html">Set</a></li>
+<li class="toctree-l2"><a class="reference internal" href="summingmergetree.html">SummingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tinylog.html">TinyLog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="view.html">View</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Table engines</a><ul>
+      <li>Previous: <a href="buffer.html" title="previous chapter">Buffer</a></li>
+      <li>Next: <a href="distributed.html" title="next chapter">Distributed</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -116,25 +181,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="distributed.html" title="Distributed"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="buffer.html" title="Buffer"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Движки таблиц</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

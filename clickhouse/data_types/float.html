@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Float32, Float64 &mdash; ClickHouse 1 documentation</title>
+    <title>Float32, Float64 &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,61 +23,120 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Типы данных" href="index.html" />
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Data types" href="index.html" />
     <link rel="next" title="UInt8, UInt16, UInt32, UInt64, Int8, Int16, Int32, Int64" href="int_uint.html" />
-    <link rel="prev" title="FixedString(N)" href="fixedstring.html" /> 
+    <link rel="prev" title="FixedString(N)" href="fixedstring.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="int_uint.html" title="UInt8, UInt16, UInt32, UInt64, Int8, Int16, Int32, Int64"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="fixedstring.html" title="FixedString(N)"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Типы данных</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="float32-float64">
 <h1>Float32, Float64<a class="headerlink" href="#float32-float64" title="Permalink to this headline">¶</a></h1>
-<p>Числа с плавающей запятой, то же, что и float, double в языке C.
-В отличие от стандартного SQL, числа с плавающей запятой поддерживают inf, -inf, а также nan-ы.
-Смотрите замечание о сортировке nan-ов в разделе &#8220;Секция ORDER BY&#8221;.
-Не рекомендуется хранить числа с плавающей запятой в таблицах.</p>
+<p>Floating-point numbers are just like &#8216;float&#8217; and &#8216;double&#8217; in the C language.
+In contrast to standard SQL, floating-point numbers support &#8216;inf&#8217;, &#8216;-inf&#8217;, and even &#8216;nan&#8217;s.
+See the notes on sorting nans in &#8220;ORDER BY clause&#8221;.
+We do not recommend storing floating-point numbers in tables.</p>
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="fixedstring.html"
-                        title="previous chapter">FixedString(N)</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="int_uint.html"
-                        title="next chapter">UInt8, UInt16, UInt32, UInt64, Int8, Int16, Int32, Int64</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/data_types/float.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Data types</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="array.html">Array(T)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="boolean.html">Boolean</a></li>
+<li class="toctree-l2"><a class="reference internal" href="date.html">Date</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datetime.html">DateTime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum.html">Enum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fixedstring.html">FixedString(N)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Float32, Float64</a></li>
+<li class="toctree-l2"><a class="reference internal" href="int_uint.html">UInt8, UInt16, UInt32, UInt64, Int8, Int16, Int32, Int64</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string.html">String</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tuple.html">Tuple(T1, T2, ...)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nested_data_structures/index.html">Nested data structures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="special_data_types/index.html">Special data types</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Data types</a><ul>
+      <li>Previous: <a href="fixedstring.html" title="previous chapter">FixedString(N)</a></li>
+      <li>Next: <a href="int_uint.html" title="next chapter">UInt8, UInt16, UInt32, UInt64, Int8, Int16, Int32, Int64</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -94,25 +153,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="int_uint.html" title="UInt8, UInt16, UInt32, UInt64, Int8, Int16, Int32, Int64"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="fixedstring.html" title="FixedString(N)"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Типы данных</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

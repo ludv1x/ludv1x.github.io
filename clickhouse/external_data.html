@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Внешние данные для обработки запроса &mdash; ClickHouse 1 documentation</title>
+    <title>External data for query processing &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,55 +23,46 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="index.html" />
-    <link rel="next" title="Движки таблиц" href="table_engines/index.html" />
-    <link rel="prev" title="Синтаксис" href="query_language/syntax.html" /> 
+    <link rel="top" title="ClickHouse  documentation" href="index.html" />
+    <link rel="next" title="Table engines" href="table_engines/index.html" />
+    <link rel="prev" title="Syntax" href="query_language/syntax.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="table_engines/index.html" title="Движки таблиц"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="query_language/syntax.html" title="Синтаксис"
-             accesskey="P">previous</a> |</li>
-        <li><a href="index.html">ClickHouse 1 documentation</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="id1">
-<h1>Внешние данные для обработки запроса<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
-<p>ClickHouse позволяет отправить на сервер данные, необходимые для обработки одного запроса, вместе с запросом SELECT. Такие данные будут положены во временную таблицу (см. раздел &#8220;Временные таблицы&#8221;) и смогут использоваться в запросе (например, в операторах IN).</p>
-<p>Для примера, если у вас есть текстовый файл с важными идентификаторами посетителей, вы можете загрузить его на сервер вместе с запросом, в котором используется фильтрация по этому списку.</p>
-<p>Если вам нужно будет выполнить более одного запроса с достаточно большими внешними данными - лучше не использовать эту функциональность, а загрузить данные в БД заранее.</p>
-<p>Внешние данные могут быть загружены как с помощью клиента командной строки (в неинтерактивном режиме), так и через HTTP-интерфейс.</p>
-<p>В клиенте командной строки, может быть указана секция параметров вида</p>
+  <div class="section" id="external-data-for-query-processing">
+<h1>External data for query processing<a class="headerlink" href="#external-data-for-query-processing" title="Permalink to this headline">¶</a></h1>
+<p>ClickHouse allows sending a server the data that is needed for processing a query, together with a SELECT query. This data is put in a temporary table (see the section &#8220;Temporary tables&#8221;) and can be used in the query (for example, in IN operators).</p>
+<p>For example, if you have a text file with important user identifiers, you can upload it to the server along with a query that uses filtration by this list.</p>
+<p>If you need to run more than one query with a large volume of external data, don&#8217;t use this feature. It is better to upload the data to the DB ahead of time.</p>
+<p>External data can be uploaded using the command-line client (in non-interactive mode), or using the HTTP interface.</p>
+<p>In the command-line client, you can specify a parameters section in the format</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>--external --file=... [--name=...] [--format=...] [--types=...|--structure=...]
 </pre></div>
 </div>
-<p>Таких секций может быть несколько - по числу передаваемых таблиц.</p>
-<p><strong>&#8211;external</strong> - маркер начала секции.
-<strong>&#8211;file</strong> - путь к файлу с дампом таблицы, или -, что обозначает stdin.
-Из stdin может быть считана только одна таблица.</p>
-<p>Следующие параметры не обязательные:
-<strong>&#8211;name</strong> - имя таблицы. Если не указано - используется _data.
-<strong>&#8211;format</strong> - формат данных в файле. Если не указано - используется TabSeparated.</p>
-<p>Должен быть указан один из следующих параметров:
-<strong>&#8211;types</strong> - список типов столбцов через запятую. Например, <tt class="docutils literal"><span class="pre">UInt64,String</span></tt>. Столбцы будут названы _1, _2, ...
-<strong>&#8211;structure</strong> - структура таблицы, в форме <tt class="docutils literal"><span class="pre">UserID</span> <span class="pre">UInt64</span></tt>, <tt class="docutils literal"><span class="pre">URL</span> <span class="pre">String</span></tt>. Определяет имена и типы столбцов.</p>
-<p>Файлы, указанные в file, будут разобраны форматом, указанным в format, с использованием типов данных, указанных в types или structure. Таблица будет загружена на сервер, и доступна там в качестве временной таблицы с именем name.</p>
-<p>Примеры:</p>
+<p>You may have multiple sections like this, for the number of tables being transmitted.</p>
+<p><strong>&#8211;external</strong> - Marks the beginning of the section.
+<strong>&#8211;file</strong> -  Path to the file with the table dump, or <code class="docutils literal"><span class="pre">-</span></code>, which refers to stdin
+Only a single table can be retrieved from stdin.</p>
+<p>The following parameters are optional:
+<strong>&#8211;name</strong> - Name of the table. If omitted, <code class="docutils literal"><span class="pre">_data</span></code> is used.
+<strong>&#8211;format</strong> - Data format in the file. If omitted, <code class="docutils literal"><span class="pre">TabSeparated</span></code> is used.</p>
+<p>One of the following parameters is required:
+<strong>&#8211;types</strong> - A comma-separated list of column types. For example, <code class="docutils literal"><span class="pre">UInt64,String</span></code>. Columns will be named <code class="docutils literal"><span class="pre">_1</span></code>, <code class="docutils literal"><span class="pre">_2</span></code>, ...
+<strong>&#8211;structure</strong> - Table structure, in the format <code class="docutils literal"><span class="pre">UserID</span> <span class="pre">UInt64,</span> <span class="pre">URL</span> <span class="pre">String</span></code>. Defines the column names and types.</p>
+<p>The files specified in <code class="docutils literal"><span class="pre">file</span></code> will be parsed by the format specified in <code class="docutils literal"><span class="pre">format</span></code>, using the data types specified in <code class="docutils literal"><span class="pre">types</span></code> or <code class="docutils literal"><span class="pre">structure</span></code>. The table will be uploaded to the server and accessible there as a temporary table with the name <code class="docutils literal"><span class="pre">name</span></code>.</p>
+<p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>echo -ne &quot;1\n2\n3\n&quot; | clickhouse-client --query=&quot;SELECT count() FROM test.visits WHERE TraficSourceID IN _data&quot; --external --file=- --types=Int8
 849897
 cat /etc/passwd | sed &#39;s/:/\t/g&#39; | clickhouse-client --query=&quot;SELECT shell, count() AS c FROM passwd GROUP BY shell ORDER BY c DESC&quot; --external --file=- --name=passwd --structure=&#39;login String, unused String, uid UInt16, gid UInt16, comment String, home String, shell String&#39;
@@ -82,8 +73,8 @@ cat /etc/passwd | sed &#39;s/:/\t/g&#39; | clickhouse-client --query=&quot;SELEC
 /bin/sync       1
 </pre></div>
 </div>
-<p>При использовании HTTP интерфейса, внешние данные передаются в формате multipart/form-data. Каждая таблица передаётся отдельным файлом. Имя таблицы берётся из имени файла. В query_string передаются параметры name_format, name_types, name_structure, где name - имя таблицы, которой соответствуют эти параметры. Смысл параметров такой же, как при использовании клиента командной строки.</p>
-<p>Пример:</p>
+<p>When using the HTTP interface, external data is passed in the multipart/form-data format. Each table is transmitted as a separate file. The table name is taken from the file name. The &#8216;query_string&#8217; passes the parameters &#8216;name_format&#8217;, &#8216;name_types&#8217;, and &#8216;name_structure&#8217;, where name is the name of the table that these parameters correspond to. The meaning of the parameters is the same as when using the command-line client.</p>
+<p>Example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>cat /etc/passwd | sed &#39;s/:/\t/g&#39; &gt; passwd.tsv
 
 curl -F &#39;passwd=@passwd.tsv;&#39; &#39;http://localhost:8123/?query=SELECT+shell,+count()+AS+c+FROM+passwd+GROUP+BY+shell+ORDER+BY+c+DESC&amp;passwd_structure=login+String,+unused+String,+uid+UInt16,+gid+UInt16,+comment+String,+home+String,+shell+String&#39;
@@ -94,27 +85,80 @@ curl -F &#39;passwd=@passwd.tsv;&#39; &#39;http://localhost:8123/?query=SELECT+s
 /bin/sync       1
 </pre></div>
 </div>
-<p>При распределённой обработке запроса, временные таблицы передаются на все удалённые серверы.</p>
+<p>For distributed query processing, the temporary tables are sent to all the remote servers.</p>
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="query_language/syntax.html"
-                        title="previous chapter">Синтаксис</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="table_engines/index.html"
-                        title="next chapter">Движки таблиц</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/external_data.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="query_language/index.html">Query language</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quotas.html">Quotas</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="query_language/syntax.html" title="previous chapter">Syntax</a></li>
+      <li>Next: <a href="table_engines/index.html" title="next chapter">Table engines</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -131,24 +175,13 @@ curl -F &#39;passwd=@passwd.tsv;&#39; &#39;http://localhost:8123/?query=SELECT+s
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="table_engines/index.html" title="Движки таблиц"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="query_language/syntax.html" title="Синтаксис"
-             >previous</a> |</li>
-        <li><a href="index.html">ClickHouse 1 documentation</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

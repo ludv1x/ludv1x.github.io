@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Математические функции &mdash; ClickHouse 1 documentation</title>
+    <title>Mathematical functions &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,82 +23,72 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Функции" href="index.html" />
-    <link rel="next" title="Прочие функции" href="other_functions.html" />
-    <link rel="prev" title="Логические функции" href="logical_functions.html" /> 
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Functions" href="index.html" />
+    <link rel="next" title="Other functions" href="other_functions.html" />
+    <link rel="prev" title="Logical functions" href="logical_functions.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="other_functions.html" title="Прочие функции"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="logical_functions.html" title="Логические функции"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Функции</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="id1">
-<h1>Математические функции<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
-<p>Все функции возвращают число типа Float64. Точность результата близка к максимально возможной, но результат может не совпадать с наиболее близким к соответствующему вещественному числу машинно представимым числом.</p>
+  <div class="section" id="mathematical-functions">
+<h1>Mathematical functions<a class="headerlink" href="#mathematical-functions" title="Permalink to this headline">¶</a></h1>
+<p>All the functions return a Float64 number. The accuracy of the result is close to the maximum precision possible, but the result might not coincide with the machine representable number nearest to the corresponding real number.</p>
 <div class="section" id="e">
 <h2>e()<a class="headerlink" href="#e" title="Permalink to this headline">¶</a></h2>
-<p>Принимает ноль аргументов, возвращает число типа Float64, близкое к числу e.</p>
+<p>Accepts zero arguments and returns a Float64 number close to the e number.</p>
 </div>
 <div class="section" id="pi">
 <h2>pi()<a class="headerlink" href="#pi" title="Permalink to this headline">¶</a></h2>
-<p>Принимает ноль аргументов, возвращает число типа Float64, близкое к числу π.</p>
+<p>Accepts zero arguments and returns a Float64 number close to π.</p>
 </div>
 <div class="section" id="exp-x">
 <h2>exp(x)<a class="headerlink" href="#exp-x" title="Permalink to this headline">¶</a></h2>
-<p>Принимает числовой аргумент, возвращает число типа Float64, близкое к экспоненте от аргумента.</p>
+<p>Accepts a numeric argument and returns a Float64 number close to the exponent of the argument.</p>
 </div>
 <div class="section" id="log-x">
 <h2>log(x)<a class="headerlink" href="#log-x" title="Permalink to this headline">¶</a></h2>
-<p>Принимает числовой аргумент, возвращает число типа Float64, близкое к натуральному логарифму от аргумента.</p>
+<p>Accepts a numeric argument and returns a Float64 number close to the natural logarithm of the argument.</p>
 </div>
 <div class="section" id="exp2-x">
 <h2>exp2(x)<a class="headerlink" href="#exp2-x" title="Permalink to this headline">¶</a></h2>
-<p>Принимает числовой аргумент, возвращает число типа Float64, близкое к 2x.</p>
+<p>Accepts a numeric argument and returns a Float64 number close to 2x.</p>
 </div>
 <div class="section" id="log2-x">
 <h2>log2(x)<a class="headerlink" href="#log2-x" title="Permalink to this headline">¶</a></h2>
-<p>Принимает числовой аргумент, возвращает число типа Float64, близкое к двоичному логарифму от аргумента.</p>
+<p>Accepts a numeric argument and returns a Float64 number close to the binary logarithm of the argument.</p>
 </div>
 <div class="section" id="exp10-x">
 <h2>exp10(x)<a class="headerlink" href="#exp10-x" title="Permalink to this headline">¶</a></h2>
-<p>Принимает числовой аргумент, возвращает число типа Float64, близкое к 10x.</p>
+<p>Accepts a numeric argument and returns a Float64 number close to 10x.</p>
 </div>
 <div class="section" id="log10-x">
 <h2>log10(x)<a class="headerlink" href="#log10-x" title="Permalink to this headline">¶</a></h2>
-<p>Принимает числовой аргумент, возвращает число типа Float64, близкое к десятичному логарифму от аргумента.</p>
+<p>Accepts a numeric argument and returns a Float64 number close to the decimal logarithm of the argument.</p>
 </div>
 <div class="section" id="sqrt-x">
 <h2>sqrt(x)<a class="headerlink" href="#sqrt-x" title="Permalink to this headline">¶</a></h2>
-<p>Принимает числовой аргумент, возвращает число типа Float64, близкое к квадратному корню от аргумента.</p>
+<p>Accepts a numeric argument and returns a Float64 number close to the square root of the argument.</p>
 </div>
 <div class="section" id="cbrt-x">
 <h2>cbrt(x)<a class="headerlink" href="#cbrt-x" title="Permalink to this headline">¶</a></h2>
-<p>Принимает числовой аргумент, возвращает число типа Float64, близкое к кубическому корню от аргумента.</p>
+<p>Accepts a numeric argument and returns a Float64 number close to the cubic root of the argument.</p>
 </div>
 <div class="section" id="erf-x">
 <h2>erf(x)<a class="headerlink" href="#erf-x" title="Permalink to this headline">¶</a></h2>
-<p>Если x неотрицательно, то erf(x / σ√2) - вероятность того, что случайная величина, имеющая нормальное распределение со среднеквадратичным отклонением σ, принимает значение, отстоящее от мат. ожидания больше чем на x.</p>
-<p>Пример (правило трёх сигм):</p>
+<p>If &#8216;x&#8217; is non-negative, then erf(x / σ√2) - is the probability that a random variable having a normal distribution with standard deviation &#8216;σ&#8217; takes the value that is separated from the expected value by more than &#8216;x&#8217;.</p>
+<p>Example (three sigma rule):</p>
 <div class="highlight-sql"><div class="highlight"><pre><span></span>SELECT erf(3 / sqrt(2))
 
 ┌─erf(divide(3, sqrt(2)))─┐
@@ -109,39 +99,39 @@
 </div>
 <div class="section" id="erfc-x">
 <h2>erfc(x)<a class="headerlink" href="#erfc-x" title="Permalink to this headline">¶</a></h2>
-<p>Принимает числовой аргумент, возвращает число типа Float64, близкое к 1 - erf(x), но без потери точности для больших x.</p>
+<p>Accepts a numeric argument and returns a Float64 number close to 1 - erf(x), but without loss of precision for large &#8216;x&#8217; values.</p>
 </div>
 <div class="section" id="lgamma-x">
 <h2>lgamma(x)<a class="headerlink" href="#lgamma-x" title="Permalink to this headline">¶</a></h2>
-<p>Логарифм от гамма функции.</p>
+<p>The logarithm of the gamma function.</p>
 </div>
 <div class="section" id="tgamma-x">
 <h2>tgamma(x)<a class="headerlink" href="#tgamma-x" title="Permalink to this headline">¶</a></h2>
-<p>Гамма функция.</p>
+<p>Gamma function.</p>
 </div>
 <div class="section" id="sin-x">
 <h2>sin(x)<a class="headerlink" href="#sin-x" title="Permalink to this headline">¶</a></h2>
-<p>Синус.</p>
+<p>The sine.</p>
 </div>
 <div class="section" id="cos-x">
 <h2>cos(x)<a class="headerlink" href="#cos-x" title="Permalink to this headline">¶</a></h2>
-<p>Косинус.</p>
+<p>The cosine.</p>
 </div>
 <div class="section" id="tan-x">
 <h2>tan(x)<a class="headerlink" href="#tan-x" title="Permalink to this headline">¶</a></h2>
-<p>Тангенс.</p>
+<p>The tangent.</p>
 </div>
 <div class="section" id="asin-x">
 <h2>asin(x)<a class="headerlink" href="#asin-x" title="Permalink to this headline">¶</a></h2>
-<p>Арксинус.</p>
+<p>The arc sine</p>
 </div>
 <div class="section" id="acos-x">
 <h2>acos(x)<a class="headerlink" href="#acos-x" title="Permalink to this headline">¶</a></h2>
-<p>Арккосинус.</p>
+<p>The arc cosine.</p>
 </div>
 <div class="section" id="atan-x">
 <h2>atan(x)<a class="headerlink" href="#atan-x" title="Permalink to this headline">¶</a></h2>
-<p>Арктангенс.</p>
+<p>The arc tangent.</p>
 </div>
 <div class="section" id="pow-x-y">
 <h2>pow(x, y)<a class="headerlink" href="#pow-x-y" title="Permalink to this headline">¶</a></h2>
@@ -153,48 +143,134 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Математические функции</a><ul>
-<li><a class="reference internal" href="#e">e()</a></li>
-<li><a class="reference internal" href="#pi">pi()</a></li>
-<li><a class="reference internal" href="#exp-x">exp(x)</a></li>
-<li><a class="reference internal" href="#log-x">log(x)</a></li>
-<li><a class="reference internal" href="#exp2-x">exp2(x)</a></li>
-<li><a class="reference internal" href="#log2-x">log2(x)</a></li>
-<li><a class="reference internal" href="#exp10-x">exp10(x)</a></li>
-<li><a class="reference internal" href="#log10-x">log10(x)</a></li>
-<li><a class="reference internal" href="#sqrt-x">sqrt(x)</a></li>
-<li><a class="reference internal" href="#cbrt-x">cbrt(x)</a></li>
-<li><a class="reference internal" href="#erf-x">erf(x)</a></li>
-<li><a class="reference internal" href="#erfc-x">erfc(x)</a></li>
-<li><a class="reference internal" href="#lgamma-x">lgamma(x)</a></li>
-<li><a class="reference internal" href="#tgamma-x">tgamma(x)</a></li>
-<li><a class="reference internal" href="#sin-x">sin(x)</a></li>
-<li><a class="reference internal" href="#cos-x">cos(x)</a></li>
-<li><a class="reference internal" href="#tan-x">tan(x)</a></li>
-<li><a class="reference internal" href="#asin-x">asin(x)</a></li>
-<li><a class="reference internal" href="#acos-x">acos(x)</a></li>
-<li><a class="reference internal" href="#atan-x">atan(x)</a></li>
-<li><a class="reference internal" href="#pow-x-y">pow(x, y)</a></li>
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Functions</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="arithmetic_functions.html">Arithmetic functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="array_functions.html">Functions for working with arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="array_join.html">arrayJoin function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bit_functions.html">Bit functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comparison_functions.html">Comparison functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conditional_functions.html">Conditional functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="date_time_functions.html">Functions for working with dates and times</a></li>
+<li class="toctree-l2"><a class="reference internal" href="encoding_functions.html">Encoding functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ext_dict_functions.html">Functions for working with external dictionaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hash_functions.html">Hash functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="higher_order_functions.html">Higher-order functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="in_functions.html">Functions for implementing the IN operator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ip_address_functions.html">Functions for working with IP addresses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json_functions.html">Functions for working with JSON.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logical_functions.html">Logical functions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Mathematical functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#e">e()</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pi">pi()</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#exp-x">exp(x)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#log-x">log(x)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#exp2-x">exp2(x)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#log2-x">log2(x)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#exp10-x">exp10(x)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#log10-x">log10(x)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sqrt-x">sqrt(x)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cbrt-x">cbrt(x)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#erf-x">erf(x)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#erfc-x">erfc(x)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lgamma-x">lgamma(x)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tgamma-x">tgamma(x)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sin-x">sin(x)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cos-x">cos(x)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tan-x">tan(x)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#asin-x">asin(x)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#acos-x">acos(x)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#atan-x">atan(x)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pow-x-y">pow(x, y)</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="other_functions.html">Other functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="random_functions.html">Functions for generating pseudo-random numbers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rounding_functions.html">Rounding functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="splitting_merging_functions.html">Functions for splitting and merging strings and arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_functions.html">Functions for working with strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_replace_functions.html">Functions for searching and replacing in strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_search_functions.html">Functions for searching strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="type_conversion_functions.html">Type conversion functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="url_functions.html">Functions for working with URLs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ym_dict_functions.html">Functions for working with Yandex.Metrica dictionaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#strong-typing">Strong typing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#common-subexpression-elimination">Common subexpression elimination</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#types-of-results">Types of results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#constants">Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#immutability">Immutability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#error-handling">Error handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#evaluation-of-argument-expressions">Evaluation of argument expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#performing-functions-for-distributed-query-processing">Performing functions for distributed query processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="logical_functions.html"
-                        title="previous chapter">Логические функции</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="other_functions.html"
-                        title="next chapter">Прочие функции</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/functions/math_functions.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Functions</a><ul>
+      <li>Previous: <a href="logical_functions.html" title="previous chapter">Logical functions</a></li>
+      <li>Next: <a href="other_functions.html" title="next chapter">Other functions</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -211,25 +287,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="other_functions.html" title="Прочие функции"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="logical_functions.html" title="Логические функции"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Функции</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

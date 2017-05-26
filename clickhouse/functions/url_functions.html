@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Функции для работы с URL &mdash; ClickHouse 1 documentation</title>
+    <title>Functions for working with URLs &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,106 +23,128 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Функции" href="index.html" />
-    <link rel="next" title="Функции для работы со словарями Яндекс.Метрики" href="ym_dict_functions.html" />
-    <link rel="prev" title="Функции преобразования типов" href="type_conversion_functions.html" /> 
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Functions" href="index.html" />
+    <link rel="next" title="Functions for working with Yandex.Metrica dictionaries" href="ym_dict_functions.html" />
+    <link rel="prev" title="Type conversion functions" href="type_conversion_functions.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="ym_dict_functions.html" title="Функции для работы со словарями Яндекс.Метрики"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="type_conversion_functions.html" title="Функции преобразования типов"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Функции</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="url">
-<h1>Функции для работы с URL<a class="headerlink" href="#url" title="Permalink to this headline">¶</a></h1>
-<p>Все функции работают не по RFC - то есть, максимально упрощены ради производительности.</p>
-<div class="section" id="id1">
-<h2>Функции, извлекающие часть URL-а.<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<p>Если в URL-е нет ничего похожего, то возвращается пустая строка.</p>
+  <div class="section" id="functions-for-working-with-urls">
+<h1>Functions for working with URLs<a class="headerlink" href="#functions-for-working-with-urls" title="Permalink to this headline">¶</a></h1>
+<p>All these functions don&#8217;t follow the RFC. They are maximally simplified for improved performance.</p>
+<div class="section" id="url">
+<h2>Функции, извлекающие часть URL-а.<a class="headerlink" href="#url" title="Permalink to this headline">¶</a></h2>
+<p>If there isn&#8217;t anything similar in a URL, an empty string is returned.</p>
 <div class="section" id="protocol">
 <h3>protocol<a class="headerlink" href="#protocol" title="Permalink to this headline">¶</a></h3>
-<p>Возвращает протокол. Примеры: http, ftp, mailto, magnet...</p>
+<ul class="simple">
+<li>Selects the protocol. Examples: http, ftp, mailto, magnet...</li>
+</ul>
 </div>
 <div class="section" id="domain">
 <h3>domain<a class="headerlink" href="#domain" title="Permalink to this headline">¶</a></h3>
-<p>Возвращает домен.</p>
+<ul class="simple">
+<li>Selects the domain.</li>
+</ul>
 </div>
 <div class="section" id="domainwithoutwww">
 <h3>domainWithoutWWW<a class="headerlink" href="#domainwithoutwww" title="Permalink to this headline">¶</a></h3>
-<p>Возвращает домен, удалив не более одного &#8216;www.&#8217; с начала, если есть.</p>
+<ul class="simple">
+<li>Selects the domain and removes no more than one &#8216;www.&#8217; from the beginning of it, if present.</li>
+</ul>
 </div>
 <div class="section" id="topleveldomain">
 <h3>topLevelDomain<a class="headerlink" href="#topleveldomain" title="Permalink to this headline">¶</a></h3>
-<p>Возвращает домен верхнего уровня. Пример: .ru.</p>
+<ul class="simple">
+<li>Selects the top-level domain. Example: .ru.</li>
+</ul>
 </div>
 <div class="section" id="firstsignificantsubdomain">
 <h3>firstSignificantSubdomain<a class="headerlink" href="#firstsignificantsubdomain" title="Permalink to this headline">¶</a></h3>
-<p>Возвращает &#8220;первый существенный поддомен&#8221;. Это понятие является нестандартным и специфично для Яндекс.Метрики. Первый существенный поддомен - это домен второго уровня, если он не равен одному из com, net, org, co, или домен третьего уровня, иначе. Например, firstSignificantSubdomain(&#8216;<a class="reference external" href="https://news.yandex.ru/">https://news.yandex.ru/</a>&#8216;) = &#8216;yandex&#8217;, firstSignificantSubdomain(&#8216;<a class="reference external" href="https://news.yandex.com.tr/">https://news.yandex.com.tr/</a>&#8216;) = &#8216;yandex&#8217;. Список &#8220;несущественных&#8221; доменов второго уровня и другие детали реализации могут изменяться в будущем.</p>
+<ul class="simple">
+<li>Selects the &#8220;first significant subdomain&#8221;. This is a non-standard concept specific to Yandex.Metrica. The first significant subdomain is a second-level domain if it is &#8216;com&#8217;, &#8216;net&#8217;, &#8216;org&#8217;, or &#8216;co&#8217;. Otherwise, it is a third-level domain. For example, firstSignificantSubdomain(&#8216;<a class="reference external" href="https://news.yandex.ru/">https://news.yandex.ru/</a>&#8216;) = &#8216;yandex&#8217;, firstSignificantSubdomain(&#8216;<a class="reference external" href="https://news.yandex.com.tr/">https://news.yandex.com.tr/</a>&#8216;) = &#8216;yandex&#8217;. The list of &#8220;insignificant&#8221; second-level domains and other implementation details may change in the future.</li>
+</ul>
 </div>
 <div class="section" id="cuttofirstsignificantsubdomain">
 <h3>cutToFirstSignificantSubdomain<a class="headerlink" href="#cuttofirstsignificantsubdomain" title="Permalink to this headline">¶</a></h3>
-<p>Возвращает часть домена, включающую поддомены верхнего уровня до &#8220;первого существенного поддомена&#8221; (см. выше).</p>
-<p>Например, <tt class="docutils literal"><span class="pre">cutToFirstSignificantSubdomain('https://news.yandex.com.tr/')</span> <span class="pre">=</span> <span class="pre">'yandex.com.tr'</span></tt>.</p>
+<ul class="simple">
+<li>Selects the part of the domain that includes top-level subdomains up to the &#8220;first significant subdomain&#8221; (see the explanation above).</li>
+</ul>
+<p>For example, <code class="docutils literal"><span class="pre">cutToFirstSignificantSubdomain('https://news.yandex.com.tr/')</span> <span class="pre">=</span> <span class="pre">'yandex.com.tr'</span></code>.</p>
 </div>
 <div class="section" id="path">
 <h3>path<a class="headerlink" href="#path" title="Permalink to this headline">¶</a></h3>
-<p>Возвращает путь. Пример: <tt class="docutils literal"><span class="pre">/top/news.html</span></tt> Путь не включает в себя query string.</p>
+<ul class="simple">
+<li>Selects the path. Example: /top/news.html The path does not include the query-string.</li>
+</ul>
 </div>
 <div class="section" id="pathfull">
 <h3>pathFull<a class="headerlink" href="#pathfull" title="Permalink to this headline">¶</a></h3>
-<p>То же самое, но включая query string и fragment. Пример: /top/news.html?page=2#comments</p>
+<ul class="simple">
+<li>The same as above, but including query-string and fragment. Example: /top/news.html?page=2#comments</li>
+</ul>
 </div>
 <div class="section" id="querystring">
 <h3>queryString<a class="headerlink" href="#querystring" title="Permalink to this headline">¶</a></h3>
-<p>Возвращает query-string. Пример: page=1&amp;lr=213. query-string не включает в себя начальный знак вопроса, а также # и всё, что после #.</p>
+<ul class="simple">
+<li>Selects the query-string. Example: page=1&amp;lr=213. query-string does not include the first question mark, or # and everything that comes after #.</li>
+</ul>
 </div>
 <div class="section" id="fragment">
 <h3>fragment<a class="headerlink" href="#fragment" title="Permalink to this headline">¶</a></h3>
-<p>Возвращает fragment identifier. fragment не включает в себя начальный символ решётки.</p>
+<ul class="simple">
+<li>Selects the fragment identifier. fragment does not include the first number sign (#).</li>
+</ul>
 </div>
 <div class="section" id="querystringandfragment">
 <h3>queryStringAndFragment<a class="headerlink" href="#querystringandfragment" title="Permalink to this headline">¶</a></h3>
-<p>Возвращает query string и fragment identifier. Пример: страница=1#29390.</p>
+<ul class="simple">
+<li>Selects the query-string and fragment identifier. Example: page=1#29390.</li>
+</ul>
 </div>
 <div class="section" id="extracturlparameter-url-name">
 <h3>extractURLParameter(URL, name)<a class="headerlink" href="#extracturlparameter-url-name" title="Permalink to this headline">¶</a></h3>
-<p>Возвращает значение параметра name в URL, если такой есть; или пустую строку, иначе; если параметров с таким именем много - вернуть первый попавшийся. Функция работает при допущении, что имя параметра закодировано в URL в точности таким же образом, что и в переданном аргументе.</p>
+<ul class="simple">
+<li>Selects the value of the &#8216;name&#8217; parameter in the URL, if present. Otherwise, selects an empty string. If there are many parameters with this name, it returns the first occurrence. This function works under the assumption that the parameter name is encoded in the URL in exactly the same way as in the argument passed.</li>
+</ul>
 </div>
 <div class="section" id="extracturlparameters-url">
 <h3>extractURLParameters(URL)<a class="headerlink" href="#extracturlparameters-url" title="Permalink to this headline">¶</a></h3>
-<p>Возвращает массив строк вида name=value, соответствующих параметрам URL. Значения никак не декодируются.</p>
+<ul class="simple">
+<li>Gets an array of name=value strings corresponding to the URL parameters. The values are not decoded in any way.</li>
+</ul>
 </div>
 <div class="section" id="extracturlparameternames-url">
 <h3>extractURLParameterNames(URL)<a class="headerlink" href="#extracturlparameternames-url" title="Permalink to this headline">¶</a></h3>
-<p>Возвращает массив строк вида name, соответствующих именам параметров URL. Значения никак не декодируются.</p>
+<ul class="simple">
+<li>Gets an array of name=value strings corresponding to the names of URL parameters. The values are not decoded in any way.</li>
+</ul>
 </div>
 <div class="section" id="urlhierarchy-url">
 <h3>URLHierarchy(URL)<a class="headerlink" href="#urlhierarchy-url" title="Permalink to this headline">¶</a></h3>
-<p>Возвращает массив, содержащий URL, обрезанный с конца по символам /, ? в пути и query-string. Подряд идущие символы-разделители считаются за один. Резка производится в позиции после всех подряд идущих символов-разделителей. Пример:</p>
+<ul class="simple">
+<li>Gets an array containing the URL trimmed to the <code class="docutils literal"><span class="pre">/</span></code>, <code class="docutils literal"><span class="pre">?</span></code> characters in the path and query-string. Consecutive separator characters are counted as one. The cut is made in the position after all the consecutive separator characters. Example:</li>
+</ul>
 </div>
 <div class="section" id="urlpathhierarchy-url">
 <h3>URLPathHierarchy(URL)<a class="headerlink" href="#urlpathhierarchy-url" title="Permalink to this headline">¶</a></h3>
-<p>То же самое, но без протокола и хоста в результате. Элемент / (корень) не включается. Пример:
-Функция используется для реализации древовидных отчётов по URL в Яндекс.Метрике.</p>
+<ul class="simple">
+<li>The same thing, but without the protocol and host in the result. The / element (root) is not included. Example:</li>
+</ul>
+<p>This function is used for implementing tree-view reports by URL in Yandex.Metrica.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>URLPathHierarchy(&#39;https://example.com/browse/CONV-6788&#39;) =
 [
     &#39;/browse/&#39;,
@@ -133,8 +155,8 @@
 </div>
 <div class="section" id="decodeurlcomponent-url">
 <h3>decodeURLComponent(URL)<a class="headerlink" href="#decodeurlcomponent-url" title="Permalink to this headline">¶</a></h3>
-<p>Возвращает декодированный URL.
-Пример:</p>
+<p>Returns a URL-decoded URL.
+Example:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span></span>:) SELECT decodeURLComponent(&#39;http://127.0.0.1:8123/?query=SELECT%201%3B&#39;) AS DecodedURL;
 
 ┌─DecodedURL─────────────────────────────┐
@@ -144,28 +166,28 @@
 </div>
 </div>
 </div>
-<div class="section" id="id2">
-<h2>Функции, удаляющие часть из URL-а.<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
-<p>Если в URL-е нет ничего похожего, то URL остаётся без изменений.</p>
+<div class="section" id="functions-that-remove-part-of-a-url">
+<h2>Functions that remove part of a URL.<a class="headerlink" href="#functions-that-remove-part-of-a-url" title="Permalink to this headline">¶</a></h2>
+<p>If the URL doesn&#8217;t have anything similar, the URL remains unchanged.</p>
 <div class="section" id="cutwww">
 <h3>cutWWW<a class="headerlink" href="#cutwww" title="Permalink to this headline">¶</a></h3>
-<p>Удаляет не более одного &#8216;www.&#8217; с начала домена URL-а, если есть.</p>
+<p>Removes no more than one &#8216;www.&#8217; from the beginning of the URL&#8217;s domain, if present.</p>
 </div>
 <div class="section" id="cutquerystring">
 <h3>cutQueryString<a class="headerlink" href="#cutquerystring" title="Permalink to this headline">¶</a></h3>
-<p>Удаляет query string. Знак вопроса тоже удаляется.</p>
+<p>Removes the query-string. The question mark is also removed..</p>
 </div>
 <div class="section" id="cutfragment">
 <h3>cutFragment<a class="headerlink" href="#cutfragment" title="Permalink to this headline">¶</a></h3>
-<p>Удаляет fragment identifier. Символ решётки тоже удаляется.</p>
+<p>Removes the fragment identifier. The number sign is also removed.</p>
 </div>
 <div class="section" id="cutquerystringandfragment">
 <h3>cutQueryStringAndFragment<a class="headerlink" href="#cutquerystringandfragment" title="Permalink to this headline">¶</a></h3>
-<p>Удаляет query string и fragment identifier. Знак вопроса и символ решётки тоже удаляются.</p>
+<p>Removes the query-string and fragment identifier. The question mark and number sign are also removed.</p>
 </div>
 <div class="section" id="cuturlparameter-url-name">
 <h3>cutURLParameter(URL, name)<a class="headerlink" href="#cuturlparameter-url-name" title="Permalink to this headline">¶</a></h3>
-<p>Удаляет параметр URL с именем name, если такой есть. Функция работает при допущении, что имя параметра закодировано в URL в точности таким же образом, что и в переданном аргументе.</p>
+<p>Removes the URL parameter named &#8216;name&#8217;, if present. This function works under the assumption that the parameter name is encoded in the URL exactly the same way as in the passed argument.</p>
 </div>
 </div>
 </div>
@@ -174,55 +196,141 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Функции для работы с URL</a><ul>
-<li><a class="reference internal" href="#id1">Функции, извлекающие часть URL-а.</a><ul>
-<li><a class="reference internal" href="#protocol">protocol</a></li>
-<li><a class="reference internal" href="#domain">domain</a></li>
-<li><a class="reference internal" href="#domainwithoutwww">domainWithoutWWW</a></li>
-<li><a class="reference internal" href="#topleveldomain">topLevelDomain</a></li>
-<li><a class="reference internal" href="#firstsignificantsubdomain">firstSignificantSubdomain</a></li>
-<li><a class="reference internal" href="#cuttofirstsignificantsubdomain">cutToFirstSignificantSubdomain</a></li>
-<li><a class="reference internal" href="#path">path</a></li>
-<li><a class="reference internal" href="#pathfull">pathFull</a></li>
-<li><a class="reference internal" href="#querystring">queryString</a></li>
-<li><a class="reference internal" href="#fragment">fragment</a></li>
-<li><a class="reference internal" href="#querystringandfragment">queryStringAndFragment</a></li>
-<li><a class="reference internal" href="#extracturlparameter-url-name">extractURLParameter(URL, name)</a></li>
-<li><a class="reference internal" href="#extracturlparameters-url">extractURLParameters(URL)</a></li>
-<li><a class="reference internal" href="#extracturlparameternames-url">extractURLParameterNames(URL)</a></li>
-<li><a class="reference internal" href="#urlhierarchy-url">URLHierarchy(URL)</a></li>
-<li><a class="reference internal" href="#urlpathhierarchy-url">URLPathHierarchy(URL)</a></li>
-<li><a class="reference internal" href="#decodeurlcomponent-url">decodeURLComponent(URL)</a></li>
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Functions</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="arithmetic_functions.html">Arithmetic functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="array_functions.html">Functions for working with arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="array_join.html">arrayJoin function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bit_functions.html">Bit functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comparison_functions.html">Comparison functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conditional_functions.html">Conditional functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="date_time_functions.html">Functions for working with dates and times</a></li>
+<li class="toctree-l2"><a class="reference internal" href="encoding_functions.html">Encoding functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ext_dict_functions.html">Functions for working with external dictionaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hash_functions.html">Hash functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="higher_order_functions.html">Higher-order functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="in_functions.html">Functions for implementing the IN operator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ip_address_functions.html">Functions for working with IP addresses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json_functions.html">Functions for working with JSON.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logical_functions.html">Logical functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="math_functions.html">Mathematical functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_functions.html">Other functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="random_functions.html">Functions for generating pseudo-random numbers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rounding_functions.html">Rounding functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="splitting_merging_functions.html">Functions for splitting and merging strings and arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_functions.html">Functions for working with strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_replace_functions.html">Functions for searching and replacing in strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_search_functions.html">Functions for searching strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="type_conversion_functions.html">Type conversion functions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Functions for working with URLs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#url">Функции, извлекающие часть URL-а.</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#protocol">protocol</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#domain">domain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#domainwithoutwww">domainWithoutWWW</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#topleveldomain">topLevelDomain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#firstsignificantsubdomain">firstSignificantSubdomain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cuttofirstsignificantsubdomain">cutToFirstSignificantSubdomain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#path">path</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pathfull">pathFull</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#querystring">queryString</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fragment">fragment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#querystringandfragment">queryStringAndFragment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#extracturlparameter-url-name">extractURLParameter(URL, name)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#extracturlparameters-url">extractURLParameters(URL)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#extracturlparameternames-url">extractURLParameterNames(URL)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urlhierarchy-url">URLHierarchy(URL)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#urlpathhierarchy-url">URLPathHierarchy(URL)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#decodeurlcomponent-url">decodeURLComponent(URL)</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id2">Функции, удаляющие часть из URL-а.</a><ul>
-<li><a class="reference internal" href="#cutwww">cutWWW</a></li>
-<li><a class="reference internal" href="#cutquerystring">cutQueryString</a></li>
-<li><a class="reference internal" href="#cutfragment">cutFragment</a></li>
-<li><a class="reference internal" href="#cutquerystringandfragment">cutQueryStringAndFragment</a></li>
-<li><a class="reference internal" href="#cuturlparameter-url-name">cutURLParameter(URL, name)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#functions-that-remove-part-of-a-url">Functions that remove part of a URL.</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#cutwww">cutWWW</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cutquerystring">cutQueryString</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cutfragment">cutFragment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cutquerystringandfragment">cutQueryStringAndFragment</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cuturlparameter-url-name">cutURLParameter(URL, name)</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="ym_dict_functions.html">Functions for working with Yandex.Metrica dictionaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#strong-typing">Strong typing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#common-subexpression-elimination">Common subexpression elimination</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#types-of-results">Types of results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#constants">Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#immutability">Immutability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#error-handling">Error handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#evaluation-of-argument-expressions">Evaluation of argument expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#performing-functions-for-distributed-query-processing">Performing functions for distributed query processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="type_conversion_functions.html"
-                        title="previous chapter">Функции преобразования типов</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="ym_dict_functions.html"
-                        title="next chapter">Функции для работы со словарями Яндекс.Метрики</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/functions/url_functions.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Functions</a><ul>
+      <li>Previous: <a href="type_conversion_functions.html" title="previous chapter">Type conversion functions</a></li>
+      <li>Next: <a href="ym_dict_functions.html" title="next chapter">Functions for working with Yandex.Metrica dictionaries</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -239,25 +347,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="ym_dict_functions.html" title="Функции для работы со словарями Яндекс.Метрики"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="type_conversion_functions.html" title="Функции преобразования типов"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Функции</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

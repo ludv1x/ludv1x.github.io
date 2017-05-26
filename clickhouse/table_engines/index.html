@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Движки таблиц &mdash; ClickHouse 1 documentation</title>
+    <title>Table engines &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,50 +23,40 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
     <link rel="next" title="AggregatingMergeTree" href="aggregatingmergetree.html" />
-    <link rel="prev" title="Внешние данные для обработки запроса" href="../external_data.html" /> 
+    <link rel="prev" title="External data for query processing" href="../external_data.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="aggregatingmergetree.html" title="AggregatingMergeTree"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="../external_data.html" title="Внешние данные для обработки запроса"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="id1">
-<h1>Движки таблиц<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="table-engines">
+<h1>Table engines<a class="headerlink" href="#table-engines" title="Permalink to this headline">¶</a></h1>
 <dl class="docutils">
-<dt>Движок таблицы (тип таблицы) определяет:</dt>
+<dt>The table engine (type of table) determines:</dt>
 <dd><ul class="first last simple">
-<li>как и где хранятся данные - куда их писать и откуда читать;</li>
-<li>какие запросы поддерживаются, и каким образом;</li>
-<li>конкуррентный доступ к данным;</li>
-<li>использование индексов, если есть;</li>
-<li>возможно ли многопоточное выполнение запроса;</li>
-<li>репликацию данных;</li>
-<li>при чтении, движок обязан лишь достать нужный набор столбцов;
-но в некоторых случаях, запрос может быть частично обработан в рамках движка таблицы.</li>
+<li>How and where data is stored - where to write it to, and where to read it from.</li>
+<li>Which queries are supported, and how.</li>
+<li>Concurrent data access.</li>
+<li>Use of indexes, if present.</li>
+<li>Whether multithreaded request execution is possible.</li>
+<li>Data replication.</li>
+<li>When reading data, the engine is only required to extract the necessary set of columns. However, in some cases, the query may be partially processed inside the table engine.</li>
 </ul>
 </dd>
 </dl>
-<p>Забегая вперёд, заметим, что для большинства серьёзных задач, следует использовать движки семейства MergeTree.</p>
+<p>Note that for most serious tasks, you should use engines from the MergeTree family.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="aggregatingmergetree.html">AggregatingMergeTree</a></li>
@@ -79,23 +69,23 @@
 <li class="toctree-l1"><a class="reference internal" href="materializedview.html">MaterializedView</a></li>
 <li class="toctree-l1"><a class="reference internal" href="memory.html">Memory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="merge.html">Merge</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="merge.html#id1">Виртуальные столбцы</a></li>
+<li class="toctree-l2"><a class="reference internal" href="merge.html#virtual-columns">Virtual columns</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="mergetree.html">MergeTree</a></li>
 <li class="toctree-l1"><a class="reference internal" href="null.html">Null</a></li>
 <li class="toctree-l1"><a class="reference internal" href="replacingmergetree.html">ReplacingMergeTree</a></li>
-<li class="toctree-l1"><a class="reference internal" href="replication.html">Репликация данных</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="replication.html">Data replication</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="replication.html#replicatedmergetree">ReplicatedMergeTree</a></li>
 <li class="toctree-l2"><a class="reference internal" href="replication.html#replicatedcollapsingmergetree">ReplicatedCollapsingMergeTree</a></li>
 <li class="toctree-l2"><a class="reference internal" href="replication.html#replicatedaggregatingmergetree">ReplicatedAggregatingMergeTree</a></li>
 <li class="toctree-l2"><a class="reference internal" href="replication.html#replicatedsummingmergetree">ReplicatedSummingMergeTree</a></li>
-<li class="toctree-l2"><a class="reference internal" href="replication.html#id2">Создание реплицируемых таблиц</a></li>
-<li class="toctree-l2"><a class="reference internal" href="replication.html#id3">Восстановление после сбоя</a></li>
-<li class="toctree-l2"><a class="reference internal" href="replication.html#id4">Восстановление в случае потери всех данных</a></li>
-<li class="toctree-l2"><a class="reference internal" href="replication.html#mergetree-replicatedmergetree">Преобразование из MergeTree в ReplicatedMergeTree</a></li>
-<li class="toctree-l2"><a class="reference internal" href="replication.html#replicatedmergetree-mergetree">Преобразование из ReplicatedMergeTree в MergeTree</a></li>
-<li class="toctree-l2"><a class="reference internal" href="replication.html#zookeeper">Восстановление в случае потери или повреждения метаданных на ZooKeeper кластере</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replication.html#creating-replicated-tables">Creating replicated tables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replication.html#recovery-after-failures">Recovery after failures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replication.html#recovery-after-complete-data-loss">Recovery after complete data loss</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replication.html#converting-from-mergetree-to-replicatedmergetree">Converting from MergeTree to ReplicatedMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replication.html#converting-from-replicatedmergetree-to-mergetree">Converting from ReplicatedMergeTree to MergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replication.html#recovery-when-metadata-in-the-zookeeper-cluster-is-lost-or-damaged">Recovery when metadata in the ZooKeeper cluster is lost or damaged</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="resharding.html">Перешардирование</a></li>
@@ -111,20 +101,94 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="../external_data.html"
-                        title="previous chapter">Внешние данные для обработки запроса</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="aggregatingmergetree.html"
-                        title="next chapter">AggregatingMergeTree</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/table_engines/index.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Table engines</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="aggregatingmergetree.html">AggregatingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buffer.html">Buffer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="collapsingmergetree.html">CollapsingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distributed.html">Distributed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file.html">File(InputFormat)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="join.html">Join</a></li>
+<li class="toctree-l2"><a class="reference internal" href="log.html">Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="materializedview.html">MaterializedView</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="merge.html">Merge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mergetree.html">MergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="null.html">Null</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replacingmergetree.html">ReplacingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replication.html">Data replication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resharding.html">Перешардирование</a></li>
+<li class="toctree-l2"><a class="reference internal" href="set.html">Set</a></li>
+<li class="toctree-l2"><a class="reference internal" href="summingmergetree.html">SummingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tinylog.html">TinyLog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="view.html">View</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../external_data.html" title="previous chapter">External data for query processing</a></li>
+      <li>Next: <a href="aggregatingmergetree.html" title="next chapter">AggregatingMergeTree</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -141,24 +205,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="aggregatingmergetree.html" title="AggregatingMergeTree"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="../external_data.html" title="Внешние данные для обработки запроса"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

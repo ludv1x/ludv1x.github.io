@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Репликация данных &mdash; ClickHouse 1 documentation</title>
+    <title>Data replication &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,37 +23,27 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Движки таблиц" href="index.html" />
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Table engines" href="index.html" />
     <link rel="next" title="Перешардирование" href="resharding.html" />
-    <link rel="prev" title="ReplacingMergeTree" href="replacingmergetree.html" /> 
+    <link rel="prev" title="ReplacingMergeTree" href="replacingmergetree.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="resharding.html" title="Перешардирование"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="replacingmergetree.html" title="ReplacingMergeTree"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Движки таблиц</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="id1">
-<h1>Репликация данных<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="data-replication">
+<h1>Data replication<a class="headerlink" href="#data-replication" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="replicatedmergetree">
 <h2>ReplicatedMergeTree<a class="headerlink" href="#replicatedmergetree" title="Permalink to this headline">¶</a></h2>
 </div>
@@ -65,11 +55,11 @@
 </div>
 <div class="section" id="replicatedsummingmergetree">
 <h2>ReplicatedSummingMergeTree<a class="headerlink" href="#replicatedsummingmergetree" title="Permalink to this headline">¶</a></h2>
-<p>Репликация поддерживается только для таблиц семейства MergeTree. Репликация работает на уровне отдельных таблиц, а не всего сервера. То есть, на сервере могут быть расположены одновременно реплицируемые и не реплицируемые таблицы.</p>
-<p>Реплицируются INSERT, ALTER (см. подробности в описании запроса ALTER). Реплицируются сжатые данные, а не тексты запросов.
-Запросы CREATE, DROP, ATTACH, DETACH, RENAME не реплицируются - то есть, относятся к одному серверу. Запрос CREATE TABLE создаёт новую реплицируемую таблицу на том сервере, где выполняется запрос; а если на других серверах такая таблица уже есть - добавляет новую реплику. Запрос DROP TABLE удаляет реплику, расположенную на том сервере, где выполняется запрос. Запрос RENAME переименовывает таблицу на одной из реплик - то есть, реплицируемые таблицы на разных репликах могут называться по разному.</p>
-<p>Репликация никак не связана с шардированием. На каждом шарде репликация работает независимо.</p>
-<p>Репликация является опциональной возможностью. Для использования репликации, укажите в конфигурационном файле адреса ZooKeeper кластера. Пример:</p>
+<p>Replication is only supported for tables in the MergeTree family. Replication works at the level of an individual table, not the entire server. A server can store both replicated and non-replicated tables at the same time.</p>
+<p>INSERT and ALTER are replicated (for more information, see ALTER). Compressed data is replicated, not query texts.
+The CREATE, DROP, ATTACH, DETACH, and RENAME queries are not replicated. In other words, they belong to a single server. The CREATE TABLE query creates a new replicatable table on the server where the query is run. If this table already exists on other servers, it adds a new replica. The DROP TABLE query deletes the replica located on the server where the query is run. The RENAME query renames the table on one of the replicas. In other words, replicated tables can have different names on different replicas.</p>
+<p>Replication is not related to sharding in any way. Replication works independently on each shard.</p>
+<p>Replication is an optional feature. To use replication, set the addresses of the ZooKeeper cluster in the config file. Example:</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;zookeeper&gt;</span>
     <span class="nt">&lt;node</span> <span class="na">index=</span><span class="s">&quot;1&quot;</span><span class="nt">&gt;</span>
         <span class="nt">&lt;host&gt;</span>example1<span class="nt">&lt;/host&gt;</span>
@@ -86,29 +76,29 @@
 <span class="nt">&lt;/zookeeper&gt;</span>
 </pre></div>
 </div>
-<p><strong>Используйте версию ZooKeeper не старее 3.4.5.</strong> Для примера, в Ubuntu Precise слишком старая версия в пакете.</p>
-<p>Можно указать любой имеющийся у вас ZooKeeper-кластер - система будет использовать в нём одну директорию для своих данных (директория указывается при создании реплицируемой таблицы).</p>
-<p>Если в конфигурационном файле не настроен ZooKeeper, то вы не сможете создать реплицируемые таблицы, а уже имеющиеся реплицируемые таблицы будут доступны в режиме только на чтение.</p>
-<p>При запросах SELECT, ZooKeeper не используется. То есть, репликация никак не влияет на производительность SELECT-ов - запросы работают так же быстро, как и для нереплицируемых таблиц.</p>
-<p>При каждом запросе INSERT (точнее, на каждый вставляемый блок данных; запрос INSERT содержит один блок, или по блоку на каждые max_insert_block_size = 1048576 строк), делается около десятка записей в ZooKeeper в рамках нескольких транзакций. Это приводит к некоторому увеличению задержек при INSERT-е, по сравнению с нереплицируемыми таблицами. Но если придерживаться обычных рекомендаций - вставлять данные пачками не более одного INSERT-а в секунду, то это не составляет проблем. На всём кластере ClickHouse, использующим для координации один кластер ZooKeeper, может быть в совокупности несколько сотен INSERT-ов в секунду. Пропускная способность при вставке данных (количество строчек в секунду) такая же высокая, как для нереплицируемых таблиц.</p>
-<p>Для очень больших кластеров, можно использовать разные кластеры ZooKeeper для разных шардов. Впрочем, на кластере Яндекс.Метрики (примерно 300 серверов) такой необходимости не возникает.</p>
-<p>Репликация асинхронная, мульти-мастер. Запросы INSERT (а также ALTER) можно отправлять на любой доступный сервер. Данные вставятся на этот сервер, а затем приедут на остальные серверы. В связи с асинхронностью, только что вставленные данные, появляются на остальных репликах с небольшой задержкой. Если часть реплик недоступна - данные на них запишутся тогда, когда они станут доступны. Если реплика доступна, то задержка составляет столько времени, сколько требуется для передачи блока сжатых данных по сети.</p>
-<p>Кворумная запись отсутствует. То есть, вы не можете записать данные с подтверждением их получения более одной репликой. Если вы записали пачку данных на одну реплику, и данные ещё не успели разъехаться по остальным репликам, после чего сервер с этими данными перестал существовать, то эта пачка данных будет потеряна.</p>
-<p>Каждый блок данных записывается атомарно. Запрос INSERT разбивается на блоки данных размером до max_insert_block_size = 1048576 строк. То есть, если в запросе INSERT менее 1048576 строк, то он делается атомарно.</p>
-<p>Блоки данных дедуплицируются. При многократной записи одного и того же блока данных (блоков данных одинакового размера, содержащих одни и те же строчки в одном и том же порядке), блок будет записан только один раз. Это сделано для того, чтобы в случае сбоя в сети, когда клиентское приложение не может понять, были ли данные записаны в БД, можно было просто повторить запрос INSERT. При этом не имеет значения, на какую реплику будут отправлены INSERT-ы с одинаковыми данными. То есть, обеспечивается идемпотентность INSERT-ов. Это работает только для последних 100 вставленных в таблицу блоков.</p>
-<p>При репликации, по сети передаются только исходные вставляемые данные. Дальнейшие преобразования данных (слияния) координируются и делаются на всех репликах одинаковым образом. За счёт этого минимизируется использование сети, и благодаря этому, репликация хорошо работает при расположении реплик в разных датацентрах. (Стоит заметить, что дублирование данных в разных датацентрах, по сути, является основной задачей репликации).</p>
-<p>Количество реплик одних и тех же данных может быть произвольным. В Яндекс.Метрике в продакшене используется двухкратная репликация. На каждом сервере используется RAID-5 или RAID-6, в некоторых случаях RAID-10. Это является сравнительно надёжным и удобным для эксплуатации решением.</p>
-<p>Система следит за синхронностью данных на репликах и умеет восстанавливаться после сбоя. Восстановление после сбоя автоматическое (в случае небольших различий в данных) или полуавтоматическое (когда данные отличаются слишком сильно, что может свидетельствовать об ошибке конфигурации).</p>
+<p><strong>Use ZooKeeper version 3.4.5 or later</strong> For example, the version in the Ubuntu Precise package is too old.</p>
+<p>You can specify any existing ZooKeeper cluster - the system will use a directory on it for its own data (the directory is specified when creating a replicatable table).</p>
+<p>If ZooKeeper isn&#8217;t set in the config file, you can&#8217;t create replicated tables, and any existing replicated tables will be read-only.</p>
+<p>ZooKeeper isn&#8217;t used for SELECT queries. In other words, replication doesn&#8217;t affect the productivity of SELECT queries - they work just as fast as for non-replicated tables.</p>
+<p>For each INSERT query (more precisely, for each inserted block of data; the INSERT query contains a single block, or per block for every max_insert_block_size = 1048576 rows), approximately ten entries are made in ZooKeeper in several transactions. This leads to slightly longer latencies for INSERT compared to non-replicated tables. But if you follow the recommendations to insert data in batches of no more than one INSERT per second, it doesn&#8217;t create any problems. The entire ClickHouse cluster used for coordinating one ZooKeeper cluster has a total of several hundred INSERTs per second. The throughput on data inserts (the number of rows per second) is just as high as for non-replicated data.</p>
+<p>For very large clusters, you can use different ZooKeeper clusters for different shards. However, this hasn&#8217;t proven necessary on the Yandex.Metrica cluster (approximately 300 servers).</p>
+<p>Replication is asynchronous and multi-master. INSERT queries (as well as ALTER) can be sent to any available server. Data is inserted on this server, then sent to the other servers. Because it is asynchronous, recently inserted data appears on the other replicas with some latency. If a part of the replicas is not available, the data on them is written when they become available. If a replica is available, the latency is the amount of time it takes to transfer the block of compressed data over the network.</p>
+<p>There are no quorum writes. You can&#8217;t write data with confirmation that it was received by more than one replica. If you write a batch of data to one replica and the server with this data ceases to exist before the data has time to get to the other replicas, this data will be lost.</p>
+<p>Each block of data is written atomically. The INSERT query is divided into blocks up to max_insert_block_size = 1048576 rows. In other words, if the INSERT query has less than 1048576 rows, it is made atomically.</p>
+<p>Blocks of data are duplicated. For multiple writes of the same data block (data blocks of the same size containing the same rows in the same order), the block is only written once. The reason for this is in case of network failures when the client application doesn&#8217;t know if the data was written to the DB, so the INSERT query can simply be repeated. It doesn&#8217;t matter which replica INSERTs were sent to with identical data - INSERTs are idempotent. This only works for the last 100 blocks inserted in a table.</p>
+<p>During replication, only the source data to insert is transferred over the network. Further data transformation (merging) is coordinated and performed on all the replicas in the same way. This minimizes network usage, which means that replication works well when replicas reside in different datacenters. (Note that duplicating data in different datacenters is the main goal of replication.)</p>
+<p>You can have any number of replicas of the same data. Yandex.Metrica uses double replication in production. Each server uses RAID-5 or RAID-6, and RAID-10 in some cases. This is a relatively reliable and convenient solution.</p>
+<p>The system monitors data synchronicity on replicas and is able to recover after a failure. Failover is automatic (for small differences in data) or semi-automatic (when data differs too much, which may indicate a configuration error).</p>
 </div>
-<div class="section" id="id2">
-<h2>Создание реплицируемых таблиц<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
-<p>В начало имени движка таблицы добавляется <tt class="docutils literal"><span class="pre">Replicated</span></tt>. Например, <tt class="docutils literal"><span class="pre">ReplicatedMergeTree</span></tt>.</p>
-<p>Также добавляются два параметра в начало списка параметров - путь к таблице в ZooKeeper, имя реплики в ZooKeeper.</p>
-<p>Пример:</p>
+<div class="section" id="creating-replicated-tables">
+<h2>Creating replicated tables<a class="headerlink" href="#creating-replicated-tables" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal"><span class="pre">'Replicated'</span></code> prefix is added to the table engine name. For example, <code class="docutils literal"><span class="pre">ReplicatedMergeTree</span></code>.</p>
+<p>Two parameters are also added in the beginning of the parameters list - the path to the table in ZooKeeper, and the replica name in ZooKeeper.</p>
+<p>Example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ReplicatedMergeTree</span><span class="p">(</span><span class="s1">&#39;/clickhouse/tables/{layer}-{shard}/hits&#39;</span><span class="p">,</span> <span class="s1">&#39;{replica}&#39;</span><span class="p">,</span> <span class="n">EventDate</span><span class="p">,</span> <span class="n">intHash32</span><span class="p">(</span><span class="n">UserID</span><span class="p">),</span> <span class="p">(</span><span class="n">CounterID</span><span class="p">,</span> <span class="n">EventDate</span><span class="p">,</span> <span class="n">intHash32</span><span class="p">(</span><span class="n">UserID</span><span class="p">),</span> <span class="n">EventTime</span><span class="p">),</span> <span class="mi">8192</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Как видно в примере, эти параметры могут содержать подстановки в фигурных скобках. Подставляемые значения достаются из конфигурационного файла, из секции macros. Пример:</p>
+<p>As the example shows, these parameters can contain substitutions in curly brackets. The substituted values are taken from the &#8216;macros&#8217; section of the config file. Example:</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;macros&gt;</span>
     <span class="nt">&lt;layer&gt;</span>05<span class="nt">&lt;/layer&gt;</span>
     <span class="nt">&lt;shard&gt;</span>02<span class="nt">&lt;/shard&gt;</span>
@@ -116,71 +106,71 @@
 <span class="nt">&lt;/macros&gt;</span>
 </pre></div>
 </div>
-<p>Путь к таблице в ZooKeeper должен быть разным для каждой реплицируемой таблицы. В том числе, для таблиц на разных шардах, должны быть разные пути.
-В данном случае, путь состоит из следующих частей:</p>
-<p><tt class="docutils literal"><span class="pre">/clickhouse/tables/</span></tt> - общий префикс. Рекомендуется использовать именно его.</p>
-<p><tt class="docutils literal"><span class="pre">{layer}-{shard}</span></tt> - идентификатор шарда. В данном примере он состоит из двух частей, так как на кластере Яндекс.Метрики используется двухуровневое шардирование. Для большинства задач, оставьте только подстановку {shard}, которая будет раскрываться в идентификатор шарда.</p>
-<p><tt class="docutils literal"><span class="pre">hits</span></tt> - имя узла для таблицы в ZooKeeper. Разумно делать его таким же, как имя таблицы. Оно указывается явно, так как, в отличие от имени таблицы, оно не меняется после запроса RENAME.</p>
-<p>Имя реплики - то, что идентифицирует разные реплики одной и той же таблицы. Можно использовать для него имя сервера, как показано в примере. Впрочем, достаточно, чтобы имя было уникально лишь в пределах каждого шарда.</p>
-<p>Можно не использовать подстановки, а прописать всё явно. Это может быть удобным для тестирования и при настройке маленьких кластеров, но менее удобным при работе с большими кластерами.</p>
-<p>Выполните запрос CREATE TABLE на каждой реплике. Запрос создаёт новую реплицируемую таблицу, или добавляет новую реплику к имеющимся.</p>
-<p>Если вы добавляете новую реплику после того, как таблица на других репликах уже содержит некоторые данные, то после выполнения запроса, данные на новую реплику будут скачаны с других реплик. То есть, новая реплика синхронизирует себя с остальными.</p>
-<p>Для удаления реплики, выполните запрос DROP TABLE. При этом, удаляется только одна реплика - расположенная на том сервере, где вы выполняете запрос.</p>
+<p>The path to the table in ZooKeeper should be unique for each replicated table. Tables on different shards should have different paths.
+In this case, the path consists of the following parts:</p>
+<p><code class="docutils literal"><span class="pre">/clickhouse/tables/</span></code> - is the common prefix. We recommend using exactly this one.</p>
+<p><code class="docutils literal"><span class="pre">{layer}-{shard}</span></code> - is the shard identifier. In this example it consists of two parts, since the Yandex.Metrica cluster uses bi-level sharding. For most tasks, you can leave just the {shard} substitution, which will be expanded to the shard identifier.</p>
+<p><code class="docutils literal"><span class="pre">hits</span></code> - is the name of the node for the table in ZooKeeper. It is a good idea to make it the same as the table name. It is defined explicitly, because in contrast to the table name, it doesn&#8217;t change after a RENAME query.</p>
+<p>The replica name identifies different replicas of the same table. You can use the server name for this, as in the example. The name only needs to be unique within each shard.</p>
+<p>You can define everything explicitly instead of using substitutions. This might be convenient for testing and for configuring small clusters, but it is inconvenient when working with large clusters.</p>
+<p>Run CREATE TABLE on each replica. This query creates a new replicated table, or adds a new replica to an existing one.</p>
+<p>If you add a new replica after the table already contains some data on other replicas, the data will be copied from the other replicas to the new one after running the query. In other words, the new replica syncs itself with the others.</p>
+<p>To delete a replica, run DROP TABLE. However, only one replica is deleted - the one that resides on the server where you run the query.</p>
 </div>
-<div class="section" id="id3">
-<h2>Восстановление после сбоя<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
-<p>Если при старте сервера, недоступен ZooKeeper, реплицируемые таблицы переходят в режим только для чтения. Система будет пытаться периодически установить соединение с ZooKeeper.</p>
-<p>Если при INSERT-е недоступен ZooKeeper, или происходит ошибка при взаимодействии с ним, будет выкинуто исключение.</p>
-<p>При подключении к ZooKeeper, система проверяет соответствие между имеющимся в локальной файловой системе набором данных и ожидаемым набором данных (информация о котором хранится в ZooKeeper). Если имеются небольшие несоответствия, то система устраняет их, синхронизируя данные с реплик.</p>
-<p>Обнаруженные битые куски данных (с файлами несоответствующего размера) или неизвестные куски (куски, записанные в файловую систему, но информация о которых не была записана в ZooKeeper) переносятся в поддиректорию detached (не удаляются). Недостающие куски скачиваются с реплик.</p>
-<p>Стоит заметить, что ClickHouse не делает самостоятельно никаких деструктивных действий типа автоматического удаления большого количества данных.</p>
-<p>При старте сервера (или создании новой сессии с ZooKeeper), проверяется только количество и размеры всех файлов. Если у файлов совпадают размеры, но изменены байты где-то посередине, то это обнаруживается не сразу, а только при попытке их прочитать при каком-либо запросе SELECT - запрос кинет исключение о несоответствующей чексумме или размере сжатого блока. В этом случае, куски данных добавляются в очередь на проверку, и при необходимости, скачиваются с реплик.</p>
-<p>Если обнаруживается, что локальный набор данных слишком сильно отличается от ожидаемого, то срабатывает защитный механизм - сервер сообщает об этом в лог и отказывается запускаться. Это сделано, так как такой случай может свидетельствовать об ошибке конфигурации - например, если реплика одного шарда была случайно сконфигурирована, как реплика другого шарда. Тем не менее, пороги защитного механизма поставлены довольно низкими, и такая ситуация может возникнуть и при обычном восстановлении после сбоя. В этом случае, восстановление делается полуавтоматически - &#8220;по кнопке&#8221;.</p>
-<p>Для запуска восстановления, создайте в ZooKeeper узел <tt class="docutils literal"><span class="pre">/path_to_table/replica_name/flags/force_restore_data</span></tt> с любым содержимым или выполните команду для восстановления всех реплицируемых таблиц:</p>
+<div class="section" id="recovery-after-failures">
+<h2>Recovery after failures<a class="headerlink" href="#recovery-after-failures" title="Permalink to this headline">¶</a></h2>
+<p>If ZooKeeper is unavailable when a server starts, replicated tables switch to read-only mode. The system periodically attempts to connect to ZooKeeper.</p>
+<p>If ZooKeeper is unavailable during an INSERT, or an error occurs when interacting with ZooKeeper, an exception is thrown.</p>
+<p>After connecting to ZooKeeper, the system checks whether the set of data in the local file system matches the expected set of data (ZooKeeper stores this information). If there are minor inconsistencies, the system resolves them by syncing data with the replicas.</p>
+<p>If the system detects broken data parts (with the wrong size of files) or unrecognized parts (parts written to the file system but not recorded in ZooKeeper), it moves them to the &#8216;detached&#8217; subdirectory (they are not deleted). Any missing parts are copied from the replicas.</p>
+<p>Note that ClickHouse does not perform any destructive actions such as automatically deleting a large amount of data.</p>
+<p>When the server starts (or establishes a new session with ZooKeeper), it only checks the quantity and sizes of all files. If the file sizes match but bytes have been changed somewhere in the middle, this is not detected immediately, but only when attempting to read the data for a SELECT query. The query throws an exception about a non-matching checksum or size of a compressed block. In this case, data parts are added to the verification queue and copied from the replicas if necessary.</p>
+<p>If the local set of data differs too much from the expected one, a safety mechanism is triggered. The server enters this in the log and refuses to launch. The reason for this is that this case may indicate a configuration error, such as if a replica on a shard was accidentally configured like a replica on a different shard. However, the thresholds for this mechanism are set fairly low, and this situation might occur during normal failure recovery. In this case, data is restored semi-automatically - by &#8220;pushing a button&#8221;.</p>
+<p>To start recovery, create the node <code class="docutils literal"><span class="pre">/path_to_table/replica_name/flags/force_restore_data</span></code> in ZooKeeper with any content or run command to recover all replicated tables:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>sudo -u clickhouse touch /var/lib/clickhouse/flags/force_restore_data
 </pre></div>
 </div>
-<p>Затем запустите сервер. При старте, сервер удалит эти флаги и запустит восстановление.</p>
+<p>Then launch the server. On start, the server deletes these flags and starts recovery.</p>
 </div>
-<div class="section" id="id4">
-<h2>Восстановление в случае потери всех данных<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
-<p>Если на одном из серверов исчезли все данные и метаданные, восстановление делается следующим образом:</p>
+<div class="section" id="recovery-after-complete-data-loss">
+<h2>Recovery after complete data loss<a class="headerlink" href="#recovery-after-complete-data-loss" title="Permalink to this headline">¶</a></h2>
+<p>If all data and metadata disappeared from one of the servers, follow these steps for recovery:</p>
 <ol class="arabic simple">
-<li>Установите на сервер ClickHouse. Корректно пропишите подстановки в конфигурационном файле, отвечающие за идентификатор шарда и реплики, если вы их используете.</li>
-<li>Если у вас были нереплицируемые таблицы, которые должны быть вручную продублированы на серверах, скопируйте их данные (в директории /var/lib/clickhouse/data/db_name/table_name/) с реплики.</li>
-<li>Скопируйте с реплики определения таблиц, находящиеся в /var/lib/clickhouse/metadata/. Если в определениях таблиц, идентификатор шарда или реплики, прописаны в явном виде - исправьте их, чтобы они соответствовали данной реплике. (Альтернативный вариант - запустить сервер и сделать самостоятельно все запросы ATTACH TABLE, которые должны были бы быть в соответствующих .sql файлах в /var/lib/clickhouse/metadata/.)</li>
-<li>Создайте в ZooKeeper узел /path_to_table/replica_name/flags/force_restore_data с любым содержимым или выполните команду для восстановления всех реплицируемых таблиц: <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">-u</span> <span class="pre">clickhouse</span> <span class="pre">touch</span> <span class="pre">/var/lib/clickhouse/flags/force_restore_data</span></tt></li>
+<li>Install ClickHouse on the server. Define substitutions correctly in the config file that contains the shard identifier and replicas, if you use them.</li>
+<li>If you had unreplicated tables that must be manually duplicated on the servers, copy their data from a replica (in the directory /var/lib/clickhouse/data/db_name/table_name/).</li>
+<li>Copy table definitions located in /var/lib/clickhouse/metadata/. from a replica. If a shard or replica identifier is defined explicitly in the table definitions, correct it so that it corresponds to this replica. (Alternatively, launch the server and make all the ATTACH TABLE queries that should have been in the .sql files in /var/lib/clickhouse/metadata/.)</li>
+<li>Create the <code class="docutils literal"><span class="pre">/path_to_table/replica_name/flags/force_restore_data</span></code> node in ZooKeeper with any content or run command to recover all replicated tables: <code class="docutils literal"><span class="pre">sudo</span> <span class="pre">-u</span> <span class="pre">clickhouse</span> <span class="pre">touch</span> <span class="pre">/var/lib/clickhouse/flags/force_restore_data</span></code></li>
 </ol>
-<p>Затем запустите сервер (перезапустите, если уже запущен). Данные будут скачаны с реплик.</p>
-<p>В качестве альтернативного варианта восстановления, вы можете удалить из ZooKeeper информацию о потерянной реплике - <tt class="docutils literal"><span class="pre">/path_to_table/replica_name</span></tt>, и затем создать реплику заново, как написано в разделе &#8220;Создание реплицируемых таблиц&#8221;.</p>
-<p>Отсутствует ограничение на использование сетевой полосы при восстановлении. Имейте это ввиду, если восстанавливаете сразу много реплик.</p>
+<p>Then launch the server (restart it if it is already running). Data will be downloaded from replicas.</p>
+<p>An alternative recovery option is to delete information about the lost replica from ZooKeeper ( <code class="docutils literal"><span class="pre">/path_to_table/replica_name</span></code>), then create the replica again as described in &#8220;Creating replicated tables&#8221;.</p>
+<p>There is no restriction on network bandwidth during recovery. Keep this in mind if you are restoring many replicas at once.</p>
 </div>
-<div class="section" id="mergetree-replicatedmergetree">
-<h2>Преобразование из MergeTree в ReplicatedMergeTree<a class="headerlink" href="#mergetree-replicatedmergetree" title="Permalink to this headline">¶</a></h2>
-<p>Здесь и далее, под <tt class="docutils literal"><span class="pre">MergeTree</span></tt> подразумеваются все движки таблиц семейства <tt class="docutils literal"><span class="pre">MergeTree</span></tt>, так же для <tt class="docutils literal"><span class="pre">ReplicatedMergeTree</span></tt>.</p>
-<p>Если у вас была таблица типа MergeTree, репликация которой делалась вручную, вы можете преобразовать её в реплицируемую таблицу. Это может понадобиться лишь в случаях, когда вы уже успели накопить большое количество данных в таблице типа MergeTree, а сейчас хотите включить репликацию.</p>
-<p>Если на разных репликах данные отличаются, то сначала синхронизируйте их, либо удалите эти данные на всех репликах кроме одной.</p>
-<p>Переименуйте имеющуюся MergeTree таблицу, затем создайте со старым именем таблицу типа ReplicatedMergeTree.
-Перенесите данные из старой таблицы в поддиректорию detached в директории с данными новой таблицы (<tt class="docutils literal"><span class="pre">/var/lib/clickhouse/data/db_name/table_name/</span></tt>).
-Затем добавьте эти куски данных в рабочий набор с помощью выполнения запросов ALTER TABLE ATTACH PART на одной из реплик.</p>
+<div class="section" id="converting-from-mergetree-to-replicatedmergetree">
+<h2>Converting from MergeTree to ReplicatedMergeTree<a class="headerlink" href="#converting-from-mergetree-to-replicatedmergetree" title="Permalink to this headline">¶</a></h2>
+<p>From here on, we use <code class="docutils literal"><span class="pre">MergeTree</span></code> to refer to all the table engines in the <code class="docutils literal"><span class="pre">MergeTree</span></code> family, including <code class="docutils literal"><span class="pre">ReplicatedMergeTree</span></code>.</p>
+<p>If you had a MergeTree table that was manually replicated, you can convert it to a replicatable table. You might need to do this if you have already collected a large amount of data in a MergeTree table and now you want to enable replication.</p>
+<p>If the data differs on various replicas, first sync it, or delete this data on all the replicas except one.</p>
+<p>Rename the existing MergeTree table, then create a ReplicatedMergeTree table with the old name.
+Move the data from the old table to the &#8216;detached&#8217; subdirectory inside the directory with the new table data (<code class="docutils literal"><span class="pre">/var/lib/clickhouse/data/db_name/table_name/</span></code>).
+Then run ALTER TABLE ATTACH PART on one of the replicas to add these data parts to the working set.</p>
+<p>If exactly the same parts exist on the other replicas, they are added to the working set on them. If not, the parts are downloaded from the replica that has them.</p>
 </div>
-<div class="section" id="replicatedmergetree-mergetree">
-<h2>Преобразование из ReplicatedMergeTree в MergeTree<a class="headerlink" href="#replicatedmergetree-mergetree" title="Permalink to this headline">¶</a></h2>
-<p>Создайте таблицу типа MergeTree с другим именем. Перенесите в её директорию с данными все данные из директории с данными таблицы типа ReplicatedMergeTree. Затем удалите таблицу типа ReplicatedMergeTree и перезапустите сервер.</p>
+<div class="section" id="converting-from-replicatedmergetree-to-mergetree">
+<h2>Converting from ReplicatedMergeTree to MergeTree<a class="headerlink" href="#converting-from-replicatedmergetree-to-mergetree" title="Permalink to this headline">¶</a></h2>
+<p>Create a MergeTree table with a different name. Move all the data from the directory with the ReplicatedMergeTree table data to the new table&#8217;s data directory. Then delete the ReplicatedMergeTree table and restart the server.</p>
 <dl class="docutils">
-<dt>Если вы хотите избавиться от таблицы ReplicatedMergeTree, не запуская сервер, то</dt>
+<dt>If you want to get rid of a ReplicatedMergeTree table without launching the server:</dt>
 <dd><ul class="first last simple">
-<li>удалите соответствующий файл .sql в директории с метаданными (<tt class="docutils literal"><span class="pre">/var/lib/clickhouse/metadata/</span></tt>);</li>
-<li>удалите соответствующий путь в ZooKeeper (<tt class="docutils literal"><span class="pre">/path_to_table/replica_name</span></tt>);</li>
+<li>Delete the corresponding .sql file in the metadata directory (<code class="docutils literal"><span class="pre">/var/lib/clickhouse/metadata/</span></code>).</li>
+<li>Delete the corresponding path in ZooKeeper (<code class="docutils literal"><span class="pre">/path_to_table/replica_name</span></code>).</li>
 </ul>
 </dd>
 </dl>
-<p>После этого, вы можете запустить сервер, создать таблицу типа MergeTree, перенести данные в её директорию, и перезапустить сервер.</p>
+<p>After this, you can launch the server, create a MergeTree table, move the data to its directory, and then restart the server.</p>
 </div>
-<div class="section" id="zookeeper">
-<h2>Восстановление в случае потери или повреждения метаданных на ZooKeeper кластере<a class="headerlink" href="#zookeeper" title="Permalink to this headline">¶</a></h2>
-<p>Если данные в ZooKeeper оказались утеряны или повреждены, то вы можете сохранить данные, переместив их в нереплицируемую таблицу, как описано в пункте выше.</p>
-<p>Если на остальных репликах есть точно такие же куски, они будут добавлены в рабочий набор на них. Если нет - куски будут скачаны с той реплики, где они есть.</p>
+<div class="section" id="recovery-when-metadata-in-the-zookeeper-cluster-is-lost-or-damaged">
+<h2>Recovery when metadata in the ZooKeeper cluster is lost or damaged<a class="headerlink" href="#recovery-when-metadata-in-the-zookeeper-cluster-is-lost-or-damaged" title="Permalink to this headline">¶</a></h2>
+<p>If you lost ZooKeeper, you can save data by moving it to an unreplicated table as described above.</p>
 </div>
 </div>
 
@@ -188,37 +178,108 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Репликация данных</a><ul>
-<li><a class="reference internal" href="#replicatedmergetree">ReplicatedMergeTree</a></li>
-<li><a class="reference internal" href="#replicatedcollapsingmergetree">ReplicatedCollapsingMergeTree</a></li>
-<li><a class="reference internal" href="#replicatedaggregatingmergetree">ReplicatedAggregatingMergeTree</a></li>
-<li><a class="reference internal" href="#replicatedsummingmergetree">ReplicatedSummingMergeTree</a></li>
-<li><a class="reference internal" href="#id2">Создание реплицируемых таблиц</a></li>
-<li><a class="reference internal" href="#id3">Восстановление после сбоя</a></li>
-<li><a class="reference internal" href="#id4">Восстановление в случае потери всех данных</a></li>
-<li><a class="reference internal" href="#mergetree-replicatedmergetree">Преобразование из MergeTree в ReplicatedMergeTree</a></li>
-<li><a class="reference internal" href="#replicatedmergetree-mergetree">Преобразование из ReplicatedMergeTree в MergeTree</a></li>
-<li><a class="reference internal" href="#zookeeper">Восстановление в случае потери или повреждения метаданных на ZooKeeper кластере</a></li>
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Table engines</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="aggregatingmergetree.html">AggregatingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buffer.html">Buffer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="collapsingmergetree.html">CollapsingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distributed.html">Distributed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file.html">File(InputFormat)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="join.html">Join</a></li>
+<li class="toctree-l2"><a class="reference internal" href="log.html">Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="materializedview.html">MaterializedView</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="merge.html">Merge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mergetree.html">MergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="null.html">Null</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replacingmergetree.html">ReplacingMergeTree</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Data replication</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#replicatedmergetree">ReplicatedMergeTree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#replicatedcollapsingmergetree">ReplicatedCollapsingMergeTree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#replicatedaggregatingmergetree">ReplicatedAggregatingMergeTree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#replicatedsummingmergetree">ReplicatedSummingMergeTree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-replicated-tables">Creating replicated tables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#recovery-after-failures">Recovery after failures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#recovery-after-complete-data-loss">Recovery after complete data loss</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#converting-from-mergetree-to-replicatedmergetree">Converting from MergeTree to ReplicatedMergeTree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#converting-from-replicatedmergetree-to-mergetree">Converting from ReplicatedMergeTree to MergeTree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#recovery-when-metadata-in-the-zookeeper-cluster-is-lost-or-damaged">Recovery when metadata in the ZooKeeper cluster is lost or damaged</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="resharding.html">Перешардирование</a></li>
+<li class="toctree-l2"><a class="reference internal" href="set.html">Set</a></li>
+<li class="toctree-l2"><a class="reference internal" href="summingmergetree.html">SummingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tinylog.html">TinyLog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="view.html">View</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="replacingmergetree.html"
-                        title="previous chapter">ReplacingMergeTree</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="resharding.html"
-                        title="next chapter">Перешардирование</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/table_engines/replication.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Table engines</a><ul>
+      <li>Previous: <a href="replacingmergetree.html" title="previous chapter">ReplacingMergeTree</a></li>
+      <li>Next: <a href="resharding.html" title="next chapter">Перешардирование</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -235,25 +296,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="resharding.html" title="Перешардирование"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="replacingmergetree.html" title="ReplacingMergeTree"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Движки таблиц</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Values &mdash; ClickHouse 1 documentation</title>
+    <title>Values &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,61 +23,132 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Форматы" href="index.html" />
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Formats" href="index.html" />
     <link rel="next" title="Vertical" href="vertical.html" />
-    <link rel="prev" title="TSKV" href="tskv.html" /> 
+    <link rel="prev" title="TSKV" href="tskv.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="vertical.html" title="Vertical"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="tskv.html" title="TSKV"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Форматы</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="values">
 <h1>Values<a class="headerlink" href="#values" title="Permalink to this headline">¶</a></h1>
-<p>Выводит каждую строку в скобках. Строки разделены запятыми. После последней строки запятой нет. Значения внутри скобок также разделены запятыми. Числа выводятся в десятичном виде без кавычек. Массивы выводятся в квадратных скобках. Строки, даты, даты-с-временем выводятся в кавычках. Правила экранирования и особенности парсинга аналогичны формату TabSeparated. При форматировании, лишние пробелы не ставятся, а при парсинге - допустимы и пропускаются (за исключением пробелов внутри значений типа массив, которые недопустимы).</p>
-<p>Минимальный набор символов, которых вам необходимо экранировать при передаче в Values формате: одинарная кавычка и обратный слеш.</p>
-<p>Именно этот формат используется в запросе <tt class="docutils literal"><span class="pre">INSERT</span> <span class="pre">INTO</span> <span class="pre">t</span> <span class="pre">VALUES</span> <span class="pre">...</span></tt>
-Но вы также можете использовать его для форматирования результатов запросов.</p>
+<p>Prints every row in parentheses. Rows are separated by commas. There is no comma after the last row. The values inside the parentheses are also comma-separated. Numbers are output in decimal format without quotes. Arrays are output in square brackets. Strings, dates, and dates with times are output in quotes. Escaping rules and parsing are same as in the TabSeparated format. During formatting, extra spaces aren&#8217;t inserted, but during parsing, they are allowed and skipped (except for spaces inside array values, which are not allowed).</p>
+<p>Minimum set of symbols that you must escape in Values format is single quote and backslash.</p>
+<p>This is the format that is used in <code class="docutils literal"><span class="pre">INSERT</span> <span class="pre">INTO</span> <span class="pre">t</span> <span class="pre">VALUES</span></code> ...
+But you can also use it for query result.</p>
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="tskv.html"
-                        title="previous chapter">TSKV</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="vertical.html"
-                        title="next chapter">Vertical</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/formats/values.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Formats</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="blocktabseparated.html">BlockTabSeparated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="csv.html">CSV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="csvwithnames.html">CSVWithNames</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json.html">JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsoncompact.html">JSONCompact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsoneachrow.html">JSONEachRow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="native.html">Native</a></li>
+<li class="toctree-l2"><a class="reference internal" href="null.html">Null</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pretty.html">Pretty</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prettycompact.html">PrettyCompact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prettycompactmonoblock.html">PrettyCompactMonoBlock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prettynoescapes.html">PrettyNoEscapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prettynoescapes.html#prettycompactnoescapes">PrettyCompactNoEscapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prettynoescapes.html#prettyspacenoescapes">PrettySpaceNoEscapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prettyspace.html">PrettySpace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rowbinary.html">RowBinary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tabseparated.html">TabSeparated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tabseparatedraw.html">TabSeparatedRaw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tabseparatedwithnames.html">TabSeparatedWithNames</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tabseparatedwithnamesandtypes.html">TabSeparatedWithNamesAndTypes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tskv.html">TSKV</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vertical.html">Vertical</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xml.html">XML</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Formats</a><ul>
+      <li>Previous: <a href="tskv.html" title="previous chapter">TSKV</a></li>
+      <li>Next: <a href="vertical.html" title="next chapter">Vertical</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -94,25 +165,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="vertical.html" title="Vertical"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="tskv.html" title="TSKV"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Форматы</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

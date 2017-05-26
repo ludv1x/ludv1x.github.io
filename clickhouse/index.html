@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Документация &mdash; ClickHouse 1 documentation</title>
+    <title>Documentation &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,101 +23,93 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="#" />
-    <link rel="next" title="Введение" href="introduction/index.html" /> 
+    <link rel="top" title="ClickHouse  documentation" href="#" />
+    <link rel="next" title="Introduction" href="introduction/index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="introduction/index.html" title="Введение"
-             accesskey="N">next</a> |</li>
-        <li><a href="#">ClickHouse 1 documentation</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="id1">
-<h1>Документация<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="documentation">
+<h1>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="introduction/index.html">Введение</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="introduction/what_is_clickhouse.html">Что такое ClickHouse</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction/distinctive_features.html">Отличительные возможности ClickHouse</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="introduction/distinctive_features.html#id1">1. По-настоящему столбцовая СУБД.</a></li>
-<li class="toctree-l3"><a class="reference internal" href="introduction/distinctive_features.html#id2">2. Сжатие данных.</a></li>
-<li class="toctree-l3"><a class="reference internal" href="introduction/distinctive_features.html#id3">3. Хранение данных на диске.</a></li>
-<li class="toctree-l3"><a class="reference internal" href="introduction/distinctive_features.html#id4">4. Параллельная обработка запроса на многих процессорных ядрах.</a></li>
-<li class="toctree-l3"><a class="reference internal" href="introduction/distinctive_features.html#id5">5. Распределённая обработка запроса на многих серверах.</a></li>
-<li class="toctree-l3"><a class="reference internal" href="introduction/distinctive_features.html#sql">6. Поддержка SQL.</a></li>
-<li class="toctree-l3"><a class="reference internal" href="introduction/distinctive_features.html#id6">7. Векторный движок.</a></li>
-<li class="toctree-l3"><a class="reference internal" href="introduction/distinctive_features.html#id7">8. Обновление данных в реальном времени.</a></li>
-<li class="toctree-l3"><a class="reference internal" href="introduction/distinctive_features.html#id8">9. Наличие индексов.</a></li>
-<li class="toctree-l3"><a class="reference internal" href="introduction/distinctive_features.html#id9">10. Подходит для онлайн запросов.</a></li>
-<li class="toctree-l3"><a class="reference internal" href="introduction/distinctive_features.html#id10">11. Поддержка приближённых вычислений.</a></li>
-<li class="toctree-l3"><a class="reference internal" href="introduction/distinctive_features.html#id11">14. Репликация данных, поддержка целостности данных на репликах.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction/index.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction/what_is_clickhouse.html">What is ClickHouse?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction/distinctive_features.html">Distinctive features of ClickHouse</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="introduction/distinctive_features.html#true-column-oriented-dbms">1. True column-oriented DBMS.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="introduction/distinctive_features.html#data-compression">2. Data compression.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="introduction/distinctive_features.html#disk-storage-of-data">3. Disk storage of data.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="introduction/distinctive_features.html#parallel-processing-on-multiple-cores">4. Parallel processing on multiple cores.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="introduction/distinctive_features.html#distributed-processing-on-multiple-servers">5. Distributed processing on multiple servers.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="introduction/distinctive_features.html#sql-support">6. SQL support.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="introduction/distinctive_features.html#vector-engine">7. Vector engine.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="introduction/distinctive_features.html#real-time-data-updates">8. Real-time data updates.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="introduction/distinctive_features.html#indexes">9. Indexes.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="introduction/distinctive_features.html#suitable-for-online-queries">10. Suitable for online queries.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="introduction/distinctive_features.html#support-for-approximated-calculations">11. Support for approximated calculations.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="introduction/distinctive_features.html#data-replication-and-support-for-data-integrity-on-replicas">14. Data replication and support for data integrity on replicas.</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="introduction/features.html">Особенности ClickHouse, которые могут считаться недостатками</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction/ya_metrika_task.html">Постановка задачи в Яндекс.Метрике</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="introduction/ya_metrika_task.html#id2">Агрегированные и неагрегированные данные</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction/features.html">ClickHouse features that can be considered disadvantages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction/ya_metrika_task.html">The Yandex.Metrica task</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="introduction/ya_metrika_task.html#aggregated-and-non-aggregated-data">Aggregated and non-aggregated data</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="introduction/use_case.html">Использование в Яндекс.Метрике и других отделах Яндекса</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction/possible_silly_questions.html">Возможные глупые вопросы</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="introduction/possible_silly_questions.html#map-reduce">1. Почему бы не использовать системы типа map-reduce?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction/use_case.html">Usage in Yandex.Metrica and other Yandex services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction/possible_silly_questions.html">Possible silly questions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="introduction/possible_silly_questions.html#why-not-to-use-systems-like-map-reduce">1. Why not to use systems like map-reduce?</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="introduction/performance.html">Производительность</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="introduction/performance.html#id2">Пропускная способность при обработке одного большого запроса</a></li>
-<li class="toctree-l3"><a class="reference internal" href="introduction/performance.html#id3">Задержки при обработке коротких запросов.</a></li>
-<li class="toctree-l3"><a class="reference internal" href="introduction/performance.html#id4">Пропускная способность при обработке большого количества коротких запросов.</a></li>
-<li class="toctree-l3"><a class="reference internal" href="introduction/performance.html#id5">Производительность при вставке данных.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction/performance.html">Performance</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="introduction/performance.html#throughput-for-a-single-large-query">Throughput for a single large query</a></li>
+<li class="toctree-l3"><a class="reference internal" href="introduction/performance.html#latency-when-processing-short-queries">Latency when processing short queries.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="introduction/performance.html#throughput-when-processing-a-large-quantity-of-short-queries">Throughput when processing a large quantity of short queries.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="introduction/performance.html#performance-on-data-insertion">Performance on data insertion.</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Начало работы</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="getting_started.html#id2">Системные требования</a></li>
-<li class="toctree-l2"><a class="reference internal" href="getting_started.html#id3">Установка</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="getting_started.html#id4">Установка из пакетов</a></li>
-<li class="toctree-l3"><a class="reference internal" href="getting_started.html#id5">Установка из исходников</a></li>
-<li class="toctree-l3"><a class="reference internal" href="getting_started.html#id6">Другие методы установки</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#system-requirements">System requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#installation">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="getting_started.html#installing-from-packages">Installing from packages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="getting_started.html#installing-from-source">Installing from source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="getting_started.html#other-methods-of-installation">Other methods of installation</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="getting_started.html#id7">Запуск</a></li>
-<li class="toctree-l2"><a class="reference internal" href="getting_started.html#id8">Тестовые данные</a></li>
-<li class="toctree-l2"><a class="reference internal" href="getting_started.html#id9">Если возникли вопросы</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#launch">Launch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#test-data">Test data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#if-you-have-questions">If you have questions</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="interfaces/index.html">Интерфейсы</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="interfaces/cli.html">Клиент командной строки</a></li>
-<li class="toctree-l2"><a class="reference internal" href="interfaces/http_interface.html">HTTP-интерфейс</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="interfaces/http_interface.html#id1">Буферизация ответа</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interfaces/index.html">Interfaces</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="interfaces/cli.html">Command-line client</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interfaces/http_interface.html">HTTP interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interfaces/jdbc.html">JDBC driver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interfaces/tcp.html">Native interface (TCP)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interfaces/third-party_client_libraries.html">Third-party client libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interfaces/third-party_gui.html">Third-party GUI</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="interfaces/jdbc.html">JDBC-драйвер</a></li>
-<li class="toctree-l2"><a class="reference internal" href="interfaces/tcp.html">Родной интерфейс (TCP)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="interfaces/third-party_client_libraries.html">Библиотеки от сторонних разработчиков</a></li>
-<li class="toctree-l2"><a class="reference internal" href="interfaces/third-party_gui.html">GUI от сторонних разработчиков</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="query_language/index.html">Язык запросов</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="query_language/clickhouse_local.html">Программа clickhouse-local</a></li>
-<li class="toctree-l2"><a class="reference internal" href="query_language/queries.html">Запросы</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="query_language/index.html">Query language</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="query_language/clickhouse_local.html">clickhouse-local</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_language/queries.html">Queries</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="query_language/queries.html#create-database">CREATE DATABASE</a></li>
 <li class="toctree-l3"><a class="reference internal" href="query_language/queries.html#create-table">CREATE TABLE</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#id2">Значения по умолчанию</a></li>
-<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#id5">Временные таблицы</a></li>
+<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#default-values">Default values</a></li>
+<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#temporary-tables">Temporary tables</a></li>
+<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#distributed-ddl-queries-section-on-cluster">Distributed DDL queries (section <code class="docutils literal"><span class="pre">ON</span> <span class="pre">CLUSTER</span></code>)</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="query_language/queries.html#create-view">CREATE VIEW</a></li>
@@ -126,10 +118,10 @@
 <li class="toctree-l3"><a class="reference internal" href="query_language/queries.html#detach">DETACH</a></li>
 <li class="toctree-l3"><a class="reference internal" href="query_language/queries.html#rename">RENAME</a></li>
 <li class="toctree-l3"><a class="reference internal" href="query_language/queries.html#alter">ALTER</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#id6">Манипуляции со столбцами</a></li>
-<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#id7">Манипуляции с партициями и кусками</a></li>
-<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#id8">Бэкапы и репликация</a></li>
-<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#id9">Синхронность запросов ALTER</a></li>
+<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#column-manipulations">Column manipulations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#manipulations-with-partitions-and-parts">Manipulations with partitions and parts</a></li>
+<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#backups-and-replication">Backups and replication</a></li>
+<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#synchronicity-of-alter-queries">Synchronicity of ALTER queries</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="query_language/queries.html#show-databases">SHOW DATABASES</a></li>
@@ -143,58 +135,58 @@
 <li class="toctree-l3"><a class="reference internal" href="query_language/queries.html#optimize">OPTIMIZE</a></li>
 <li class="toctree-l3"><a class="reference internal" href="query_language/queries.html#insert">INSERT</a></li>
 <li class="toctree-l3"><a class="reference internal" href="query_language/queries.html#select">SELECT</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#from">Секция FROM</a></li>
-<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#sample">Секция SAMPLE</a></li>
-<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#array-join">Секция ARRAY JOIN</a></li>
-<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#join">Секция JOIN</a></li>
-<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#where">Секция WHERE</a></li>
-<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#prewhere">Секция PREWHERE</a></li>
-<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#group-by">Секция GROUP BY</a><ul>
-<li class="toctree-l5"><a class="reference internal" href="query_language/queries.html#with-totals">Модификатор WITH TOTALS</a></li>
-<li class="toctree-l5"><a class="reference internal" href="query_language/queries.html#id12">GROUP BY во внешней памяти</a></li>
-<li class="toctree-l5"><a class="reference internal" href="query_language/queries.html#limit-n-by">Модификатор LIMIT N BY</a></li>
+<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#from-clause">FROM clause</a></li>
+<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#sample-clause">SAMPLE clause</a></li>
+<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#array-join-clause">ARRAY JOIN clause</a></li>
+<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#join-clause">JOIN clause</a></li>
+<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#where-clause">WHERE clause</a></li>
+<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#prewhere-clause">PREWHERE clause</a></li>
+<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#group-by-clause">GROUP BY clause</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="query_language/queries.html#with-totals-modifier">WITH TOTALS modifier</a></li>
+<li class="toctree-l5"><a class="reference internal" href="query_language/queries.html#external-memory-group-by">external memory GROUP BY</a></li>
+<li class="toctree-l5"><a class="reference internal" href="query_language/queries.html#limit-n-by-modifier">LIMIT N BY modifier</a></li>
 </ul>
 </li>
-<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#having">Секция HAVING</a></li>
-<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#order-by">Секция ORDER BY</a></li>
-<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#id13">Секция SELECT</a></li>
-<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#distinct">Секция DISTINCT</a></li>
-<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#limit">Секция LIMIT</a></li>
-<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#union-all">Секция UNION ALL</a></li>
-<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#into-outfile">Секция INTO OUTFILE</a></li>
-<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#format">Секция FORMAT</a></li>
-<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#in">Операторы IN</a></li>
-<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#id14">Распределённые подзапросы</a></li>
-<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#id15">Экстремальные значения</a></li>
-<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#id16">Замечания</a></li>
+<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#having-clause">HAVING clause</a></li>
+<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#order-by-clause">ORDER BY clause</a></li>
+<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#select-clause">SELECT clause</a></li>
+<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#distinct-clause">DISTINCT clause</a></li>
+<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#limit-clause">LIMIT clause</a></li>
+<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#union-all-clause">UNION ALL clause</a></li>
+<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#into-outfile-clause">INTO OUTFILE clause</a></li>
+<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#format-clause">FORMAT clause</a></li>
+<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#in-operators">IN operators</a></li>
+<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#distributed-subqueries">Distributed subqueries</a></li>
+<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#extreme-values">Extreme values</a></li>
+<li class="toctree-l4"><a class="reference internal" href="query_language/queries.html#notes">Notes</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="query_language/queries.html#kill-query">KILL QUERY</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="query_language/syntax.html">Синтаксис</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="query_language/syntax.html#id2">Пробелы</a></li>
-<li class="toctree-l3"><a class="reference internal" href="query_language/syntax.html#id3">Комментарии</a></li>
-<li class="toctree-l3"><a class="reference internal" href="query_language/syntax.html#id4">Ключевые слова</a></li>
-<li class="toctree-l3"><a class="reference internal" href="query_language/syntax.html#id5">Идентификаторы</a></li>
-<li class="toctree-l3"><a class="reference internal" href="query_language/syntax.html#id6">Литералы</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="query_language/syntax.html#id7">Числовые литералы</a></li>
-<li class="toctree-l4"><a class="reference internal" href="query_language/syntax.html#id8">Строковые литералы</a></li>
-<li class="toctree-l4"><a class="reference internal" href="query_language/syntax.html#id9">Составные литералы</a></li>
+<li class="toctree-l2"><a class="reference internal" href="query_language/syntax.html">Syntax</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="query_language/syntax.html#spaces">Spaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query_language/syntax.html#comments">Comments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query_language/syntax.html#keywords">Keywords</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query_language/syntax.html#identifiers">Identifiers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query_language/syntax.html#literals">Literals</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="query_language/syntax.html#numeric-literals">Numeric literals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="query_language/syntax.html#string-literals">String literals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="query_language/syntax.html#compound-literals">Compound literals</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="query_language/syntax.html#id10">Функции</a></li>
-<li class="toctree-l3"><a class="reference internal" href="query_language/syntax.html#id11">Операторы</a></li>
-<li class="toctree-l3"><a class="reference internal" href="query_language/syntax.html#id12">Типы данных и движки таблиц</a></li>
-<li class="toctree-l3"><a class="reference internal" href="query_language/syntax.html#id13">Синонимы</a></li>
-<li class="toctree-l3"><a class="reference internal" href="query_language/syntax.html#id14">Звёздочка</a></li>
-<li class="toctree-l3"><a class="reference internal" href="query_language/syntax.html#id15">Выражения</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query_language/syntax.html#functions">Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query_language/syntax.html#operators">Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query_language/syntax.html#data-types-and-database-table-engines">Data types and database table engines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query_language/syntax.html#synonyms">Synonyms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query_language/syntax.html#asterisk">Asterisk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="query_language/syntax.html#expressions">Expressions</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="external_data.html">Внешние данные для обработки запроса</a></li>
-<li class="toctree-l1"><a class="reference internal" href="table_engines/index.html">Движки таблиц</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="table_engines/index.html">Table engines</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="table_engines/aggregatingmergetree.html">AggregatingMergeTree</a></li>
 <li class="toctree-l2"><a class="reference internal" href="table_engines/buffer.html">Buffer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="table_engines/collapsingmergetree.html">CollapsingMergeTree</a></li>
@@ -205,23 +197,23 @@
 <li class="toctree-l2"><a class="reference internal" href="table_engines/materializedview.html">MaterializedView</a></li>
 <li class="toctree-l2"><a class="reference internal" href="table_engines/memory.html">Memory</a></li>
 <li class="toctree-l2"><a class="reference internal" href="table_engines/merge.html">Merge</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="table_engines/merge.html#id1">Виртуальные столбцы</a></li>
+<li class="toctree-l3"><a class="reference internal" href="table_engines/merge.html#virtual-columns">Virtual columns</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="table_engines/mergetree.html">MergeTree</a></li>
 <li class="toctree-l2"><a class="reference internal" href="table_engines/null.html">Null</a></li>
 <li class="toctree-l2"><a class="reference internal" href="table_engines/replacingmergetree.html">ReplacingMergeTree</a></li>
-<li class="toctree-l2"><a class="reference internal" href="table_engines/replication.html">Репликация данных</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="table_engines/replication.html">Data replication</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="table_engines/replication.html#replicatedmergetree">ReplicatedMergeTree</a></li>
 <li class="toctree-l3"><a class="reference internal" href="table_engines/replication.html#replicatedcollapsingmergetree">ReplicatedCollapsingMergeTree</a></li>
 <li class="toctree-l3"><a class="reference internal" href="table_engines/replication.html#replicatedaggregatingmergetree">ReplicatedAggregatingMergeTree</a></li>
 <li class="toctree-l3"><a class="reference internal" href="table_engines/replication.html#replicatedsummingmergetree">ReplicatedSummingMergeTree</a></li>
-<li class="toctree-l3"><a class="reference internal" href="table_engines/replication.html#id2">Создание реплицируемых таблиц</a></li>
-<li class="toctree-l3"><a class="reference internal" href="table_engines/replication.html#id3">Восстановление после сбоя</a></li>
-<li class="toctree-l3"><a class="reference internal" href="table_engines/replication.html#id4">Восстановление в случае потери всех данных</a></li>
-<li class="toctree-l3"><a class="reference internal" href="table_engines/replication.html#mergetree-replicatedmergetree">Преобразование из MergeTree в ReplicatedMergeTree</a></li>
-<li class="toctree-l3"><a class="reference internal" href="table_engines/replication.html#replicatedmergetree-mergetree">Преобразование из ReplicatedMergeTree в MergeTree</a></li>
-<li class="toctree-l3"><a class="reference internal" href="table_engines/replication.html#zookeeper">Восстановление в случае потери или повреждения метаданных на ZooKeeper кластере</a></li>
+<li class="toctree-l3"><a class="reference internal" href="table_engines/replication.html#creating-replicated-tables">Creating replicated tables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="table_engines/replication.html#recovery-after-failures">Recovery after failures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="table_engines/replication.html#recovery-after-complete-data-loss">Recovery after complete data loss</a></li>
+<li class="toctree-l3"><a class="reference internal" href="table_engines/replication.html#converting-from-mergetree-to-replicatedmergetree">Converting from MergeTree to ReplicatedMergeTree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="table_engines/replication.html#converting-from-replicatedmergetree-to-mergetree">Converting from ReplicatedMergeTree to MergeTree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="table_engines/replication.html#recovery-when-metadata-in-the-zookeeper-cluster-is-lost-or-damaged">Recovery when metadata in the ZooKeeper cluster is lost or damaged</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="table_engines/resharding.html">Перешардирование</a></li>
@@ -231,7 +223,7 @@
 <li class="toctree-l2"><a class="reference internal" href="table_engines/view.html">View</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="system_tables/index.html">Системные таблицы</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="system_tables/index.html">System tables</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="system_tables/system.asynchronous_metrics.html">system.asynchronous_metrics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="system_tables/system.clusters.html">system.clusters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="system_tables/system.columns.html">system.columns</a></li>
@@ -252,12 +244,12 @@
 <li class="toctree-l2"><a class="reference internal" href="system_tables/system.zookeeper.html">system.zookeeper</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="table_functions/index.html">Табличные функции</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="table_functions/index.html">Table functions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="table_functions/merge.html">merge</a></li>
 <li class="toctree-l2"><a class="reference internal" href="table_functions/remote.html">remote</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="formats/index.html">Форматы</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="formats/index.html">Formats</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="formats/blocktabseparated.html">BlockTabSeparated</a></li>
 <li class="toctree-l2"><a class="reference internal" href="formats/csv.html">CSV</a></li>
 <li class="toctree-l2"><a class="reference internal" href="formats/csvwithnames.html">CSVWithNames</a></li>
@@ -284,20 +276,20 @@
 <li class="toctree-l2"><a class="reference internal" href="formats/xml.html">XML</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="data_types/index.html">Типы данных</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="data_types/index.html">Data types</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="data_types/array.html">Array(T)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="data_types/boolean.html">Булевы значения</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_types/boolean.html">Boolean</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_types/date.html">Date</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_types/datetime.html">DateTime</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="data_types/datetime.html#id1">Часовые пояса</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_types/datetime.html#time-zones">Time zones</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="data_types/enum.html">Enum</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_types/fixedstring.html">FixedString(N)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_types/float.html">Float32, Float64</a></li>
 <li class="toctree-l2"><a class="reference internal" href="data_types/int_uint.html">UInt8, UInt16, UInt32, UInt64, Int8, Int16, Int32, Int64</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="data_types/int_uint.html#int">Диапазоны Int</a></li>
-<li class="toctree-l3"><a class="reference internal" href="data_types/int_uint.html#uint">Диапазоны Uint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_types/int_uint.html#int-ranges">Int ranges</a></li>
+<li class="toctree-l3"><a class="reference internal" href="data_types/int_uint.html#uint-ranges">Uint ranges</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="data_types/string.html">String</a><ul>
@@ -305,51 +297,51 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="data_types/tuple.html">Tuple(T1, T2, ...)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="data_types/nested_data_structures/index.html">Вложенные структуры данных</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="data_types/nested_data_structures/index.html">Nested data structures</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="data_types/nested_data_structures/aggregatefunction.html">AggregateFunction(name, types_of_arguments...)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="data_types/nested_data_structures/nested.html">Nested(Name1 Type1, Name2 Type2, ...)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="data_types/special_data_types/index.html">Служебные типы данных</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="data_types/special_data_types/index.html">Special data types</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="data_types/special_data_types/expression.html">Expression</a></li>
 <li class="toctree-l3"><a class="reference internal" href="data_types/special_data_types/set.html">Set</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="operators/index.html">Операторы</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="operators/index.html#id2">Операторы доступа</a></li>
-<li class="toctree-l2"><a class="reference internal" href="operators/index.html#id3">Оператор числового отрицания</a></li>
-<li class="toctree-l2"><a class="reference internal" href="operators/index.html#id4">Операторы умножения и деления</a></li>
-<li class="toctree-l2"><a class="reference internal" href="operators/index.html#id5">Операторы сложения и вычитания</a></li>
-<li class="toctree-l2"><a class="reference internal" href="operators/index.html#id6">Операторы сравнения</a></li>
-<li class="toctree-l2"><a class="reference internal" href="operators/index.html#id7">Операторы для работы с множествами</a></li>
-<li class="toctree-l2"><a class="reference internal" href="operators/index.html#id8">Оператор логического отрицания</a></li>
-<li class="toctree-l2"><a class="reference internal" href="operators/index.html#id9">Оператор логического &#8220;И&#8221;.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="operators/index.html#id10">Оператор логического &#8220;ИЛИ&#8221;.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="operators/index.html#id11">Условный оператор</a></li>
-<li class="toctree-l2"><a class="reference internal" href="operators/index.html#id12">Условное выражение</a></li>
-<li class="toctree-l2"><a class="reference internal" href="operators/index.html#id13">Оператор склеивания строк</a></li>
-<li class="toctree-l2"><a class="reference internal" href="operators/index.html#id14">Оператор создания лямбда-выражения</a></li>
-<li class="toctree-l2"><a class="reference internal" href="operators/index.html#id15">Оператор создания массива</a></li>
-<li class="toctree-l2"><a class="reference internal" href="operators/index.html#id16">Оператор создания кортежа</a></li>
-<li class="toctree-l2"><a class="reference internal" href="operators/index.html#id17">Ассоциативность</a></li>
+<li class="toctree-l1"><a class="reference internal" href="operators/index.html">Operators</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="operators/index.html#access-operators">Access operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operators/index.html#numeric-negation-operator">Numeric negation operator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operators/index.html#multiplication-and-division-operators">Multiplication and division operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operators/index.html#addition-and-subtraction-operators">Addition and subtraction operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operators/index.html#comparison-operators">Comparison operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operators/index.html#operators-for-working-with-data-sets">Operators for working with data sets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operators/index.html#logical-negation-operator">Logical negation operator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operators/index.html#logical-and-operator">Logical &#8220;AND&#8221; operator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operators/index.html#logical-or-operator">Logical &#8220;OR&#8221; operator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operators/index.html#conditional-operator">Conditional operator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operators/index.html#conditional-expression">Conditional expression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operators/index.html#string-concatenation-operator">String concatenation operator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operators/index.html#lambda-creation-operator">Lambda creation operator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operators/index.html#array-creation-operator">Array creation operator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operators/index.html#tuple-creation-operator">Tuple creation operator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="operators/index.html#associativity">Associativity</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="functions/index.html">Функции</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="functions/arithmetic_functions.html">Арифметические функции</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="functions/arithmetic_functions.html#plus-a-b-a-b">plus(a, b), оператор a + b</a></li>
-<li class="toctree-l3"><a class="reference internal" href="functions/arithmetic_functions.html#minus-a-b-a-b">minus(a, b), оператор a - b</a></li>
-<li class="toctree-l3"><a class="reference internal" href="functions/arithmetic_functions.html#multiply-a-b-a-b">multiply(a, b), оператор a * b</a></li>
-<li class="toctree-l3"><a class="reference internal" href="functions/arithmetic_functions.html#divide-a-b-a-b">divide(a, b), оператор a / b</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functions/index.html">Functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="functions/arithmetic_functions.html">Arithmetic functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="functions/arithmetic_functions.html#plus-a-b-a-b-operator">plus(a, b), a + b operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions/arithmetic_functions.html#minus-a-b-a-b-operator">minus(a, b), a - b operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions/arithmetic_functions.html#multiply-a-b-a-b-operator">multiply(a, b), a * b operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions/arithmetic_functions.html#divide-a-b-a-b-operator">divide(a, b), a / b operator</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/arithmetic_functions.html#intdiv-a-b">intDiv(a, b)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/arithmetic_functions.html#intdivorzero-a-b">intDivOrZero(a, b)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="functions/arithmetic_functions.html#modulo-a-b-a-b">modulo(a, b), оператор a % b</a></li>
-<li class="toctree-l3"><a class="reference internal" href="functions/arithmetic_functions.html#negate-a-a">negate(a), оператор -a</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions/arithmetic_functions.html#modulo-a-b-a-b-operator">modulo(a, b), a % b operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions/arithmetic_functions.html#negate-a-a-operator">negate(a), -a operator</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/arithmetic_functions.html#abs-a">abs(a)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="functions/array_functions.html">Функции по работе с массивами</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="functions/array_functions.html">Functions for working with arrays</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="functions/array_functions.html#empty">empty</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/array_functions.html#notempty">notEmpty</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/array_functions.html#length">length</a></li>
@@ -371,8 +363,8 @@
 <li class="toctree-l3"><a class="reference internal" href="functions/array_functions.html#arrayjoin-arr">arrayJoin(arr)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="functions/array_join.html">Функция arrayJoin</a></li>
-<li class="toctree-l2"><a class="reference internal" href="functions/bit_functions.html">Битовые функции</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="functions/array_join.html">arrayJoin function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions/bit_functions.html">Bit functions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="functions/bit_functions.html#bitand-a-b">bitAnd(a, b)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/bit_functions.html#bitor-a-b">bitOr(a, b)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/bit_functions.html#bitxor-a-b">bitXor(a, b)</a></li>
@@ -381,20 +373,20 @@
 <li class="toctree-l3"><a class="reference internal" href="functions/bit_functions.html#bitshiftright-a-b">bitShiftRight(a, b)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="functions/comparison_functions.html">Функции сравнения</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="functions/comparison_functions.html#equals-a-b-a-b">equals, оператор a = b и a == b</a></li>
-<li class="toctree-l3"><a class="reference internal" href="functions/comparison_functions.html#notequals-a-b-a-b">notEquals, оператор a != b и a &lt;&gt; b</a></li>
-<li class="toctree-l3"><a class="reference internal" href="functions/comparison_functions.html#less">less, оператор &lt;</a></li>
-<li class="toctree-l3"><a class="reference internal" href="functions/comparison_functions.html#greater">greater, оператор &gt;</a></li>
-<li class="toctree-l3"><a class="reference internal" href="functions/comparison_functions.html#lessorequals">lessOrEquals, оператор &lt;=</a></li>
-<li class="toctree-l3"><a class="reference internal" href="functions/comparison_functions.html#greaterorequals">greaterOrEquals, оператор &gt;=</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions/comparison_functions.html">Comparison functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="functions/comparison_functions.html#equals-a-b-and-a-b-operator">equals, a = b and a == b operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions/comparison_functions.html#notequals-a-b-and-a-b-operator">notEquals, a != b and a &lt;&gt; b operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions/comparison_functions.html#less-operator">less, &lt; operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions/comparison_functions.html#greater-operator">greater, &gt; operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions/comparison_functions.html#lessorequals-operator">lessOrEquals, &lt;= operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions/comparison_functions.html#greaterorequals-operator">greaterOrEquals, &gt;= operator</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="functions/conditional_functions.html">Условные функции</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="functions/conditional_functions.html">Conditional functions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="functions/conditional_functions.html#if-cond-then-else-cond-then-else">if(cond, then, else), оператор cond ? then : else</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="functions/date_time_functions.html">Функции для работы с датами и временем</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="functions/date_time_functions.html">Functions for working with dates and times</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="functions/date_time_functions.html#toyear">toYear</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/date_time_functions.html#tomonth">toMonth</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/date_time_functions.html#todayofmonth">toDayOfMonth</a></li>
@@ -402,6 +394,7 @@
 <li class="toctree-l3"><a class="reference internal" href="functions/date_time_functions.html#tohour">toHour</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/date_time_functions.html#tominute">toMinute</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/date_time_functions.html#tosecond">toSecond</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions/date_time_functions.html#tostartofday">toStartOfDay</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/date_time_functions.html#tomonday">toMonday</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/date_time_functions.html#tostartofmonth">toStartOfMonth</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/date_time_functions.html#tostartofquarter">toStartOfQuarter</a></li>
@@ -424,7 +417,7 @@
 <li class="toctree-l3"><a class="reference internal" href="functions/date_time_functions.html#timeslots-starttime-duration">timeSlots(StartTime, Duration)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="functions/encoding_functions.html">Функции кодирования</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="functions/encoding_functions.html">Encoding functions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="functions/encoding_functions.html#hex">hex</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/encoding_functions.html#unhex-str">unhex(str)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/encoding_functions.html#uuidstringtonum-str">UUIDStringToNum(str)</a></li>
@@ -433,7 +426,7 @@
 <li class="toctree-l3"><a class="reference internal" href="functions/encoding_functions.html#bitmasktoarray-num">bitmaskToArray(num)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="functions/ext_dict_functions.html">Функции для работы с внешними словарями</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="functions/ext_dict_functions.html">Functions for working with external dictionaries</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="functions/ext_dict_functions.html#dictgetuint8-dictgetuint16-dictgetuint32-dictgetuint64">dictGetUInt8, dictGetUInt16, dictGetUInt32, dictGetUInt64</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/ext_dict_functions.html#dictgetint8-dictgetint16-dictgetint32-dictgetint64">dictGetInt8, dictGetInt16, dictGetInt32, dictGetInt64</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/ext_dict_functions.html#dictgetfloat32-dictgetfloat64">dictGetFloat32, dictGetFloat64</a></li>
@@ -445,7 +438,7 @@
 <li class="toctree-l3"><a class="reference internal" href="functions/ext_dict_functions.html#dicthas">dictHas</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="functions/hash_functions.html">Функции хэширования</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="functions/hash_functions.html">Hash functions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="functions/hash_functions.html#halfmd5">halfMD5</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/hash_functions.html#md5">MD5</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/hash_functions.html#siphash64">sipHash64</a></li>
@@ -459,8 +452,8 @@
 <li class="toctree-l3"><a class="reference internal" href="functions/hash_functions.html#urlhash-url-n">URLHash(url[, N])</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="functions/higher_order_functions.html">Функции высшего порядка</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="functions/higher_order_functions.html#lambda-params-expr">Оператор -&gt;, функция lambda(params, expr)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions/higher_order_functions.html">Higher-order functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="functions/higher_order_functions.html#operator-lambda-params-expr-function">-&gt; operator, lambda(params, expr) function</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/higher_order_functions.html#arraymap-func-arr1">arrayMap(func, arr1, ...)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/higher_order_functions.html#arrayfilter-func-arr1">arrayFilter(func, arr1, ...)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/higher_order_functions.html#arraycount-func-arr1">arrayCount([func,] arr1, ...)</a></li>
@@ -471,13 +464,13 @@
 <li class="toctree-l3"><a class="reference internal" href="functions/higher_order_functions.html#arrayfirstindex-func-arr1">arrayFirstIndex(func, arr1, ...)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="functions/in_functions.html">Функции для реализации оператора IN.</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="functions/in_functions.html">Functions for implementing the IN operator</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="functions/in_functions.html#in-notin-globalin-globalnotin">in, notIn, globalIn, globalNotIn</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/in_functions.html#tuple-x-y-x-y">tuple(x, y, ...), оператор (x, y, ...)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/in_functions.html#tupleelement-tuple-n-x-n">tupleElement(tuple, n), оператор x.N</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="functions/ip_address_functions.html">Функции для работы с IP-адресами</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="functions/ip_address_functions.html">Functions for working with IP addresses</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="functions/ip_address_functions.html#ipv4numtostring-num">IPv4NumToString(num)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/ip_address_functions.html#ipv4stringtonum-s">IPv4StringToNum(s)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/ip_address_functions.html#ipv4numtostringclassc-num">IPv4NumToStringClassC(num)</a></li>
@@ -485,7 +478,7 @@
 <li class="toctree-l3"><a class="reference internal" href="functions/ip_address_functions.html#ipv6stringtonum-s">IPv6StringToNum(s)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="functions/json_functions.html">Функции для работы с JSON.</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="functions/json_functions.html">Functions for working with JSON.</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="functions/json_functions.html#visitparamhas-params-name">visitParamHas(params, name)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/json_functions.html#visitparamextractuint-params-name">visitParamExtractUInt(params, name)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/json_functions.html#visitparamextractint-params-name">visitParamExtractInt(params, name)</a></li>
@@ -495,14 +488,14 @@
 <li class="toctree-l3"><a class="reference internal" href="functions/json_functions.html#visitparamextractstring-params-name">visitParamExtractString(params, name)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="functions/logical_functions.html">Логические функции</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="functions/logical_functions.html#and-and">and, оператор AND</a></li>
-<li class="toctree-l3"><a class="reference internal" href="functions/logical_functions.html#or-or">or, оператор OR</a></li>
-<li class="toctree-l3"><a class="reference internal" href="functions/logical_functions.html#not-not">not, оператор NOT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions/logical_functions.html">Logical functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="functions/logical_functions.html#and-and-operator">and, AND operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions/logical_functions.html#or-or-operator">or, OR operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions/logical_functions.html#not-not-operator">not, NOT operator</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/logical_functions.html#xor">xor</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="functions/math_functions.html">Математические функции</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="functions/math_functions.html">Mathematical functions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="functions/math_functions.html#e">e()</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/math_functions.html#pi">pi()</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/math_functions.html#exp-x">exp(x)</a></li>
@@ -526,7 +519,7 @@
 <li class="toctree-l3"><a class="reference internal" href="functions/math_functions.html#pow-x-y">pow(x, y)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="functions/other_functions.html">Прочие функции</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="functions/other_functions.html">Other functions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="functions/other_functions.html#hostname">hostName()</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/other_functions.html#visiblewidth-x">visibleWidth(x)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/other_functions.html#totypename-x">toTypeName(x)</a></li>
@@ -548,14 +541,17 @@
 <li class="toctree-l3"><a class="reference internal" href="functions/other_functions.html#version">version()</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/other_functions.html#rownumberinallblocks">rowNumberInAllBlocks()</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/other_functions.html#runningdifference-x">runningDifference(x)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions/other_functions.html#macnumtostring-num">MACNumToString(num)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions/other_functions.html#macstringtonum-s">MACStringToNum(s)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions/other_functions.html#macstringtooui-s">MACStringToOUI(s)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="functions/random_functions.html">Функции генерации псевдослучайных чисел</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="functions/random_functions.html">Functions for generating pseudo-random numbers</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="functions/random_functions.html#rand">rand</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/random_functions.html#rand64">rand64</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="functions/rounding_functions.html">Функции округления</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="functions/rounding_functions.html">Rounding functions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="functions/rounding_functions.html#floor-x-n">floor(x[, N])</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/rounding_functions.html#ceil-x-n">ceil(x[, N])</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/rounding_functions.html#round-x-n">round(x[, N])</a></li>
@@ -564,14 +560,14 @@
 <li class="toctree-l3"><a class="reference internal" href="functions/rounding_functions.html#roundage-num">roundAge(num)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="functions/splitting_merging_functions.html">Функции разбиения и слияния строк и массивов</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="functions/splitting_merging_functions.html">Functions for splitting and merging strings and arrays</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="functions/splitting_merging_functions.html#splitbychar-separator-s">splitByChar(separator, s)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/splitting_merging_functions.html#splitbystring-separator-s">splitByString(separator, s)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/splitting_merging_functions.html#arraystringconcat-arr-separator">arrayStringConcat(arr[, separator])</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/splitting_merging_functions.html#alphatokens-s">alphaTokens(s)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="functions/string_functions.html">Функции для работы со строками</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="functions/string_functions.html">Functions for working with strings</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="functions/string_functions.html#empty">empty</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/string_functions.html#notempty">notEmpty</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/string_functions.html#length">length</a></li>
@@ -589,14 +585,14 @@
 <li class="toctree-l3"><a class="reference internal" href="functions/string_functions.html#convertcharset-s-from-to">convertCharset(s, from, to)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="functions/string_replace_functions.html">Функции поиска и замены в строках</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="functions/string_replace_functions.html">Functions for searching and replacing in strings</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="functions/string_replace_functions.html#replaceone-haystack-pattern-replacement">replaceOne(haystack, pattern, replacement)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/string_replace_functions.html#replaceall-haystack-pattern-replacement">replaceAll(haystack, pattern, replacement)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/string_replace_functions.html#replaceregexpone-haystack-pattern-replacement">replaceRegexpOne(haystack, pattern, replacement)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/string_replace_functions.html#replaceregexpall-haystack-pattern-replacement">replaceRegexpAll(haystack, pattern, replacement)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="functions/string_search_functions.html">Функции поиска в строках</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="functions/string_search_functions.html">Functions for searching strings</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="functions/string_search_functions.html#position-haystack-needle">position(haystack, needle)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/string_search_functions.html#positionutf8-haystack-needle">positionUTF8(haystack, needle)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/string_search_functions.html#match-haystack-pattern">match(haystack, pattern)</a></li>
@@ -606,7 +602,7 @@
 <li class="toctree-l3"><a class="reference internal" href="functions/string_search_functions.html#notlike-haystack-pattern-haystack-not-like-pattern">notLike(haystack, pattern), оператор haystack NOT LIKE pattern</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="functions/type_conversion_functions.html">Функции преобразования типов</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="functions/type_conversion_functions.html">Type conversion functions</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="functions/type_conversion_functions.html#touint8-touint16-touint32-touint64">toUInt8, toUInt16, toUInt32, toUInt64</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/type_conversion_functions.html#toint8-toint16-toint32-toint64">toInt8, toInt16, toInt32, toInt64</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/type_conversion_functions.html#tofloat32-tofloat64">toFloat32, toFloat64</a></li>
@@ -623,8 +619,8 @@
 <li class="toctree-l3"><a class="reference internal" href="functions/type_conversion_functions.html#cast-x-t">CAST(x, t)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="functions/url_functions.html">Функции для работы с URL</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="functions/url_functions.html#id1">Функции, извлекающие часть URL-а.</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="functions/url_functions.html">Functions for working with URLs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="functions/url_functions.html#url">Функции, извлекающие часть URL-а.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="functions/url_functions.html#protocol">protocol</a></li>
 <li class="toctree-l4"><a class="reference internal" href="functions/url_functions.html#domain">domain</a></li>
 <li class="toctree-l4"><a class="reference internal" href="functions/url_functions.html#domainwithoutwww">domainWithoutWWW</a></li>
@@ -644,7 +640,7 @@
 <li class="toctree-l4"><a class="reference internal" href="functions/url_functions.html#decodeurlcomponent-url">decodeURLComponent(URL)</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="functions/url_functions.html#id2">Функции, удаляющие часть из URL-а.</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="functions/url_functions.html#functions-that-remove-part-of-a-url">Functions that remove part of a URL.</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="functions/url_functions.html#cutwww">cutWWW</a></li>
 <li class="toctree-l4"><a class="reference internal" href="functions/url_functions.html#cutquerystring">cutQueryString</a></li>
 <li class="toctree-l4"><a class="reference internal" href="functions/url_functions.html#cutfragment">cutFragment</a></li>
@@ -654,8 +650,8 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="functions/ym_dict_functions.html">Функции для работы со словарями Яндекс.Метрики</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="functions/ym_dict_functions.html#id2">Множественные геобазы</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions/ym_dict_functions.html">Functions for working with Yandex.Metrica dictionaries</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="functions/ym_dict_functions.html#multiple-geobases">Multiple geobases</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/ym_dict_functions.html#regiontocity-id-geobase">regionToCity(id[, geobase])</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/ym_dict_functions.html#regiontoarea-id-geobase">regionToArea(id[, geobase])</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/ym_dict_functions.html#regiontodistrict-id-geobase">regionToDistrict(id[, geobase])</a></li>
@@ -665,25 +661,19 @@
 <li class="toctree-l3"><a class="reference internal" href="functions/ym_dict_functions.html#regionin-lhs-rhs-geobase">regionIn(lhs, rhs[, geobase])</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/ym_dict_functions.html#regionhierarchy-id-geobase">regionHierarchy(id[, geobase])</a></li>
 <li class="toctree-l3"><a class="reference internal" href="functions/ym_dict_functions.html#regiontoname-id-lang">regionToName(id[, lang])</a></li>
-<li class="toctree-l3"><a class="reference internal" href="functions/ym_dict_functions.html#ostoroot">OSToRoot</a></li>
-<li class="toctree-l3"><a class="reference internal" href="functions/ym_dict_functions.html#osin-lhs-rhs">OSIn(lhs, rhs)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="functions/ym_dict_functions.html#oshierarchy">OSHierarchy</a></li>
-<li class="toctree-l3"><a class="reference internal" href="functions/ym_dict_functions.html#setoroot">SEToRoot</a></li>
-<li class="toctree-l3"><a class="reference internal" href="functions/ym_dict_functions.html#sein-lhs-rhs">SEIn(lhs, rhs)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="functions/ym_dict_functions.html#sehierarchy">SEHierarchy</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="functions/index.html#id2">Строгая типизация</a></li>
-<li class="toctree-l2"><a class="reference internal" href="functions/index.html#id3">Склейка одинаковых выражений</a></li>
-<li class="toctree-l2"><a class="reference internal" href="functions/index.html#id4">Типы результата</a></li>
-<li class="toctree-l2"><a class="reference internal" href="functions/index.html#id5">Константы</a></li>
-<li class="toctree-l2"><a class="reference internal" href="functions/index.html#id6">Неизменяемость</a></li>
-<li class="toctree-l2"><a class="reference internal" href="functions/index.html#id7">Обработка ошибок</a></li>
-<li class="toctree-l2"><a class="reference internal" href="functions/index.html#id8">Вычисление выражений-аргументов</a></li>
-<li class="toctree-l2"><a class="reference internal" href="functions/index.html#id9">Выполнение функций при распределённой обработке запроса</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions/index.html#strong-typing">Strong typing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions/index.html#common-subexpression-elimination">Common subexpression elimination</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions/index.html#types-of-results">Types of results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions/index.html#constants">Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions/index.html#immutability">Immutability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions/index.html#error-handling">Error handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions/index.html#evaluation-of-argument-expressions">Evaluation of argument expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions/index.html#performing-functions-for-distributed-query-processing">Performing functions for distributed query processing</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="agg_functions/index.html">Агрегатные функции</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="agg_functions/index.html">Aggregate functions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="agg_functions/index.html#count">count()</a></li>
 <li class="toctree-l2"><a class="reference internal" href="agg_functions/index.html#any-x">any(x)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="agg_functions/index.html#anylast-x">anyLast(x)</a></li>
@@ -717,37 +707,38 @@
 <li class="toctree-l2"><a class="reference internal" href="agg_functions/index.html#corr-x-y">corr(x, y)</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="agg_functions/index.html#id2">Параметрические агрегатные функции</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="agg_functions/index.html#sequencematch-pattern-time-cond1-cond2">sequenceMatch(pattern)(time, cond1, cond2, ...)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="agg_functions/index.html#sequencecount-pattern-time-cond1-cond2">sequenceCount(pattern)(time, cond1, cond2, ...)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="agg_functions/index.html#uniqupto-n-x">uniqUpTo(N)(x)</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="agg_functions/index.html#id3">Комбинаторы агрегатных функций</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="agg_functions/index.html#if">Комбинатор -If. Условные агрегатные функции</a></li>
-<li class="toctree-l2"><a class="reference internal" href="agg_functions/index.html#array">Комбинатор -Array. Агрегатные функции для аргументов-массивов</a></li>
-<li class="toctree-l2"><a class="reference internal" href="agg_functions/index.html#state">Комбинатор -State.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="agg_functions/index.html#merge">Комбинатор -Merge.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="agg_functions/index.html#mergestate">Комбинатор -MergeState.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="agg_functions/index.html#if-combinator-conditional-aggregate-functions">-If combinator. Conditional aggregate functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="agg_functions/index.html#array-combinator-aggregate-functions-for-array-arguments">-Array combinator. Aggregate functions for array arguments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="agg_functions/index.html#state-combinator">-State combinator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="agg_functions/index.html#merge-combinator">-Merge combinator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="agg_functions/index.html#mergestate-combinator">-MergeState combinator</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="dicts/index.html">Словари</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="dicts/external_dicts.html">Внешние словари</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="dicts/index.html">Dictionaries</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dicts/external_dicts.html">External dictionaries</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="dicts/external_dicts.html#flat">flat</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dicts/external_dicts.html#hashed">hashed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dicts/external_dicts.html#cache">cache</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dicts/external_dicts.html#range-hashed">range_hashed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dicts/external_dicts.html#ip-trie">ip_trie</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dicts/external_dicts.html#complex-key-hashed">complex_key_hashed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="dicts/external_dicts.html#complex-key-cache">complex_key_cache</a></li>
-<li class="toctree-l3"><a class="reference internal" href="dicts/external_dicts.html#id4">Примечания</a></li>
-<li class="toctree-l3"><a class="reference internal" href="dicts/external_dicts.html#id5">Словари с составными ключами</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dicts/external_dicts.html#notes">Notes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dicts/external_dicts.html#dictionaries-with-complex-keys">Dictionaries with complex keys</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="dicts/internal_dicts.html">Встроенные словари</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dicts/internal_dicts.html">Internal dictionaries</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="settings/index.html">Настройки</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="settings/query_complexity.html">Ограничения на сложность запроса</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="settings/index.html">Settings</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="settings/query_complexity.html">Restrictions on query complexity</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="settings/query_complexity.html#readonly">readonly</a></li>
 <li class="toctree-l3"><a class="reference internal" href="settings/query_complexity.html#max-memory-usage">max_memory_usage</a></li>
 <li class="toctree-l3"><a class="reference internal" href="settings/query_complexity.html#max-rows-to-read">max_rows_to_read</a></li>
@@ -815,12 +806,12 @@
 <li class="toctree-l2"><a class="reference internal" href="settings/settings.html#min-count-to-compile">min_count_to_compile</a></li>
 <li class="toctree-l2"><a class="reference internal" href="settings/settings.html#input-format-skip-unknown-fields">input_format_skip_unknown_fields</a></li>
 <li class="toctree-l2"><a class="reference internal" href="settings/settings.html#output-format-json-quote-64bit-integers">output_format_json_quote_64bit_integers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="settings/settings_profiles.html">Профили настроек</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings/settings_profiles.html">Settings profiles</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="configuration_files.html">Конфигурационные файлы</a></li>
-<li class="toctree-l1"><a class="reference internal" href="access_rights.html">Права доступа</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quotas.html">Квоты</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quotas.html">Quotas</a></li>
 </ul>
 </div>
 </div>
@@ -829,17 +820,72 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Next topic</h4>
-  <p class="topless"><a href="introduction/index.html"
-                        title="next chapter">Введение</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/index.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+<p class="logo">
+  <a href="#">
+    <img class="logo" src="_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quotas.html">Quotas</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="introduction/index.html" title="next chapter">Introduction</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -856,21 +902,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="introduction/index.html" title="Введение"
-             >next</a> |</li>
-        <li><a href="#">ClickHouse 1 documentation</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

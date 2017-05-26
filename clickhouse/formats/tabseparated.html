@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>TabSeparated &mdash; ClickHouse 1 documentation</title>
+    <title>TabSeparated &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,61 +23,51 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Форматы" href="index.html" />
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Formats" href="index.html" />
     <link rel="next" title="TabSeparatedRaw" href="tabseparatedraw.html" />
-    <link rel="prev" title="RowBinary" href="rowbinary.html" /> 
+    <link rel="prev" title="RowBinary" href="rowbinary.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="tabseparatedraw.html" title="TabSeparatedRaw"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="rowbinary.html" title="RowBinary"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Форматы</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="tabseparated">
 <h1>TabSeparated<a class="headerlink" href="#tabseparated" title="Permalink to this headline">¶</a></h1>
-<p>В TabSeparated формате данные пишутся по строкам. Каждая строчка содержит значения, разделённые табами. После каждого значения идёт таб, кроме последнего значения в строке, после которого идёт перевод строки. Везде подразумеваются исключительно unix-переводы строк. Последняя строка также обязана содержать перевод строки на конце. Значения пишутся в текстовом виде, без обрамляющих кавычек, с экранированием служебных символов.</p>
-<p>Целые числа пишутся в десятичной форме. Числа могут содержать лишний символ &#8220;+&#8221; в начале (игнорируется при парсинге, а при форматировании не пишется). Неотрицательные числа не могут содержать знак отрицания. При чтении допустим парсинг пустой строки, как числа ноль, или (для знаковых типов) строки, состоящей из одного минуса, как числа ноль. Числа, не помещающиеся в соответствующий тип данных, могут парсится, как некоторое другое число, без сообщения об ошибке.</p>
-<p>Числа с плавающей запятой пишутся в десятичной форме. При этом, десятичный разделитель - точка. Поддерживается экспоненциальная запись, а также inf, +inf, -inf, nan. Запись числа с плавающей запятой может начинаться или заканчиваться на десятичную точку.
-При форматировании возможна потеря точности чисел с плавающей запятой.
-При парсинге, допустимо чтение не обязательно наиболее близкого к десятичной записи машинно-представимого числа.</p>
-<p>Даты выводятся в формате YYYY-MM-DD, парсятся в том же формате, но с любыми символами в качестве разделителей.
-Даты-с-временем выводятся в формате YYYY-MM-DD hh:mm:ss, парсятся в том же формате, но с любыми символами в качестве разделителей.
-Всё это происходит в системном часовом поясе на момент старта клиента (если клиент занимается форматированием данных) или сервера. Для дат-с-временем не указывается, действует ли daylight saving time. То есть, если в дампе есть времена во время перевода стрелок назад, то дамп не соответствует данным однозначно, и при парсинге будет выбрано какое-либо из двух времён.
-При парсинге, некорректные даты и даты-с-временем могут парситься с естественным переполнением или как нулевые даты/даты-с-временем без сообщения об ошибке.</p>
-<p>В качестве исключения, поддерживается также парсинг даты-с-временем в формате unix timestamp, если он состоит ровно из 10 десятичных цифр. Результат не зависит от часового пояса. Различение форматов YYYY-MM-DD hh:mm:ss и NNNNNNNNNN делается автоматически.</p>
-<p>Строки выводятся с экранированием спец-символов с помощью обратного слеша. При выводе, используются следующие escape-последовательности: <tt class="docutils literal"><span class="pre">\b</span></tt>, <tt class="docutils literal"><span class="pre">\f</span></tt>, <tt class="docutils literal"><span class="pre">\r</span></tt>, <tt class="docutils literal"><span class="pre">\n</span></tt>, <tt class="docutils literal"><span class="pre">\t</span></tt>, <tt class="docutils literal"><span class="pre">\0</span></tt>, <tt class="docutils literal"><span class="pre">\'</span></tt>, <tt class="docutils literal"><span class="pre">\\</span></tt>. При парсинге, также поддерживаются последовательности <tt class="docutils literal"><span class="pre">\a</span></tt>, <tt class="docutils literal"><span class="pre">\v</span></tt>, а также <tt class="docutils literal"><span class="pre">\xHH</span></tt> (hex escape-последовательности) и любые последовательности вида <tt class="docutils literal"><span class="pre">\c</span></tt>, где <tt class="docutils literal"><span class="pre">c</span></tt> - любой символ - такие последовательности преобразуется в <tt class="docutils literal"><span class="pre">c</span></tt>. Таким образом, при чтении поддерживаются форматы, где перевод строки может быть записан как <tt class="docutils literal"><span class="pre">\n</span></tt> и как <tt class="docutils literal"><span class="pre">\</span></tt> и перевод строки. Например, строка <tt class="docutils literal"><span class="pre">Hello</span> <span class="pre">world</span></tt>, где между словами вместо пробела стоит перевод строки, может быть считана в любом из следующих вариантов:</p>
+<p>In TabSeparated format, data is written by row. Each row contains values separated by tabs. Each value is follow by a tab, except the last value in the row, which is followed by a line break. Strictly Unix line breaks are assumed everywhere. The last row also must contain a line break at the end. Values are written in text format, without enclosing quotation marks, and with special characters escaped.</p>
+<p>Numbers are written in decimal form. Numbers may contain an extra &#8220;+&#8221; symbol at the beginning (but it is not recorded during an output). Non-negative numbers can&#8217;t contain the negative sign. When parsing, it is allowed to parse an empty string as a zero, or (for signed types) a string consisting of just a minus sign as a zero. Numbers that do not fit into the corresponding data type may be parsed as a different number, without an error message.</p>
+<p>Floating-point numbers are formatted in decimal form. The dot is used as the decimal separator. Exponential entries are supported, as are &#8216;inf&#8217;, &#8216;+inf&#8217;, &#8216;-inf&#8217;, and &#8216;nan&#8217;. An entry of floating-point numbers may begin or end with a decimal point.
+During formatting, accuracy may be lost on floating-point numbers.
+During parsing, a result is not necessarily the nearest machine-representable number.</p>
+<p>Dates are formatted in YYYY-MM-DD format and parsed in the same format, but with any characters as separators.
+DateTimes are formatted in the format YYYY-MM-DD hh:mm:ss and parsed in the same format, but with any characters as separators.
+This all occurs in the system time zone at the time the client or server starts (depending on which one formats data). For DateTimes, daylight saving time is not specified. So if a dump has times during daylight saving time, the dump does not unequivocally match the data, and parsing will select one of the two times.
+During a parsing operation, incorrect dates and dates with times can be parsed with natural overflow or as null dates and times, without an error message.</p>
+<p>As an exception, parsing DateTime is also supported in Unix timestamp format, if it consists of exactly 10 decimal digits. The result is not time zone-dependent. The formats <code class="docutils literal"><span class="pre">YYYY-MM-DD</span> <span class="pre">hh:mm:ss</span></code> and <code class="docutils literal"><span class="pre">NNNNNNNNNN</span></code> are differentiated automatically.</p>
+<p>Strings are parsed and formatted with backslash-escaped special characters. The following escape sequences are used while formatting: <code class="docutils literal"><span class="pre">\b</span></code>, <code class="docutils literal"><span class="pre">\f</span></code>, <code class="docutils literal"><span class="pre">\r</span></code>, <code class="docutils literal"><span class="pre">\n</span></code>, <code class="docutils literal"><span class="pre">\t</span></code>, <code class="docutils literal"><span class="pre">\0</span></code>, <code class="docutils literal"><span class="pre">\'</span></code>, and <code class="docutils literal"><span class="pre">\\</span></code>. For parsing, also supported a, v and xHH (hex escape sequence) and any sequences of the type c where c is any character (these sequences are converted to c). This means that parsing supports formats where a line break can be written as n or as and a line break. For example, the string &#8216;Hello world&#8217; with a line break between the words instead of a space can be retrieved in any of the following variations:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>Hello\nworld
 
 Hello\
 world
 </pre></div>
 </div>
-<p>Второй вариант поддерживается, так как его использует MySQL при записи tab-separated дампа.</p>
-<p>Минимальный набор символов, которых вам необходимо экранировать при передаче в TabSeparated формате: таб, перевод строки (LF) и обратный слеш.</p>
-<p>Экранируется лишь небольшой набор символов. Вы можете легко наткнуться на строковое значение, которое испортит ваш терминал при выводе в него.</p>
-<p>Массивы форматируются в виде списка значений через запятую в квадратных скобках. Элементы массива - числа форматируются как обычно, а даты, даты-с-временем и строки - в одинарных кавычках с такими же правилами экранирования, как указано выше.</p>
-<p>Формат TabSeparated удобен для обработки данных произвольными программами и скриптами. Он используется по умолчанию в HTTP-интерфейсе, а также в batch-режиме клиента командной строки. Также формат позволяет переносить данные между разными СУБД. Например, вы можете получить дамп из MySQL и загрузить его в ClickHouse, или наоборот.</p>
-<p>Формат TabSeparated поддерживает вывод тотальных значений (при использовании WITH TOTALS) и экстремальных значений (при настройке extremes выставленной в 1). В этих случаях, после основных данных выводятся тотальные значения, и экстремальные значения. Основной результат, тотальные значения и экстремальные значения, отделяются друг от друга пустой строкой. Пример:</p>
-<p><tt class="docutils literal"><span class="pre">SELECT</span> <span class="pre">EventDate,</span> <span class="pre">count()</span> <span class="pre">AS</span> <span class="pre">c</span> <span class="pre">FROM</span> <span class="pre">test.hits</span> <span class="pre">GROUP</span> <span class="pre">BY</span> <span class="pre">EventDate</span> <span class="pre">WITH</span> <span class="pre">TOTALS</span> <span class="pre">ORDER</span> <span class="pre">BY</span> <span class="pre">EventDate</span> <span class="pre">FORMAT</span> <span class="pre">TabSeparated</span></tt></p>
+<p>The second variant is supported because MySQL uses it when writing tab-separated dumps.</p>
+<p>Only a small set of symbols are escaped. You can easily stumble onto a string value that your terminal will ruin in output.</p>
+<p>Minimum set of symbols that you must escape in TabSeparated format is tab, newline (LF) and backslash.</p>
+<p>Arrays are formatted as a list of comma-separated values in square brackets. Number items in the array are formatted as normally, but dates, dates with times, and strings are formatted in single quotes with the same escaping rules as above.</p>
+<p>The TabSeparated format is convenient for processing data using custom programs and scripts. It is used by default in the HTTP interface, and in the command-line client&#8217;s batch mode. This format also allows transferring data between different DBMSs. For example, you can get a dump from MySQL and upload it to ClickHouse, or vice versa.</p>
+<p>The TabSeparated format supports outputting total values (when using WITH TOTALS) and extreme values (when &#8216;extremes&#8217; is set to 1). In these cases, the total values and extremes are output after the main data. The main result, total values, and extremes are separated from each other by an empty line. Example:</p>
+<p><code class="docutils literal"><span class="pre">SELECT</span> <span class="pre">EventDate,</span> <span class="pre">count()</span> <span class="pre">AS</span> <span class="pre">c</span> <span class="pre">FROM</span> <span class="pre">test.hits</span> <span class="pre">GROUP</span> <span class="pre">BY</span> <span class="pre">EventDate</span> <span class="pre">WITH</span> <span class="pre">TOTALS</span> <span class="pre">ORDER</span> <span class="pre">BY</span> <span class="pre">EventDate</span> <span class="pre">FORMAT</span> <span class="pre">TabSeparated</span></code></p>
 <div class="highlight-sql"><div class="highlight"><pre><span></span><span class="mi">2014</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">17</span>      <span class="mi">1406958</span>
 <span class="mi">2014</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">18</span>      <span class="mi">1383658</span>
 <span class="mi">2014</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">19</span>      <span class="mi">1405797</span>
@@ -92,27 +82,108 @@ world
 <span class="mi">2014</span><span class="o">-</span><span class="mi">03</span><span class="o">-</span><span class="mi">23</span>      <span class="mi">1406958</span>
 </pre></div>
 </div>
-<p>Этот формат также доступен под именем <tt class="docutils literal"><span class="pre">TSV</span></tt>.</p>
+<p>It&#8217;s also available as <code class="docutils literal"><span class="pre">TSV</span></code>.</p>
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="rowbinary.html"
-                        title="previous chapter">RowBinary</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="tabseparatedraw.html"
-                        title="next chapter">TabSeparatedRaw</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/formats/tabseparated.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Formats</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="blocktabseparated.html">BlockTabSeparated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="csv.html">CSV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="csvwithnames.html">CSVWithNames</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json.html">JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsoncompact.html">JSONCompact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsoneachrow.html">JSONEachRow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="native.html">Native</a></li>
+<li class="toctree-l2"><a class="reference internal" href="null.html">Null</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pretty.html">Pretty</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prettycompact.html">PrettyCompact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prettycompactmonoblock.html">PrettyCompactMonoBlock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prettynoescapes.html">PrettyNoEscapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prettynoescapes.html#prettycompactnoescapes">PrettyCompactNoEscapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prettynoescapes.html#prettyspacenoescapes">PrettySpaceNoEscapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prettyspace.html">PrettySpace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rowbinary.html">RowBinary</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">TabSeparated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tabseparatedraw.html">TabSeparatedRaw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tabseparatedwithnames.html">TabSeparatedWithNames</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tabseparatedwithnamesandtypes.html">TabSeparatedWithNamesAndTypes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tskv.html">TSKV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="values.html">Values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vertical.html">Vertical</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xml.html">XML</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Formats</a><ul>
+      <li>Previous: <a href="rowbinary.html" title="previous chapter">RowBinary</a></li>
+      <li>Next: <a href="tabseparatedraw.html" title="next chapter">TabSeparatedRaw</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -129,25 +200,13 @@ world
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="tabseparatedraw.html" title="TabSeparatedRaw"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="rowbinary.html" title="RowBinary"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Форматы</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

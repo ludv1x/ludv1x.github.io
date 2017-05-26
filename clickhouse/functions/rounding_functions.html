@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Функции округления &mdash; ClickHouse 1 documentation</title>
+    <title>Rounding functions &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,71 +23,60 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Функции" href="index.html" />
-    <link rel="next" title="Функции разбиения и слияния строк и массивов" href="splitting_merging_functions.html" />
-    <link rel="prev" title="Функции генерации псевдослучайных чисел" href="random_functions.html" /> 
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Functions" href="index.html" />
+    <link rel="next" title="Functions for splitting and merging strings and arrays" href="splitting_merging_functions.html" />
+    <link rel="prev" title="Functions for generating pseudo-random numbers" href="random_functions.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="splitting_merging_functions.html" title="Функции разбиения и слияния строк и массивов"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="random_functions.html" title="Функции генерации псевдослучайных чисел"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Функции</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="id1">
-<h1>Функции округления<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="rounding-functions">
+<h1>Rounding functions<a class="headerlink" href="#rounding-functions" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="floor-x-n">
 <h2>floor(x[, N])<a class="headerlink" href="#floor-x-n" title="Permalink to this headline">¶</a></h2>
-<p>Возвращает наибольшее круглое число, которое меньше или равно, чем x.
-Круглым называется число, кратное 1 / 10N или ближайшее к нему число соответствующего типа данных, если 1 / 10N не представимо точно.
-N - целочисленная константа, не обязательный параметр. По умолчанию - ноль, что означает - округлять до целого числа.
-N может быть отрицательным.</p>
-<p>Примеры: <tt class="docutils literal"><span class="pre">floor(123.45,</span> <span class="pre">1)</span> <span class="pre">=</span> <span class="pre">123.4,</span> <span class="pre">floor(123.45,</span> <span class="pre">-1)</span> <span class="pre">=</span> <span class="pre">120.</span></tt></p>
-<p><tt class="docutils literal"><span class="pre">x</span></tt> - любой числовой тип. Результат - число того же типа.
-Для целочисленных аргументов имеет смысл округление с отрицательным значением N (для неотрицательных N, функция ничего не делает).
-В случае переполнения при округлении (например, floor(-128, -1)), возвращается implementation specific результат.</p>
+<p>Returns a rounder number that is less than or equal to &#8216;x&#8217;.
+A round number is a multiple of 1 / 10N, or the nearest number of the appropriate data type <code class="docutils literal"><span class="pre">if</span> <span class="pre">1</span> <span class="pre">/</span> <span class="pre">10N</span></code> isn&#8217;t exact.
+&#8216;N&#8217; is an integer constant, optional parameter. By default it is zero, which means to round to an integer.
+&#8216;N&#8217; may be negative.</p>
+<p>Examples: <code class="docutils literal"><span class="pre">floor(123.45,</span> <span class="pre">1)</span> <span class="pre">=</span> <span class="pre">123.4,</span> <span class="pre">floor(123.45,</span> <span class="pre">-1)</span> <span class="pre">=</span> <span class="pre">120</span></code>.</p>
+<p>&#8216;x&#8217; is any numeric type. The result is a number of the same type.
+For integer arguments, it makes sense to round with a negative &#8216;N&#8217; value (for non-negative &#8216;N&#8217;, the function doesn&#8217;t do anything).
+If rounding causes overflow (for example, <code class="docutils literal"><span class="pre">floor(-128,</span> <span class="pre">-1))</span></code>, an implementation-specific result is returned.</p>
 </div>
 <div class="section" id="ceil-x-n">
 <h2>ceil(x[, N])<a class="headerlink" href="#ceil-x-n" title="Permalink to this headline">¶</a></h2>
-<p>Возвращает наименьшее круглое число, которое больше или равно, чем x.
-В остальном, аналогично функции floor, см. выше.</p>
+<p>Returns the smallest round number that is greater than or equal to &#8216;x&#8217;. In every other way, it is the same as the &#8216;floor&#8217; function (see above)..</p>
 </div>
 <div class="section" id="round-x-n">
 <h2>round(x[, N])<a class="headerlink" href="#round-x-n" title="Permalink to this headline">¶</a></h2>
-<p>Возвращает ближайшее к num круглое число, которое может быть меньше или больше или равно x.
-Если x находится посередине от ближайших круглых чисел, то возвращается какое-либо одно из них (implementation specific).
-Число -0. может считаться или не считаться круглым (implementation specific).
-В остальном, аналогично функциям floor и ceil, см. выше.</p>
+<p>Returns the round number nearest to &#8216;num&#8217;, which may be less than, greater than, or equal to &#8216;x&#8217;.
+If &#8216;x&#8217; is exactly in the middle between the nearest round numbers, one of them is returned (implementation-specific).
+The number &#8216;-0.&#8217; may or may not be considered round (implementation-specific).
+In every other way, this function is the same as &#8216;floor&#8217; and &#8216;ceil&#8217; described above.</p>
 </div>
 <div class="section" id="roundtoexp2-num">
 <h2>roundToExp2(num)<a class="headerlink" href="#roundtoexp2-num" title="Permalink to this headline">¶</a></h2>
-<p>Принимает число. Если число меньше единицы - возвращает 0. Иначе округляет число вниз до ближайшей (целой неотрицательной) степени двух.</p>
+<p>Accepts a number. If the number is less than one, it returns 0. Otherwise, it rounds the number down to the nearest (whole non-negative) degree of two.</p>
 </div>
 <div class="section" id="roundduration-num">
 <h2>roundDuration(num)<a class="headerlink" href="#roundduration-num" title="Permalink to this headline">¶</a></h2>
-<p>Принимает число. Если число меньше единицы - возвращает 0. Иначе округляет число вниз до чисел из набора: 1, 10, 30, 60, 120, 180, 240, 300, 600, 1200, 1800, 3600, 7200, 18000, 36000. Эта функция специфична для Яндекс.Метрики и предназначена для реализации отчёта по длительности визита.</p>
+<p>Accepts a number. If the number is less than one, it returns 0. Otherwise, it rounds the number down to numbers from the set: 1, 10, 30, 60, 120, 180, 240, 300, 600, 1200, 1800, 3600, 7200, 18000, 36000. This function is specific to Yandex.Metrica and used for implementing the report on session length.</p>
 </div>
 <div class="section" id="roundage-num">
 <h2>roundAge(num)<a class="headerlink" href="#roundage-num" title="Permalink to this headline">¶</a></h2>
-<p>Принимает число. Если число меньше 18 - возвращает 0. Иначе округляет число вниз до чисел из набора: 18, 25, 35, 45. Эта функция специфична для Яндекс.Метрики и предназначена для реализации отчёта по возрасту посетителей.</p>
+<p>Accepts a number. If the number is less than 18, it returns 0. Otherwise, it rounds the number down to numbers from the set: 18, 25, 35, 45, 55. This function is specific to Yandex.Metrica and used for implementing the report on user age.</p>
 </div>
 </div>
 
@@ -95,33 +84,119 @@ N может быть отрицательным.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Функции округления</a><ul>
-<li><a class="reference internal" href="#floor-x-n">floor(x[, N])</a></li>
-<li><a class="reference internal" href="#ceil-x-n">ceil(x[, N])</a></li>
-<li><a class="reference internal" href="#round-x-n">round(x[, N])</a></li>
-<li><a class="reference internal" href="#roundtoexp2-num">roundToExp2(num)</a></li>
-<li><a class="reference internal" href="#roundduration-num">roundDuration(num)</a></li>
-<li><a class="reference internal" href="#roundage-num">roundAge(num)</a></li>
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Functions</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="arithmetic_functions.html">Arithmetic functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="array_functions.html">Functions for working with arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="array_join.html">arrayJoin function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bit_functions.html">Bit functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comparison_functions.html">Comparison functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conditional_functions.html">Conditional functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="date_time_functions.html">Functions for working with dates and times</a></li>
+<li class="toctree-l2"><a class="reference internal" href="encoding_functions.html">Encoding functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ext_dict_functions.html">Functions for working with external dictionaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hash_functions.html">Hash functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="higher_order_functions.html">Higher-order functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="in_functions.html">Functions for implementing the IN operator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ip_address_functions.html">Functions for working with IP addresses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json_functions.html">Functions for working with JSON.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logical_functions.html">Logical functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="math_functions.html">Mathematical functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_functions.html">Other functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="random_functions.html">Functions for generating pseudo-random numbers</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Rounding functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#floor-x-n">floor(x[, N])</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ceil-x-n">ceil(x[, N])</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#round-x-n">round(x[, N])</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#roundtoexp2-num">roundToExp2(num)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#roundduration-num">roundDuration(num)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#roundage-num">roundAge(num)</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="splitting_merging_functions.html">Functions for splitting and merging strings and arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_functions.html">Functions for working with strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_replace_functions.html">Functions for searching and replacing in strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_search_functions.html">Functions for searching strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="type_conversion_functions.html">Type conversion functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="url_functions.html">Functions for working with URLs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ym_dict_functions.html">Functions for working with Yandex.Metrica dictionaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#strong-typing">Strong typing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#common-subexpression-elimination">Common subexpression elimination</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#types-of-results">Types of results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#constants">Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#immutability">Immutability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#error-handling">Error handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#evaluation-of-argument-expressions">Evaluation of argument expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#performing-functions-for-distributed-query-processing">Performing functions for distributed query processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="random_functions.html"
-                        title="previous chapter">Функции генерации псевдослучайных чисел</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="splitting_merging_functions.html"
-                        title="next chapter">Функции разбиения и слияния строк и массивов</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/functions/rounding_functions.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Functions</a><ul>
+      <li>Previous: <a href="random_functions.html" title="previous chapter">Functions for generating pseudo-random numbers</a></li>
+      <li>Next: <a href="splitting_merging_functions.html" title="next chapter">Functions for splitting and merging strings and arrays</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -138,25 +213,13 @@ N может быть отрицательным.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="splitting_merging_functions.html" title="Функции разбиения и слияния строк и массивов"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="random_functions.html" title="Функции генерации псевдослучайных чисел"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Функции</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

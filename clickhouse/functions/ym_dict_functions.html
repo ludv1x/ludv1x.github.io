@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Функции для работы со словарями Яндекс.Метрики &mdash; ClickHouse 1 documentation</title>
+    <title>Functions for working with Yandex.Metrica dictionaries &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,169 +23,135 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Функции" href="index.html" />
-    <link rel="next" title="Агрегатные функции" href="../agg_functions/index.html" />
-    <link rel="prev" title="Функции для работы с URL" href="url_functions.html" /> 
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Functions" href="index.html" />
+    <link rel="next" title="Aggregate functions" href="../agg_functions/index.html" />
+    <link rel="prev" title="Functions for working with URLs" href="url_functions.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../agg_functions/index.html" title="Агрегатные функции"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="url_functions.html" title="Функции для работы с URL"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Функции</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="id1">
-<h1>Функции для работы со словарями Яндекс.Метрики<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
-<p>Чтобы указанные ниже функции работали, в конфиге сервера должны быть указаны пути и адреса для получения всех словарей Яндекс.Метрики. Словари загружаются при первом вызове любой из этих функций. Если справочники не удаётся загрузить - будет выкинуто исключение.</p>
-<p>О том, как создать справочники, смотрите в разделе &#8220;Словари&#8221;.</p>
-<div class="section" id="id2">
-<h2>Множественные геобазы<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
-<p>ClickHouse поддерживает работу одновременно с несколькими альтернативными геобазами (иерархиями регионов), для того чтобы можно было поддержать разные точки зрения о принадлежности регионов странам.</p>
-<p>В конфиге clickhouse-server указывается файл с иерархией регионов:
-<tt class="docutils literal"><span class="pre">&lt;path_to_regions_hierarchy_file&gt;/opt/geo/regions_hierarchy.txt&lt;/path_to_regions_hierarchy_file&gt;</span></tt></p>
-<p>Кроме указанного файла, рядом ищутся файлы, к имени которых (до расширения) добавлен символ _ и какой угодно суффикс.
-Например, также найдётся файл <tt class="docutils literal"><span class="pre">/opt/geo/regions_hierarchy_ua.txt</span></tt>, если такой есть.</p>
-<p><tt class="docutils literal"><span class="pre">ua</span></tt> называется ключом словаря. Для словаря без суффикса, ключ является пустой строкой.</p>
-<p>Все словари перезагружаются в рантайме (раз в количество секунд, заданное в конфигурационном параметре builtin_dictionaries_reload_interval, по умолчанию - раз в час), но перечень доступных словарей определяется один раз, при старте сервера.</p>
-<p>Во все функции по работе с регионами, в конце добавлен один необязательный аргумент - ключ словаря. Далее он обозначен как geobase.
-Пример:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>regionToCountry(RegionID) - использует словарь по умолчанию: /opt/geo/regions_hierarchy.txt;
-regionToCountry(RegionID, &#39;&#39;) - использует словарь по умолчанию: /opt/geo/regions_hierarchy.txt;
-regionToCountry(RegionID, &#39;ua&#39;) - использует словарь для ключа ua: /opt/geo/regions_hierarchy_ua.txt;
+  <div class="section" id="functions-for-working-with-yandex-metrica-dictionaries">
+<h1>Functions for working with Yandex.Metrica dictionaries<a class="headerlink" href="#functions-for-working-with-yandex-metrica-dictionaries" title="Permalink to this headline">¶</a></h1>
+<p>In order for the functions below to work, the server config must specify the paths and addresses for getting all the Yandex.Metrica dictionaries. The dictionaries are loaded at the first call of any of these functions. If the reference lists can&#8217;t be loaded, an exception is thrown.</p>
+<p>For information about creating reference lists, see the section &#8220;Dictionaries&#8221;.</p>
+<div class="section" id="multiple-geobases">
+<h2>Multiple geobases<a class="headerlink" href="#multiple-geobases" title="Permalink to this headline">¶</a></h2>
+<p>ClickHouse supports working with multiple alternative geobases (regional hierarchies) simultaneously, in order to support various perspectives on which countries certain regions belong to.</p>
+<p>The &#8216;clickhouse-server&#8217; config specifies the file with the regional hierarchy:
+<code class="docutils literal"><span class="pre">&lt;path_to_regions_hierarchy_file&gt;/opt/geo/regions_hierarchy.txt&lt;/path_to_regions_hierarchy_file&gt;</span></code></p>
+<p>Besides this file, it also searches for files nearby that have the _ symbol and any suffix appended to the name (before the file extension).
+For example, it will also find the file <code class="docutils literal"><span class="pre">/opt/geo/regions_hierarchy_ua.txt</span></code>, if present.</p>
+<p><code class="docutils literal"><span class="pre">ua</span></code> is called the dictionary key. For a dictionary without a suffix, the key is an empty string.</p>
+<p>All the dictionaries are re-loaded in runtime (once every certain number of seconds, as defined in the builtin_dictionaries_reload_interval config parameter, or once an hour by default). However, the list of available dictionaries is defined one time, when the server starts.</p>
+<p>All functions for working with regions have an optional argument at the end - the dictionary key. It is indicated as the geobase.
+Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>regionToCountry(RegionID) - Uses the default dictionary: /opt/geo/regions_hierarchy.txt
+regionToCountry(RegionID, &#39;&#39;) - Uses the default dictionary: /opt/geo/regions_hierarchy.txt
+regionToCountry(RegionID, &#39;ua&#39;) - Uses the dictionary for the &#39;ua&#39; key: /opt/geo/regions_hierarchy_ua.txt
 </pre></div>
 </div>
 </div>
 <div class="section" id="regiontocity-id-geobase">
 <h2>regionToCity(id[, geobase])<a class="headerlink" href="#regiontocity-id-geobase" title="Permalink to this headline">¶</a></h2>
-<p>Принимает число типа UInt32 - идентификатор региона из геобазы Яндекса. Если регион является городом или входит в некоторый город, то возвращает идентификатор региона - соответствующего города. Иначе возвращает 0.</p>
+<p>Accepts a UInt32 number - the region ID from the Yandex geobase. If this region is a city or part of a city, it returns the region ID for the appropriate city. Otherwise, returns 0.</p>
 </div>
 <div class="section" id="regiontoarea-id-geobase">
 <h2>regionToArea(id[, geobase])<a class="headerlink" href="#regiontoarea-id-geobase" title="Permalink to this headline">¶</a></h2>
-<p>Переводит регион в область (тип в геобазе - 5). В остальном, аналогично функции regionToCity.</p>
-<div class="highlight-sql"><div class="highlight"><pre><span></span>SELECT DISTINCT regionToName(regionToArea(toUInt32(number), &#39;ua&#39;))
+<p>Converts a region to an area (type 5 in the geobase). In every other way, this function is the same as &#8216;regionToCity&#8217;.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span>SELECT DISTINCT regionToName(regionToArea(toUInt32(number), &#39;ua&#39;), &#39;en&#39;)
 FROM system.numbers
 LIMIT 15
 
-┌─regionToName(regionToArea(toUInt32(number), \&#39;ua\&#39;))─┐
-│                                                      │
-│ Москва и Московская область                          │
-│ Санкт-Петербург и Ленинградская область              │
-│ Белгородская область                                 │
-│ Ивановская область                                   │
-│ Калужская область                                    │
-│ Костромская область                                  │
-│ Курская область                                      │
-│ Липецкая область                                     │
-│ Орловская область                                    │
-│ Рязанская область                                    │
-│ Смоленская область                                   │
-│ Тамбовская область                                   │
-│ Тверская область                                     │
-│ Тульская область                                     │
-└──────────────────────────────────────────────────────┘
+┌─regionToName(regionToArea(toUInt32(number), \&#39;ua\&#39;), \&#39;en\&#39;)─┐
+│                                                              │
+│ Moscow and Moscow region                                     │
+│ Saint-Petersburg and Leningradskaya oblast                   │
+│ Belgorod District                                            │
+│ Ivanovo district                                             │
+│ Kaluga District                                              │
+│ Kostroma District                                            │
+│ Kursk District                                               │
+│ Lipetsk District                                             │
+│ Orel District                                                │
+│ Ryazhan District                                             │
+│ Smolensk District                                            │
+│ Tambov District                                              │
+│ Tver District                                                │
+│ Tula District                                                │
+└──────────────────────────────────────────────────────────────┘
 </pre></div>
 </div>
 </div>
 <div class="section" id="regiontodistrict-id-geobase">
 <h2>regionToDistrict(id[, geobase])<a class="headerlink" href="#regiontodistrict-id-geobase" title="Permalink to this headline">¶</a></h2>
-<p>Переводит регион в федеральный округ (тип в геобазе - 4). В остальном, аналогично функции regionToCity.</p>
-<div class="highlight-sql"><div class="highlight"><pre><span></span>SELECT DISTINCT regionToName(regionToDistrict(toUInt32(number), &#39;ua&#39;))
+<p>Converts a region to a federal district (type 4 in the geobase). In every other way, this function is the same as &#8216;regionToCity&#8217;.</p>
+<div class="highlight-sql"><div class="highlight"><pre><span></span>SELECT DISTINCT regionToName(regionToDistrict(toUInt32(number), &#39;ua&#39;), &#39;en&#39;)
 FROM system.numbers
 LIMIT 15
 
-┌─regionToName(regionToDistrict(toUInt32(number), \&#39;ua\&#39;))─┐
-│                                                          │
-│ Центральный федеральный округ                            │
-│ Северо-Западный федеральный округ                        │
-│ Южный федеральный округ                                  │
-│ Северо-Кавказский федеральный округ                      │
-│ Приволжский федеральный округ                            │
-│ Уральский федеральный округ                              │
-│ Сибирский федеральный округ                              │
-│ Дальневосточный федеральный округ                        │
-│ Шотландия                                                │
-│ Фарерские острова                                        │
-│ Фламандский регион                                       │
-│ Брюссельский столичный регион                            │
-│ Валлония                                                 │
-│ Федерация Боснии и Герцеговины                           │
-└──────────────────────────────────────────────────────────┘
+┌─regionToName(regionToDistrict(toUInt32(number), \&#39;ua\&#39;), \&#39;en\&#39;)─┐
+│                                                                  │
+│ Central                                                          │
+│ Northwest                                                        │
+│ South                                                            │
+│ North Kavkaz                                                     │
+│ Volga Region                                                     │
+│ Ural                                                             │
+│ Siberian                                                         │
+│ Far East                                                         │
+│ Scotland                                                         │
+│ Faroe Islands                                                    │
+│ Flemish Region                                                   │
+│ Brussels-Capital Region                                          │
+│ Wallonia                                                         │
+│ Federation of Bosnia and Herzegovina                             │
+└──────────────────────────────────────────────────────────────────┘
 </pre></div>
 </div>
 </div>
 <div class="section" id="regiontocountry-id-geobase">
 <h2>regionToCountry(id[, geobase])<a class="headerlink" href="#regiontocountry-id-geobase" title="Permalink to this headline">¶</a></h2>
-<p>Переводит регион в страну. В остальном, аналогично функции regionToCity.
-Пример: <tt class="docutils literal"><span class="pre">regionToCountry(toUInt32(213))</span> <span class="pre">=</span> <span class="pre">225</span></tt> - преобразовали Москву (213) в Россию (225).</p>
+<p>Converts a region to a country. In every other way, this function is the same as &#8216;regionToCity&#8217;.
+Example: <code class="docutils literal"><span class="pre">regionToCountry(toUInt32(213))</span> <span class="pre">=</span> <span class="pre">225</span></code> converts <code class="docutils literal"><span class="pre">Moscow</span> <span class="pre">(213)</span></code> to <code class="docutils literal"><span class="pre">Russia</span> <span class="pre">(225)</span></code>.</p>
 </div>
 <div class="section" id="regiontocontinent-id-geobase">
 <h2>regionToContinent(id[, geobase])<a class="headerlink" href="#regiontocontinent-id-geobase" title="Permalink to this headline">¶</a></h2>
-<p>Переводит регион в континент. В остальном, аналогично функции regionToCity.
-Пример: <tt class="docutils literal"><span class="pre">regionToContinent(toUInt32(213))</span> <span class="pre">=</span> <span class="pre">10001</span></tt> - преобразовали Москву (213) в Евразию (10001).</p>
+<p>Converts a region to a continent. In every other way, this function is the same as &#8216;regionToCity&#8217;.
+Example: <code class="docutils literal"><span class="pre">regionToContinent(toUInt32(213))</span> <span class="pre">=</span> <span class="pre">10001</span></code> converts Moscow (213) to Eurasia (10001).</p>
 </div>
 <div class="section" id="regiontopopulation-id-geobase">
 <h2>regionToPopulation(id[, geobase])<a class="headerlink" href="#regiontopopulation-id-geobase" title="Permalink to this headline">¶</a></h2>
-<p>Получает население для региона.
-Население может быть прописано в файлах с геобазой. Смотрите в разделе &#8220;Встроенные словари&#8221;.
-Если для региона не прописано население, возвращается 0.
-В геобазе Яндекса, население может быть прописано для дочерних регионов, но не прописано для родительских.</p>
+<p>Gets the population for a region.
+The population can be recorded in files with the geobase. See the section &#8220;External dictionaries&#8221;.
+If the population is not recorded for the region, it returns 0.
+In the Yandex geobase, the population might be recorded for child regions, but not for parent regions..</p>
 </div>
 <div class="section" id="regionin-lhs-rhs-geobase">
 <h2>regionIn(lhs, rhs[, geobase])<a class="headerlink" href="#regionin-lhs-rhs-geobase" title="Permalink to this headline">¶</a></h2>
-<p>Проверяет принадлежность региона lhs региону rhs. Возвращает число типа UInt8, равное 1, если принадлежит и 0, если не принадлежит.
-Отношение рефлексивное - любой регион принадлежит также самому себе.</p>
+<p>Checks whether a &#8216;lhs&#8217; region belongs to a &#8216;rhs&#8217; region. Returns a UInt8 number equal to 1 if it belongs, or 0 if it doesn&#8217;t belong.
+The relationship is reflexive - any region also belongs to itself.</p>
 </div>
 <div class="section" id="regionhierarchy-id-geobase">
 <h2>regionHierarchy(id[, geobase])<a class="headerlink" href="#regionhierarchy-id-geobase" title="Permalink to this headline">¶</a></h2>
-<p>Принимает число типа UInt32 - идентификатор региона из геобазы Яндекса. Возвращает массив идентификаторов регионов, состоящий из переданного региона и всех родителей по цепочке.
-Пример: <tt class="docutils literal"><span class="pre">regionHierarchy(toUInt32(213))</span> <span class="pre">=</span> <span class="pre">[213,1,3,225,10001,10000]</span></tt>.</p>
+<p>ПAccepts a UInt32 number - the region ID from the Yandex geobase. Returns an array of region IDs consisting of the passed region and all parents along the chain.
+Example:  <code class="docutils literal"><span class="pre">regionHierarchy(toUInt32(213))</span> <span class="pre">=</span> <span class="pre">[213,1,3,225,10001,10000]</span></code>.</p>
 </div>
 <div class="section" id="regiontoname-id-lang">
 <h2>regionToName(id[, lang])<a class="headerlink" href="#regiontoname-id-lang" title="Permalink to this headline">¶</a></h2>
-<p>Принимает число типа UInt32 - идентификатор региона из геобазы Яндекса. Вторым аргументом может быть передана строка - название языка. Поддерживаются языки ru, en, ua, uk, by, kz, tr. Если второй аргумент отсутствует - используется язык ru. Если язык не поддерживается - кидается исключение. Возвращает строку - название региона на соответствующем языке. Если региона с указанным идентификатором не существует - возвращается пустая строка.</p>
-<p><tt class="docutils literal"><span class="pre">ua</span></tt> и <tt class="docutils literal"><span class="pre">uk</span></tt> обозначают одно и то же - украинский язык.</p>
-</div>
-<div class="section" id="ostoroot">
-<h2>OSToRoot<a class="headerlink" href="#ostoroot" title="Permalink to this headline">¶</a></h2>
-<p>Принимает число типа UInt8 - идентификатор операционной системы из словаря Яндекс.Метрики. Если переданному числу соответствует какая-либо операционная система - возвращает число типа UInt8 - идентификатор соответствующей корневой операционной системы (например, переводит Windows Vista в Windows). Иначе возвращает 0.</p>
-</div>
-<div class="section" id="osin-lhs-rhs">
-<h2>OSIn(lhs, rhs)<a class="headerlink" href="#osin-lhs-rhs" title="Permalink to this headline">¶</a></h2>
-<p>Проверяет принадлежность операционной системы lhs операционной системе rhs.</p>
-</div>
-<div class="section" id="oshierarchy">
-<h2>OSHierarchy<a class="headerlink" href="#oshierarchy" title="Permalink to this headline">¶</a></h2>
-<p>Принимает число типа UInt8 - идентификатор операционной системы из словаря Яндекс.Метрики. Возвращает массив с иерархией операционных систем. Аналогично функции regionHierarchy.</p>
-</div>
-<div class="section" id="setoroot">
-<h2>SEToRoot<a class="headerlink" href="#setoroot" title="Permalink to this headline">¶</a></h2>
-<p>Принимает число типа UInt8 - идентификатор поисковой системы из словаря Яндекс.Метрики. Если переданному числу соответствует какая-либо поисковая система - возвращает число типа UInt8 - идентификатор соответствующей корневой поисковой системы (например, переводит Яндекс.Картинки в Яндекс). Иначе возвращает 0.</p>
-</div>
-<div class="section" id="sein-lhs-rhs">
-<h2>SEIn(lhs, rhs)<a class="headerlink" href="#sein-lhs-rhs" title="Permalink to this headline">¶</a></h2>
-<p>Проверяет принадлежность поисковой системы lhs поисковой системе rhs.</p>
-</div>
-<div class="section" id="sehierarchy">
-<h2>SEHierarchy<a class="headerlink" href="#sehierarchy" title="Permalink to this headline">¶</a></h2>
-<p>Принимает число типа UInt8 - идентификатор поисковой системы из словаря Яндекс.Метрики. Возвращает массив с иерархией поисковых систем. Аналогично функции regionHierarchy.</p>
+<p>Accepts a UInt32 number - the region ID from the Yandex geobase. A string with the name of the language can be passed as a second argument. Supported languages are: ru, en, ua, uk, by, kz, tr. If the second argument is omitted, the language &#8216;ru&#8217; is used. If the language is not supported, an exception is thrown. Returns a string - the name of the region in the corresponding language. If the region with the specified ID doesn&#8217;t exist, an empty string is returned.</p>
+<p><code class="docutils literal"><span class="pre">ua</span></code> and <code class="docutils literal"><span class="pre">uk</span></code> mean the same thing - Ukrainian.</p>
 </div>
 </div>
 
@@ -193,43 +159,123 @@ LIMIT 15
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Функции для работы со словарями Яндекс.Метрики</a><ul>
-<li><a class="reference internal" href="#id2">Множественные геобазы</a></li>
-<li><a class="reference internal" href="#regiontocity-id-geobase">regionToCity(id[, geobase])</a></li>
-<li><a class="reference internal" href="#regiontoarea-id-geobase">regionToArea(id[, geobase])</a></li>
-<li><a class="reference internal" href="#regiontodistrict-id-geobase">regionToDistrict(id[, geobase])</a></li>
-<li><a class="reference internal" href="#regiontocountry-id-geobase">regionToCountry(id[, geobase])</a></li>
-<li><a class="reference internal" href="#regiontocontinent-id-geobase">regionToContinent(id[, geobase])</a></li>
-<li><a class="reference internal" href="#regiontopopulation-id-geobase">regionToPopulation(id[, geobase])</a></li>
-<li><a class="reference internal" href="#regionin-lhs-rhs-geobase">regionIn(lhs, rhs[, geobase])</a></li>
-<li><a class="reference internal" href="#regionhierarchy-id-geobase">regionHierarchy(id[, geobase])</a></li>
-<li><a class="reference internal" href="#regiontoname-id-lang">regionToName(id[, lang])</a></li>
-<li><a class="reference internal" href="#ostoroot">OSToRoot</a></li>
-<li><a class="reference internal" href="#osin-lhs-rhs">OSIn(lhs, rhs)</a></li>
-<li><a class="reference internal" href="#oshierarchy">OSHierarchy</a></li>
-<li><a class="reference internal" href="#setoroot">SEToRoot</a></li>
-<li><a class="reference internal" href="#sein-lhs-rhs">SEIn(lhs, rhs)</a></li>
-<li><a class="reference internal" href="#sehierarchy">SEHierarchy</a></li>
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Functions</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="arithmetic_functions.html">Arithmetic functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="array_functions.html">Functions for working with arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="array_join.html">arrayJoin function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bit_functions.html">Bit functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comparison_functions.html">Comparison functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conditional_functions.html">Conditional functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="date_time_functions.html">Functions for working with dates and times</a></li>
+<li class="toctree-l2"><a class="reference internal" href="encoding_functions.html">Encoding functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ext_dict_functions.html">Functions for working with external dictionaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hash_functions.html">Hash functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="higher_order_functions.html">Higher-order functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="in_functions.html">Functions for implementing the IN operator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ip_address_functions.html">Functions for working with IP addresses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json_functions.html">Functions for working with JSON.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logical_functions.html">Logical functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="math_functions.html">Mathematical functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_functions.html">Other functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="random_functions.html">Functions for generating pseudo-random numbers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rounding_functions.html">Rounding functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="splitting_merging_functions.html">Functions for splitting and merging strings and arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_functions.html">Functions for working with strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_replace_functions.html">Functions for searching and replacing in strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_search_functions.html">Functions for searching strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="type_conversion_functions.html">Type conversion functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="url_functions.html">Functions for working with URLs</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Functions for working with Yandex.Metrica dictionaries</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#multiple-geobases">Multiple geobases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#regiontocity-id-geobase">regionToCity(id[, geobase])</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#regiontoarea-id-geobase">regionToArea(id[, geobase])</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#regiontodistrict-id-geobase">regionToDistrict(id[, geobase])</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#regiontocountry-id-geobase">regionToCountry(id[, geobase])</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#regiontocontinent-id-geobase">regionToContinent(id[, geobase])</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#regiontopopulation-id-geobase">regionToPopulation(id[, geobase])</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#regionin-lhs-rhs-geobase">regionIn(lhs, rhs[, geobase])</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#regionhierarchy-id-geobase">regionHierarchy(id[, geobase])</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#regiontoname-id-lang">regionToName(id[, lang])</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#strong-typing">Strong typing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#common-subexpression-elimination">Common subexpression elimination</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#types-of-results">Types of results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#constants">Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#immutability">Immutability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#error-handling">Error handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#evaluation-of-argument-expressions">Evaluation of argument expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#performing-functions-for-distributed-query-processing">Performing functions for distributed query processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="url_functions.html"
-                        title="previous chapter">Функции для работы с URL</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="../agg_functions/index.html"
-                        title="next chapter">Агрегатные функции</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/functions/ym_dict_functions.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Functions</a><ul>
+      <li>Previous: <a href="url_functions.html" title="previous chapter">Functions for working with URLs</a></li>
+      <li>Next: <a href="../agg_functions/index.html" title="next chapter">Aggregate functions</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -246,25 +292,13 @@ LIMIT 15
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../agg_functions/index.html" title="Агрегатные функции"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="url_functions.html" title="Функции для работы с URL"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Функции</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

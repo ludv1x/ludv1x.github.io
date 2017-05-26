@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Арифметические функции &mdash; ClickHouse 1 documentation</title>
+    <title>Arithmetic functions &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,39 +23,29 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Функции" href="index.html" />
-    <link rel="next" title="Функции по работе с массивами" href="array_functions.html" />
-    <link rel="prev" title="Функции" href="index.html" /> 
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Functions" href="index.html" />
+    <link rel="next" title="Functions for working with arrays" href="array_functions.html" />
+    <link rel="prev" title="Functions" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="array_functions.html" title="Функции по работе с массивами"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="Функции"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Функции</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="id1">
-<h1>Арифметические функции<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
-<p>Для всех арифметических функций, тип результата вычисляется, как минимальный числовой тип, который может вместить результат, если такой тип есть. Минимум берётся одновременно по числу бит, знаковости и &#8220;плавучести&#8221;. Если бит не хватает, то берётся тип максимальной битности.</p>
-<p>Пример:</p>
+  <div class="section" id="arithmetic-functions">
+<h1>Arithmetic functions<a class="headerlink" href="#arithmetic-functions" title="Permalink to this headline">¶</a></h1>
+<p>For all arithmetic functions, the result type is calculated as the smallest number type that the result fits in, if there is such a type. The minimum is taken simultaneously based on the number of bits, whether it is signed, and whether it floats. If there are not enough bits, the highest bit type is taken.</p>
+<p>Example</p>
 <div class="highlight-sql"><div class="highlight"><pre><span></span>:) SELECT toTypeName(0), toTypeName(0 + 0), toTypeName(0 + 0 + 0), toTypeName(0 + 0 + 0 + 0)
 
 ┌─toTypeName(0)─┬─toTypeName(plus(0, 0))─┬─toTypeName(plus(plus(0, 0), 0))─┬─toTypeName(plus(plus(plus(0, 0), 0), 0))─┐
@@ -63,52 +53,51 @@
 └───────────────┴────────────────────────┴─────────────────────────────────┴──────────────────────────────────────────┘
 </pre></div>
 </div>
-<p>Арифметические функции работают для любой пары типов из UInt8, UInt16, UInt32, UInt64, Int8, Int16, Int32, Int64, Float32, Float64.</p>
-<p>Переполнение производится также, как в C++.</p>
-<div class="section" id="plus-a-b-a-b">
-<h2>plus(a, b), оператор a + b<a class="headerlink" href="#plus-a-b-a-b" title="Permalink to this headline">¶</a></h2>
-<p>Вычисляет сумму чисел.
-Также можно складывать целые числа с датой и датой-с-временем. В случае даты, прибавление целого числа означает прибавление соответствующего количества дней. В случае даты-с-временем - прибавление соответствующего количества секунд.</p>
+<p>Arithmetic functions work for any pair of types from UInt8, UInt16, UInt32, UInt64, Int8, Int16, Int32, Int64, Float32, or Float64.</p>
+<p>Overflow is produced the same way as in C++.</p>
+<div class="section" id="plus-a-b-a-b-operator">
+<h2>plus(a, b), a + b operator<a class="headerlink" href="#plus-a-b-a-b-operator" title="Permalink to this headline">¶</a></h2>
+<p>Calculates the sum of the numbers.
+You can also add whole numbers with a date or date and time. In the case of a date, adding a whole number means adding the corresponding number of days. For a date with time, it means adding the corresponding number of seconds.</p>
 </div>
-<div class="section" id="minus-a-b-a-b">
-<h2>minus(a, b), оператор a - b<a class="headerlink" href="#minus-a-b-a-b" title="Permalink to this headline">¶</a></h2>
-<p>Вычисляет разность чисел. Результат всегда имеет знаковый тип.</p>
-<p>Также можно вычитать целые числа из даты и даты-с-временем. Смысл аналогичен - смотрите выше для plus.</p>
+<div class="section" id="minus-a-b-a-b-operator">
+<h2>minus(a, b), a - b operator<a class="headerlink" href="#minus-a-b-a-b-operator" title="Permalink to this headline">¶</a></h2>
+<p>Calculates the difference. The result is always signed.</p>
+<p>You can also calculate whole numbers from a date or date with time. The idea is the same - see above for &#8216;plus&#8217;.</p>
 </div>
-<div class="section" id="multiply-a-b-a-b">
-<h2>multiply(a, b), оператор a * b<a class="headerlink" href="#multiply-a-b-a-b" title="Permalink to this headline">¶</a></h2>
-<p>Вычисляет произведение чисел.</p>
+<div class="section" id="multiply-a-b-a-b-operator">
+<h2>multiply(a, b), a * b operator<a class="headerlink" href="#multiply-a-b-a-b-operator" title="Permalink to this headline">¶</a></h2>
+<p>Calculates the product of the numbers.</p>
 </div>
-<div class="section" id="divide-a-b-a-b">
-<h2>divide(a, b), оператор a / b<a class="headerlink" href="#divide-a-b-a-b" title="Permalink to this headline">¶</a></h2>
-<p>Вычисляет частное чисел. Тип результата всегда является типом с плавающей запятой.
-То есть, деление не целочисленное. Для целочисленного деления, используйте функцию intDiv.
-При делении на ноль получится inf, -inf или nan.</p>
+<div class="section" id="divide-a-b-a-b-operator">
+<h2>divide(a, b), a / b operator<a class="headerlink" href="#divide-a-b-a-b-operator" title="Permalink to this headline">¶</a></h2>
+<p>Calculates the quotient of the numbers. The result type is always a floating-point type.
+It is not integer division. For integer division, use the &#8216;intDiv&#8217; function.
+When dividing by zero you get &#8216;inf&#8217;, &#8216;-inf&#8217;, or &#8216;nan&#8217;.</p>
 </div>
 <div class="section" id="intdiv-a-b">
 <h2>intDiv(a, b)<a class="headerlink" href="#intdiv-a-b" title="Permalink to this headline">¶</a></h2>
-<p>Вычисляет частное чисел. Деление целочисленное, с округлением вниз (по абсолютному значению).
-При делении на ноль или при делении минимального отрицательного числа на минус единицу, кидается исключение.</p>
+<p>Calculates the quotient of the numbers. Divides into integers, rounding down (by the absolute value).
+When dividing by zero or when dividing a minimal negative number by minus one, an exception is thrown.</p>
 </div>
 <div class="section" id="intdivorzero-a-b">
 <h2>intDivOrZero(a, b)<a class="headerlink" href="#intdivorzero-a-b" title="Permalink to this headline">¶</a></h2>
-<p>Отличается от intDiv тем, что при делении на ноль или при делении минимального отрицательного числа на минус единицу, возвращается ноль.</p>
+<p>Differs from &#8216;intDiv&#8217; in that it returns zero when dividing by zero or when dividing a minimal negative number by minus one.</p>
 </div>
-<div class="section" id="modulo-a-b-a-b">
-<h2>modulo(a, b), оператор a % b<a class="headerlink" href="#modulo-a-b-a-b" title="Permalink to this headline">¶</a></h2>
-<p>Вычисляет остаток от деления.
-Если аргументы - числа с плавающей запятой, то они предварительно преобразуются в целые числа, путём отбрасывания дробной части.
-Берётся остаток в том же смысле, как это делается в C++. По факту, для отрицательных чисел, используется truncated division.
-При делении на ноль или при делении минимального отрицательного числа на минус единицу, кидается исключение.</p>
+<div class="section" id="modulo-a-b-a-b-operator">
+<h2>modulo(a, b), a % b operator<a class="headerlink" href="#modulo-a-b-a-b-operator" title="Permalink to this headline">¶</a></h2>
+<p>Calculates the remainder after division.
+If arguments are floating-point numbers, they are pre-converted to integers by dropping the decimal portion. The remainder is taken in the same sense as in C++. Truncated division is used for negative numbers.
+An exception is thrown when dividing by zero or when dividing a minimal negative number by minus one.</p>
 </div>
-<div class="section" id="negate-a-a">
-<h2>negate(a), оператор -a<a class="headerlink" href="#negate-a-a" title="Permalink to this headline">¶</a></h2>
-<p>Вычисляет число, обратное по знаку. Результат всегда имеет знаковый тип.</p>
+<div class="section" id="negate-a-a-operator">
+<h2>negate(a), -a operator<a class="headerlink" href="#negate-a-a-operator" title="Permalink to this headline">¶</a></h2>
+<p>Calculates a number with the reverse sign. The result is always signed.</p>
 </div>
 <div class="section" id="abs-a">
 <h2>abs(a)<a class="headerlink" href="#abs-a" title="Permalink to this headline">¶</a></h2>
-<p>Вычисляет абсолютное значение для числа a. То есть, если a &lt; 0, то возвращает -a.
-Для беззнаковых типов ничего не делает. Для чисел типа целых со знаком, возвращает число беззнакового типа.</p>
+<p>Calculates the absolute value of the number &#8216;a&#8217;. That is, if a&lt; 0, it returns -a.
+For unsigned types, it doesn&#8217;t do anything. For signed integer types, it returns an unsigned number.</p>
 </div>
 </div>
 
@@ -116,36 +105,122 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Арифметические функции</a><ul>
-<li><a class="reference internal" href="#plus-a-b-a-b">plus(a, b), оператор a + b</a></li>
-<li><a class="reference internal" href="#minus-a-b-a-b">minus(a, b), оператор a - b</a></li>
-<li><a class="reference internal" href="#multiply-a-b-a-b">multiply(a, b), оператор a * b</a></li>
-<li><a class="reference internal" href="#divide-a-b-a-b">divide(a, b), оператор a / b</a></li>
-<li><a class="reference internal" href="#intdiv-a-b">intDiv(a, b)</a></li>
-<li><a class="reference internal" href="#intdivorzero-a-b">intDivOrZero(a, b)</a></li>
-<li><a class="reference internal" href="#modulo-a-b-a-b">modulo(a, b), оператор a % b</a></li>
-<li><a class="reference internal" href="#negate-a-a">negate(a), оператор -a</a></li>
-<li><a class="reference internal" href="#abs-a">abs(a)</a></li>
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Functions</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="">Arithmetic functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#plus-a-b-a-b-operator">plus(a, b), a + b operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#minus-a-b-a-b-operator">minus(a, b), a - b operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#multiply-a-b-a-b-operator">multiply(a, b), a * b operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#divide-a-b-a-b-operator">divide(a, b), a / b operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#intdiv-a-b">intDiv(a, b)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#intdivorzero-a-b">intDivOrZero(a, b)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#modulo-a-b-a-b-operator">modulo(a, b), a % b operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#negate-a-a-operator">negate(a), -a operator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#abs-a">abs(a)</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="array_functions.html">Functions for working with arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="array_join.html">arrayJoin function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bit_functions.html">Bit functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comparison_functions.html">Comparison functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conditional_functions.html">Conditional functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="date_time_functions.html">Functions for working with dates and times</a></li>
+<li class="toctree-l2"><a class="reference internal" href="encoding_functions.html">Encoding functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ext_dict_functions.html">Functions for working with external dictionaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hash_functions.html">Hash functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="higher_order_functions.html">Higher-order functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="in_functions.html">Functions for implementing the IN operator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ip_address_functions.html">Functions for working with IP addresses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json_functions.html">Functions for working with JSON.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logical_functions.html">Logical functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="math_functions.html">Mathematical functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_functions.html">Other functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="random_functions.html">Functions for generating pseudo-random numbers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rounding_functions.html">Rounding functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="splitting_merging_functions.html">Functions for splitting and merging strings and arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_functions.html">Functions for working with strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_replace_functions.html">Functions for searching and replacing in strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_search_functions.html">Functions for searching strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="type_conversion_functions.html">Type conversion functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="url_functions.html">Functions for working with URLs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ym_dict_functions.html">Functions for working with Yandex.Metrica dictionaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#strong-typing">Strong typing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#common-subexpression-elimination">Common subexpression elimination</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#types-of-results">Types of results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#constants">Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#immutability">Immutability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#error-handling">Error handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#evaluation-of-argument-expressions">Evaluation of argument expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#performing-functions-for-distributed-query-processing">Performing functions for distributed query processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">Функции</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="array_functions.html"
-                        title="next chapter">Функции по работе с массивами</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/functions/arithmetic_functions.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Functions</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Functions</a></li>
+      <li>Next: <a href="array_functions.html" title="next chapter">Functions for working with arrays</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -162,25 +237,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="array_functions.html" title="Функции по работе с массивами"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="Функции"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Функции</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Профили настроек &mdash; ClickHouse 1 documentation</title>
+    <title>Settings profiles &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,110 +23,178 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Настройки" href="index.html" />
-    <link rel="next" title="Конфигурационные файлы" href="../configuration_files.html" />
-    <link rel="prev" title="max_block_size" href="settings.html" /> 
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Settings" href="index.html" />
+    <link rel="next" title="Configuration files" href="../configuration_files.html" />
+    <link rel="prev" title="max_block_size" href="settings.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../configuration_files.html" title="Конфигурационные файлы"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="settings.html" title="max_block_size"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Настройки</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="id1">
-<h1>Профили настроек<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
-<p>Профили настроек - это множество настроек, сгруппированных под одним именем. Для каждого пользователя ClickHouse указывается некоторый профиль.
-Все настройки профиля можно применить, установив настройку с именем profile. Пример:</p>
+  <div class="section" id="settings-profiles">
+<h1>Settings profiles<a class="headerlink" href="#settings-profiles" title="Permalink to this headline">¶</a></h1>
+<p>A settings profile is a collection of settings grouped under the same name. Each ClickHouse user has a profile.
+To apply all the settings in a profile, set &#8216;profile&#8217;. Example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>SET profile = &#39;web&#39;
 </pre></div>
 </div>
 <ul class="simple">
-<li>установить профиль web - то есть, установить все настройки, относящиеся к профилю web.</li>
+<li>Load the &#8216;web&#8217; profile. That is, set all the options belonging to the &#8216;web&#8217; profile.</li>
 </ul>
-<p>Профили настроек объявляются в конфигурационном файле пользователей. Обычно это - <tt class="docutils literal"><span class="pre">users.xml</span></tt>.
-Пример:</p>
-<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="c">&lt;!-- Профили настроек. --&gt;</span>
+<p>Settings profiles are declared in the user config file. This is normally &#8216;users.xml&#8217;.
+Example:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="c">&lt;!-- Settings profiles. --&gt;</span>
 <span class="nt">&lt;profiles&gt;</span>
-    <span class="c">&lt;!-- Настройки по умолчанию --&gt;</span>
+    <span class="c">&lt;!-- Default settings --&gt;</span>
     <span class="nt">&lt;default&gt;</span>
-        <span class="c">&lt;!-- Максимальное количество потоков при выполнении одного запроса. --&gt;</span>
+        <span class="c">&lt;!-- Maximum number of threads for executing a single query. --&gt;</span>
         <span class="nt">&lt;max_threads&gt;</span>8<span class="nt">&lt;/max_threads&gt;</span>
     <span class="nt">&lt;/default&gt;</span>
-
-    <span class="c">&lt;!-- Настройки для запросов из пользовательского интерфейса --&gt;</span>
+    <span class="c">&lt;!-- Settings for queries from the user interface --&gt;</span>
     <span class="nt">&lt;web&gt;</span>
         <span class="nt">&lt;max_rows_to_read&gt;</span>1000000000<span class="nt">&lt;/max_rows_to_read&gt;</span>
         <span class="nt">&lt;max_bytes_to_read&gt;</span>100000000000<span class="nt">&lt;/max_bytes_to_read&gt;</span>
-
         <span class="nt">&lt;max_rows_to_group_by&gt;</span>1000000<span class="nt">&lt;/max_rows_to_group_by&gt;</span>
         <span class="nt">&lt;group_by_overflow_mode&gt;</span>any<span class="nt">&lt;/group_by_overflow_mode&gt;</span>
-
         <span class="nt">&lt;max_rows_to_sort&gt;</span>1000000<span class="nt">&lt;/max_rows_to_sort&gt;</span>
         <span class="nt">&lt;max_bytes_to_sort&gt;</span>1000000000<span class="nt">&lt;/max_bytes_to_sort&gt;</span>
-
         <span class="nt">&lt;max_result_rows&gt;</span>100000<span class="nt">&lt;/max_result_rows&gt;</span>
         <span class="nt">&lt;max_result_bytes&gt;</span>100000000<span class="nt">&lt;/max_result_bytes&gt;</span>
         <span class="nt">&lt;result_overflow_mode&gt;</span>break<span class="nt">&lt;/result_overflow_mode&gt;</span>
-
         <span class="nt">&lt;max_execution_time&gt;</span>600<span class="nt">&lt;/max_execution_time&gt;</span>
         <span class="nt">&lt;min_execution_speed&gt;</span>1000000<span class="nt">&lt;/min_execution_speed&gt;</span>
         <span class="nt">&lt;timeout_before_checking_execution_speed&gt;</span>15<span class="nt">&lt;/timeout_before_checking_execution_speed&gt;</span>
-
         <span class="nt">&lt;max_columns_to_read&gt;</span>25<span class="nt">&lt;/max_columns_to_read&gt;</span>
         <span class="nt">&lt;max_temporary_columns&gt;</span>100<span class="nt">&lt;/max_temporary_columns&gt;</span>
         <span class="nt">&lt;max_temporary_non_const_columns&gt;</span>50<span class="nt">&lt;/max_temporary_non_const_columns&gt;</span>
-
         <span class="nt">&lt;max_subquery_depth&gt;</span>2<span class="nt">&lt;/max_subquery_depth&gt;</span>
         <span class="nt">&lt;max_pipeline_depth&gt;</span>25<span class="nt">&lt;/max_pipeline_depth&gt;</span>
         <span class="nt">&lt;max_ast_depth&gt;</span>50<span class="nt">&lt;/max_ast_depth&gt;</span>
         <span class="nt">&lt;max_ast_elements&gt;</span>100<span class="nt">&lt;/max_ast_elements&gt;</span>
-
         <span class="nt">&lt;readonly&gt;</span>1<span class="nt">&lt;/readonly&gt;</span>
     <span class="nt">&lt;/web&gt;</span>
 <span class="nt">&lt;/profiles&gt;</span>
 </pre></div>
 </div>
-<p>В примере задано два профиля: <tt class="docutils literal"><span class="pre">default</span></tt> и <tt class="docutils literal"><span class="pre">web</span></tt>. Профиль <tt class="docutils literal"><span class="pre">default</span></tt> имеет специальное значение - он всегда обязан присутствовать и применяется при запуске сервера. То есть, профиль default содержит настройки по умолчанию. Профиль web - обычный профиль, который может быть установлен с помощью запроса SET или с помощью параметра URL при запросе по HTTP.</p>
-<p>Профили настроек могут наследоваться от друг-друга - это реализуется указанием настройки profile перед остальными настройками, перечисленными в профиле.</p>
+<p>In the example, two profiles are set: <code class="docutils literal"><span class="pre">default</span></code> and <code class="docutils literal"><span class="pre">web</span></code>. The <code class="docutils literal"><span class="pre">default</span></code> profile has a special purpose - it must always be present and is applied when starting the server. In other words, the <code class="docutils literal"><span class="pre">default</span></code> profile contains default settings. The <code class="docutils literal"><span class="pre">web</span></code> profile is a regular profile that can be set using the SET query or using a URL parameter in an HTTP query.</p>
+<p>Settings profiles can inherit from each other. To use inheritance, indicate the &#8216;profile&#8217; setting before the other settings that are listed in the profile.</p>
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="settings.html"
-                        title="previous chapter">max_block_size</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="../configuration_files.html"
-                        title="next chapter">Конфигурационные файлы</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/settings/settings_profiles.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Settings</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="query_complexity.html">Restrictions on query complexity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html">max_block_size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#max-insert-block-size">max_insert_block_size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#max-threads">max_threads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#max-compress-block-size">max_compress_block_size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#min-compress-block-size">min_compress_block_size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#max-query-size">max_query_size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#interactive-delay">interactive_delay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#connect-timeout">connect_timeout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#receive-timeout">receive_timeout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#send-timeout">send_timeout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#poll-interval">poll_interval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#max-distributed-connections">max_distributed_connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#distributed-connections-pool-size">distributed_connections_pool_size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#connect-timeout-with-failover-ms">connect_timeout_with_failover_ms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#connections-with-failover-max-tries">connections_with_failover_max_tries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#extremes">extremes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#use-uncompressed-cache">use_uncompressed_cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#replace-running-query">replace_running_query</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#load-balancing">load_balancing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#totals-mode">totals_mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#totals-auto-threshold">totals_auto_threshold</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#default-sample">default_sample</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#max-parallel-replicas">max_parallel_replicas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#compile">compile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#min-count-to-compile">min_count_to_compile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#input-format-skip-unknown-fields">input_format_skip_unknown_fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#output-format-json-quote-64bit-integers">output_format_json_quote_64bit_integers</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Settings profiles</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Settings</a><ul>
+      <li>Previous: <a href="settings.html" title="previous chapter">max_block_size</a></li>
+      <li>Next: <a href="../configuration_files.html" title="next chapter">Configuration files</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -143,25 +211,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../configuration_files.html" title="Конфигурационные файлы"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="settings.html" title="max_block_size"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Настройки</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

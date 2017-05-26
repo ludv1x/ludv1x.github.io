@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>system.processes &mdash; ClickHouse 1 documentation</title>
+    <title>system.processes &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,56 +23,46 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Системные таблицы" href="index.html" />
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="System tables" href="index.html" />
     <link rel="next" title="system.replicas" href="system.replicas.html" />
-    <link rel="prev" title="system.parts" href="system.parts.html" /> 
+    <link rel="prev" title="system.parts" href="system.parts.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="system.replicas.html" title="system.replicas"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="system.parts.html" title="system.parts"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Системные таблицы</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="system-processes">
 <h1>system.processes<a class="headerlink" href="#system-processes" title="Permalink to this headline">¶</a></h1>
-<p>Эта системная таблица используется для реализации запроса <tt class="docutils literal"><span class="pre">SHOW</span> <span class="pre">PROCESSLIST</span></tt>.
-Столбцы:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>user String              - имя пользователя, который задал запрос. При распределённой обработке запроса, относится к пользователю, с помощью которого сервер-инициатор запроса отправил запрос на данный сервер, а не к имени пользователя, который задал распределённый запрос на сервер-инициатор запроса.
+<p>This system table is used for implementing the <code class="docutils literal"><span class="pre">SHOW</span> <span class="pre">PROCESSLIST</span></code> query.
+Columns:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>user String              - Name of the user who made the request. For distributed query processing, this is the user who helped the requestor server send the query to this server, not the user who made the distributed request on the requestor server.
 
-address String           - IP-адрес, с которого задан запрос. При распределённой обработке запроса, аналогично.
+address String           - The IP address the request was made from. The same for distributed processing.
 
-elapsed Float64          - время в секундах, прошедшее от начала выполнения запроса.
+elapsed Float64          - The time in seconds since request execution started.
 
-rows_read UInt64         - количество прочитанных из таблиц строк. При распределённой обработке запроса, на сервере-инициаторе запроса, представляет собой сумму по всем удалённым серверам.
+rows_read UInt64         - The number of rows read from the table. For distributed processing, on the requestor server, this is the total for all remote servers.
 
-bytes_read UInt64        - количество прочитанных из таблиц байт, в несжатом виде. При распределённой обработке запроса, на сервере-инициаторе запроса, представляет собой сумму по всем удалённым серверам.
+bytes_read UInt64        - The number of uncompressed bytes read from the table. For distributed processing, on the requestor server, this is the total for all remote servers.
 
-total_rows_approx UInt64 - приблизительная оценка общего количества строк, которые должны быть прочитаны. При распределённой обработке запроса, на сервере-инициаторе запроса, представляет собой сумму по всем удалённым серверам. Может обновляться в процессе выполнения запроса, когда становятся известны новые источники для обработки.
+total_rows_approx UInt64 - The approximation of the total number of rows that should be read. For distributed processing, on the requestor server, this is the total for all remote servers. It can be updated during request processing, when new sources to process become known.
 
-memory_usage UInt64      - потребление памяти запросом. Может не учитывать некоторые виды выделенной памяти.
+memory_usage UInt64      - How much memory the request uses. It might not include some types of dedicated memory.
 
-query String             - текст запроса. В случае INSERT - без данных для INSERT-а.
+query String             - The query text. For INSERT, it doesn&#39;t include the data to insert.
 
-query_id String          - идентификатор запроса, если был задан.
+query_id String          - Query ID, if defined.
 </pre></div>
 </div>
 </div>
@@ -81,20 +71,95 @@ query_id String          - идентификатор запроса, если �
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="system.parts.html"
-                        title="previous chapter">system.parts</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="system.replicas.html"
-                        title="next chapter">system.replicas</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/system_tables/system.processes.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">System tables</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="system.asynchronous_metrics.html">system.asynchronous_metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.clusters.html">system.clusters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.columns.html">system.columns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.databases.html">system.databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.dictionaries.html">system.dictionaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.events.html">system.events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.functions.html">system.functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.merges.html">system.merges</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.metrics.html">system.metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.numbers.html">system.numbers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.numbers_mt.html">system.numbers_mt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.one.html">system.one</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.parts.html">system.parts</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">system.processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.replicas.html">system.replicas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.settings.html">system.settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.tables.html">system.tables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.zookeeper.html">system.zookeeper</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">System tables</a><ul>
+      <li>Previous: <a href="system.parts.html" title="previous chapter">system.parts</a></li>
+      <li>Next: <a href="system.replicas.html" title="next chapter">system.replicas</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -111,25 +176,13 @@ query_id String          - идентификатор запроса, если �
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="system.replicas.html" title="system.replicas"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="system.parts.html" title="system.parts"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Системные таблицы</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

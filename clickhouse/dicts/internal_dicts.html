@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Встроенные словари &mdash; ClickHouse 1 documentation</title>
+    <title>Internal dictionaries &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,100 +23,148 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Словари" href="index.html" />
-    <link rel="next" title="Настройки" href="../settings/index.html" />
-    <link rel="prev" title="Внешние словари" href="external_dicts.html" /> 
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Dictionaries" href="index.html" />
+    <link rel="next" title="Settings" href="../settings/index.html" />
+    <link rel="prev" title="External dictionaries" href="external_dicts.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../settings/index.html" title="Настройки"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="external_dicts.html" title="Внешние словари"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Словари</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="id1">
-<h1>Встроенные словари<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
-<p>ClickHouse содержит встроенную возможность работы с геобазой.</p>
+  <div class="section" id="internal-dictionaries">
+<h1>Internal dictionaries<a class="headerlink" href="#internal-dictionaries" title="Permalink to this headline">¶</a></h1>
+<p>ClickHouse contains a built-in feature for working with a geobase.</p>
 <dl class="docutils">
-<dt>Это позволяет:</dt>
+<dt>This allows you to:</dt>
 <dd><ul class="first last simple">
-<li>для идентификатора региона получить его имя на нужном языке;</li>
-<li>по идентификатору региона получить идентификатор города, области, федерального округа, страны, континента;</li>
-<li>проверить, что один регион входит в другой;</li>
-<li>получить цепочку родительских регионов.</li>
+<li>Use a region&#8217;s ID to get its name in the desired language.</li>
+<li>Use a region&#8217;s ID to get the ID of a city, area, federal district, country, or continent.</li>
+<li>Check whether a region is part of another region.</li>
+<li>Get a chain of parent regions.</li>
 </ul>
 </dd>
 </dl>
-<p>Все функции поддерживают &#8220;транслокальность&#8221;, то есть возможность использовать одновременно разные точки зрения на принадлежность регионов. Подробнее смотрите в разделе &#8220;Функции для работы со словарями Яндекс.Метрики&#8221;.</p>
-<p>В пакете по умолчанию, встроенные словари выключены.
-Для включения, раскомментируйте параметры <tt class="docutils literal"><span class="pre">path_to_regions_hierarchy_file</span></tt> и <tt class="docutils literal"><span class="pre">path_to_regions_names_files</span></tt> в конфигурационном файле сервера.</p>
-<p>Геобаза загружается из текстовых файлов.
-Если вы работаете в Яндексе, то для их создания вы можете воспользоваться инструкцией:
+<p>All the functions support &#8220;translocality,&#8221; the ability to simultaneously use different perspectives on region ownership. For more information, see the section &#8220;Functions for working with Yandex.Metrica dictionaries&#8221;.</p>
+<p>The internal dictionaries are disabled in the default package.
+To enable them, uncomment the parameters <code class="docutils literal"><span class="pre">path_to_regions_hierarchy_file</span></code> and <code class="docutils literal"><span class="pre">path_to_regions_names_files</span></code> in the server config file.</p>
+<p>The geobase is loaded from text files.
+If you are Yandex employee, to create them, use the following instructions:
 <a class="reference external" href="https://github.yandex-team.ru/raw/Metrika/ClickHouse_private/master/doc/create_embedded_geobase_dictionaries.txt">https://github.yandex-team.ru/raw/Metrika/ClickHouse_private/master/doc/create_embedded_geobase_dictionaries.txt</a></p>
-<p>Положите файлы regions_hierarchy*.txt в директорию path_to_regions_hierarchy_file. Этот конфигурационный параметр должен содержать путь к файлу regions_hierarchy.txt (иерархия регионов по умолчанию), а другие файлы (regions_hierarchy_ua.txt) должны находиться рядом в той же директории.</p>
-<p>Положите файлы regions_names_*.txt в директорию path_to_regions_names_files.</p>
-<p>Также вы можете создать эти файлы самостоятельно. Формат файлов такой:</p>
+<p>Put the regions_hierarchy*.txt files in the path_to_regions_hierarchy_file directory. This configuration parameter must contain the path to the regions_hierarchy.txt file (the default regional hierarchy), and the other files (regions_hierarchy_ua.txt) must be located in the same directory.</p>
+<p>Put the regions_names_*.txt files in the path_to_regions_names_files directory.</p>
+<p>You can also create these files yourself. The file format is as follows:</p>
 <dl class="docutils">
-<dt><tt class="docutils literal"><span class="pre">regions_hierarchy*.txt</span></tt>: TabSeparated (без заголовка), столбцы:</dt>
+<dt><code class="docutils literal"><span class="pre">regions_hierarchy*.txt</span></code>: TabSeparated (no header), columns:</dt>
 <dd><ul class="first last simple">
-<li>идентификатор региона (UInt32);</li>
-<li>идентификатор родительского региона (UInt32);</li>
-<li>тип региона (UInt8): 1 - континент, 3 - страна, 4 - федеральный округ, 5 - область, 6 - город; остальные типы не имеют значения;</li>
-<li>население (UInt32) - не обязательный столбец.</li>
+<li>Region ID (UInt32)</li>
+<li>Parent region ID (UInt32)</li>
+<li>Region type (UInt8): 1 - continent, 3 - country, 4 - federal district, 5 - region, 6 - city; other types don&#8217;t have values.</li>
+<li>Population (UInt32) - Optional column.</li>
 </ul>
 </dd>
-<dt><tt class="docutils literal"><span class="pre">regions_names_*.txt</span></tt>: TabSeparated (без заголовка), столбцы:</dt>
+<dt><code class="docutils literal"><span class="pre">regions_names_*.txt</span></code>: TabSeparated (no header), columns:</dt>
 <dd><ul class="first last simple">
-<li>идентификатор региона (UInt32);</li>
-<li>имя региона (String) - не может содержать табы или переводы строк, даже экранированные.</li>
+<li>Region ID (UInt32)</li>
+<li>Region name (String) - Can&#8217;t contain tabs or line breaks, even escaped ones.</li>
 </ul>
 </dd>
 </dl>
-<p>Для хранения в оперативке используется плоский массив. Поэтому, идентификаторы не должны быть больше миллиона.</p>
-<p>Словари могут обновляться без перезапуска сервера. Но набор доступных словарей не обновляется.
-Для обновления проверяется время модификации файлов; если файл изменился, то словарь будет обновлён.
-Периодичность проверки настраивается конфигурационным параметром builtin_dictionaries_reload_interval.
-Обновление словарей (кроме загрузки при первом использовании) не блокирует запросы - во время обновления запросы используют старую версию словарей. Если при обновлении возникнет ошибка, то ошибка пишется в лог сервера, а запросы продолжат использовать старую версию словарей.</p>
-<p>Рекомендуется периодически обновлять словари с геобазой. При обновлении, генерируйте новые файлы, записывая их в отдельное место, а только когда всё готово - переименовывайте в файлы, которые использует сервер.</p>
-<p>Также имеются функции для работы с идентификаторами операционных систем и поисковых систем Яндекс.Метрики, пользоваться которыми не нужно.</p>
+<p>A flat array is used for storing in RAM. For this reason, IDs shouldn&#8217;t be more than a million.</p>
+<p>Dictionaries can be updated without the server restart. However, the set of available dictionaries is not updated. For updates, the file modification times are checked. If a file has changed, the dictionary is updated.
+The interval to check for changes is configured in the &#8216;builtin_dictionaries_reload_interval&#8217; parameter.
+Dictionary updates (other than loading at first use) do not block queries. During updates, queries use the old versions of dictionaries. If an error occurs during an update, the error is written to the server log, while queries continue using the old version of dictionaries.</p>
+<p>We recommend periodically updating the dictionaries with the geobase. During an update, generate new files and write them to a separate location. When everything is ready, rename them to the files used by the server.</p>
+<p>There are also functions for working with OS identifiers and Yandex.Metrica search engines, but they shouldn&#8217;t be used.</p>
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="external_dicts.html"
-                        title="previous chapter">Внешние словари</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="../settings/index.html"
-                        title="next chapter">Настройки</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/dicts/internal_dicts.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Dictionaries</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="external_dicts.html">External dictionaries</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Internal dictionaries</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Dictionaries</a><ul>
+      <li>Previous: <a href="external_dicts.html" title="previous chapter">External dictionaries</a></li>
+      <li>Next: <a href="../settings/index.html" title="next chapter">Settings</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -133,25 +181,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../settings/index.html" title="Настройки"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="external_dicts.html" title="Внешние словари"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Словари</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

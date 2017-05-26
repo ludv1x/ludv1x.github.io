@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ReplacingMergeTree &mdash; ClickHouse 1 documentation</title>
+    <title>ReplacingMergeTree &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,66 +23,132 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Движки таблиц" href="index.html" />
-    <link rel="next" title="Репликация данных" href="replication.html" />
-    <link rel="prev" title="Null" href="null.html" /> 
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Table engines" href="index.html" />
+    <link rel="next" title="Data replication" href="replication.html" />
+    <link rel="prev" title="Null" href="null.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="replication.html" title="Репликация данных"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="null.html" title="Null"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Движки таблиц</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="replacingmergetree">
 <h1>ReplacingMergeTree<a class="headerlink" href="#replacingmergetree" title="Permalink to this headline">¶</a></h1>
-<p>Движок таблиц отличается от <tt class="docutils literal"><span class="pre">MergeTree</span></tt> тем, что выполняет удаление дублирующихся записей с одинаковым значением первичного ключа.</p>
-<p>Последний, необязательный параметр движка таблицы - столбец с &#8220;версией&#8221;. При слиянии, для всех строк с одинаковым значением первичного ключа, оставляет только одну строку: если задан столбец версии - строку с максимальной версией, иначе - последнюю строку.</p>
-<p>Столбец с версией должен иметь тип из семейства <tt class="docutils literal"><span class="pre">UInt</span></tt>, либо <tt class="docutils literal"><span class="pre">Date</span></tt> или <tt class="docutils literal"><span class="pre">DateTime</span></tt>.</p>
+<p>This engine differs from <code class="docutils literal"><span class="pre">MergeTree</span></code> in that it can deduplicate data by primary key while merging.</p>
+<p>For ReplacingMergeTree mode, last parameter is optional name of &#8216;version&#8217; column. While merging, for all rows with same primary key, only one row is selected: last row, if version column was not specified, or last row with maximum version value, if specified.</p>
+<p>Version column must have type of UInt family or <code class="docutils literal"><span class="pre">Date</span></code> or <code class="docutils literal"><span class="pre">DateTime</span></code>.</p>
 <div class="highlight-sql"><div class="highlight"><pre><span></span><span class="n">ReplacingMergeTree</span><span class="p">(</span><span class="n">EventDate</span><span class="p">,</span> <span class="p">(</span><span class="n">OrderID</span><span class="p">,</span> <span class="n">EventDate</span><span class="p">,</span> <span class="n">BannerID</span><span class="p">,</span> <span class="p">...),</span> <span class="mi">8192</span><span class="p">,</span> <span class="n">ver</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Обратите внимание, что дедупликация данных производится лишь во время слияний. Слияние происходят в фоне, в неизвестный момент времени, на который вы не можете ориентироваться. Некоторая часть данных может так и остаться необработанной. Хотя вы можете вызвать внеочередное слияние с помощью запроса OPTIMIZE, на это не стоит рассчитывать, так как запрос OPTIMIZE приводит к чтению и записи большого объёма данных.</p>
-<p>Таким образом, <tt class="docutils literal"><span class="pre">ReplacingMergeTree</span></tt> подходит для фоновой чистки дублирующихся данных в целях экономии места, но не даёт гарантий отсутствия дубликатов.</p>
-<p><em>Движок не используется в Яндекс.Метрике, но нашёл своё применение в других отделах Яндекса.</em></p>
+<p>Please note, that data is deduplicated only while merging process. Merges are processed in background. Exact time of merge is unspecified and you could not rely on it. Some part of data could be not merged at all. While you could trigger extra merge with OPTIMIZE query, it is not recommended, as OPTIMIZE will read and write vast amount of data.</p>
+<p>This table engine is suitable for background removal of duplicate data to save space, but not suitable to guarantee of deduplication.</p>
+<p><em>Developed for special purposes of not Yandex.Metrica department.</em></p>
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="null.html"
-                        title="previous chapter">Null</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="replication.html"
-                        title="next chapter">Репликация данных</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/table_engines/replacingmergetree.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Table engines</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="aggregatingmergetree.html">AggregatingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buffer.html">Buffer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="collapsingmergetree.html">CollapsingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="distributed.html">Distributed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file.html">File(InputFormat)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="join.html">Join</a></li>
+<li class="toctree-l2"><a class="reference internal" href="log.html">Log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="materializedview.html">MaterializedView</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html">Memory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="merge.html">Merge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mergetree.html">MergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="null.html">Null</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">ReplacingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="replication.html">Data replication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resharding.html">Перешардирование</a></li>
+<li class="toctree-l2"><a class="reference internal" href="set.html">Set</a></li>
+<li class="toctree-l2"><a class="reference internal" href="summingmergetree.html">SummingMergeTree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tinylog.html">TinyLog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="view.html">View</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Table engines</a><ul>
+      <li>Previous: <a href="null.html" title="previous chapter">Null</a></li>
+      <li>Next: <a href="replication.html" title="next chapter">Data replication</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -99,25 +165,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="replication.html" title="Репликация данных"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="null.html" title="Null"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Движки таблиц</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>RowBinary &mdash; ClickHouse 1 documentation</title>
+    <title>RowBinary &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,65 +23,136 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Форматы" href="index.html" />
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Formats" href="index.html" />
     <link rel="next" title="TabSeparated" href="tabseparated.html" />
-    <link rel="prev" title="PrettySpace" href="prettyspace.html" /> 
+    <link rel="prev" title="PrettySpace" href="prettyspace.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="tabseparated.html" title="TabSeparated"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="prettyspace.html" title="PrettySpace"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Форматы</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="rowbinary">
 <h1>RowBinary<a class="headerlink" href="#rowbinary" title="Permalink to this headline">¶</a></h1>
-<p>Форматирует и парсит данные по строкам, в бинарном виде. Строки и значения уложены подряд, без разделителей.
-Формат менее эффективен, чем формат Native, так как является строковым.</p>
-<p>Числа представлены в little endian формате фиксированной длины. Для примера, UInt64 занимает 8 байт.
-DateTime представлены как UInt32, содержащий unix timestamp в качестве значения.
-Date представлены как UInt16, содержащий количество дней, прошедших с 1970-01-01 в качестве значения.
-String представлены как длина в формате varint (unsigned <a class="reference external" href="https://en.wikipedia.org/wiki/LEB128">LEB128</a>), а затем байты строки.
-FixedString представлены просто как последовательность байт.</p>
-<p>Array представлены как длина в формате varint (unsigned <a class="reference external" href="https://en.wikipedia.org/wiki/LEB128">LEB128</a>), а затем элементы массива, подряд.</p>
+<p>Writes data by row in binary format. Rows and values are listed consecutively, without separators.
+This format is less efficient than the Native format, since it is row-based.</p>
+<p>Numbers is written in little endian, fixed width. For example, UInt64 takes 8 bytes.
+DateTime is written as UInt32 with unix timestamp value.
+Date is written as UInt16 with number of days since 1970-01-01 in value.
+String is written as length in varint (unsigned <a class="reference external" href="https://en.wikipedia.org/wiki/LEB128">LEB128</a>) format and then bytes of string.
+FixedString is written as just its bytes.
+Array is written as length in varint (unsigned <a class="reference external" href="https://en.wikipedia.org/wiki/LEB128">LEB128</a>) format and then all elements, contiguously</p>
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="prettyspace.html"
-                        title="previous chapter">PrettySpace</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="tabseparated.html"
-                        title="next chapter">TabSeparated</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/formats/rowbinary.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Formats</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="blocktabseparated.html">BlockTabSeparated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="csv.html">CSV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="csvwithnames.html">CSVWithNames</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json.html">JSON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsoncompact.html">JSONCompact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="jsoneachrow.html">JSONEachRow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="native.html">Native</a></li>
+<li class="toctree-l2"><a class="reference internal" href="null.html">Null</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pretty.html">Pretty</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prettycompact.html">PrettyCompact</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prettycompactmonoblock.html">PrettyCompactMonoBlock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prettynoescapes.html">PrettyNoEscapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prettynoescapes.html#prettycompactnoescapes">PrettyCompactNoEscapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prettynoescapes.html#prettyspacenoescapes">PrettySpaceNoEscapes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prettyspace.html">PrettySpace</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">RowBinary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tabseparated.html">TabSeparated</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tabseparatedraw.html">TabSeparatedRaw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tabseparatedwithnames.html">TabSeparatedWithNames</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tabseparatedwithnamesandtypes.html">TabSeparatedWithNamesAndTypes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tskv.html">TSKV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="values.html">Values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vertical.html">Vertical</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xml.html">XML</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Formats</a><ul>
+      <li>Previous: <a href="prettyspace.html" title="previous chapter">PrettySpace</a></li>
+      <li>Next: <a href="tabseparated.html" title="next chapter">TabSeparated</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -98,25 +169,13 @@ FixedString представлены просто как последовате�
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="tabseparated.html" title="TabSeparated"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="prettyspace.html" title="PrettySpace"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Форматы</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

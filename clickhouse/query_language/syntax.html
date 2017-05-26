@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Синтаксис &mdash; ClickHouse 1 documentation</title>
+    <title>Syntax &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,129 +23,116 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Язык запросов" href="index.html" />
-    <link rel="next" title="Внешние данные для обработки запроса" href="../external_data.html" />
-    <link rel="prev" title="Запросы" href="queries.html" /> 
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Query language" href="index.html" />
+    <link rel="next" title="External data for query processing" href="../external_data.html" />
+    <link rel="prev" title="Queries" href="queries.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../external_data.html" title="Внешние данные для обработки запроса"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="queries.html" title="Запросы"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Язык запросов</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="id1">
-<h1>Синтаксис<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
-<p>В системе есть два вида парсеров: полноценный парсер SQL (recursive descent parser) и парсер форматов данных (быстрый потоковый парсер).
-Во всех случаях кроме запроса INSERT, используется только полноценный парсер SQL.
-В запросе INSERT используется оба парсера:</p>
+  <div class="section" id="syntax">
+<h1>Syntax<a class="headerlink" href="#syntax" title="Permalink to this headline">¶</a></h1>
+<p>There are two types of parsers in the system: a full SQL parser (a recursive descent parser), and a data format parser (a fast stream parser). In all cases except the INSERT query, only the full SQL parser is used.
+The INSERT query uses both parsers:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>INSERT INTO t VALUES (1, &#39;Hello, world&#39;), (2, &#39;abc&#39;), (3, &#39;def&#39;)
 </pre></div>
 </div>
-<p>Фрагмент <tt class="docutils literal"><span class="pre">INSERT</span> <span class="pre">INTO</span> <span class="pre">t</span> <span class="pre">VALUES</span></tt> парсится полноценным парсером, а данные <tt class="docutils literal"><span class="pre">(1,</span> <span class="pre">'Hello,</span> <span class="pre">world'),</span> <span class="pre">(2,</span> <span class="pre">'abc'),</span> <span class="pre">(3,</span> <span class="pre">'def')</span></tt> - быстрым потоковым парсером.
-Данные могут иметь любой формат. При получении запроса, сервер заранее считывает в оперативку не более <tt class="docutils literal"><span class="pre">max_query_size</span></tt> байт запроса (по умолчанию, 1МБ), а всё остальное обрабатывается потоково.
-Таким образом, в системе нет проблем с большими INSERT запросами, как в MySQL.</p>
-<p>При использовании формата Values в INSERT запросе может сложиться иллюзия, что данные парсятся также, как выражения в запросе SELECT, но это не так - формат Values гораздо более ограничен.</p>
-<p>Далее пойдёт речь о полноценном парсере. О парсерах форматов, смотри раздел &#8220;Форматы&#8221;.</p>
-<div class="section" id="id2">
-<h2>Пробелы<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
-<p>Между синтаксическими конструкциями (в том числе, в начале и конце запроса) может быть расположено произвольное количество пробельных символов. К пробельным символам относятся пробел, таб, перевод строки, CR, form feed.</p>
+<p>The <code class="docutils literal"><span class="pre">INSERT</span> <span class="pre">INTO</span> <span class="pre">t</span> <span class="pre">VALUES</span></code> fragment is parsed by the full parser, and the data <code class="docutils literal"><span class="pre">(1,</span> <span class="pre">'Hello,</span> <span class="pre">world'),</span> <span class="pre">(2,</span> <span class="pre">'abc'),</span> <span class="pre">(3,</span> <span class="pre">'def')</span></code> is parsed by the fast stream parser.
+Data can have any format. When a query is received, the server calculates no more than &#8216;max_query_size&#8217; bytes of the request in RAM (by default, 1 MB), and the rest is stream parsed. This means the system doesn&#8217;t have problems with large INSERT queries, like MySQL does.</p>
+<p>When using the Values format in an <code class="docutils literal"><span class="pre">INSERT</span></code> query, it may seem that data is parsed the same as expressions in a SELECT query, but this is not true. The Values format is much more limited.</p>
+<p>Next we will cover the full parser. For more information about format parsers, see the section &#8220;Formats&#8221;.</p>
+<div class="section" id="spaces">
+<h2>Spaces<a class="headerlink" href="#spaces" title="Permalink to this headline">¶</a></h2>
+<p>There may be any number of space symbols between syntactical constructions (including the beginning and end of a query). Space symbols include the space, tab, line break, CR, and form feed.</p>
 </div>
-<div class="section" id="id3">
-<h2>Комментарии<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
-<p>Поддерживаются комментарии в SQL-стиле и C-стиле.
-Комментарии в SQL-стиле: от <tt class="docutils literal"><span class="pre">--</span></tt> до конца строки. Пробел после <tt class="docutils literal"><span class="pre">--</span></tt> может не ставиться.
-Комментарии в C-стиле: от <tt class="docutils literal"><span class="pre">/*</span></tt> до <tt class="docutils literal"><span class="pre">*/</span></tt>. Такие комментарии могут быть многострочными. Пробелы тоже не обязательны.</p>
+<div class="section" id="comments">
+<h2>Comments<a class="headerlink" href="#comments" title="Permalink to this headline">¶</a></h2>
+<p>SQL-style and C-style comments are supported.
+SQL-style comments: from <code class="docutils literal"><span class="pre">--</span></code> to the end of the line. The space after <code class="docutils literal"><span class="pre">--</span></code> can be omitted.
+C-style comments: from <code class="docutils literal"><span class="pre">/*</span></code> to <code class="docutils literal"><span class="pre">*/</span></code>. These comments can be multiline. Spaces are not required here, either.</p>
 </div>
-<div class="section" id="id4">
-<h2>Ключевые слова<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
-<p>Ключевые слова (например, <tt class="docutils literal"><span class="pre">SELECT</span></tt>) регистронезависимы. Всё остальное (имена столбцов, функций и т. п.), в отличие от стандарта SQL, регистрозависимо. Ключевые слова не зарезервированы (а всего лишь парсятся как ключевые слова в соответствующем контексте).</p>
+<div class="section" id="keywords">
+<h2>Keywords<a class="headerlink" href="#keywords" title="Permalink to this headline">¶</a></h2>
+<p>Keywords (such as SELECT) are not case-sensitive. Everything else (column names, functions, and so on), in contrast to standard SQL, is case-sensitive. Keywords are not reserved (they are just parsed as keywords in the corresponding context).</p>
 </div>
-<div class="section" id="id5">
-<h2>Идентификаторы<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
-<p>Идентификаторы (имена столбцов, функций, типов данных) могут быть квотированными или не квотированными.
-Не квотированные идентификаторы начинаются на букву латинского алфавита или подчёркивание; продолжаются на букву латинского алфавита или подчёркивание или цифру. Короче говоря, должны соответствовать регулярному выражению <tt class="docutils literal"><span class="pre">^[a-zA-Z_][0-9a-zA-Z_]*$</span></tt>. Примеры: <tt class="docutils literal"><span class="pre">x,</span> <span class="pre">_1,</span> <span class="pre">X_y__Z123_.</span></tt>
-Квотированные идентификаторы расположены в обратных кавычках <tt class="docutils literal"><span class="pre">`id`</span></tt> (также, как в MySQL), и могут обозначать произвольный (непустой) набор байт. При этом, внутри записи такого идентификатора, символы (например, символ обратной кавычки) могут экранироваться с помощью обратного слеша. Правила экранирования такие же, как в строковых литералах (см. ниже).
-Рекомендуется использовать идентификаторы, которые не нужно квотировать.</p>
+<div class="section" id="identifiers">
+<h2>Identifiers<a class="headerlink" href="#identifiers" title="Permalink to this headline">¶</a></h2>
+<p>Identifiers (column names, functions, and data types) can be quoted or non-quoted.
+Non-quoted identifiers start with a Latin letter or underscore, and continue with a Latin letter, underscore, or number. In other words, they must match the regex <code class="docutils literal"><span class="pre">^[a-zA-Z_][0-9a-zA-Z_]*$</span></code>. Examples: <code class="docutils literal"><span class="pre">x</span></code>, <code class="docutils literal"><span class="pre">_1</span></code>, <code class="docutils literal"><span class="pre">X_y__Z123_</span></code>.
+Quoted identifiers are placed in reversed quotation marks <code class="docutils literal"><span class="pre">`id`</span></code> (the same as in MySQL), and can indicate any set of bytes (non-empty). In addition, symbols (for example, the reverse quotation mark) inside this type of identifier can be backslash-escaped. Escaping rules are the same as for string literals (see below).
+We recommend using identifiers that do not need to be quoted.</p>
 </div>
-<div class="section" id="id6">
-<h2>Литералы<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
-<p>Бывают числовые, строковые и составные литералы.</p>
-<div class="section" id="id7">
-<h3>Числовые литералы<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
-<p>Числовой литерал пытается распарситься:
-- сначала как 64-битное число без знака, с помощью функции strtoull;
-- если не получилось - то как 64-битное число со знаком, с помощью функции strtoll;
-- если не получилось - то как число с плавающей запятой, с помощью функции strtod;
-- иначе - ошибка.</p>
-<p>Соответствующее значение будет иметь тип минимального размера, который вмещает значение.
-Например, 1 парсится как UInt8, а 256 - как UInt16. Подробнее смотрите &#8220;Типы данных&#8221;.</p>
-<p>Примеры: <tt class="docutils literal"><span class="pre">1</span></tt>, <tt class="docutils literal"><span class="pre">18446744073709551615</span></tt>, <tt class="docutils literal"><span class="pre">0xDEADBEEF</span></tt>, <tt class="docutils literal"><span class="pre">01</span></tt>, <tt class="docutils literal"><span class="pre">0.1</span></tt>, <tt class="docutils literal"><span class="pre">1e100</span></tt>, <tt class="docutils literal"><span class="pre">-1e-100</span></tt>, <tt class="docutils literal"><span class="pre">inf</span></tt>, <tt class="docutils literal"><span class="pre">nan</span></tt>.</p>
+<div class="section" id="literals">
+<h2>Literals<a class="headerlink" href="#literals" title="Permalink to this headline">¶</a></h2>
+<p>There are numeric literals, string literals, and compound literals.</p>
+<div class="section" id="numeric-literals">
+<h3>Numeric literals<a class="headerlink" href="#numeric-literals" title="Permalink to this headline">¶</a></h3>
+<p>A numeric literal tries to be parsed:
+- first as a 64-bit signed number, using the &#8216;strtoull&#8217; function.
+- if unsuccessful, as a 64-bit unsigned number, using the &#8216;strtoll&#8217; function.
+- if unsuccessful, as a floating-point number using the &#8216;strtod&#8217; function.
+- otherwise, an error is returned.</p>
+<p>The corresponding value will have the smallest type that the value fits in.
+For example, 1 is parsed as UInt8, but 256 is parsed as UInt16. For more information, see &#8220;Data types&#8221;.</p>
+<p>Examples: <code class="docutils literal"><span class="pre">1</span></code>, <code class="docutils literal"><span class="pre">18446744073709551615</span></code>, <code class="docutils literal"><span class="pre">0xDEADBEEF</span></code>, <code class="docutils literal"><span class="pre">01</span></code>, <code class="docutils literal"><span class="pre">0.1</span></code>, <code class="docutils literal"><span class="pre">1e100</span></code>, <code class="docutils literal"><span class="pre">-1e-100</span></code>, <code class="docutils literal"><span class="pre">inf</span></code>, <code class="docutils literal"><span class="pre">nan</span></code>.</p>
 </div>
-<div class="section" id="id8">
-<h3>Строковые литералы<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
-<p>Поддерживаются только строковые литералы в одинарных кавычках. Символы внутри могут быть экранированы с помощью обратного слеша. Следующие escape-последовательности имеют соответствующее специальное значение: <tt class="docutils literal"><span class="pre">\b</span></tt>, <tt class="docutils literal"><span class="pre">\f</span></tt>, <tt class="docutils literal"><span class="pre">\r</span></tt>, <tt class="docutils literal"><span class="pre">\n</span></tt>, <tt class="docutils literal"><span class="pre">\t</span></tt>, <tt class="docutils literal"><span class="pre">\0</span></tt>, <tt class="docutils literal"><span class="pre">\a</span></tt>, <tt class="docutils literal"><span class="pre">\v</span></tt>, <tt class="docutils literal"><span class="pre">\xHH</span></tt>. Во всех остальных случаях, последовательности вида <tt class="docutils literal"><span class="pre">\c</span></tt>, где c - любой символ, преобразуется в c. Таким образом, могут быть использованы последовательности <tt class="docutils literal"><span class="pre">\'</span></tt> и <tt class="docutils literal"><span class="pre">\\</span></tt>. Значение будет иметь тип String.</p>
-<p>Минимальный набор символов, которых вам необходимо экранировать в строковых литералах: <tt class="docutils literal"><span class="pre">'</span></tt> and <tt class="docutils literal"><span class="pre">\</span></tt>.</p>
+<div class="section" id="string-literals">
+<h3>String literals<a class="headerlink" href="#string-literals" title="Permalink to this headline">¶</a></h3>
+<p>Only string literals in single quotes are supported. The enclosed characters can be backslash-escaped. The following escape sequences have special meanings: <code class="docutils literal"><span class="pre">\b</span></code>, <code class="docutils literal"><span class="pre">\f</span></code>, <code class="docutils literal"><span class="pre">\r</span></code>, <code class="docutils literal"><span class="pre">\n</span></code>, <code class="docutils literal"><span class="pre">\t</span></code>, <code class="docutils literal"><span class="pre">\0</span></code>, <code class="docutils literal"><span class="pre">\a</span></code>, <code class="docutils literal"><span class="pre">\v</span></code>, <code class="docutils literal"><span class="pre">\xHH</span></code>. In all other cases, escape sequences like c, where c is any character, are transformed to c. This means that the sequences <code class="docutils literal"><span class="pre">\'</span></code> and <code class="docutils literal"><span class="pre">\\</span></code> can be used. The value will have the String type.</p>
+<p>Minimum set of symbols that must be escaped in string literal is <code class="docutils literal"><span class="pre">'</span></code> and <code class="docutils literal"><span class="pre">\</span></code>.</p>
 </div>
-<div class="section" id="id9">
-<h3>Составные литералы<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
-<p>Поддерживаются конструкции для массивов: <tt class="docutils literal"><span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">3]</span></tt> и кортежей: <tt class="docutils literal"><span class="pre">(1,</span> <span class="pre">'Hello,</span> <span class="pre">world!',</span> <span class="pre">2)</span></tt>.
-На самом деле, это вовсе не литералы, а выражение с оператором создания массива и оператором создания кортежа, соответственно.
-Подробнее смотри в разделе &#8220;Операторы&#8221;.
-Массив должен состоять хотя бы из одного элемента, а кортеж - хотя бы из двух.
-Кортежи носят служебное значение для использования в секции IN запроса SELECT. Кортежи могут быть получены в качестве результата запроса, но не могут быть сохранены в базу (за исключением таблиц типа Memory).</p>
+<div class="section" id="compound-literals">
+<h3>Compound literals<a class="headerlink" href="#compound-literals" title="Permalink to this headline">¶</a></h3>
+<p>Constructions are supported for arrays: <code class="docutils literal"><span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">3]</span></code> and tuples: <code class="docutils literal"><span class="pre">(1,</span> <span class="pre">'Hello,</span> <span class="pre">world!',</span> <span class="pre">2)</span></code>.
+Actually, these are not literals, but expressions with the array creation operator and the tuple creation operator, respectively. For more information, see the section &#8220;Operators&#8221;.
+An array must consist of at least one item, and a tuple must have at least two items.
+Tuples have a special purpose for use in the IN clause of a SELECT query. Tuples can be obtained as the result of a query, but they can&#8217;t be saved to a database (with the exception of Memory-type tables).</p>
 </div>
 </div>
-<div class="section" id="id10">
-<h2>Функции<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h2>
-<p>Функции записываются как идентификатор со списком аргументов (возможно, пустым) в скобках. В отличие от стандартного SQL, даже в случае пустого списка аргументов, скобки обязательны. Пример: <tt class="docutils literal"><span class="pre">now()</span></tt>.
-Бывают обычные и агрегатные функции (смотрите раздел &#8220;Агрегатные функции&#8221;). Некоторые агрегатные функции могут содержать два списка аргументов в круглых скобках. Пример: <tt class="docutils literal"><span class="pre">quantile(0.9)(x)</span></tt>. Такие агрегатные функции называются &#8220;параметрическими&#8221;, а первый список аргументов называется &#8220;параметрами&#8221;. Синтаксис агрегатных функций без параметров ничем не отличается от обычных функций.</p>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<p>Functions are written like an identifier with a list of arguments (possibly empty) in brackets. In contrast to standard SQL, the brackets are required, even for an empty arguments list. Example: <code class="docutils literal"><span class="pre">now()</span></code>.
+There are regular and aggregate functions (see the section &#8220;Aggregate functions&#8221;). Some aggregate functions can contain two lists of arguments in brackets. Example: <code class="docutils literal"><span class="pre">quantile(0.9)(x)</span></code>. These aggregate functions are called &#8220;parametric&#8221; functions, and the arguments in the first list are called &#8220;parameters&#8221;. The syntax of aggregate functions without parameters is the same as for regular functions.</p>
 </div>
-<div class="section" id="id11">
-<h2>Операторы<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h2>
-<p>Операторы преобразуются в соответствующие им функции во время парсинга запроса, с учётом их приоритета и ассоциативности.
-Например, выражение <tt class="docutils literal"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">2</span> <span class="pre">*</span> <span class="pre">3</span> <span class="pre">+</span> <span class="pre">4</span></tt> преобразуется в <tt class="docutils literal"><span class="pre">plus(plus(1,</span> <span class="pre">multiply(2,</span> <span class="pre">3)),</span> <span class="pre">4)</span></tt>.
-Подробнее смотрите раздел &#8220;Операторы&#8221; ниже.</p>
+<div class="section" id="operators">
+<h2>Operators<a class="headerlink" href="#operators" title="Permalink to this headline">¶</a></h2>
+<p>Operators are converted to their corresponding functions during query parsing, taking their priority and associativity into account.
+For example, the expression <code class="docutils literal"><span class="pre">1</span> <span class="pre">+</span> <span class="pre">2</span> <span class="pre">*</span> <span class="pre">3</span> <span class="pre">+</span> <span class="pre">4</span></code> is transformed to <code class="docutils literal"><span class="pre">plus(plus(1,</span> <span class="pre">multiply(2,</span> <span class="pre">3)),</span> <span class="pre">4)</span></code>.
+For more information, see the section &#8220;Operators&#8221; below.</p>
 </div>
-<div class="section" id="id12">
-<h2>Типы данных и движки таблиц<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h2>
-<p>Типы данных и движки таблиц в запросе <tt class="docutils literal"><span class="pre">CREATE</span></tt> записываются также, как идентификаторы или также как функции. То есть, могут содержать или не содержать список аргументов в круглых скобках. Подробнее смотрите разделы &#8220;Типы данных&#8221;, &#8220;Движки таблиц&#8221;, &#8220;CREATE&#8221;.</p>
+<div class="section" id="data-types-and-database-table-engines">
+<h2>Data types and database table engines<a class="headerlink" href="#data-types-and-database-table-engines" title="Permalink to this headline">¶</a></h2>
+<p>Data types and table engines in the <code class="docutils literal"><span class="pre">CREATE</span></code> query are written the same way as identifiers or functions. In other words, they may or may not contain an arguments list in brackets. For more information, see the sections &#8220;Data types,&#8221; &#8220;Table engines,&#8221; and &#8220;CREATE&#8221;.</p>
 </div>
-<div class="section" id="id13">
-<h2>Синонимы<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h2>
-<p>В запросе SELECT, в выражениях могут быть указаны синонимы с помощью ключевого слова AS. Слева от AS стоит любое выражение. Справа от AS стоит идентификатор - имя для синонима. В отличие от стандартного SQL, синонимы могут объявляться не только на верхнем уровне выражений:</p>
+<div class="section" id="synonyms">
+<h2>Synonyms<a class="headerlink" href="#synonyms" title="Permalink to this headline">¶</a></h2>
+<p>In the SELECT query, expressions can specify synonyms using the AS keyword. Any expression is placed to the left of AS. The identifier name for the synonym is placed to the right of AS. As opposed to standard SQL, synonyms are not only declared on the top level of expressions:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>SELECT (1 AS n) + 2, n
 </pre></div>
 </div>
-<p>В отличие от стандартного SQL, синонимы могут использоваться во всех секциях запроса, а не только <tt class="docutils literal"><span class="pre">SELECT</span></tt>.</p>
+<p>In contrast to standard SQL, synonyms can be used in all parts of a query, not just <code class="docutils literal"><span class="pre">SELECT</span></code>.</p>
 </div>
-<div class="section" id="id14">
-<h2>Звёздочка<a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h2>
-<p>В запросе <tt class="docutils literal"><span class="pre">SELECT</span></tt>, вместо выражения может стоять звёздочка. Подробнее смотрите раздел &#8220;SELECT&#8221;.</p>
+<div class="section" id="asterisk">
+<h2>Asterisk<a class="headerlink" href="#asterisk" title="Permalink to this headline">¶</a></h2>
+<p>In a <code class="docutils literal"><span class="pre">SELECT</span></code> query, an asterisk can replace the expression. For more information, see the section &#8220;SELECT&#8221;.</p>
 </div>
-<div class="section" id="id15">
-<h2>Выражения<a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h2>
-<p>Выражение представляет собой функцию, идентификатор, литерал, применение оператора, выражение в скобках, подзапрос, звёздочку; и может содержать синоним.
-Список выражений - одно выражение или несколько выражений через запятую.
-Функции и операторы, в свою очередь, в качестве аргументов, могут иметь произвольные выражения.</p>
+<div class="section" id="expressions">
+<h2>Expressions<a class="headerlink" href="#expressions" title="Permalink to this headline">¶</a></h2>
+<p>An expression is a function, identifier, literal, application of an operator, expression in brackets, subquery, or asterisk. It can also contain a synonym.
+A list of expressions is one or more expressions separated by commas.
+Functions and operators, in turn, can have expressions as arguments.</p>
 </div>
 </div>
 
@@ -153,43 +140,98 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Синтаксис</a><ul>
-<li><a class="reference internal" href="#id2">Пробелы</a></li>
-<li><a class="reference internal" href="#id3">Комментарии</a></li>
-<li><a class="reference internal" href="#id4">Ключевые слова</a></li>
-<li><a class="reference internal" href="#id5">Идентификаторы</a></li>
-<li><a class="reference internal" href="#id6">Литералы</a><ul>
-<li><a class="reference internal" href="#id7">Числовые литералы</a></li>
-<li><a class="reference internal" href="#id8">Строковые литералы</a></li>
-<li><a class="reference internal" href="#id9">Составные литералы</a></li>
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Query language</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="clickhouse_local.html">clickhouse-local</a></li>
+<li class="toctree-l2"><a class="reference internal" href="queries.html">Queries</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Syntax</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#spaces">Spaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#comments">Comments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#keywords">Keywords</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#identifiers">Identifiers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#literals">Literals</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#numeric-literals">Numeric literals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#string-literals">String literals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#compound-literals">Compound literals</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id10">Функции</a></li>
-<li><a class="reference internal" href="#id11">Операторы</a></li>
-<li><a class="reference internal" href="#id12">Типы данных и движки таблиц</a></li>
-<li><a class="reference internal" href="#id13">Синонимы</a></li>
-<li><a class="reference internal" href="#id14">Звёздочка</a></li>
-<li><a class="reference internal" href="#id15">Выражения</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#functions">Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#operators">Operators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data-types-and-database-table-engines">Data types and database table engines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#synonyms">Synonyms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#asterisk">Asterisk</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#expressions">Expressions</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="queries.html"
-                        title="previous chapter">Запросы</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="../external_data.html"
-                        title="next chapter">Внешние данные для обработки запроса</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/query_language/syntax.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Query language</a><ul>
+      <li>Previous: <a href="queries.html" title="previous chapter">Queries</a></li>
+      <li>Next: <a href="../external_data.html" title="next chapter">External data for query processing</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -206,25 +248,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../external_data.html" title="Внешние данные для обработки запроса"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="queries.html" title="Запросы"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Язык запросов</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

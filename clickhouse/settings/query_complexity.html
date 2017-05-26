@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Ограничения на сложность запроса &mdash; ClickHouse 1 documentation</title>
+    <title>Restrictions on query complexity &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,203 +23,192 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Настройки" href="index.html" />
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Settings" href="index.html" />
     <link rel="next" title="max_block_size" href="settings.html" />
-    <link rel="prev" title="Настройки" href="index.html" /> 
+    <link rel="prev" title="Settings" href="index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="settings.html" title="max_block_size"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="Настройки"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Настройки</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="id1">
-<h1>Ограничения на сложность запроса<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
-<p>Ограничения на сложность запроса - часть настроек.
-Используются, чтобы обеспечить более безопасное исполнение запросов из пользовательского интерфейса.
-Почти все ограничения действуют только на SELECT-ы.
-При распределённой обработке запроса, ограничения действуют на каждом сервере по-отдельности.</p>
-<p>Ограничения вида &#8220;максимальное количество чего-нибудь&#8221; могут принимать значение 0, которое обозначает &#8220;не ограничено&#8221;.
-Для большинства ограничений также присутствует настройка вида overflow_mode - что делать, когда ограничение превышено.
-Оно может принимать одно из двух значений: <tt class="docutils literal"><span class="pre">throw</span></tt> или <tt class="docutils literal"><span class="pre">break</span></tt>; а для ограничения на агрегацию (group_by_overflow_mode) есть ещё значение <tt class="docutils literal"><span class="pre">any</span></tt>.</p>
-<p><tt class="docutils literal"><span class="pre">throw</span></tt> - кинуть исключение (по умолчанию).</p>
-<p><tt class="docutils literal"><span class="pre">break</span></tt> - прервать выполнение запроса и вернуть неполный результат, как будто исходные данные закончились.</p>
-<p><tt class="docutils literal"><span class="pre">any</span> <span class="pre">(только</span> <span class="pre">для</span> <span class="pre">group_by_overflow_mode)</span></tt> - продолжить агрегацию по ключам, которые успели войти в набор, но не добавлять новые ключи в набор.</p>
+  <div class="section" id="restrictions-on-query-complexity">
+<h1>Restrictions on query complexity<a class="headerlink" href="#restrictions-on-query-complexity" title="Permalink to this headline">¶</a></h1>
+<p>Restrictions on query complexity are part of the settings.
+They are used in order to provide safer execution from the user interface.
+Almost all the restrictions only apply to SELECTs.
+For distributed query processing, restrictions are applied on each server separately.</p>
+<p>Restrictions on the &#8220;maximum amount of something&#8221; can take the value 0, which means &#8220;unrestricted&#8221;.
+Most restrictions also have an &#8216;overflow_mode&#8217; setting, meaning what to do when the limit is exceeded.
+It can take one of two values: &#8216;throw&#8217; or &#8216;break&#8217;. Restrictions on aggregation (<code class="docutils literal"><span class="pre">group_by_overflow_mode</span></code>) also have the value <code class="docutils literal"><span class="pre">any</span></code>.</p>
+<p><code class="docutils literal"><span class="pre">throw</span></code> - Throw an exception (default).</p>
+<p><code class="docutils literal"><span class="pre">break</span></code> - Stop executing the query and return the partial result, as if the source data ran out.</p>
+<p><code class="docutils literal"><span class="pre">any</span></code> (only for group_by_overflow_mode) - Continuing aggregation for the keys that got into the set, but don&#8217;t add new keys to the set.</p>
 <div class="section" id="readonly">
 <h2>readonly<a class="headerlink" href="#readonly" title="Permalink to this headline">¶</a></h2>
-<p>При значении 0 можно выполнять любые запросы.
-При значении 1 можно выполнять только запросы на чтение (например, SELECT и SHOW). Запросы на запись и изменение настроек (INSERT, SET) запрещены.
-При значении 2 можно выполнять запросы на чтение (SELECT, SHOW) и изменение настроек (SET).</p>
-<p>Включив режим readonly, вы уже не сможете выключить его в текущей сессии.</p>
-<p>При использовании метода GET HTTP интерфейса, автоматически выставляется readonly = 1. То есть, для запросов, модифицирующие данные, можно использовать только метод POST. Сам запрос при этом можно отправлять как в теле POST-а, так и в параметре URL.</p>
+<p>If set to 0, allows to run any queries.
+If set to 1, allows to run only queries that don&#8217;t change data or settings (e.g. SELECT or SHOW). INSERT and SET are forbidden.
+If set to 2, allows to run queries that don&#8217;t change data (SELECT, SHOW) and allows to change settings (SET).</p>
+<p>After you set the read-only mode, you won&#8217;t be able to disable it in the current session.</p>
+<p>When using the GET method in the HTTP interface, &#8216;readonly = 1&#8217; is set automatically. In other words, for queries that modify data, you can only use the POST method. You can send the query itself either in the POST body, or in the URL parameter.</p>
 </div>
 <div class="section" id="max-memory-usage">
 <h2>max_memory_usage<a class="headerlink" href="#max-memory-usage" title="Permalink to this headline">¶</a></h2>
-<p>Максимальное количество потребляемой памяти при выполнении запроса на одном сервере. По умолчанию - 10 GB.</p>
-<p>Настройка не учитывает объём свободной памяти или общий объём памяти на машине.
-Ограничение действует на один запрос, в пределах одного сервера.
-Текущее потребление оперативки для каждого запроса можно посмотреть с помощью SHOW PROCESSLIST.
-Также отслеживается пиковое потребление оперативки для каждого запроса, и выводится в лог.</p>
+<p>The maximum amount of memory consumption when running a query on a single server. By default, 10 GB.</p>
+<p>The setting doesn&#8217;t consider the volume of available memory or the total volume of memory on the machine.
+The restriction applies to a single query within a single server.
+You can use SHOW PROCESSLIST to see the current memory consumption for each query.
+In addition, the peak memory consumption is tracked for each query and written to the log.</p>
 <dl class="docutils">
-<dt>Некоторые случаи потребления оперативки не отслеживаются:</dt>
+<dt>Certain cases of memory consumption are not tracked:</dt>
 <dd><ul class="first last simple">
-<li>большие константы (например, очень длинная константная строка);</li>
-<li>состояния некоторых агрегатных функций;</li>
+<li>Large constants (for example, a very long string constant).</li>
+<li>The states of &#8216;groupArray&#8217; aggregate functions, and also &#8216;quantile&#8217; (it is tracked for &#8216;quantileTiming&#8217;).</li>
 </ul>
 </dd>
 </dl>
-<p>Потребление оперативки не полностью учитывается для состояний агрегатных функций min, max, any, anyLast, argMin, argMax от аргументов String и Array.</p>
+<p>Memory consumption is not fully considered for aggregate function states <code class="docutils literal"><span class="pre">min</span></code>, <code class="docutils literal"><span class="pre">max</span></code>, <code class="docutils literal"><span class="pre">any</span></code>, <code class="docutils literal"><span class="pre">anyLast</span></code>, <code class="docutils literal"><span class="pre">argMin</span></code>, and <code class="docutils literal"><span class="pre">argMax</span></code> from String and Array arguments.</p>
 </div>
 <div class="section" id="max-rows-to-read">
 <h2>max_rows_to_read<a class="headerlink" href="#max-rows-to-read" title="Permalink to this headline">¶</a></h2>
-<p>Следующие ограничения могут проверяться на каждый блок (а не на каждую строку). То есть, ограничения могут быть немного нарушены.
-При выполнении запроса в несколько потоков, следующие ограничения действуют в каждом потоке по-отдельности.</p>
-<p>Максимальное количество строчек, которое можно прочитать из таблицы при выполнении запроса.</p>
+<p>The following restrictions can be checked on each block (instead of on each row). That is, the restrictions can be broken a little.
+When running a query in multiple threads, the following restrictions apply to each thread separately.</p>
+<p>Maximum number of rows that can be read from a table when running a query.</p>
 </div>
 <div class="section" id="max-bytes-to-read">
 <h2>max_bytes_to_read<a class="headerlink" href="#max-bytes-to-read" title="Permalink to this headline">¶</a></h2>
-<p>Максимальное количество байт (несжатых данных), которое можно прочитать из таблицы при выполнении запроса.</p>
+<p>Maximum number of bytes (uncompressed data) that can be read from a table when running a query.</p>
 </div>
 <div class="section" id="read-overflow-mode">
 <h2>read_overflow_mode<a class="headerlink" href="#read-overflow-mode" title="Permalink to this headline">¶</a></h2>
-<p>Что делать, когда количество прочитанных данных превысило одно из ограничений: throw или break. По умолчанию: throw.</p>
+<p>What to do when the volume of data read exceeds one of the limits: <code class="docutils literal"><span class="pre">throw</span></code> or <code class="docutils literal"><span class="pre">break</span></code>. <code class="docutils literal"><span class="pre">By</span> <span class="pre">default,</span> <span class="pre">throw</span></code>.</p>
 </div>
 <div class="section" id="max-rows-to-group-by">
 <h2>max_rows_to_group_by<a class="headerlink" href="#max-rows-to-group-by" title="Permalink to this headline">¶</a></h2>
-<p>Максимальное количество уникальных ключей, получаемых в процессе агрегации. Позволяет ограничить потребление оперативки при агрегации.</p>
+<p>Maximum number of unique keys received from aggregation. This setting lets you limit memory consumption when aggregating.</p>
 </div>
 <div class="section" id="group-by-overflow-mode">
 <h2>group_by_overflow_mode<a class="headerlink" href="#group-by-overflow-mode" title="Permalink to this headline">¶</a></h2>
-<p>Что делать, когда количество уникальных ключей при агрегации превысило ограничение: throw, break или any. По умолчанию: throw.
-Использование значения any позволяет выполнить GROUP BY приближённо. Качество такого приближённого вычисления сильно зависит от статистических свойств данных.</p>
+<p>What to do when the number of unique keys for aggregation exceeds the limit: <code class="docutils literal"><span class="pre">throw</span></code>, <code class="docutils literal"><span class="pre">break</span></code>, or <code class="docutils literal"><span class="pre">any</span></code>. <code class="docutils literal"><span class="pre">By</span> <span class="pre">default,</span> <span class="pre">throw</span></code>.
+Using the &#8216;any&#8217; value lets you run an approximation of GROUP BY. The quality of this approximation depends on the statistical nature of the data.</p>
 </div>
 <div class="section" id="max-rows-to-sort">
 <h2>max_rows_to_sort<a class="headerlink" href="#max-rows-to-sort" title="Permalink to this headline">¶</a></h2>
-<p>Максимальное количество строк до сортировки. Позволяет ограничить потребление оперативки при сортировке.</p>
+<p>Maximum number of rows before sorting. This allows you to limit memory consumption when sorting.</p>
 </div>
 <div class="section" id="max-bytes-to-sort">
 <h2>max_bytes_to_sort<a class="headerlink" href="#max-bytes-to-sort" title="Permalink to this headline">¶</a></h2>
-<p>Максимальное количество байт до сортировки.</p>
+<p>Maximum number of bytes before sorting.</p>
 </div>
 <div class="section" id="sort-overflow-mode">
 <h2>sort_overflow_mode<a class="headerlink" href="#sort-overflow-mode" title="Permalink to this headline">¶</a></h2>
-<p>Что делать, если количество строк, полученное перед сортировкой, превысило одно из ограничений: throw или break. По умолчанию: throw.</p>
+<p>What to do if the number of rows received before sorting exceeds one of the limits: <code class="docutils literal"><span class="pre">throw</span></code> or <code class="docutils literal"><span class="pre">break</span></code>. <code class="docutils literal"><span class="pre">By</span> <span class="pre">default,</span> <span class="pre">throw</span></code>.</p>
 </div>
 <div class="section" id="max-result-rows">
 <h2>max_result_rows<a class="headerlink" href="#max-result-rows" title="Permalink to this headline">¶</a></h2>
-<p>Ограничение на количество строк результата. Проверяются также для подзапросов и на удалённых серверах при выполнении части распределённого запроса.</p>
+<p>Limit on the number of rows in the result. Also checked for subqueries, and on remote servers when running parts of a distributed query.</p>
 </div>
 <div class="section" id="max-result-bytes">
 <h2>max_result_bytes<a class="headerlink" href="#max-result-bytes" title="Permalink to this headline">¶</a></h2>
-<p>Ограничение на количество байт результата. Аналогично.</p>
+<p>Limit on the number of bytes in the result. The same as the previous setting.</p>
 </div>
 <div class="section" id="result-overflow-mode">
 <h2>result_overflow_mode<a class="headerlink" href="#result-overflow-mode" title="Permalink to this headline">¶</a></h2>
-<p>Что делать, если объём результата превысил одно из ограничений: throw или break. По умолчанию: throw.
-Использование break по смыслу похоже на LIMIT.</p>
+<p>What to do if the volume of the result exceeds one of the limits: <code class="docutils literal"><span class="pre">throw</span></code> or <code class="docutils literal"><span class="pre">break</span></code>. By default, throw.
+Using <code class="docutils literal"><span class="pre">break</span></code> is similar to using <code class="docutils literal"><span class="pre">LIMIT</span></code>.</p>
 </div>
 <div class="section" id="max-execution-time">
 <h2>max_execution_time<a class="headerlink" href="#max-execution-time" title="Permalink to this headline">¶</a></h2>
-<p>Максимальное время выполнения запроса в секундах.
-На данный момент не проверяется при одной из стадий сортировки а также при слиянии и финализации агрегатных функций.</p>
+<p>Maximum query execution time in seconds.
+At this time, it is not checked for one of the sorting stages, or when merging and finalizing aggregate functions.</p>
 </div>
 <div class="section" id="timeout-overflow-mode">
 <h2>timeout_overflow_mode<a class="headerlink" href="#timeout-overflow-mode" title="Permalink to this headline">¶</a></h2>
-<p>Что делать, если запрос выполняется дольше max_execution_time: throw или break. По умолчанию: throw.</p>
+<p>What to do if the query is run longer than <code class="docutils literal"><span class="pre">max_execution_time</span></code>: <code class="docutils literal"><span class="pre">throw</span></code> or <code class="docutils literal"><span class="pre">break</span></code>. <code class="docutils literal"><span class="pre">By</span> <span class="pre">default,</span> <span class="pre">throw</span></code>.</p>
 </div>
 <div class="section" id="min-execution-speed">
 <h2>min_execution_speed<a class="headerlink" href="#min-execution-speed" title="Permalink to this headline">¶</a></h2>
-<p>Минимальная скорость выполнения запроса в строчках в секунду. Проверяется на каждый блок данных по истечении timeout_before_checking_execution_speed. Если скорость выполнения запроса оказывается меньше, то кидается исключение.</p>
+<p>Minimal execution speed in rows per second. Checked on every data block when <code class="docutils literal"><span class="pre">timeout_before_checking_execution_speed</span></code> expires. If the execution speed is lower, an exception is thrown.</p>
 </div>
 <div class="section" id="timeout-before-checking-execution-speed">
 <h2>timeout_before_checking_execution_speed<a class="headerlink" href="#timeout-before-checking-execution-speed" title="Permalink to this headline">¶</a></h2>
-<p>Проверять, что скорость выполнения запроса не слишком низкая (не меньше min_execution_speed), после прошествия указанного времени в секундах.</p>
+<p>Checks that execution speed is not too slow (no less than <code class="docutils literal"><span class="pre">min_execution_speed</span></code>), after the specified time in seconds has expired.</p>
 </div>
 <div class="section" id="max-columns-to-read">
 <h2>max_columns_to_read<a class="headerlink" href="#max-columns-to-read" title="Permalink to this headline">¶</a></h2>
-<p>Максимальное количество столбцов, которых можно читать из таблицы в одном запросе. Если запрос требует чтения большего количества столбцов - кинуть исключение.</p>
+<p>Maximum number of columns that can be read from a table in a single query. If a query requires reading a greater number of columns, it throws an exception.</p>
 </div>
 <div class="section" id="max-temporary-columns">
 <h2>max_temporary_columns<a class="headerlink" href="#max-temporary-columns" title="Permalink to this headline">¶</a></h2>
-<p>Максимальное количество временных столбцов, которых необходимо одновременно держать в оперативке, в процессе выполнения запроса, включая константные столбцы. Если временных столбцов оказалось больше - кидается исключение.</p>
+<p>Maximum number of temporary columns that must be kept in RAM at the same time when running a query, including constant columns. If there are more temporary columns than this, it throws an exception.</p>
 </div>
 <div class="section" id="max-temporary-non-const-columns">
 <h2>max_temporary_non_const_columns<a class="headerlink" href="#max-temporary-non-const-columns" title="Permalink to this headline">¶</a></h2>
-<p>То же самое, что и max_temporary_columns, но без учёта столбцов-констант.
-Стоит заметить, что столбцы-константы довольно часто образуются в процессе выполнения запроса, но расходуют примерно нулевое количество вычислительных ресурсов.</p>
+<p>The same thing as &#8216;max_temporary_columns&#8217;, but without counting constant columns.
+Note that constant columns are formed fairly often when running a query, but they require approximately zero computing resources.</p>
 </div>
 <div class="section" id="max-subquery-depth">
 <h2>max_subquery_depth<a class="headerlink" href="#max-subquery-depth" title="Permalink to this headline">¶</a></h2>
-<p>Максимальная вложенность подзапросов. Если подзапросы более глубокие - кидается исключение. По умолчанию: 100.</p>
+<p>Maximum nesting depth of subqueries. If subqueries are deeper, an exception is thrown. <code class="docutils literal"><span class="pre">By</span> <span class="pre">default,</span> <span class="pre">100</span></code>.</p>
 </div>
 <div class="section" id="max-pipeline-depth">
 <h2>max_pipeline_depth<a class="headerlink" href="#max-pipeline-depth" title="Permalink to this headline">¶</a></h2>
-<p>Максимальная глубина конвейера выполнения запроса. Соответствует количеству преобразований, которое проходит каждый блок данных в процессе выполнения запроса. Считается в пределах одного сервера. Если глубина конвейера больше - кидается исключение. По умолчанию: 1000.</p>
+<p>Maximum pipeline depth. Corresponds to the number of transformations that each data block goes through during query processing. Counted within the limits of a single server. If the pipeline depth is greater, an exception is thrown. By default, 1000.</p>
 </div>
 <div class="section" id="max-ast-depth">
 <h2>max_ast_depth<a class="headerlink" href="#max-ast-depth" title="Permalink to this headline">¶</a></h2>
-<p>Максимальная вложенность синтаксического дерева запроса. Если превышена - кидается исключение.
-На данный момент, проверяются не во время парсинга а уже после парсинга запроса. То есть, во время парсинга может быть создано слишком глубокое синтаксическое дерево, но запрос не будет выполнен. По умолчанию: 1000.</p>
+<p>Maximum nesting depth of a query syntactic tree. If exceeded, an exception is thrown. At this time, it isn&#8217;t checked during parsing, but only after parsing the query. That is, a syntactic tree that is too deep can be created during parsing, but the query will fail. By default, 1000.</p>
 </div>
 <div class="section" id="max-ast-elements">
 <h2>max_ast_elements<a class="headerlink" href="#max-ast-elements" title="Permalink to this headline">¶</a></h2>
-<p>Максимальное количество элементов синтаксического дерева запроса. Если превышено - кидается исключение.
-Аналогично, проверяется уже после парсинга запроса. По умолчанию: 10 000.</p>
+<p>Maximum number of elements in a query syntactic tree. If exceeded, an exception is thrown.
+In the same way as the previous setting, it is checked only after parsing the query. <code class="docutils literal"><span class="pre">By</span> <span class="pre">default,</span> <span class="pre">10,000</span></code>.</p>
 </div>
 <div class="section" id="max-rows-in-set">
 <h2>max_rows_in_set<a class="headerlink" href="#max-rows-in-set" title="Permalink to this headline">¶</a></h2>
-<p>Максимальное количество строчек для множества в секции IN, создаваемого из подзапроса.</p>
+<p>Maximum number of rows for a data set in the IN clause created from a subquery.</p>
 </div>
 <div class="section" id="max-bytes-in-set">
 <h2>max_bytes_in_set<a class="headerlink" href="#max-bytes-in-set" title="Permalink to this headline">¶</a></h2>
-<p>Максимальное количество байт (несжатых данных), занимаемое множеством в секции IN, создаваемым из подзапроса.</p>
+<p>Maximum number of bytes (uncompressed data) used by a set in the IN clause created from a subquery.</p>
 </div>
 <div class="section" id="set-overflow-mode">
 <h2>set_overflow_mode<a class="headerlink" href="#set-overflow-mode" title="Permalink to this headline">¶</a></h2>
-<p>Что делать, когда количество данных превысило одно из ограничений: throw или break. По умолчанию: throw.</p>
+<p>What to do when the amount of data exceeds one of the limits: <code class="docutils literal"><span class="pre">throw</span></code> or <code class="docutils literal"><span class="pre">break</span></code>. <code class="docutils literal"><span class="pre">By</span> <span class="pre">default,</span> <span class="pre">throw</span></code>.</p>
 </div>
 <div class="section" id="max-rows-in-distinct">
 <h2>max_rows_in_distinct<a class="headerlink" href="#max-rows-in-distinct" title="Permalink to this headline">¶</a></h2>
-<p>Максимальное количество различных строчек при использовании DISTINCT.</p>
+<p>Maximum number of different rows when using DISTINCT.</p>
 </div>
 <div class="section" id="max-bytes-in-distinct">
 <h2>max_bytes_in_distinct<a class="headerlink" href="#max-bytes-in-distinct" title="Permalink to this headline">¶</a></h2>
-<p>Максимальное количество байт, занимаемых хэш-таблицей, при использовании DISTINCT.</p>
+<p>Maximum number of bytes used by a hash table when using DISTINCT.</p>
 </div>
 <div class="section" id="distinct-overflow-mode">
 <h2>distinct_overflow_mode<a class="headerlink" href="#distinct-overflow-mode" title="Permalink to this headline">¶</a></h2>
-<p>Что делать, когда количество данных превысило одно из ограничений: throw или break. По умолчанию: throw.</p>
+<p>What to do when the amount of data exceeds one of the limits: <code class="docutils literal"><span class="pre">throw</span></code> or <code class="docutils literal"><span class="pre">break</span></code>. <code class="docutils literal"><span class="pre">By</span> <span class="pre">default,</span> <span class="pre">throw</span></code>.</p>
 </div>
 <div class="section" id="max-rows-to-transfer">
 <h2>max_rows_to_transfer<a class="headerlink" href="#max-rows-to-transfer" title="Permalink to this headline">¶</a></h2>
-<p>Максимальное количество строчек, которых можно передать на удалённый сервер или сохранить во временную таблицу, при использовании GLOBAL IN.</p>
+<p>Maximum number of rows that can be passed to a remote server or saved in a temporary table when using GLOBAL IN.</p>
 </div>
 <div class="section" id="max-bytes-to-transfer">
 <h2>max_bytes_to_transfer<a class="headerlink" href="#max-bytes-to-transfer" title="Permalink to this headline">¶</a></h2>
-<p>Максимальное количество байт (несжатых данных), которых можно передать на удалённый сервер или сохранить во временную таблицу, при использовании GLOBAL IN.</p>
+<p>Maximum number of bytes (uncompressed data) that can be passed to a remote server or saved in a temporary table when using GLOBAL IN.</p>
 </div>
 <div class="section" id="transfer-overflow-mode">
 <h2>transfer_overflow_mode<a class="headerlink" href="#transfer-overflow-mode" title="Permalink to this headline">¶</a></h2>
-<p>Что делать, когда количество данных превысило одно из ограничений: throw или break. По умолчанию: throw.</p>
+<p>What to do when the amount of data exceeds one of the limits: <code class="docutils literal"><span class="pre">throw</span></code> or <code class="docutils literal"><span class="pre">break</span></code>. <code class="docutils literal"><span class="pre">By</span> <span class="pre">default,</span> <span class="pre">throw</span></code>.</p>
 </div>
 </div>
 
@@ -227,60 +216,141 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Ограничения на сложность запроса</a><ul>
-<li><a class="reference internal" href="#readonly">readonly</a></li>
-<li><a class="reference internal" href="#max-memory-usage">max_memory_usage</a></li>
-<li><a class="reference internal" href="#max-rows-to-read">max_rows_to_read</a></li>
-<li><a class="reference internal" href="#max-bytes-to-read">max_bytes_to_read</a></li>
-<li><a class="reference internal" href="#read-overflow-mode">read_overflow_mode</a></li>
-<li><a class="reference internal" href="#max-rows-to-group-by">max_rows_to_group_by</a></li>
-<li><a class="reference internal" href="#group-by-overflow-mode">group_by_overflow_mode</a></li>
-<li><a class="reference internal" href="#max-rows-to-sort">max_rows_to_sort</a></li>
-<li><a class="reference internal" href="#max-bytes-to-sort">max_bytes_to_sort</a></li>
-<li><a class="reference internal" href="#sort-overflow-mode">sort_overflow_mode</a></li>
-<li><a class="reference internal" href="#max-result-rows">max_result_rows</a></li>
-<li><a class="reference internal" href="#max-result-bytes">max_result_bytes</a></li>
-<li><a class="reference internal" href="#result-overflow-mode">result_overflow_mode</a></li>
-<li><a class="reference internal" href="#max-execution-time">max_execution_time</a></li>
-<li><a class="reference internal" href="#timeout-overflow-mode">timeout_overflow_mode</a></li>
-<li><a class="reference internal" href="#min-execution-speed">min_execution_speed</a></li>
-<li><a class="reference internal" href="#timeout-before-checking-execution-speed">timeout_before_checking_execution_speed</a></li>
-<li><a class="reference internal" href="#max-columns-to-read">max_columns_to_read</a></li>
-<li><a class="reference internal" href="#max-temporary-columns">max_temporary_columns</a></li>
-<li><a class="reference internal" href="#max-temporary-non-const-columns">max_temporary_non_const_columns</a></li>
-<li><a class="reference internal" href="#max-subquery-depth">max_subquery_depth</a></li>
-<li><a class="reference internal" href="#max-pipeline-depth">max_pipeline_depth</a></li>
-<li><a class="reference internal" href="#max-ast-depth">max_ast_depth</a></li>
-<li><a class="reference internal" href="#max-ast-elements">max_ast_elements</a></li>
-<li><a class="reference internal" href="#max-rows-in-set">max_rows_in_set</a></li>
-<li><a class="reference internal" href="#max-bytes-in-set">max_bytes_in_set</a></li>
-<li><a class="reference internal" href="#set-overflow-mode">set_overflow_mode</a></li>
-<li><a class="reference internal" href="#max-rows-in-distinct">max_rows_in_distinct</a></li>
-<li><a class="reference internal" href="#max-bytes-in-distinct">max_bytes_in_distinct</a></li>
-<li><a class="reference internal" href="#distinct-overflow-mode">distinct_overflow_mode</a></li>
-<li><a class="reference internal" href="#max-rows-to-transfer">max_rows_to_transfer</a></li>
-<li><a class="reference internal" href="#max-bytes-to-transfer">max_bytes_to_transfer</a></li>
-<li><a class="reference internal" href="#transfer-overflow-mode">transfer_overflow_mode</a></li>
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Settings</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="">Restrictions on query complexity</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#readonly">readonly</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#max-memory-usage">max_memory_usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#max-rows-to-read">max_rows_to_read</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#max-bytes-to-read">max_bytes_to_read</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#read-overflow-mode">read_overflow_mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#max-rows-to-group-by">max_rows_to_group_by</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#group-by-overflow-mode">group_by_overflow_mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#max-rows-to-sort">max_rows_to_sort</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#max-bytes-to-sort">max_bytes_to_sort</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sort-overflow-mode">sort_overflow_mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#max-result-rows">max_result_rows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#max-result-bytes">max_result_bytes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#result-overflow-mode">result_overflow_mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#max-execution-time">max_execution_time</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timeout-overflow-mode">timeout_overflow_mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#min-execution-speed">min_execution_speed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#timeout-before-checking-execution-speed">timeout_before_checking_execution_speed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#max-columns-to-read">max_columns_to_read</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#max-temporary-columns">max_temporary_columns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#max-temporary-non-const-columns">max_temporary_non_const_columns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#max-subquery-depth">max_subquery_depth</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#max-pipeline-depth">max_pipeline_depth</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#max-ast-depth">max_ast_depth</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#max-ast-elements">max_ast_elements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#max-rows-in-set">max_rows_in_set</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#max-bytes-in-set">max_bytes_in_set</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#set-overflow-mode">set_overflow_mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#max-rows-in-distinct">max_rows_in_distinct</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#max-bytes-in-distinct">max_bytes_in_distinct</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#distinct-overflow-mode">distinct_overflow_mode</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#max-rows-to-transfer">max_rows_to_transfer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#max-bytes-to-transfer">max_bytes_to_transfer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#transfer-overflow-mode">transfer_overflow_mode</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html">max_block_size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#max-insert-block-size">max_insert_block_size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#max-threads">max_threads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#max-compress-block-size">max_compress_block_size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#min-compress-block-size">min_compress_block_size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#max-query-size">max_query_size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#interactive-delay">interactive_delay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#connect-timeout">connect_timeout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#receive-timeout">receive_timeout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#send-timeout">send_timeout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#poll-interval">poll_interval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#max-distributed-connections">max_distributed_connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#distributed-connections-pool-size">distributed_connections_pool_size</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#connect-timeout-with-failover-ms">connect_timeout_with_failover_ms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#connections-with-failover-max-tries">connections_with_failover_max_tries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#extremes">extremes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#use-uncompressed-cache">use_uncompressed_cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#replace-running-query">replace_running_query</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#load-balancing">load_balancing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#totals-mode">totals_mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#totals-auto-threshold">totals_auto_threshold</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#default-sample">default_sample</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#max-parallel-replicas">max_parallel_replicas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#compile">compile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#min-count-to-compile">min_count_to_compile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#input-format-skip-unknown-fields">input_format_skip_unknown_fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings.html#output-format-json-quote-64bit-integers">output_format_json_quote_64bit_integers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="settings_profiles.html">Settings profiles</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">Настройки</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="settings.html"
-                        title="next chapter">max_block_size</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/settings/query_complexity.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Settings</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Settings</a></li>
+      <li>Next: <a href="settings.html" title="next chapter">max_block_size</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -297,25 +367,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="settings.html" title="max_block_size"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="Настройки"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Настройки</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

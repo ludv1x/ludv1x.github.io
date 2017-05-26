@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Квоты &mdash; ClickHouse 1 documentation</title>
+    <title>Quotas &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,53 +23,47 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="index.html" />
-    <link rel="prev" title="Права доступа" href="access_rights.html" /> 
+    <link rel="top" title="ClickHouse  documentation" href="index.html" />
+    <link rel="prev" title="Access rights" href="access_rights.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="access_rights.html" title="Права доступа"
-             accesskey="P">previous</a> |</li>
-        <li><a href="index.html">ClickHouse 1 documentation</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="id1">
-<h1>Квоты<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
-<p>Квоты позволяют ограничить использование ресурсов за некоторый интервал времени, или просто подсчитывать использование ресурсов.
-Квоты настраиваются в конфиге пользователей. Обычно это users.xml.</p>
-<p>В системе есть возможность ограничить сложность одного запроса. Для этого смотрите раздел &#8220;Ограничения на сложность запроса&#8221;.</p>
+  <div class="section" id="quotas">
+<h1>Quotas<a class="headerlink" href="#quotas" title="Permalink to this headline">¶</a></h1>
+<p>Quotas allow you to limit resource usage over a period of time, or simply track the use of resources.
+Quotas are set up in the user config. This is usually <code class="docutils literal"><span class="pre">users.xml</span></code>.</p>
+<p>The system also has a feature for limiting the complexity of a single query (see the section &#8220;Restrictions on query complexity&#8221;).</p>
 <dl class="docutils">
-<dt>В отличие от них, квоты:</dt>
+<dt>In contrast to query complexity restrictions, quotas:</dt>
 <dd><ul class="first last simple">
-<li>ограничивают не один запрос, а множество запросов, которые могут быть выполнены за интервал времени;</li>
-<li>при распределённой обработке запроса, учитывают ресурсы, потраченные на всех удалённых серверах.</li>
+<li>place restrictions on a set of queries that can be run over a period of time, instead of limiting a single query.</li>
+<li>account for resources spent on all remote servers for distributed query processing.</li>
 </ul>
 </dd>
 </dl>
-<p>Рассмотрим фрагмент файла users.xml, описывающего квоты.</p>
-<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="c">&lt;!-- Квоты. --&gt;</span>
+<p>Let&#8217;s look at the section of the <code class="docutils literal"><span class="pre">users.xml</span></code> file that defines quotas.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="c">&lt;!-- Quotas. --&gt;</span>
 <span class="nt">&lt;quotas&gt;</span>
-    <span class="c">&lt;!-- Имя квоты. --&gt;</span>
+    <span class="c">&lt;!-- Quota name. --&gt;</span>
     <span class="nt">&lt;default&gt;</span>
-        <span class="c">&lt;!-- Ограничения за интервал времени. Можно задать много интервалов с разными ограничениями. --&gt;</span>
+        <span class="c">&lt;!-- Restrictions for a time period. You can set multiple time intervals with various restrictions. --&gt;</span>
         <span class="nt">&lt;interval&gt;</span>
-            <span class="c">&lt;!-- Длина интервала. --&gt;</span>
+            <span class="c">&lt;!-- Length of time. --&gt;</span>
             <span class="nt">&lt;duration&gt;</span>3600<span class="nt">&lt;/duration&gt;</span>
 
-            <span class="c">&lt;!-- Без ограничений. Просто считать соответствующие данные за указанный интервал. --&gt;</span>
+            <span class="c">&lt;!-- No restrictions. Just collect data for the specified time interval. --&gt;</span>
             <span class="nt">&lt;queries&gt;</span>0<span class="nt">&lt;/queries&gt;</span>
             <span class="nt">&lt;errors&gt;</span>0<span class="nt">&lt;/errors&gt;</span>
             <span class="nt">&lt;result_rows&gt;</span>0<span class="nt">&lt;/result_rows&gt;</span>
@@ -79,24 +73,20 @@
     <span class="nt">&lt;/default&gt;</span>
 </pre></div>
 </div>
-<p>Видно, что квота по умолчанию просто считает использование ресурсов за каждый час, но не ограничивает их.
-Подсчитанное использование ресурсов за каждый интервал, выводится в лог сервера после каждого запроса.</p>
+<p>By default, the quota just tracks resource consumption for each hour, without limiting usage.</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;statbox&gt;</span>
-    <span class="c">&lt;!-- Ограничения за интервал времени. Можно задать много интервалов с разными ограничениями. --&gt;</span>
+    <span class="c">&lt;!-- Restrictions for a time period. You can set multiple time intervals with various restrictions. --&gt;</span>
     <span class="nt">&lt;interval&gt;</span>
-        <span class="c">&lt;!-- Длина интервала. --&gt;</span>
+        <span class="c">&lt;!-- Length of time.--&gt;</span>
         <span class="nt">&lt;duration&gt;</span>3600<span class="nt">&lt;/duration&gt;</span>
-
         <span class="nt">&lt;queries&gt;</span>1000<span class="nt">&lt;/queries&gt;</span>
         <span class="nt">&lt;errors&gt;</span>100<span class="nt">&lt;/errors&gt;</span>
         <span class="nt">&lt;result_rows&gt;</span>1000000000<span class="nt">&lt;/result_rows&gt;</span>
         <span class="nt">&lt;read_rows&gt;</span>100000000000<span class="nt">&lt;/read_rows&gt;</span>
         <span class="nt">&lt;execution_time&gt;</span>900<span class="nt">&lt;/execution_time&gt;</span>
     <span class="nt">&lt;/interval&gt;</span>
-
     <span class="nt">&lt;interval&gt;</span>
         <span class="nt">&lt;duration&gt;</span>86400<span class="nt">&lt;/duration&gt;</span>
-
         <span class="nt">&lt;queries&gt;</span>10000<span class="nt">&lt;/queries&gt;</span>
         <span class="nt">&lt;errors&gt;</span>1000<span class="nt">&lt;/errors&gt;</span>
         <span class="nt">&lt;result_rows&gt;</span>5000000000<span class="nt">&lt;/result_rows&gt;</span>
@@ -106,50 +96,101 @@
 <span class="nt">&lt;/statbox&gt;</span>
 </pre></div>
 </div>
-<p>Для квоты с именем statbox заданы ограничения за каждый час и за каждые 24 часа (86 400 секунд). Интервал времени считается начиная от некоторого implementation defined фиксированного момента времени. То есть, интервал длины 24 часа начинается не обязательно в полночь.</p>
-<p>Когда интервал заканчивается, все накопленные значения сбрасываются. То есть, в следующий час, расчёт квоты за час, начинается заново.</p>
-<p>Рассмотрим величины, которые можно ограничить:</p>
-<p><tt class="docutils literal"><span class="pre">queries</span></tt> - общее количество запросов;</p>
-<p><tt class="docutils literal"><span class="pre">errors</span></tt> - количество запросов, при выполнении которых было выкинуто исключение;</p>
-<p><tt class="docutils literal"><span class="pre">result_rows</span></tt> - суммарное количество строк, отданных в виде результата;</p>
-<p><tt class="docutils literal"><span class="pre">read_rows</span></tt> - суммарное количество исходных строк, прочитанных из таблиц, для выполнения запроса, на всех удалённых серверах;</p>
-<p><tt class="docutils literal"><span class="pre">execution_time</span></tt> - суммарное время выполнения запросов, в секундах (wall time);</p>
-<p>Если за хотя бы один интервал, ограничение превышено, то кидается исключение с текстом о том, какая величина превышена, за какой интервал, и когда начнётся новый интервал (когда снова можно будет задавать запросы).</p>
-<p>Для квоты может быть включена возможность указывать &#8220;ключ квоты&#8221;, чтобы производить учёт ресурсов для многих ключей независимо. Рассмотрим это на примере:</p>
-<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="c">&lt;!-- Для глобального конструктора отчётов. --&gt;</span>
+<p>For the <code class="docutils literal"><span class="pre">statbox</span></code> quota, restrictions are set for every hour and for every 24 hours (86,400 seconds). The time interval is counted starting from an implementation-defined fixed moment in time. In other words, the 24-hour interval doesn&#8217;t necessarily begin at midnight.</p>
+<p>When the interval ends, all collected values are cleared. For the next hour, the quota calculation starts over.</p>
+<p>Let&#8217;s examine the amounts that can be restricted:</p>
+<p><code class="docutils literal"><span class="pre">queries</span></code> - The overall number of queries.</p>
+<p><code class="docutils literal"><span class="pre">errors</span></code> - The number of queries that threw exceptions.</p>
+<p><code class="docutils literal"><span class="pre">result_rows</span></code> - The total number of rows output in results.</p>
+<p><code class="docutils literal"><span class="pre">read_rows</span></code> - The total number of source rows retrieved from tables for running a query, on all remote servers.</p>
+<p><code class="docutils literal"><span class="pre">execution_time</span></code> - The total time of query execution, in seconds (wall time).</p>
+<p>If the limit is exceeded for at least one time interval, an exception is thrown with a text about which restriction was exceeded, for which interval, and when the new interval begins (when queries can be sent again).</p>
+<p>Quotas can use the &#8220;quota key&#8221; feature in order to report on resources for multiple keys independently. Here is an example of this:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="c">&lt;!-- For the global report builder. --&gt;</span>
 <span class="nt">&lt;web_global&gt;</span>
-    <span class="c">&lt;!-- keyed - значит в параметре запроса передаётся &quot;ключ&quot; quota_key,</span>
-<span class="c">            и квота считается по отдельности для каждого значения ключа.</span>
-<span class="c">        Например, в качестве ключа может передаваться логин пользователя в Метрике,</span>
-<span class="c">            и тогда квота будет считаться для каждого логина по отдельности.</span>
-<span class="c">        Имеет смысл использовать только если quota_key передаётся не пользователем, а программой.</span>
-
-<span class="c">        Также можно написать &lt;keyed_by_ip /&gt; - тогда в качестве ключа квоты используется IP-адрес.</span>
-<span class="c">        (но стоит учесть, что пользователь может достаточно легко менять IPv6-адрес)</span>
-<span class="c">    --&gt;</span>
+    <span class="c">&lt;!-- keyed - the quota_key &quot;key&quot; is passed in the query parameter, and the quota is tracked separately for each key value.</span>
+<span class="c">    For example, you can pass a Metrica username as the key, so the quota will be counted separately for each username.</span>
+<span class="c">    Using keys makes sense only if quota_key is transmitted by the program, not by a user.</span>
+<span class="c">    You can also write &lt;keyed_by_ip /&gt; so the IP address is used as the quota key.</span>
+<span class="c">    (But keep in mind that users can change the IPv6 address fairly easily.) --&gt;</span>
     <span class="nt">&lt;keyed</span> <span class="nt">/&gt;</span>
 </pre></div>
 </div>
-<p>Квота прописывается для пользователей в секции users конфига. Смотрите раздел &#8220;Права доступа&#8221;.</p>
-<p>При распределённой обработке запроса, накопленные величины хранятся на сервере-инициаторе запроса. То есть, если пользователь пойдёт на другой сервер - там квота будет действовать &#8220;с нуля&#8221;.</p>
-<p>При перезапуске сервера, квоты сбрасываются.</p>
+<p>The quota is assigned to users in the <code class="docutils literal"><span class="pre">users</span></code> section of the config. See the section &#8220;Access rights&#8221;.</p>
+<p>For distributed query processing, the accumulated amounts are stored on the requestor server. So if the user goes to another server, the quota there will &#8220;start over&#8221;.</p>
+<p>When the server is restarted, quotas are reset.</p>
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="access_rights.html"
-                        title="previous chapter">Права доступа</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/quotas.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="access_rights.html">Access rights</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Quotas</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="access_rights.html" title="previous chapter">Access rights</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -166,21 +207,13 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="access_rights.html" title="Права доступа"
-             >previous</a> |</li>
-        <li><a href="index.html">ClickHouse 1 documentation</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

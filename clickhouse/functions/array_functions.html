@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Функции по работе с массивами &mdash; ClickHouse 1 documentation</title>
+    <title>Functions for working with arrays &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,54 +23,44 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Функции" href="index.html" />
-    <link rel="next" title="Функция arrayJoin" href="array_join.html" />
-    <link rel="prev" title="Арифметические функции" href="arithmetic_functions.html" /> 
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="Functions" href="index.html" />
+    <link rel="next" title="arrayJoin function" href="array_join.html" />
+    <link rel="prev" title="Arithmetic functions" href="arithmetic_functions.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="array_join.html" title="Функция arrayJoin"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="arithmetic_functions.html" title="Арифметические функции"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Функции</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
-  <div class="section" id="id1">
-<h1>Функции по работе с массивами<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="functions-for-working-with-arrays">
+<h1>Functions for working with arrays<a class="headerlink" href="#functions-for-working-with-arrays" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="empty">
 <h2>empty<a class="headerlink" href="#empty" title="Permalink to this headline">¶</a></h2>
-<p>Возвращает 1 для пустого массива, и 0 для непустого массива.
-Тип результата - UInt8.
-Функция также работает для строк.</p>
+<p>Returns 1 for an empty array, or 0 for a non-empty array.
+The result type is UInt8.
+The function also works for strings.</p>
 </div>
 <div class="section" id="notempty">
 <h2>notEmpty<a class="headerlink" href="#notempty" title="Permalink to this headline">¶</a></h2>
-<p>Возвращает 0 для пустого массива, и 1 для непустого массива.
-Тип результата - UInt8.
-Функция также работает для строк.</p>
+<p>Returns 0 for an empty array, or 1 for a non-empty array.
+The result type is UInt8.
+The function also works for strings.</p>
 </div>
 <div class="section" id="length">
 <h2>length<a class="headerlink" href="#length" title="Permalink to this headline">¶</a></h2>
-<p>Возвращает количество элементов в массиве.
-Тип результата - UInt64.
-Функция также работает для строк.</p>
+<p>Returns the number of items in the array.
+The result type is UInt64.
+The function also works for strings.</p>
 </div>
 <div class="section" id="emptyarrayuint8-emptyarrayuint16-emptyarrayuint32-emptyarrayuint64">
 <h2>emptyArrayUInt8, emptyArrayUInt16, emptyArrayUInt32, emptyArrayUInt64<a class="headerlink" href="#emptyarrayuint8-emptyarrayuint16-emptyarrayuint32-emptyarrayuint64" title="Permalink to this headline">¶</a></h2>
@@ -86,51 +76,51 @@
 </div>
 <div class="section" id="emptyarraystring">
 <h2>emptyArrayString<a class="headerlink" href="#emptyarraystring" title="Permalink to this headline">¶</a></h2>
-<p>Принимает ноль аргументов и возвращает пустой массив соответствующего типа.</p>
+<p>Accepts zero arguments and returns an empty array of the appropriate type.</p>
 </div>
 <div class="section" id="emptyarraytosingle">
 <h2>emptyArrayToSingle<a class="headerlink" href="#emptyarraytosingle" title="Permalink to this headline">¶</a></h2>
-<p>Принимает пустой массив и возвращает массив из одного элемента, равного значению по умолчанию.</p>
+<p>Accepts an empty array as argument and returns an array of one element equal to the default value.</p>
 </div>
 <div class="section" id="range-n">
 <h2>range(N)<a class="headerlink" href="#range-n" title="Permalink to this headline">¶</a></h2>
-<p>Возвращает массив чисел от 0 до N-1.
-На всякий случай, если на блок данных, создаются массивы суммарной длины больше 100 000 000 элементов, то кидается исключение.</p>
+<p>Returns an array of numbers from 0 to N-1.
+Just in case, an exception is thrown if arrays with a total length of more than 100,000,000 elements are created in a data block.</p>
 </div>
 <div class="section" id="array-x1-x1">
 <h2>array(x1, ...), оператор [x1, ...]<a class="headerlink" href="#array-x1-x1" title="Permalink to this headline">¶</a></h2>
-<p>Создаёт массив из аргументов функции.
-Аргументы должны быть константами и иметь типы, для которых есть наименьший общий тип. Должен быть передан хотя бы один аргумент, так как иначе непонятно, какого типа создавать массив. То есть, с помощью этой функции невозможно создать пустой массив (для этого используйте функции emptyArray*, описанные выше).
-Возвращает результат типа Array(T), где T - наименьший общий тип от переданных аргументов.</p>
+<p>Creates an array from the function arguments.
+The arguments must be constants and have types that have the smallest common type. At least one argument must be passed, because otherwise it isn&#8217;t clear which type of array to create. That is, you can&#8217;t use this function to create an empty array (to do that, use the &#8216;emptyArray*&#8217; function described above).
+Returns an &#8216;Array(T)&#8217; type result, where &#8216;T&#8217; is the smallest common type out of the passed arguments.</p>
 </div>
 <div class="section" id="arrayelement-arr-n-arr-n">
 <h2>arrayElement(arr, n), оператор arr[n]<a class="headerlink" href="#arrayelement-arr-n-arr-n" title="Permalink to this headline">¶</a></h2>
-<p>Достаёт элемент с индексом n из массива arr.
-n должен быть любым целочисленным типом.
-Индексы в массиве начинаются с единицы.
-Поддерживаются отрицательные индексы - в этом случае, будет выбран соответствующий по номеру элемент с конца. Например, arr[-1] - последний элемент массива.</p>
-<p>Если индекс выходит за границы массива, то
-- если оба аргумента - константы, то кидается исключение;
-- иначе, возвращается некоторое значение по умолчанию (0 для чисел, пустая строка для строк и т. п.).</p>
+<p>Get the element with the index &#8216;n&#8217; from the array &#8216;arr&#8217;.
+&#8216;n&#8217; should be any integer type.
+Indexes in an array begin from one.
+Negative indexes are supported - in this case, it selects the corresponding element numbered from the end. For example, &#8216;arr[-1]&#8217; is the last item in the array.</p>
+<p>If the index goes beyond the array bounds:
+- if both arguments are constants, an exception is thrown.
+- otherwise, a default value is returned (0 for numbers, an empty string for strings, etc.).</p>
 </div>
 <div class="section" id="has-arr-elem">
 <h2>has(arr, elem)<a class="headerlink" href="#has-arr-elem" title="Permalink to this headline">¶</a></h2>
-<p>Проверяет наличие элемента elem в массиве arr.
-Возвращает 0, если элемента в массиве нет, или 1, если есть.
-elem должен быть константой.</p>
+<p>Checks whether the &#8216;arr&#8217; array has the &#8216;elem&#8217; element.
+Returns 0 if the the element is not in the array, or 1 if it is.
+&#8216;elem&#8217; must be a constant.</p>
 </div>
 <div class="section" id="indexof-arr-x">
 <h2>indexOf(arr, x)<a class="headerlink" href="#indexof-arr-x" title="Permalink to this headline">¶</a></h2>
-<p>Возвращает индекс элемента x (начиная с 1), если он есть в массиве, или 0, если его нет.</p>
+<p>Returns the index of the &#8216;x&#8217; element (starting from 1) if it is in the array, or 0 if it is not.</p>
 </div>
 <div class="section" id="countequal-arr-x">
 <h2>countEqual(arr, x)<a class="headerlink" href="#countequal-arr-x" title="Permalink to this headline">¶</a></h2>
-<p>Возвращает количество элементов массива, равных x. Эквивалентно arrayCount(elem -&gt; elem = x, arr).</p>
+<p>Returns the number of elements in the array equal to &#8216;x&#8217;. Equivalent to <code class="docutils literal"><span class="pre">arrayCount(elem</span> <span class="pre">-&gt;</span> <span class="pre">elem</span> <span class="pre">=</span> <span class="pre">x,</span> <span class="pre">arr)</span></code>.</p>
 </div>
 <div class="section" id="arrayenumerate-arr">
 <h2>arrayEnumerate(arr)<a class="headerlink" href="#arrayenumerate-arr" title="Permalink to this headline">¶</a></h2>
-<p>Возвращает массив [1, 2, 3, ..., length(arr)]</p>
-<p>Эта функция обычно используется совместно с ARRAY JOIN. Она позволяет, после применения ARRAY JOIN, посчитать что-либо только один раз для каждого массива. Пример:</p>
+<p>Returns the array <code class="docutils literal"><span class="pre">[1,</span> <span class="pre">2,</span> <span class="pre">3,</span> <span class="pre">...,</span> <span class="pre">length(arr)]</span></code></p>
+<p>This function is normally used together with ARRAY JOIN. It allows counting something just once for each array after applying ARRAY JOIN. Example:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span></span>SELECT
     count() AS Reaches,
     countIf(num = 1) AS Hits
@@ -146,7 +136,7 @@ LIMIT 10
 └─────────┴───────┘
 </pre></div>
 </div>
-<p>В этом примере, Reaches - число достижений целей (строк, получившихся после применения ARRAY JOIN), а Hits - число хитов (строк, которые были до ARRAY JOIN). В данном случае, тот же результат можно получить проще:</p>
+<p>In this example, Reaches is the number of conversions (the strings received after applying ARRAY JOIN), and Hits is the number of pageviews (strings before ARRAY JOIN). In this particular case, you can get the same result in an easier way:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span></span>SELECT
     sum(length(GoalsReached)) AS Reaches,
     count() AS Hits
@@ -158,14 +148,13 @@ WHERE (CounterID = 160656) AND notEmpty(GoalsReached)
 └─────────┴───────┘
 </pre></div>
 </div>
-<p>Также эта функция может быть использована в функциях высшего порядка. Например, с её помощью можно достать индексы массива для элементов, удовлетворяющих некоторому условию.</p>
+<p>This function can also be used in higher-order functions. For example, you can use it to get array indexes for elements that match a condition.</p>
 </div>
 <div class="section" id="arrayenumerateuniq-arr">
 <h2>arrayEnumerateUniq(arr, ...)<a class="headerlink" href="#arrayenumerateuniq-arr" title="Permalink to this headline">¶</a></h2>
-<p>Возвращает массив, такого же размера, как исходный, где для каждого элемента указано, какой он по счету среди элементов с таким же значением.
-Например: arrayEnumerateUniq([10, 20, 10, 30]) = [1,  1,  2,  1].</p>
-<p>Эта функция полезна при использовании ARRAY JOIN и агрегации по элементам массива.
-Пример:</p>
+<p>Returns an array the same size as the source array, indicating for each element what its position is among elements with the same value.
+For example: <code class="docutils literal"><span class="pre">arrayEnumerateUniq([10,</span> <span class="pre">20,</span> <span class="pre">10,</span> <span class="pre">30])</span> <span class="pre">=</span> <span class="pre">[1,</span>&nbsp; <span class="pre">1,</span>&nbsp; <span class="pre">2,</span>&nbsp; <span class="pre">1]</span></code>.</p>
+<p>This function is useful when using ARRAY JOIN and aggregation of array elements. Example:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span></span>SELECT
     Goals.ID AS GoalID,
     sum(Sign) AS Reaches,
@@ -193,8 +182,10 @@ LIMIT 10
 └─────────┴─────────┴────────┘
 </pre></div>
 </div>
-<p>В этом примере, для каждого идентификатора цели, посчитано количество достижений целей (каждый элемент вложенной структуры данных Goals является достижением целей) и количество визитов. Если бы не было ARRAY JOIN, мы бы считали количество визитов как sum(Sign). Но в данном случае, строчки были размножены по вложенной структуре Goals, и чтобы после этого учесть каждый визит один раз, мы поставили условие на значение функции arrayEnumerateUniq(Goals.ID).</p>
-<p>Функция arrayEnumerateUniq может принимать несколько аргументов - массивов одинаковых размеров. В этом случае, уникальность считается для кортежей элементов на одинаковых позициях всех массивов.</p>
+<p>In this example, each goal ID has a calculation of the number of conversions (each element in the Goals nested data structure is a goal that was reached, which we refer to as a conversion) and the number of sessions.
+Without ARRAY JOIN, we would have counted the number of sessions as <code class="docutils literal"><span class="pre">sum(Sign)</span></code>. But in this particular case, the rows were multiplied by the nested Goals structure, so in order to count each session one time after this,
+we apply a condition to the value of the <code class="docutils literal"><span class="pre">arrayEnumerateUniq(Goals.ID)</span></code> function.</p>
+<p>The arrayEnumerateUniq function can take multiple arrays of the same size as arguments. In this case, uniqueness is considered for tuples of elements in the same positions in all the arrays.</p>
 <div class="highlight-sql"><div class="highlight"><pre><span></span>SELECT arrayEnumerateUniq([1, 1, 1, 2, 2, 2], [1, 1, 2, 1, 1, 2]) AS res
 
 ┌─res───────────┐
@@ -202,17 +193,17 @@ LIMIT 10
 └───────────────┘
 </pre></div>
 </div>
-<p>Это нужно при использовании ARRAY JOIN с вложенной структурой данных и затем агрегации по нескольким элементам этой структуры.</p>
+<p>This is necessary when using ARRAY JOIN with a nested data structure and further aggregation across multiple elements in this structure.</p>
 </div>
 <div class="section" id="arrayuniq-arr">
 <h2>arrayUniq(arr, ...)<a class="headerlink" href="#arrayuniq-arr" title="Permalink to this headline">¶</a></h2>
-<p>Если передан один аргумент, считает количество разных элементов в массиве.
-Если передано несколько аргументов, считает количество разных кортежей из элементов на соответствующих позициях в нескольких массивах.</p>
-<p>Если необходимо получить список уникальных элементов массива, можно воспользоваться arrayReduce(&#8216;groupUniqArray&#8217;, arr).</p>
+<p>If a single array is passed, returns a number of unique elements in that array.
+If multiple arrays of the same size are passed as arguments to the function, returns a number of unique tuples of elements in the same positions in all the arrays.</p>
+<p>If you need an array of the unique elements, you can use <code class="docutils literal"><span class="pre">arrayReduce('groupUniqArray',</span> <span class="pre">arr)</span></code>.</p>
 </div>
 <div class="section" id="arrayjoin-arr">
 <h2>arrayJoin(arr)<a class="headerlink" href="#arrayjoin-arr" title="Permalink to this headline">¶</a></h2>
-<p>Особенная функция. Смотрите раздел &#8220;Функция arrayJoin&#8221;.</p>
+<p>A special function. See the section &#8220;arrayJoin function&#8221;.</p>
 </div>
 </div>
 
@@ -220,46 +211,132 @@ LIMIT 10
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Функции по работе с массивами</a><ul>
-<li><a class="reference internal" href="#empty">empty</a></li>
-<li><a class="reference internal" href="#notempty">notEmpty</a></li>
-<li><a class="reference internal" href="#length">length</a></li>
-<li><a class="reference internal" href="#emptyarrayuint8-emptyarrayuint16-emptyarrayuint32-emptyarrayuint64">emptyArrayUInt8, emptyArrayUInt16, emptyArrayUInt32, emptyArrayUInt64</a></li>
-<li><a class="reference internal" href="#emptyarrayint8-emptyarrayint16-emptyarrayint32-emptyarrayint64">emptyArrayInt8, emptyArrayInt16, emptyArrayInt32, emptyArrayInt64</a></li>
-<li><a class="reference internal" href="#emptyarrayfloat32-emptyarrayfloat64">emptyArrayFloat32, emptyArrayFloat64</a></li>
-<li><a class="reference internal" href="#emptyarraydate-emptyarraydatetime">emptyArrayDate, emptyArrayDateTime</a></li>
-<li><a class="reference internal" href="#emptyarraystring">emptyArrayString</a></li>
-<li><a class="reference internal" href="#emptyarraytosingle">emptyArrayToSingle</a></li>
-<li><a class="reference internal" href="#range-n">range(N)</a></li>
-<li><a class="reference internal" href="#array-x1-x1">array(x1, ...), оператор [x1, ...]</a></li>
-<li><a class="reference internal" href="#arrayelement-arr-n-arr-n">arrayElement(arr, n), оператор arr[n]</a></li>
-<li><a class="reference internal" href="#has-arr-elem">has(arr, elem)</a></li>
-<li><a class="reference internal" href="#indexof-arr-x">indexOf(arr, x)</a></li>
-<li><a class="reference internal" href="#countequal-arr-x">countEqual(arr, x)</a></li>
-<li><a class="reference internal" href="#arrayenumerate-arr">arrayEnumerate(arr)</a></li>
-<li><a class="reference internal" href="#arrayenumerateuniq-arr">arrayEnumerateUniq(arr, ...)</a></li>
-<li><a class="reference internal" href="#arrayuniq-arr">arrayUniq(arr, ...)</a></li>
-<li><a class="reference internal" href="#arrayjoin-arr">arrayJoin(arr)</a></li>
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../system_tables/index.html">System tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Functions</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="arithmetic_functions.html">Arithmetic functions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Functions for working with arrays</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#empty">empty</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#notempty">notEmpty</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#length">length</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#emptyarrayuint8-emptyarrayuint16-emptyarrayuint32-emptyarrayuint64">emptyArrayUInt8, emptyArrayUInt16, emptyArrayUInt32, emptyArrayUInt64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#emptyarrayint8-emptyarrayint16-emptyarrayint32-emptyarrayint64">emptyArrayInt8, emptyArrayInt16, emptyArrayInt32, emptyArrayInt64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#emptyarrayfloat32-emptyarrayfloat64">emptyArrayFloat32, emptyArrayFloat64</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#emptyarraydate-emptyarraydatetime">emptyArrayDate, emptyArrayDateTime</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#emptyarraystring">emptyArrayString</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#emptyarraytosingle">emptyArrayToSingle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#range-n">range(N)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#array-x1-x1">array(x1, ...), оператор [x1, ...]</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#arrayelement-arr-n-arr-n">arrayElement(arr, n), оператор arr[n]</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#has-arr-elem">has(arr, elem)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#indexof-arr-x">indexOf(arr, x)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#countequal-arr-x">countEqual(arr, x)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#arrayenumerate-arr">arrayEnumerate(arr)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#arrayenumerateuniq-arr">arrayEnumerateUniq(arr, ...)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#arrayuniq-arr">arrayUniq(arr, ...)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#arrayjoin-arr">arrayJoin(arr)</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="array_join.html">arrayJoin function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bit_functions.html">Bit functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comparison_functions.html">Comparison functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conditional_functions.html">Conditional functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="date_time_functions.html">Functions for working with dates and times</a></li>
+<li class="toctree-l2"><a class="reference internal" href="encoding_functions.html">Encoding functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ext_dict_functions.html">Functions for working with external dictionaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hash_functions.html">Hash functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="higher_order_functions.html">Higher-order functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="in_functions.html">Functions for implementing the IN operator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ip_address_functions.html">Functions for working with IP addresses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json_functions.html">Functions for working with JSON.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logical_functions.html">Logical functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="math_functions.html">Mathematical functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="other_functions.html">Other functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="random_functions.html">Functions for generating pseudo-random numbers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rounding_functions.html">Rounding functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="splitting_merging_functions.html">Functions for splitting and merging strings and arrays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_functions.html">Functions for working with strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_replace_functions.html">Functions for searching and replacing in strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="string_search_functions.html">Functions for searching strings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="type_conversion_functions.html">Type conversion functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="url_functions.html">Functions for working with URLs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ym_dict_functions.html">Functions for working with Yandex.Metrica dictionaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#strong-typing">Strong typing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#common-subexpression-elimination">Common subexpression elimination</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#types-of-results">Types of results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#constants">Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#immutability">Immutability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#error-handling">Error handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#evaluation-of-argument-expressions">Evaluation of argument expressions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#performing-functions-for-distributed-query-processing">Performing functions for distributed query processing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="arithmetic_functions.html"
-                        title="previous chapter">Арифметические функции</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="array_join.html"
-                        title="next chapter">Функция arrayJoin</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/functions/array_functions.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Functions</a><ul>
+      <li>Previous: <a href="arithmetic_functions.html" title="previous chapter">Arithmetic functions</a></li>
+      <li>Next: <a href="array_join.html" title="next chapter">arrayJoin function</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -276,25 +353,13 @@ LIMIT 10
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="array_join.html" title="Функция arrayJoin"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="arithmetic_functions.html" title="Арифметические функции"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Функции</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>

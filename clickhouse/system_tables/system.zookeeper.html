@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>system.zookeeper &mdash; ClickHouse 1 documentation</title>
+    <title>system.zookeeper &mdash; ClickHouse  documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1',
+        VERSION:     '',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,60 +23,50 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="ClickHouse 1 documentation" href="../index.html" />
-    <link rel="up" title="Системные таблицы" href="index.html" />
-    <link rel="next" title="Табличные функции" href="../table_functions/index.html" />
-    <link rel="prev" title="system.tables" href="system.tables.html" /> 
+    <link rel="top" title="ClickHouse  documentation" href="../index.html" />
+    <link rel="up" title="System tables" href="index.html" />
+    <link rel="next" title="Table functions" href="../table_functions/index.html" />
+    <link rel="prev" title="system.tables" href="system.tables.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../table_functions/index.html" title="Табличные функции"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="system.tables.html" title="system.tables"
-             accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Системные таблицы</a> &raquo;</li> 
-      </ul>
-    </div>  
+  <body role="document">
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="system-zookeeper">
 <h1>system.zookeeper<a class="headerlink" href="#system-zookeeper" title="Permalink to this headline">¶</a></h1>
-<p>Позволяет читать данные из ZooKeeper кластера, описанного в конфигурации.
-В запросе обязательно в секции WHERE должно присутствовать условие на равенство path - путь в ZooKeeper, для детей которого вы хотите получить данные.</p>
-<p>Запрос <tt class="docutils literal"><span class="pre">SELECT</span> <span class="pre">*</span> <span class="pre">FROM</span> <span class="pre">system.zookeeper</span> <span class="pre">WHERE</span> <span class="pre">path</span> <span class="pre">=</span> <span class="pre">'/clickhouse'</span></tt> выведет данные по всем детям узла <tt class="docutils literal"><span class="pre">/clickhouse</span></tt>.
-Чтобы вывести данные по всем узлам в корне, напишите path = &#8216;/&#8217;.
-Если узла, указанного в path не существует, то будет брошено исключение.</p>
-<p>Столбцы:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span>name String          - имя узла
-path String          - путь к узлу
-value String         - значение узла
-dataLength Int32     - размер значения
-numChildren Int32    - количество детей
-czxid Int64          - идентификатор транзакции, в которой узел был создан
-mzxid Int64          - идентификатор транзакции, в которой узел был последний раз изменён
-pzxid Int64          - идентификатор транзакции, последний раз удаливший или добавивший детей
-ctime DateTime       - время создания узла
-mtime DateTime       - время последней модификации узла
-version Int32        - версия узла - количество раз, когда узел был изменён
-cversion Int32       - количество добавлений или удалений детей
-aversion Int32       - количество изменений ACL
-ephemeralOwner Int64 - для эфемерных узлов - идентификатор сессии, которая владеет этим узлом
+<p>Allows reading data from the ZooKeeper cluster defined in the config.
+The query must have a &#8216;path&#8217; equality condition in the WHERE clause. This is the path in ZooKeeper for the children that you want to get data for.</p>
+<p>Query SELECT * FROM system.zookeeper WHERE path = &#8216;/clickhouse&#8217; outputs data for all children on the /clickhouse node.
+To output data for all root nodes, write path = &#8216;/&#8217;.
+If the path specified in &#8216;path&#8217; doesn&#8217;t exist, an exception will be thrown.</p>
+<p>Columns:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span>name String          - Name of the node.
+path String          - Path to the node.
+value String         - Value of the node.
+dataLength Int32     - Size of the value.
+numChildren Int32    - Number of children.
+czxid Int64          - ID of the transaction that created the node.
+mzxid Int64          - ID of the transaction that last changed the node.
+pzxid Int64          - ID of the transaction that last added or removed children.
+ctime DateTime       - Time of node creation.
+mtime DateTime       - Time of the last node modification.
+version Int32        - Node version - the number of times the node was changed.
+cversion Int32       - Number of added or removed children.
+aversion Int32       - Number of changes to ACL.
+ephemeralOwner Int64 - For ephemeral nodes, the ID of the session that owns this node.
 </pre></div>
 </div>
-<p>Пример:</p>
+<p>Example:</p>
 <div class="highlight-sql"><div class="highlight"><pre><span></span>SELECT *
 FROM system.zookeeper
 WHERE path = &#39;/clickhouse/tables/01-08/visits/replicas&#39;
@@ -123,20 +113,95 @@ path:           /clickhouse/tables/01-08/visits/replicas
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="system.tables.html"
-                        title="previous chapter">system.tables</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="../table_functions/index.html"
-                        title="next chapter">Табличные функции</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/system_tables/system.zookeeper.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+    
+    <h1 class="logo logo-name">ClickHouse</h1>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../interfaces/index.html">Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../query_language/index.html">Query language</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_data.html">External data for query processing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../table_engines/index.html">Table engines</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">System tables</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="system.asynchronous_metrics.html">system.asynchronous_metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.clusters.html">system.clusters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.columns.html">system.columns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.databases.html">system.databases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.dictionaries.html">system.dictionaries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.events.html">system.events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.functions.html">system.functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.merges.html">system.merges</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.metrics.html">system.metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.numbers.html">system.numbers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.numbers_mt.html">system.numbers_mt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.one.html">system.one</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.parts.html">system.parts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.processes.html">system.processes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.replicas.html">system.replicas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.settings.html">system.settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.tables.html">system.tables</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">system.zookeeper</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../table_functions/index.html">Table functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats/index.html">Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_types/index.html">Data types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operators/index.html">Operators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions/index.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html">Aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#parametric-aggregate-functions">Parametric aggregate functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../agg_functions/index.html#aggregate-function-combinators">Aggregate function combinators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dicts/index.html">Dictionaries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../settings/index.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files.html">Configuration files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../access_rights.html">Access rights</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quotas.html">Quotas</a></li>
+</ul>
+
+
+<hr />
+<ul>
+    
+    <li class="toctree-l1"><a href="/docs/ru/">Documentation in Russian</a></li>
+    
+    <li class="toctree-l1"><a href="/docs/en/single/">Single page documentation</a></li>
+    
+    <li class="toctree-l1"><a href="/">Website home</a></li>
+    
+    <li class="toctree-l1"><a href="https://github.com/yandex/ClickHouse">GitHub</a></li>
+    
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">System tables</a><ul>
+      <li>Previous: <a href="system.tables.html" title="previous chapter">system.tables</a></li>
+      <li>Next: <a href="../table_functions/index.html" title="next chapter">Table functions</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -153,25 +218,13 @@ path:           /clickhouse/tables/01-08/visits/replicas
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../table_functions/index.html" title="Табличные функции"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="system.tables.html" title="system.tables"
-             >previous</a> |</li>
-        <li><a href="../index.html">ClickHouse 1 documentation</a> &raquo;</li>
-          <li><a href="index.html" >Системные таблицы</a> &raquo;</li> 
-      </ul>
-    </div>
     <div class="footer">
-        &copy; Copyright 2017, Alexey Milovidov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      &copy;2016–2017 Yandex LLC.
+      
     </div>
+
+    
+
+    
   </body>
 </html>
